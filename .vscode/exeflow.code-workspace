@@ -16,6 +16,8 @@
             "tsconfig.json": true,
             "vite.config.json": true,
             "svelte.config.js": true,
+            "supabase/.temp": true,
+            "supabase/.branches": true,
         },
         // Editor
         "editor.tabSize": 4,
@@ -28,5 +30,11 @@
         },
         "editor.snippetSuggestions": "bottom",
         "emmet.showSuggestionsAsSnippets": true,
+        // Deno (supabase)
+        "deno.lint": true,
+        "deno.unstable": true,
+        "deno.enablePaths": [
+            "supabase/functions"
+        ]
     }
 }
