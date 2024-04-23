@@ -2,7 +2,7 @@ import {error, type Handle} from '@sveltejs/kit';
 
 import {supabase} from '$lib/supabase/client.server';
 import {supabaseUserToAuthUser} from '$lib/api/user';
-import {SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY} from '$env/static/private';
+import {SUPABASE_API_URL, SUPABASE_SERVICE_ROLE_KEY} from '$env/static/private';
 
 export const handle: Handle = async ({event, resolve}) => {
     event.locals.user = async () => {
@@ -19,7 +19,7 @@ export const handle: Handle = async ({event, resolve}) => {
 
         await event.locals.supabase.auth.admin.deleteUser(anonUser.id);
     };
-    event.locals.supabase = supabase(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, event.cookies);
+    event.locals.supabase = supabase(SUPABASE_API_URL, SUPABASE_SERVICE_ROLE_KEY, event.cookies);
 
     return await resolve(event);
 };
