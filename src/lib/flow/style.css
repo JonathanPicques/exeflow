@@ -1,0 +1,39 @@
+.svelte-flow {
+    --bg-color: #111;
+    --text-color: #ddd;
+    --node-bg-color: #222222aa;
+    --node-border-radius: 10px;
+    --xy-background-pattern-dots-color-default: #404040;
+
+    color: var(--text-color);
+    background-color: var(--bg-color) !important;
+}
+
+.svelte-flow__controls button {
+    border: 1px solid var(--text-color);
+    border-bottom: none;
+
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+.svelte-flow__controls button:hover {
+    background-color: rgb(37, 37, 37);
+}
+
+.svelte-flow__controls button:first-child {
+    border-radius: 5px 5px 0 0;
+}
+
+.svelte-flow__controls button:last-child {
+    border-bottom: 1px solid var(--text-color);
+    border-radius: 0 0 5px 5px;
+}
+
+.svelte-flow__controls button path {
+    fill: var(--text-color);
+}
+
+.svelte-flow__attribution {
+    visibility: hidden;
+}

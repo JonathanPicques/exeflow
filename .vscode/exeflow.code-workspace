@@ -1,0 +1,32 @@
+{
+    "folders": [
+        {
+            "path": "../"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/node_modules": true,
+            // Zen mode
+            ".npmrc": true,
+            ".eslint*": true,
+            "pnpm-lock*": true,
+            ".svelte-kit": true,
+            ".prettierrc": true,
+            "tsconfig.json": true,
+            "vite.config.json": true,
+            "svelte.config.js": true,
+        },
+        // Editor
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
+        "editor.gotoLocation.multipleDefinitions": "goto",
+        "editor.detectIndentation": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+        },
+        "editor.snippetSuggestions": "bottom",
+        "emmet.showSuggestionsAsSnippets": true,
+    }
+}
