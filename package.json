@@ -10,7 +10,8 @@
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "prettier --check . && eslint .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "gentypes": "kysely-codegen --include-pattern=public.* --out-file src/lib/supabase/db.server.types.ts"
     },
     "dependencies": {
         "@dagrejs/dagre": "^1.1.2",
@@ -22,11 +23,15 @@
         "@sveltejs/kit": "^2.5.7",
         "@sveltejs/vite-plugin-svelte": "^3.1.0",
         "@types/eslint": "^8.56.10",
+        "@types/pg": "^8.11.5",
         "@typescript-eslint/eslint-plugin": "^7.7.1",
         "@typescript-eslint/parser": "^7.7.1",
         "eslint": "^9.1.1",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-svelte": "^2.38.0",
+        "kysely": "^0.27.3",
+        "kysely-codegen": "^0.15.0",
+        "pg": "^8.11.5",
         "prettier": "^3.2.5",
         "prettier-plugin-svelte": "^3.2.3",
         "svelte": "^4.2.15",

@@ -25,10 +25,12 @@ Exeflow is perfect for:
 
 - Run `pnpm install`
 - Run `supabase start`
-- Create a `.env` file:
+- Create a `.env` file and use the output from `supabase start`:
 ```toml
-    SUPABASE_API_URL=`API URL` from `supabase start`
-    SUPABASE_SERVICE_ROLE_KEY=`service_role key` from `supabase start`
+    DATABASE_URL=""
+    SUPABASE_API_URL=""
+    SUPABASE_ANON_KEY=""
+    SUPABASE_SERVICE_ROLE_KEY=""
 ```
 - Run `pnpm dev`
 
