@@ -1,8 +1,8 @@
 import {createClient} from '@supabase/supabase-js';
 import type {Cookies} from '@sveltejs/kit';
 
-export const supabase = (url: string, key: string, cookies: Cookies) =>
-    createClient(url, key, {
+export const supabase = (url: string, key: string, cookies: Cookies) => {
+    return createClient(url, key, {
         auth: {
             flowType: 'pkce',
             persistSession: true,
@@ -25,8 +25,13 @@ export const supabase = (url: string, key: string, cookies: Cookies) =>
                     });
                 },
                 removeItem(key) {
-                    cookies.delete(key, {path: '/', httpOnly: true, sameSite: 'lax'});
+                    cookies.delete(key, {
+                        path: '/',
+                        httpOnly: true,
+                        sameSite: 'strict',
+                    });
                 },
             },
         },
     });
+};
