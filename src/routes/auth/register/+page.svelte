@@ -22,4 +22,5 @@
     </label>
 </form>
 
+<a href="/auth/link">Link</a>
 <a href="/auth/login">Login instead</a>
