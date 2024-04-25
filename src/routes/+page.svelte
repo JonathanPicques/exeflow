@@ -1,16 +1,18 @@
 <script lang="ts">
+    import {_POST} from './api/project/fetch.client';
+    import {_DELETE} from './api/project/[id]/fetch.client';
+
     export let data;
 
     async function createProject() {
-        const response = await fetch('/project/new', {method: 'POST'});
-        const project = await response.json();
+        const project = await _POST();
 
         data.projects.push(project);
         data.projects = data.projects;
     }
 
     async function removeProject(id: string) {
-        await fetch(`/project/${id}/api`, {method: 'DELETE'});
+        await _DELETE({id});
 
         data.projects = data.projects.filter(p => p.id !== id);
     }

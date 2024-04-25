@@ -3,6 +3,8 @@ import {DATABASE_URL} from '$env/static/private';
 import {Kysely, PostgresDialect} from 'kysely';
 import type {DB} from './db.server.types';
 
+export type Db = Kysely<DB>;
+
 const dialect = new PostgresDialect({
     pool: new Pg.Pool({
         max: 10,
@@ -10,8 +12,4 @@ const dialect = new PostgresDialect({
     }),
 });
 
-export const db = () => {
-    return new Kysely<DB>({
-        dialect,
-    });
-};
+export const db = () => new Kysely<DB>({dialect});

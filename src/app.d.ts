@@ -1,4 +1,4 @@
-import type {DB} from '$lib/supabase/db.server.types';
+import type {Db} from '$lib/supabase/db.server';
 import type {Kysely} from 'kysely';
 import type {AuthUser} from '$lib/api/user';
 import type {User, SupabaseClient} from '@supabase/supabase-js';
@@ -12,7 +12,7 @@ declare global {
             user: () => Promise<AuthUser>;
             migrateAnon: (anonUser: User, signedInUser: User) => Promise<void>;
             //
-            db: Kysely<DB>;
+            db: Db;
             supabase: SupabaseClient;
         }
         interface PageData {}
