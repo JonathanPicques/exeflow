@@ -4,6 +4,7 @@
     import {writable} from 'svelte/store';
     import {Panel, Controls, Background, SvelteFlow, useSvelteFlow, type Edge, type Node, type Connection} from '@xyflow/svelte';
 
+    import Toolbar from '$lib/flow/Toolbar.svelte';
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
@@ -26,7 +27,7 @@
     const nodes = writable(project.content.nodes);
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};
 
-    const {fitView} = useSvelteFlow();
+    const {fitView, screenToFlowPosition} = useSvelteFlow();
 
     const save = () => {
         _PATCH({
@@ -41,6 +42,37 @@
         $edges = graph.edges;
 
         fitView();
+    };
+
+    const ondrop = (e: DragEvent) => {
+        e.preventDefault();
+
+        if (!e.dataTransfer) {
+            return null;
+        }
+
+        const name = e.dataTransfer.getData('application/svelteflow:name');
+        const position = screenToFlowPosition({x: e.clientX, y: e.clientY});
+
+        $nodes = [
+            ...$nodes,
+            {
+                ...$nodes[0]!,
+                id: `${Math.random()}`,
+                data: {
+                    ...($nodes[0]!.data as any),
+                    name,
+                },
+                position,
+            },
+        ];
+    };
+    const ondragover = (e: DragEvent) => {
+        e.preventDefault();
+
+        if (e.dataTransfer) {
+            e.dataTransfer.dropEffect = 'move';
+        }
     };
 
     const onconnect = (connection: Connection) => {
@@ -88,11 +120,14 @@
 </script>
 
 <main>
-    <SvelteFlow fitView {edges} {edgeTypes} {nodes} {nodeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection}>
+    <SvelteFlow fitView {edges} {edgeTypes} {nodes} {nodeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
         <Panel position="top-right">
             <button on:click={() => save()}>Save</button>
             <button on:click={() => layout()}>Layout</button>
             <button on:click={() => fitView()}>Fit view</button>
+        </Panel>
+        <Panel position="top-center">
+            <Toolbar actions={data.actions} triggers={data.triggers} />
         </Panel>
         <Controls />
         <Background />
@@ -101,7 +136,9 @@
 
 <style>
     main {
+        display: flex;
         flex-grow: 1;
+        flex-direction: column;
     }
 
     :global(.svelte-flow .svelte-flow__handle.connectingto) {
