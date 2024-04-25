@@ -1,45 +1,51 @@
 <script lang="ts">
-    import {_POST} from './api/project/fetch.client';
+    import {onMount} from 'svelte';
+    import {_GET, _POST} from './api/project/fetch.client';
+    import type {Project} from './api/project/api.server';
     import {_DELETE} from './api/project/[id]/fetch.client';
 
     export let data;
 
-    async function createProject() {
-        const project = await _POST();
+    let projects: Project[] = [];
 
-        data.projects.push(project);
-        data.projects = data.projects;
-    }
+    onMount(async () => {
+        if (data.user) {
+            projects = await _GET();
+        }
+    });
 
-    async function removeProject(id: string) {
+    const createProject = async () => {
+        projects = [...projects, await _POST({name: `Untitled project ${projects.length}`})];
+    };
+
+    const removeProject = async (id: string) => {
         await _DELETE({id});
-
-        data.projects = data.projects.filter(p => p.id !== id);
-    }
+        projects = projects.filter(p => p.id !== id);
+    };
 </script>
 
-<main>
-    {#if data.user.type === 'anon'}
-        <div>
-            <span>Anon #{data.user.id}</span>
-            <a href="/auth/register">Save your work by creating an account!</a>
-        </div>
-    {/if}
-    {#if data.user.type === 'user'}
-        <div>
-            <span>{data.user.email}</span>
-            <a href="/auth/logout">Logout</a>
-        </div>
-    {/if}
-
-    <h1>My projects</h1>
+{#if data.user}
     <div>
-        <button on:click={createProject}>Create project</button>
-        {#each data.projects as { id, name }}
-            <div>
-                <a href="/project/{id}">{name}</a>
-                <button on:click={() => removeProject(id)}>x</button>
-            </div>
-        {/each}
+        <h1>My projects</h1>
+        <ul>
+            {#each projects as project}
+                <li>
+                    <a href="/project/{project.id}">{project.name}</a>
+                    <button on:click={() => removeProject(project.id)}>❌</button>
+                </li>
+            {/each}
+        </ul>
+        <button on:click={createProject}>Create new project</button>
+        <a href="/auth/logout">Logout</a>
     </div>
-</main>
+{:else}
+    <div>
+        <h1>Landing page</h1>
+        <nav>
+            <ul>
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register">Register</a></li>
+            </ul>
+        </nav>
+    </div>
+{/if}

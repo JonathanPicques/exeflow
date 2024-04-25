@@ -1,22 +1,17 @@
 <script lang="ts">
-    export let form;
+    export let data;
 </script>
 
-{#if form?.failed}<p>{form.message}</p>{/if}
-{#if form?.invalid}<p>Passswords required or don't match!</p>{/if}
-{#if form?.success}<p>Account password updated!</p>{/if}
-
-<form method="POST">
-    <label>
-        Password:
-        <input name="password" type="password" required />
-    </label>
-    <label>
-        Confirm Password:
-        <input name="confirmPassword" type="password" required />
-    </label>
-    <label>
-        Finalize register:
-        <input type="submit" />
-    </label>
-</form>
+<div>
+    {#if data.success}
+        <h1>Your account is validated!</h1>
+        <ul>
+            <li><a href="/">Start automating!</a></li>
+        </ul>
+    {/if}
+    {#if data.error}
+        <h1>There was an error while validating your account!</h1>
+        <p>Error #{data.code}</p>
+        <p>{data.description}</p>
+    {/if}
+</div>

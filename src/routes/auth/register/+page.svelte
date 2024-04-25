@@ -3,11 +3,11 @@
 </script>
 
 {#if form?.failed}<p>{form.message}</p>{/if}
-{#if form?.invalid}<p>Email field is required</p>{/if}
+{#if form?.invalid}<p>Email and password fields are required</p>{/if}
 {#if form?.success}
     <div>
-        <p>Account linked!</p>
-        <p>Check your inbox ({form.email}) to setup a password</p>
+        <p>Account created!</p>
+        <p>Check your inbox ({form.email}) to validate your account</p>
     </div>
 {/if}
 
@@ -17,10 +17,17 @@
         <input name="email" type="email" value={form?.email ?? ''} required />
     </label>
     <label>
-        Link account:
+        Password:
+        <input name="password" type="password" required />
+    </label>
+    <label>
+        Confirm Password:
+        <input name="confirmPassword" type="password" required />
+    </label>
+    <label>
+        Register:
         <input type="submit" />
     </label>
 </form>
 
-<a href="/auth/link">Link</a>
 <a href="/auth/login">Login instead</a>

@@ -9,11 +9,10 @@ declare global {
     namespace App {
         interface Error {}
         interface Locals {
-            user: () => Promise<AuthUser>;
-            migrateAnon: (anonUser: User, signedInUser: User) => Promise<void>;
-            //
             db: Db;
             supabase: SupabaseClient;
+            //
+            user: () => Promise<AuthUser | undefined>;
         }
         interface PageData {}
         interface PageState {}

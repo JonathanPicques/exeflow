@@ -3,7 +3,7 @@
 </script>
 
 {#if form?.failed}<p class="error">{form.message}</p>{/if}
-{#if form?.invalid}<p class="error">Email and password fields are required</p>{/if}
+{#if form?.invalid}<p class="error">Email and password are required</p>{/if}
 
 <form method="POST">
     <label>

@@ -4,9 +4,11 @@ export const actions = {
     default: async ({locals, request}) => {
         const form = await request.formData();
         const email = form.get('email') as string;
+        const password = form.get('password') as string;
+        const confirmPassword = form.get('confirmPassword') as string;
 
-        if (email) {
-            const result = await locals.supabase.auth.updateUser({email}, {emailRedirectTo: 'http://localhost:5173/auth/validate'});
+        if (email && password && confirmPassword && password === confirmPassword) {
+            const result = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: 'http://localhost:5173/auth/validate'}});
 
             if (result.data.user) {
                 return {email, success: true};

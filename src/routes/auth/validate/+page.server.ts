@@ -1,19 +1,16 @@
-import {fail} from '@sveltejs/kit';
+export async function load({url, locals, cookies}) {
+    const code = url.searchParams.get('code') as string | undefined;
+    const error = url.searchParams.get('error') as string | undefined;
+    const errorCode = url.searchParams.get('error_code') as string | undefined;
+    const errorDescription = url.searchParams.get('error_description') as string | undefined;
 
-export const actions = {
-    default: async ({locals, request}) => {
-        const form = await request.formData();
-        const password = form.get('password') as string;
-        const confirmPassword = form.get('confirmPassword') as string;
+    if (code && !error) {
+        const result = await locals.supabase.auth.exchangeCodeForSession(code);
 
-        if (password && confirmPassword && password === confirmPassword) {
-            const result = await locals.supabase.auth.updateUser({password});
-
-            if (result.data.user) {
-                return {error: undefined, success: true};
-            }
-            return fail(400, {failed: true, message: result.error?.message ?? 'failed to update password'});
+        if (result.data.user) {
+            return {success: true};
         }
-        return fail(400, {invalid: true});
-    },
-};
+        return {error: true, code: errorCode ?? '403', description: errorDescription ?? 'unable to validate you account'};
+    }
+    return {error: true, code: errorCode ?? '001', description: errorDescription ?? 'validation failed'};
+}
