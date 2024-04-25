@@ -1,4 +1,4 @@
-export async function load({url, locals, cookies}) {
+export async function load({url, locals}) {
     const code = url.searchParams.get('code') as string | undefined;
     const error = url.searchParams.get('error') as string | undefined;
     const errorCode = url.searchParams.get('error_code') as string | undefined;

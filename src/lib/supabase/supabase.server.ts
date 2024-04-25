@@ -21,14 +21,15 @@ export const supabase = (url: string, key: string, cookies: Cookies) => {
                         maxAge: 365 * 60 * 60 * 24 * 1000,
                         secure: process.env.NODE_ENV === 'production',
                         httpOnly: true,
-                        sameSite: 'strict',
+                        sameSite: 'lax', // TODO: can only be strict if supabase and exeflow share the same domain
                     });
                 },
                 removeItem(key) {
                     cookies.delete(key, {
                         path: '/',
+                        secure: process.env.NODE_ENV === 'production',
                         httpOnly: true,
-                        sameSite: 'strict',
+                        sameSite: 'lax', // TODO: can only be strict if supabase and exeflow share the same domain
                     });
                 },
             },
