@@ -1,6 +1,8 @@
 <script lang="ts">
+    import {_PATCH} from '../../api/project/[id]/fetch.client.js';
+
     import {writable} from 'svelte/store';
-    import {Panel, Controls, Background, SvelteFlow, useSvelteFlow, type Edge, type Connection} from '@xyflow/svelte';
+    import {Panel, Controls, Background, SvelteFlow, useSvelteFlow, type Edge, type Node, type Connection} from '@xyflow/svelte';
 
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';
     import ActionNode from '$lib/flow/nodes/Action.svelte';
@@ -8,22 +10,30 @@
     import {layoutGraph} from '$lib/flow/dagre/dagre';
 
     import {compatible} from '$lib/schema/validate';
-    import {initialEdges} from '$lib/graph/edges';
-    import {initialNodes} from '$lib/graph/nodes';
     import {splitHandleId} from '$lib/graph/points';
 
     import '@xyflow/svelte/dist/style.css';
     import '$lib/flow/style.css';
 
-    const edges = writable(initialEdges);
-    const edgeTypes = {
-        edge: CutEdge,
-    };
+    export let data;
+
+    const project = data.project;
+
+    const edges = writable(project.content.edges);
+    const edgeTypes = {edge: CutEdge};
     const defaultEdgeOptions = {type: 'edge'};
 
-    const nodes = writable(initialNodes);
+    const nodes = writable(project.content.nodes);
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};
 
+    const {fitView} = useSvelteFlow();
+
+    const save = () => {
+        _PATCH({
+            id: project.id,
+            content: {nodes: $nodes, edges: $edges},
+        });
+    };
     const layout = () => {
         const graph = layoutGraph($nodes, $edges);
 
@@ -32,7 +42,6 @@
 
         fitView();
     };
-    const {fitView} = useSvelteFlow();
 
     const onconnect = (connection: Connection) => {
         const leftNode = $nodes.find(n => n.id === connection.target);
@@ -81,6 +90,7 @@
 <main>
     <SvelteFlow fitView {edges} {edgeTypes} {nodes} {nodeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection}>
         <Panel position="top-right">
+            <button on:click={() => save()}>Save</button>
             <button on:click={() => layout()}>Layout</button>
             <button on:click={() => fitView()}>Fit view</button>
         </Panel>

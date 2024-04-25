@@ -2,7 +2,7 @@ import {error, type Handle} from '@sveltejs/kit';
 
 import {db} from '$lib/supabase/db.server';
 import {supabase} from '$lib/supabase/supabase.server';
-import {supabaseUserToAuthUser} from '$lib/api/user';
+import {supabaseUserToAuthUser} from '$lib/supabase/user';
 import {SUPABASE_API_URL, SUPABASE_SERVICE_ROLE_KEY} from '$env/static/private';
 
 export const handle: Handle = async ({event, resolve}) => {

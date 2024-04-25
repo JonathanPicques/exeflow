@@ -1,6 +1,6 @@
 import {error} from '@sveltejs/kit';
-import type {Action} from '$lib/api/action';
-import type {Trigger} from '$lib/api/trigger';
+import type {Action} from '$lib/graph/action';
+import type {Trigger} from '$lib/graph/trigger';
 
 export async function load({data}) {
     const actions: Record<string, Action<unknown>> = {};

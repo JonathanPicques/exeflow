@@ -6,5 +6,5 @@ export async function load({locals}) {
     if (result.error) {
         throw error(500, result.error.message);
     }
-    return {redirectTo: '/'};
+    throw redirect(303, '/');
 }

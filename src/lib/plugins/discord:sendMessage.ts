@@ -1,4 +1,4 @@
-import {action, type ActionSignature} from '../api/action';
+import {action, type ActionSignature} from '$lib/graph/action';
 
 interface Config {
     token: string;

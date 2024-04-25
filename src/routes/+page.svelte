@@ -36,7 +36,7 @@
             {/each}
         </ul>
         <button on:click={createProject}>Create new project</button>
-        <a href="/auth/logout">Logout</a>
+        <a href="/auth/logout" data-sveltekit-reload>Logout</a>
     </div>
 {:else}
     <div>

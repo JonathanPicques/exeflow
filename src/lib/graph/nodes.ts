@@ -33,7 +33,7 @@ export interface TriggerNodeData {
     [x: string]: unknown;
 }
 
-export const initialNodes: (ActionNode | TriggerNode)[] = [
+export const nodes: (ActionNode | TriggerNode)[] = [
     {
         id: '0',
         type: 'trigger',
