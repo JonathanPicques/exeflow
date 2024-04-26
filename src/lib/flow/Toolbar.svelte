@@ -40,15 +40,19 @@
     }
 
     .action {
-        --node-color: #f3ce39;
+        color: var(--node-action-color);
 
-        color: var(--node-color);
+        &:hover {
+            border: 2px solid var(--node-action-color);
+        }
     }
 
     .trigger {
-        --node-color: #f54e9e;
+        color: var(--node-trigger-color);
 
-        color: var(--node-color);
+        &:hover {
+            border: 2px solid var(--node-trigger-color);
+        }
     }
 
     .action,
@@ -70,10 +74,6 @@
 
         & > img {
             pointer-events: none;
-        }
-
-        &:hover {
-            border: 2px solid var(--node-color);
         }
     }
 </style>

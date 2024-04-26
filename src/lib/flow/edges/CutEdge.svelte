@@ -30,19 +30,19 @@
 
 <BaseEdge {path} {style} {markerEnd} />
 <EdgeLabelRenderer>
-    <div class="edge nopan nodrag" style:transform="translate(-50%, -50%) translate({labelX}px,{labelY}px)">
-        <button class="cutButton" on:click={onEdgeClick}>×</button>
+    <div class="nopan nodrag" style:transform="translate(-50%, -50%) translate({labelX}px,{labelY}px)">
+        <button on:click={onEdgeClick}>×</button>
     </div>
 </EdgeLabelRenderer>
 
 <style>
-    .edge {
+    div {
         display: flex;
         position: absolute;
         pointer-events: all;
     }
 
-    .cutButton {
+    button {
         width: 20px;
         height: 20px;
 
@@ -59,11 +59,11 @@
         transition: box-shadow linear 0.1s;
     }
 
-    .cutButton:hover {
+    button:hover {
         box-shadow: 0 0 4px 2px rgba(252, 252, 252, 0.998);
     }
 
-    .cutButton:active {
+    button:active {
         box-shadow: 0 0 6px 2px rgba(252, 252, 252, 0.998);
     }
 </style>

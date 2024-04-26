@@ -2,7 +2,7 @@
     import {_PATCH} from '../../api/project/[id]/fetch.client.js';
 
     import {writable} from 'svelte/store';
-    import {Panel, Controls, Background, SvelteFlow, useSvelteFlow, type Edge, type Node, type Connection} from '@xyflow/svelte';
+    import {Panel, Controls, Background, SvelteFlow, useSvelteFlow, type Edge, type Connection} from '@xyflow/svelte';
 
     import Toolbar from '$lib/flow/Toolbar.svelte';
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';

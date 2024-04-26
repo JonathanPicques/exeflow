@@ -45,9 +45,6 @@
 
 <style>
     :global(.svelte-flow__node-trigger) {
-        --node-color: #f54e9e;
-        --point-color: #ccc;
-
         display: flex;
         padding: 10px;
         min-width: 150px;
@@ -65,7 +62,7 @@
     }
 
     :global(.svelte-flow__node-trigger.selected) {
-        border: 2px solid var(--node-color);
+        border: 2px solid var(--node-trigger-color);
     }
 
     .head {
@@ -76,7 +73,7 @@
     }
 
     .head > span {
-        color: var(--node-color);
+        color: var(--node-trigger-color);
         font-size: 16px;
         font-weight: bold;
     }

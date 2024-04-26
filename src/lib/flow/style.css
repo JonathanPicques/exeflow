@@ -1,7 +1,10 @@
 .svelte-flow {
     --bg-color: #111;
     --text-color: #ddd;
+    --point-color: #ccc;
     --node-bg-color: #222222aa;
+    --node-action-color: #f3ce39;
+    --node-trigger-color: #f54e9e;
     --node-border-radius: 10px;
     --xy-background-pattern-dots-color-default: #404040;
 
