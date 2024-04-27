@@ -1,6 +1,7 @@
-import {valid} from '$lib/schema/validate';
 import {json, error} from '@sveltejs/kit';
-import {getProjects, createProject} from './api.server';
+
+import {valid} from '$lib/schema/validate';
+import {getProjects, createProject} from '$lib/projects/projects';
 
 export const GET = async ({locals}) => {
     const user = await locals.user();

@@ -1,8 +1,8 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import {_GET, _POST} from './api/project/fetch.client';
-    import type {Project} from './api/project/api.server';
     import {_DELETE} from './api/project/[id]/fetch.client';
+    import {_GET, _POST} from './api/project/fetch.client';
+    import type {Project} from '$lib/projects/projects';
 
     export let data;
 

@@ -1,6 +1,7 @@
-import {valid} from '$lib/schema/validate';
 import {json, error} from '@sveltejs/kit';
-import {updateProject, deleteProject} from '../api.server';
+
+import {valid} from '$lib/schema/validate';
+import {updateProject, deleteProject} from '$lib/projects/projects';
 
 export const PATCH = async ({locals, params, request}) => {
     const body = await request.json();

@@ -1,4 +1,4 @@
-import type {Project} from './api.server';
+import type {Project} from '$lib/projects/projects';
 
 export const _GET = async () => {
     return (await (await fetch(`/api/project`, {method: 'GET'})).json()) as Project[];

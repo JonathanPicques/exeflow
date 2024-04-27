@@ -87,9 +87,11 @@
         const {type: rightPointType} = splitHandleId(connection.sourceHandle);
 
         if (leftPointType === 'input' && rightPointType === 'output') {
+            // FIXME
             // Make sure only one edge can exit from the source (right)
             edges.update(edges => edges.filter(e => e.sourceHandle !== connection.sourceHandle || e.targetHandle === connection.targetHandle));
         } else if (leftPointType === 'param' && rightPointType === 'return' && leftNode.data.type === 'action') {
+            // FIXME
             // Make sure only one edge can enter into the target (left)
             edges.update(edges => edges.filter(e => e.sourceHandle === connection.sourceHandle || e.targetHandle !== connection.targetHandle));
         } else {

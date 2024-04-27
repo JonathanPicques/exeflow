@@ -1,4 +1,4 @@
-import type {Project} from '../api.server';
+import type {Project} from '$lib/projects/projects';
 
 export const _PATCH = async ({id, content}: Pick<Project, 'id' | 'content'>) => {
     return (await (

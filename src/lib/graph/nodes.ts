@@ -36,7 +36,7 @@ export interface TriggerNodeData {
     [x: string]: unknown;
 }
 
-export const nodes: PluginNode[] = [
+export const initialNodes: PluginNode[] = [
     {
         id: '0',
         type: 'trigger',

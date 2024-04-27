@@ -1,13 +1,14 @@
-import {edges} from '$lib/graph/edges';
-import {nodes, type PluginNode} from '$lib/graph/nodes';
+import {initialEdges} from '$lib/graph/edges';
+import {initialNodes} from '$lib/graph/nodes';
 import type {Db} from '$lib/supabase/db.server';
-import type {Edge} from '@xyflow/svelte';
 import type {AuthUser} from '$lib/supabase/user';
+import type {PluginEdge} from '$lib/graph/edges';
+import type {PluginNode} from '$lib/graph/nodes';
 
 export interface Project {
     id: string;
     name: string;
-    content: {nodes: PluginNode[]; edges: Edge[]};
+    content: {nodes: PluginNode[]; edges: PluginEdge[]};
 }
 
 export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
@@ -19,8 +20,11 @@ export const getProjects = async (db: Db, {ownerId}: {ownerId: AuthUser['id']}) 
 };
 
 export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: AuthUser['id']}) => {
-    const content = JSON.stringify({nodes, edges});
-    return (await db.insertInto('projects').values({name, content, owner_id: ownerId}).returning(['id', 'name', 'content']).executeTakeFirstOrThrow()) as Project;
+    return (await db
+        .insertInto('projects')
+        .values({name, content: JSON.stringify({nodes: initialNodes, edges: initialEdges}), owner_id: ownerId})
+        .returning(['id', 'name', 'content'])
+        .executeTakeFirstOrThrow()) as Project;
 };
 
 export const deleteProject = async (db: Db, {id}: Pick<Project, 'id'>) => {

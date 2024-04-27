@@ -1,3 +1,5 @@
 import type {Edge} from '@xyflow/svelte';
 
-export const edges: Edge[] = [];
+export type PluginEdge = Edge;
+
+export const initialEdges: PluginEdge[] = [];
