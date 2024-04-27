@@ -1,5 +1,5 @@
 import {edges} from '$lib/graph/edges';
-import {nodes, type AnyNode} from '$lib/graph/nodes';
+import {nodes, type PluginNode} from '$lib/graph/nodes';
 import type {Db} from '$lib/supabase/db.server';
 import type {Edge} from '@xyflow/svelte';
 import type {AuthUser} from '$lib/supabase/user';
@@ -7,7 +7,7 @@ import type {AuthUser} from '$lib/supabase/user';
 export interface Project {
     id: string;
     name: string;
-    content: {nodes: AnyNode[]; edges: Edge[]};
+    content: {nodes: PluginNode[]; edges: Edge[]};
 }
 
 export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {

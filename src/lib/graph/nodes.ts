@@ -1,13 +1,15 @@
 import type {Node} from '@xyflow/svelte';
+import type {ActionId} from '$lib/plugins/@action';
+import type {TriggerId} from '$lib/plugins/@trigger';
 import type {JSONSchema} from '$lib/schema/schema';
 
-export type AnyNode = ActionNode | TriggerNode;
-export type AnyNodeData = ActionNodeData | TriggerNodeData;
-
+export type PluginNode = ActionNode | TriggerNode;
 export type ActionNode = Node<ActionNodeData>;
 export type TriggerNode = Node<TriggerNodeData>;
+export type PluginNodeData = ActionNodeData | TriggerNodeData;
 
 export interface ActionNodeData {
+    id: ActionId;
     type: 'action';
     //
     name: string;
@@ -22,6 +24,7 @@ export interface ActionNodeData {
 }
 
 export interface TriggerNodeData {
+    id: TriggerId;
     type: 'trigger';
     //
     name: string;
@@ -33,11 +36,12 @@ export interface TriggerNodeData {
     [x: string]: unknown;
 }
 
-export const nodes: (ActionNode | TriggerNode)[] = [
+export const nodes: PluginNode[] = [
     {
         id: '0',
         type: 'trigger',
         data: {
+            id: 'webhook:webhook',
             type: 'trigger',
             //
             name: 'webhook',
@@ -59,6 +63,7 @@ export const nodes: (ActionNode | TriggerNode)[] = [
         id: '1',
         type: 'action',
         data: {
+            id: 'smtp:sendMail',
             type: 'action',
             //
             name: 'send mail',
@@ -85,6 +90,7 @@ export const nodes: (ActionNode | TriggerNode)[] = [
         id: '2',
         type: 'action',
         data: {
+            id: 'smtp:sendMail',
             type: 'action',
             //
             name: 'send mail',
@@ -111,6 +117,7 @@ export const nodes: (ActionNode | TriggerNode)[] = [
         id: '3',
         type: 'action',
         data: {
+            id: 'smtp:sendMail',
             type: 'action',
             //
             name: 'send mail',

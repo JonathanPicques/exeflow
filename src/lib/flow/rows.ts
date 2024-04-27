@@ -1,9 +1,9 @@
-import type {AnyNodeData} from '$lib/graph/nodes';
+import type {PluginNodeData} from '$lib/graph/nodes';
 import type {LeftPoint, RightPoint} from '$lib/graph/points';
 
 export type Row = [LeftPoint | undefined, RightPoint | undefined];
 
-export const useRows = (nodeData: AnyNodeData): Row[] => {
+export const useRows = (nodeData: PluginNodeData): Row[] => {
     switch (nodeData.type) {
         case 'action': {
             const rows: Row[] = [];

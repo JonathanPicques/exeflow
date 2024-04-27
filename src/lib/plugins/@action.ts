@@ -1,7 +1,8 @@
 import type {JSONSchema, FromObjectSchema} from '$lib/schema/schema';
 
-export interface Trigger<Config, Signature extends TriggerSignature = TriggerSignature> {
-    type: 'trigger';
+export interface Action<Config, Signature extends ActionSignature = ActionSignature> {
+    type: 'action';
+    //
     icon: string;
     title: string;
     description: string;
@@ -10,6 +11,8 @@ export interface Trigger<Config, Signature extends TriggerSignature = TriggerSig
     renderForm: (args: RenderFormArgs<Config>) => JSONSchema | Promise<JSONSchema>;
     renderNode: (args: RenderNodeArgs<Config, Signature>) => Signature | Promise<Signature>;
 }
+
+export type ActionId = string;
 
 interface ConfigArgs<Config> {
     form?: unknown;
@@ -27,20 +30,24 @@ interface RenderFormArgs<Config> {
     props?: unknown;
 }
 
-interface RenderNodeArgs<Config, Signature extends TriggerSignature> {
+interface RenderNodeArgs<Config, Signature extends ActionSignature> {
     config: Config;
-    params?: FromObjectSchema<Signature['returns']['values']>;
+    params?: FromObjectSchema<Signature['params']['values']>;
 }
 
-export interface TriggerSignature {
+export interface ActionSignature {
+    inputs: string[];
     outputs: string[];
     //
+    params: {order: string[]; values: Record<string, JSONSchema>};
     returns: {order: string[]; values: Record<string, JSONSchema>};
 }
 
-export const trigger = <Config, Signature extends TriggerSignature = TriggerSignature>(trigger: Omit<Trigger<Config, Signature>, 'type'>) => ({type: 'trigger', ...trigger});
-export const emptyTriggerSignature: TriggerSignature = {
+export const action = <Config, Signature extends ActionSignature = ActionSignature>(action: Omit<Action<Config, Signature>, 'type'>) => ({type: 'action', ...action});
+export const emptyActionSignature: ActionSignature = {
+    inputs: [],
     outputs: [],
     //
+    params: {order: [], values: {}},
     returns: {order: [], values: {}},
 };

@@ -1,4 +1,4 @@
-import {trigger, type TriggerSignature} from '$lib/graph/trigger';
+import {trigger, type TriggerSignature} from './@trigger';
 
 interface Config {}
 
