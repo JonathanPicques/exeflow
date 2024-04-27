@@ -1,12 +1,12 @@
 import {NoResultError} from 'kysely';
 
 import {AppError} from '$lib/helper/appError';
-import {initialEdges} from '$lib/graph/edges';
 import {initialNodes} from '$lib/graph/nodes';
+import {initialEdges} from '$lib/graph/edges';
 import type {Db} from '$lib/supabase/db.server';
 import type {AuthUser} from '$lib/supabase/user';
-import type {PluginEdge} from '$lib/graph/edges';
 import type {PluginNode} from '$lib/graph/nodes';
+import type {PluginEdge} from '$lib/graph/edges';
 
 export interface Project {
     id: string;

@@ -1,10 +1,11 @@
 import dagre from '@dagrejs/dagre';
-import {Position, type Edge, type Node} from '@xyflow/svelte';
+import {Position} from '@xyflow/svelte';
+import type {Node, Edge} from '@xyflow/svelte';
 
 const nodeWidth = 150;
 const nodeHeight = 100;
 
-export const layoutGraph = <N extends Node, E extends Edge>(nodes: N[], edges: E[]): {nodes: N[]; edges: E[]} => {
+export const layoutGraph = <N extends Node, E extends Edge>({nodes, edges}: {nodes: N[]; edges: E[]}): {nodes: N[]; edges: E[]} => {
     const graph = new dagre.graphlib.Graph();
 
     graph.setGraph({rankdir: 'LR'});

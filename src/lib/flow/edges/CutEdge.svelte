@@ -1,5 +1,6 @@
 <script lang="ts">
-    import {useEdges, BaseEdge, getBezierPath, EdgeLabelRenderer, type EdgeProps} from '@xyflow/svelte';
+    import {useEdges, BaseEdge, getBezierPath, EdgeLabelRenderer} from '@xyflow/svelte';
+    import type {EdgeProps} from '@xyflow/svelte';
 
     type $$Props = EdgeProps;
 
