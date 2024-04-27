@@ -4,7 +4,7 @@ export async function _GET() {
     return (await (await fetch(`/api/project`, {method: 'GET'})).json()) as Project[];
 }
 
-export async function _POST({name = 'TODO'}: Pick<Project, 'name'>) {
+export async function _POST({name}: Pick<Project, 'name'>) {
     return (await (
         await fetch(`/api/project`, {
             method: 'POST',

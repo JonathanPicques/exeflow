@@ -14,7 +14,7 @@ export const layoutGraph = <N extends Node, E extends Edge>(nodes: N[], edges: E
         graph.setEdge(edge.source, edge.target);
     }
     for (const node of nodes) {
-        graph.setNode(node.id, {width: node.width ?? nodeWidth, height: node.height ?? nodeHeight});
+        graph.setNode(node.id, {width: node.computed?.width ?? node.width ?? nodeWidth, height: node.computed?.height ?? node.height ?? nodeHeight});
     }
 
     dagre.layout(graph);

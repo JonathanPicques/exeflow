@@ -1,3 +1,4 @@
+import {valid} from '$lib/schema/validate';
 import {json, error} from '@sveltejs/kit';
 import {getProjects, createProject} from './api.server';
 
@@ -10,11 +11,16 @@ export async function GET({locals}) {
     throw error(403);
 }
 
-export async function POST({locals}) {
+export async function POST({locals, request}) {
     const user = await locals.user();
+    const body = await request.json();
 
     if (user) {
-        return json(await createProject(locals.db, {name: 'New project', ownerId: user.id}));
+        let name = 'New project';
+        if (valid(body, {type: 'object', required: ['name'], properties: {name: {type: 'string'}}})) {
+            name = body.name;
+        }
+        return json(await createProject(locals.db, {name, ownerId: user.id}));
     }
     throw error(403);
 }
