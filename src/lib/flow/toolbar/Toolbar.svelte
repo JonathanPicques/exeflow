@@ -5,6 +5,7 @@
     export let actions: Record<ActionId, Action<unknown>>;
     export let triggers: Record<TriggerId, Trigger<unknown>>;
 
+    const sort = (a: [ActionId | TriggerId, unknown], b: [ActionId | TriggerId, unknown]) => a.length - b.length - a[0].localeCompare(b[0]);
     const onDragStart = (e: DragEvent, id: ActionId | TriggerId, plugin: Action<unknown> | Trigger<unknown>) => {
         if (!e.dataTransfer) {
             return null;
@@ -17,16 +18,16 @@
 </script>
 
 <aside>
-    {#each Object.entries(actions) as [id, action]}
-        <div class="action" role="img" on:dragstart={e => onDragStart(e, id, action)} draggable={true}>
-            <img src={action.icon} alt="action icon" />
-            <span>{action.title}</span>
-        </div>
-    {/each}
-    {#each Object.entries(triggers) as [id, trigger]}
+    {#each Object.entries(triggers).toSorted(sort) as [id, trigger]}
         <div class="trigger" role="img" on:dragstart={e => onDragStart(e, id, trigger)} draggable={true}>
             <img src={trigger.icon} alt="trigger icon" />
             <span>{trigger.title}</span>
+        </div>
+    {/each}
+    {#each Object.entries(actions).toSorted(sort) as [id, action]}
+        <div class="action" role="img" on:dragstart={e => onDragStart(e, id, action)} draggable={true}>
+            <img src={action.icon} alt="action icon" />
+            <span>{action.title}</span>
         </div>
     {/each}
 </aside>
