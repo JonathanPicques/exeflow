@@ -1,3 +1,3 @@
-export async function load({locals}) {
+export const load = async ({locals}) => {
     return {user: await locals.user()};
-}
+};

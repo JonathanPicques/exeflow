@@ -2,7 +2,7 @@ import {valid} from '$lib/schema/validate';
 import {json, error} from '@sveltejs/kit';
 import {updateProject, deleteProject} from '../api.server';
 
-export async function PATCH({locals, params, request}) {
+export const PATCH = async ({locals, params, request}) => {
     const body = await request.json();
 
     if (valid(body, {type: 'object', required: ['edges', 'nodes'], properties: {edges: {}, nodes: {}}})) {
@@ -10,9 +10,9 @@ export async function PATCH({locals, params, request}) {
         return json({id: params.id});
     }
     throw error(400, 'invalid body');
-}
+};
 
-export async function DELETE({locals, params}) {
+export const DELETE = async ({locals, params}) => {
     await deleteProject(locals.db, {id: params.id});
     return json({id: params.id});
-}
+};

@@ -2,16 +2,16 @@ import {valid} from '$lib/schema/validate';
 import {json, error} from '@sveltejs/kit';
 import {getProjects, createProject} from './api.server';
 
-export async function GET({locals}) {
+export const GET = async ({locals}) => {
     const user = await locals.user();
 
     if (user) {
         return json(await getProjects(locals.db, {ownerId: user.id}));
     }
     throw error(403);
-}
+};
 
-export async function POST({locals, request}) {
+export const POST = async ({locals, request}) => {
     const user = await locals.user();
     const body = await request.json();
 
@@ -23,4 +23,4 @@ export async function POST({locals, request}) {
         return json(await createProject(locals.db, {name, ownerId: user.id}));
     }
     throw error(403);
-}
+};

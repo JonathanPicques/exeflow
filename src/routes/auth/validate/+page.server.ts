@@ -1,4 +1,4 @@
-export async function load({url, locals}) {
+export const load = async ({url, locals}) => {
     const code = url.searchParams.get('code') as string | undefined;
     const error = url.searchParams.get('error') as string | undefined;
     const errorCode = url.searchParams.get('error_code') as string | undefined;
@@ -13,4 +13,4 @@ export async function load({url, locals}) {
         return {error: true, code: errorCode ?? '403', description: errorDescription ?? 'unable to validate you account'};
     }
     return {error: true, code: errorCode ?? '001', description: errorDescription ?? 'validation failed'};
-}
+};

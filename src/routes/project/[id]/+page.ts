@@ -2,7 +2,7 @@ import {error} from '@sveltejs/kit';
 import type {Action, ActionId} from '$lib/plugins/@action';
 import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
 
-export async function load({data}) {
+export const load = async ({data}) => {
     const actions: Record<ActionId, Action<unknown>> = {};
     const triggers: Record<TriggerId, Trigger<unknown>> = {};
     const pluginModules = import.meta.glob('$lib/plugins/*');
@@ -31,4 +31,4 @@ export async function load({data}) {
         actions,
         triggers,
     };
-}
+};
