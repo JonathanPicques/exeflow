@@ -1,8 +1,6 @@
 import {NoResultError} from 'kysely';
 
 import {AppError} from '$lib/helper/appError';
-import {initialNodes} from '$lib/graph/nodes';
-import {initialEdges} from '$lib/graph/edges';
 import type {Db} from '$lib/supabase/db.server';
 import type {AuthUser} from '$lib/supabase/user';
 import type {PluginNode} from '$lib/graph/nodes';
@@ -32,7 +30,7 @@ export const getProjects = async (db: Db, {ownerId}: {ownerId: AuthUser['id']}) 
 export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: AuthUser['id']}) => {
     return (await db
         .insertInto('projects')
-        .values({name, content: JSON.stringify({nodes: initialNodes, edges: initialEdges}), owner_id: ownerId})
+        .values({name, content: JSON.stringify({nodes: [], edges: []}), owner_id: ownerId})
         .returning(['id', 'name', 'content'])
         .executeTakeFirstOrThrow()) as Project;
 };

@@ -131,7 +131,18 @@
     };
 </script>
 
-<SvelteFlow fitView {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
+<SvelteFlow
+    {nodes}
+    {nodeTypes}
+    {edges}
+    {edgeTypes}
+    {defaultEdgeOptions}
+    {onconnect}
+    {isValidConnection}
+    on:drop={ondrop}
+    on:dragover={ondragover}
+    fitView={initialNodes.length > 0}
+>
     <Panel position="top-right">
         <button on:click={() => save?.($nodes, $edges)}>Save</button>
         <button on:click={() => layout()}>Layout</button>
