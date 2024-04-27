@@ -1,15 +1,18 @@
 <script lang="ts">
-    import {useRows} from '../rows';
-    import {type ActionNode} from '$lib/graph/nodes';
-    import {type Point, makeHandleId} from '$lib/graph/points';
-    import {Handle, useEdges, Position, type NodeProps} from '@xyflow/svelte';
+    import {Handle, useEdges, Position} from '@xyflow/svelte';
+    import type {NodeProps} from '@xyflow/svelte';
+
+    import {nodeRows} from '$lib/helper/nodeRows';
+    import {makeHandleId} from '$lib/graph/points';
+    import type {Point} from '$lib/graph/points';
+    import type {ActionNode} from '$lib/graph/nodes';
 
     type $$Props = NodeProps<ActionNode>;
 
     export let id: $$Props['id'];
     export let data: $$Props['data'];
 
-    const rows = useRows(data);
+    const rows = nodeRows(data);
     const edges = useEdges();
 
     $: lefts = [...new Set($edges.filter(e => e.target === id).map(e => e.targetHandle))] as string[];

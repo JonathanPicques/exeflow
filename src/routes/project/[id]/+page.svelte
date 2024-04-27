@@ -2,19 +2,20 @@
     import {_PATCH} from '../../api/project/[id]/fetch.client.js';
 
     import {writable} from 'svelte/store';
-    import {Panel, Controls, Background, SvelteFlow, useSvelteFlow, type Edge, type Connection} from '@xyflow/svelte';
+    import {Panel, Controls, Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
+    import type {Edge, Connection} from '@xyflow/svelte';
 
-    import Toolbar from '$lib/flow/Toolbar.svelte';
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';
+    import Toolbar from '$lib/flow/toolbar/Toolbar.svelte';
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
-    import {layoutGraph} from '$lib/flow/dagre/dagre';
-
     import {compatible} from '$lib/schema/validate';
+    import {layoutGraph} from '$lib/flow/dagre/dagre';
     import {splitHandleId} from '$lib/graph/points';
+    import type {PluginNode} from '$lib/graph/nodes.js';
 
     import '@xyflow/svelte/dist/style.css';
-    import '$lib/flow/style.css';
+    import '$lib/flow/flow.css';
 
     export let data;
 
@@ -51,20 +52,34 @@
             return null;
         }
 
-        const name = e.dataTransfer.getData('application/svelteflow:name');
+        const id = e.dataTransfer.getData('application/exeflow+plugin:id');
+        const type = e.dataTransfer.getData('application/exeflow+plugin:type');
+        const plugin = ((id: string, type: 'action' | 'trigger') => {
+            switch (type) {
+                case 'action':
+                    return data.actions[id]!;
+                case 'trigger':
+                    return data.triggers[id]!;
+                default:
+                    throw new Error('unreachable');
+            }
+        })(id, type as 'action' | 'trigger');
         const position = screenToFlowPosition({x: e.clientX, y: e.clientY});
 
         $nodes = [
             ...$nodes,
             {
-                ...$nodes[0]!,
                 id: `${Math.random()}`,
+                type: plugin.type,
                 data: {
-                    ...($nodes[0]!.data as any),
-                    name,
+                    id,
+                    icon: plugin.icon,
+                    type: plugin.type,
+                    name: plugin.title,
+                    ...plugin.renderNode({config: {}}),
                 },
                 position,
-            },
+            } as PluginNode,
         ];
     };
     const ondragover = (e: DragEvent) => {
@@ -87,13 +102,11 @@
         const {type: rightPointType} = splitHandleId(connection.sourceHandle);
 
         if (leftPointType === 'input' && rightPointType === 'output') {
-            // FIXME
-            // Make sure only one edge can exit from the source (right)
-            edges.update(edges => edges.filter(e => e.sourceHandle !== connection.sourceHandle || e.targetHandle === connection.targetHandle));
+            // FIXME: Make sure only one edge can exit from the source (right)
+            // edges.update(edges => edges.filter(e => e.sourceHandle !== connection.sourceHandle || e.targetHandle === connection.targetHandle));
         } else if (leftPointType === 'param' && rightPointType === 'return' && leftNode.data.type === 'action') {
-            // FIXME
-            // Make sure only one edge can enter into the target (left)
-            edges.update(edges => edges.filter(e => e.sourceHandle === connection.sourceHandle || e.targetHandle !== connection.targetHandle));
+            // FIXME: Make sure only one edge can enter into the target (left)
+            // edges.update(edges => edges.filter(e => e.sourceHandle === connection.sourceHandle || e.targetHandle !== connection.targetHandle));
         } else {
             throw new Error(`onconnect: ${leftPointType} and ${rightPointType} cannot be connected`);
         }

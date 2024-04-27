@@ -3,7 +3,7 @@ import type {LeftPoint, RightPoint} from '$lib/graph/points';
 
 export type Row = [LeftPoint | undefined, RightPoint | undefined];
 
-export const useRows = (nodeData: PluginNodeData): Row[] => {
+export const nodeRows = (nodeData: PluginNodeData): Row[] => {
     switch (nodeData.type) {
         case 'action': {
             const rows: Row[] = [];

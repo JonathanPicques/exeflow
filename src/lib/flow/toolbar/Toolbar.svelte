@@ -1,30 +1,30 @@
 <script lang="ts">
-    import type {Action} from '$lib/graph/action';
-    import type {Trigger} from '$lib/graph/trigger';
+    import type {Action, ActionId} from '$lib/plugins/@action';
+    import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
 
-    export let actions: Record<string, Action<unknown>>;
-    export let triggers: Record<string, Trigger<unknown>>;
+    export let actions: Record<ActionId, Action<unknown>>;
+    export let triggers: Record<TriggerId, Trigger<unknown>>;
 
-    const onDragStart = (e: DragEvent, name: string, type: string) => {
+    const onDragStart = (e: DragEvent, id: ActionId | TriggerId, plugin: Action<unknown> | Trigger<unknown>) => {
         if (!e.dataTransfer) {
             return null;
         }
 
-        e.dataTransfer.setData('application/svelteflow:name', name);
-        e.dataTransfer.setData('application/svelteflow:type', type);
+        e.dataTransfer.setData('application/exeflow+plugin:id', id);
+        e.dataTransfer.setData('application/exeflow+plugin:type', plugin.type);
         e.dataTransfer.effectAllowed = 'move';
     };
 </script>
 
 <aside>
-    {#each Object.entries(actions) as [name, action]}
-        <div class="action" role="doc-part" on:dragstart={e => onDragStart(e, name, action.type)} draggable={true}>
+    {#each Object.entries(actions) as [id, action]}
+        <div class="action" role="img" on:dragstart={e => onDragStart(e, id, action)} draggable={true}>
             <img src={action.icon} alt="action icon" />
             <span>{action.title}</span>
         </div>
     {/each}
-    {#each Object.entries(triggers) as [name, trigger]}
-        <div class="trigger" role="doc-part" on:dragstart={e => onDragStart(e, name, trigger.type)} draggable={true}>
+    {#each Object.entries(triggers) as [id, trigger]}
+        <div class="trigger" role="img" on:dragstart={e => onDragStart(e, id, trigger)} draggable={true}>
             <img src={trigger.icon} alt="trigger icon" />
             <span>{trigger.title}</span>
         </div>
