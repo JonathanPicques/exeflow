@@ -1,3 +1,6 @@
+import {NoResultError} from 'kysely';
+
+import {AppError} from '$lib/helper/appError';
 import {initialEdges} from '$lib/graph/edges';
 import {initialNodes} from '$lib/graph/nodes';
 import type {Db} from '$lib/supabase/db.server';
@@ -12,7 +15,14 @@ export interface Project {
 }
 
 export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
-    return (await db.selectFrom('projects').select(['id', 'name', 'content']).where('id', '=', id).executeTakeFirstOrThrow()) as Project;
+    try {
+        return (await db.selectFrom('projects').select(['id', 'name', 'content']).where('id', '=', id).executeTakeFirstOrThrow()) as Project;
+    } catch (e) {
+        if (e instanceof NoResultError) {
+            throw new ProjectNotFoundError(id);
+        }
+        throw e;
+    }
 };
 
 export const getProjects = async (db: Db, {ownerId}: {ownerId: AuthUser['id']}) => {
@@ -28,13 +38,33 @@ export const createProject = async (db: Db, {name, ownerId}: {name: Project['nam
 };
 
 export const deleteProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
-    await db.deleteFrom('projects').where('id', '=', id).execute();
+    try {
+        await db.deleteFrom('projects').where('id', '=', id).execute();
+    } catch (e) {
+        if (e instanceof NoResultError) {
+            throw new ProjectNotFoundError(id);
+        }
+        throw e;
+    }
 };
 
 export const updateProject = async (db: Db, {id, content}: Pick<Project, 'id' | 'content'>) => {
-    await db
-        .updateTable('projects')
-        .where('id', '=', id)
-        .set({content: JSON.stringify(content)})
-        .execute();
+    try {
+        await db
+            .updateTable('projects')
+            .where('id', '=', id)
+            .set({content: JSON.stringify(content)})
+            .execute();
+    } catch (e) {
+        if (e instanceof NoResultError) {
+            throw new ProjectNotFoundError(id);
+        }
+        throw e;
+    }
 };
+
+export class ProjectNotFoundError extends AppError {
+    constructor(id: string) {
+        super(`project ${id} not found`, 404);
+    }
+}
