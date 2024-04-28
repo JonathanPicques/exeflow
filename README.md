@@ -27,10 +27,11 @@ Exeflow is perfect for:
 - Run `supabase start`
 - Create a `.env` file and use the output from `supabase start`:
 ```toml
-    DATABASE_URL=""
-    SUPABASE_API_URL=""
-    SUPABASE_ANON_KEY=""
-    SUPABASE_SERVICE_ROLE_KEY=""
+    EXEFLOW_URL="http://localhost:5173" # Must match [auth.additional_redirect_urls] in supabase/config.toml
+    SUPABASE_DB_URL="..."
+    SUPABASE_API_URL="..."
+    SUPABASE_ANON_KEY="..."
+    SUPABASE_SERVICE_ROLE_KEY="..."
 ```
 - Run `pnpm dev`
 

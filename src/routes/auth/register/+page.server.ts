@@ -1,5 +1,7 @@
 import {fail} from '@sveltejs/kit';
 
+import {EXEFLOW_URL} from '$env/static/private';
+
 export const actions = {
     default: async ({locals, request}) => {
         const form = await request.formData();
@@ -8,7 +10,7 @@ export const actions = {
         const confirmPassword = form.get('confirmPassword') as string;
 
         if (email && password && confirmPassword && password === confirmPassword) {
-            const result = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: 'http://localhost:5173/auth/validate'}});
+            const result = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: `${EXEFLOW_URL}/auth/validate`}});
 
             if (result.data.user) {
                 return {email, success: true};
