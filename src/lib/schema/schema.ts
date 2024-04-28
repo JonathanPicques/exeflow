@@ -44,18 +44,17 @@ export type InferJsonSchema<T extends JsonSchema> = T extends JsonSchemaAny
             : never;
 export type InferJsonSchemaRecord<T extends Record<string, JsonSchema>> = {[K in keyof T]: InferJsonSchema<T[K]>};
 
-type InferJsonSchemaAny<T extends JsonSchemaAny> = ConstOrDefault<T, any>;
-type InferJsonSchemaObject<T extends JsonSchemaObject> = ConstOrDefault<T, MapObject<T>>;
-type InferJsonSchemaNumber<T extends JsonSchemaNumber> = ConstOrDefault<T, number>;
-type InferJsonSchemaString<T extends JsonSchemaString> = ConstOrDefault<T, T['enum'] extends (infer E)[] ? E : string>;
-type InferJsonSchemaBoolean<T extends JsonSchemaBoolean> = ConstOrDefault<T, boolean>;
+type InferJsonSchemaAny<T extends JsonSchemaAny> = Const<T, any>;
+type InferJsonSchemaObject<T extends JsonSchemaObject> = Const<T, MapObject<T>>;
+type InferJsonSchemaNumber<T extends JsonSchemaNumber> = Const<T, number>;
+type InferJsonSchemaString<T extends JsonSchemaString> = Const<T, T['enum'] extends (infer E)[] ? E : string>;
+type InferJsonSchemaBoolean<T extends JsonSchemaBoolean> = Const<T, boolean>;
 
-type ConstOrDefault<T extends JsonSchema, Fallback> = T['const'] extends infer C extends {} ? C : T['default'] extends infer D extends {} ? D : Fallback;
-
+type Const<T extends JsonSchema, Fallback> = T['const'] extends infer C extends {} ? C : Fallback;
 type MapObject<T extends JsonSchemaObject> =
     T['properties'] extends Record<string, JsonSchema>
         ? {[K in RequiredKeys<T>]: InferJsonSchema<T['properties'][K]>} & {[K in NonRequiredKeys<T>]+?: InferJsonSchema<T['properties'][K]>}
-        : object;
+        : Record<string, unknown>;
 type PropertyKeys<T extends JsonSchemaObject> = keyof T['properties'];
 type RequiredKeys<T extends JsonSchemaObject> = T['required'] extends (infer K)[] ? K & PropertyKeys<T> : never;
 type NonRequiredKeys<T extends JsonSchemaObject> = Exclude<PropertyKeys<T>, RequiredKeys<T>>;
