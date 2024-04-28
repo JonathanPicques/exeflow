@@ -50,16 +50,19 @@ export default action<Config, Signature>({
                     type: 'string',
                     default: config.token,
                     //
-                    title: 'Discord bot token',
                     description: 'You discord bot token can be found here: https://acme.com/api-key',
                 },
                 server: {
                     type: 'string',
                     default: config.server,
+                    //
+                    description: 'The message will be sent on this server',
                 },
                 channel: {
                     type: 'string',
                     default: config.channel,
+                    //
+                    description: 'The message will be sent on this channel',
                 },
             },
         };

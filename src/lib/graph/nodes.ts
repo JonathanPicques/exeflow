@@ -1,7 +1,7 @@
 import type {Node} from '@xyflow/svelte';
 import type {ActionId} from '$lib/plugins/@action';
 import type {TriggerId} from '$lib/plugins/@trigger';
-import type {JSONSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/schema/schema';
 
 export type PluginNode = ActionNode | TriggerNode;
 export type ActionNode = Node<ActionNodeData>;
@@ -17,8 +17,8 @@ export interface ActionNodeData {
     //
     inputs: string[];
     outputs: string[];
-    params: {order: string[]; values: Record<string, JSONSchema>};
-    returns: {order: string[]; values: Record<string, JSONSchema>};
+    params: {order: string[]; values: Record<string, JsonSchema>};
+    returns: {order: string[]; values: Record<string, JsonSchema>};
     //
     [x: string]: unknown;
 }
@@ -31,7 +31,7 @@ export interface TriggerNodeData {
     icon: string;
     //
     outputs: string[];
-    returns: {order: string[]; values: Record<string, JSONSchema>};
+    returns: {order: string[]; values: Record<string, JsonSchema>};
     //
     [x: string]: unknown;
 }

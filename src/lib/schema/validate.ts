@@ -1,12 +1,12 @@
 import Ajv from 'ajv';
-import type {FromSchema, JSONSchema} from './schema';
+import type {JsonSchema, InferJsonSchema} from './schema';
 
 const validator = new Ajv();
 
-export const valid = <T extends JSONSchema>(data: unknown, schema: T): data is FromSchema<T> => {
+export const valid = <T extends JsonSchema>(data: unknown, schema: T): data is InferJsonSchema<T> => {
     return validator.validate(schema, data);
 };
 
-export const compatible = (lhs: JSONSchema, rhs: JSONSchema) => {
+export const compatible = (lhs: JsonSchema, rhs: JsonSchema) => {
     return lhs.type === rhs.type;
 };

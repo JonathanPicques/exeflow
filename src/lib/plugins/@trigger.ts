@@ -1,4 +1,4 @@
-import type {JSONSchema, FromObjectSchema} from '$lib/schema/schema';
+import type {JsonSchema, InferJsonSchemaRecord} from '$lib/schema/schema';
 
 export interface Trigger<Config, Signature extends TriggerSignature = TriggerSignature> {
     type: 'trigger';
@@ -8,7 +8,7 @@ export interface Trigger<Config, Signature extends TriggerSignature = TriggerSig
     description: string;
     //
     config: (args: ConfigArgs<Config>) => ConfigResult<Config> | Promise<ConfigResult<Config>>;
-    renderForm: (args: RenderFormArgs<Config>) => JSONSchema | Promise<JSONSchema>;
+    renderForm: (args: RenderFormArgs<Config>) => JsonSchema | Promise<JsonSchema>;
     renderNode: (args: RenderNodeArgs<Config, Signature>) => Signature | Promise<Signature>;
 }
 
@@ -32,13 +32,13 @@ interface RenderFormArgs<Config> {
 
 interface RenderNodeArgs<Config, Signature extends TriggerSignature> {
     config: Config;
-    params?: FromObjectSchema<Signature['returns']['values']>;
+    params?: InferJsonSchemaRecord<Signature['returns']['values']>;
 }
 
 export interface TriggerSignature {
     outputs: string[];
     //
-    returns: {order: string[]; values: Record<string, JSONSchema>};
+    returns: {order: string[]; values: Record<string, JsonSchema>};
 }
 
 export const trigger = <Config, Signature extends TriggerSignature = TriggerSignature>(trigger: Omit<Trigger<Config, Signature>, 'type'>) => ({type: 'trigger', ...trigger});

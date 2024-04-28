@@ -43,8 +43,8 @@
         const type = e.dataTransfer.getData('application/exeflow+plugin:type');
         const position = screenToFlowPosition({x: e.clientX, y: e.clientY});
 
-        if (valid(id, {type: 'string'}) && valid(type, {type: 'string', enum: ['action', 'trigger']})) {
-            $nodes = [...$nodes, positionNode(await createNode(id, type as 'action' | 'trigger'), position)];
+        if (valid(id, {type: 'string'}) && valid(type, {type: 'string', enum: ['action', 'trigger'] as const})) {
+            $nodes = [...$nodes, positionNode(await createNode(id, type), position)];
         }
     };
     const ondragover = (e: DragEvent) => {
