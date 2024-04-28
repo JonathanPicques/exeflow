@@ -1,5 +1,4 @@
 <script lang="ts">
-    import {writable} from 'svelte/store';
     import {Panel, Controls, Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
@@ -7,29 +6,20 @@
     import Toolbar from '$lib/flow/toolbar/Toolbar.svelte';
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
-    import {compatible} from '$lib/schema/validate';
     import {layoutGraph} from '$lib/flow/dagre/dagre';
     import {splitHandleId} from '$lib/graph/points';
-    import type {PluginEdge} from '$lib/graph/edges';
-    import type {PluginNode} from '$lib/graph/nodes';
-    import type {Action, ActionId} from '$lib/plugins/@action';
-    import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
+    import {getGraphContext} from '$lib/graph/data';
+    import {valid, compatible} from '$lib/schema/validate';
 
     import '@xyflow/svelte/dist/style.css';
     import '$lib/flow/flow.css';
 
-    export let actions: Record<ActionId, Action<unknown>>;
-    export let triggers: Record<TriggerId, Trigger<unknown>>;
-    export let initialNodes: PluginNode[];
-    export let initialEdges: PluginEdge[];
+    export let initialFitView: boolean;
 
-    export let save: ((nodes: PluginNode[], edges: PluginEdge[]) => void) | undefined;
+    const {nodes, edges, createNode, positionNode} = getGraphContext();
 
-    const nodes = writable(initialNodes);
-    const nodeTypes = {action: ActionNode, trigger: TriggerNode};
-
-    const edges = writable(initialEdges);
     const edgeTypes = {edge: CutEdge};
+    const nodeTypes = {action: ActionNode, trigger: TriggerNode};
     const defaultEdgeOptions = {type: 'edge'};
 
     const {fitView, screenToFlowPosition} = useSvelteFlow();
@@ -51,33 +41,11 @@
 
         const id = e.dataTransfer.getData('application/exeflow+plugin:id');
         const type = e.dataTransfer.getData('application/exeflow+plugin:type');
-        const plugin = ((id: string, type: 'action' | 'trigger') => {
-            switch (type) {
-                case 'action':
-                    return actions[id]!;
-                case 'trigger':
-                    return triggers[id]!;
-                default:
-                    throw new Error('unreachable');
-            }
-        })(id, type as 'action' | 'trigger');
         const position = screenToFlowPosition({x: e.clientX, y: e.clientY});
 
-        $nodes = [
-            ...$nodes,
-            {
-                id: `${Math.random()}`,
-                type: plugin.type,
-                data: {
-                    id,
-                    icon: plugin.icon,
-                    type: plugin.type,
-                    name: plugin.title,
-                    ...(await plugin.renderNode({config: (await plugin.config({})).config ?? {}})),
-                },
-                position,
-            } as PluginNode,
-        ];
+        if (valid(id, {type: 'string'}) && valid(type, {type: 'string', enum: ['action', 'trigger']})) {
+            $nodes = [...$nodes, positionNode(await createNode(id, type as 'action' | 'trigger'), position)];
+        }
     };
     const ondragover = (e: DragEvent) => {
         e.preventDefault();
@@ -131,25 +99,13 @@
     };
 </script>
 
-<SvelteFlow
-    {nodes}
-    {nodeTypes}
-    {edges}
-    {edgeTypes}
-    {defaultEdgeOptions}
-    {onconnect}
-    {isValidConnection}
-    on:drop={ondrop}
-    on:dragover={ondragover}
-    fitView={initialNodes.length > 0}
->
+<SvelteFlow fitView={initialFitView} {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
     <Panel position="top-right">
-        <button on:click={() => save?.($nodes, $edges)}>Save</button>
         <button on:click={() => layout()}>Layout</button>
         <button on:click={() => fitView()}>Fit view</button>
     </Panel>
     <Panel position="top-center">
-        <Toolbar {actions} {triggers} />
+        <Toolbar />
     </Panel>
     <Controls />
     <Background />

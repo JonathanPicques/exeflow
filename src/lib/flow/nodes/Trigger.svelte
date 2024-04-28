@@ -17,7 +17,7 @@
 
     $: rights = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
     $: rightHandleStyle = (right: Point) => {
-        const selected = rights.includes(makeHandleId(right));
+        const filled = rights.includes(makeHandleId(right));
         return `
             position: relative;
             top: 8px;
@@ -25,7 +25,7 @@
             height: 5px;
             border: 1px solid var(--flow-point-color);
             border-radius: ${right.type === 'output' ? '0' : '100%'};
-            background-color: ${selected ? 'var(--flow-point-color)' : 'transparent'};
+            background-color: ${filled ? 'var(--flow-point-color)' : 'transparent'};
         `;
     };
 </script>

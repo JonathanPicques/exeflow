@@ -1,9 +1,9 @@
 <script lang="ts">
+    import {getGraphContext} from '$lib/graph/data';
     import type {Action, ActionId} from '$lib/plugins/@action';
     import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
 
-    export let actions: Record<ActionId, Action<unknown>>;
-    export let triggers: Record<TriggerId, Trigger<unknown>>;
+    const {actions, triggers} = getGraphContext();
 
     const sort = (a: [ActionId | TriggerId, unknown], b: [ActionId | TriggerId, unknown]) => a.length - b.length - a[0].localeCompare(b[0]);
     const onDragStart = (e: DragEvent, id: ActionId | TriggerId, plugin: Action<unknown> | Trigger<unknown>) => {

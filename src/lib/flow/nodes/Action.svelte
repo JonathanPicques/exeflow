@@ -18,7 +18,7 @@
     $: lefts = [...new Set($edges.filter(e => e.target === id).map(e => e.targetHandle))] as string[];
     $: rights = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
     $: leftHandleStyle = (left: Point) => {
-        const selected = lefts.includes(makeHandleId(left));
+        const filled = lefts.includes(makeHandleId(left));
         return `
             position: relative;
             top: 8px;
@@ -26,11 +26,11 @@
             height: 5px;
             border: 1px solid var(--flow-point-color);
             border-radius: ${left.type === 'input' ? '0' : '100%'};
-            background-color: ${selected ? 'var(--flow-point-color)' : 'transparent'};
+            background-color: ${filled ? 'var(--flow-point-color)' : 'transparent'};
         `;
     };
     $: rightHandleStyle = (right: Point) => {
-        const selected = rights.includes(makeHandleId(right));
+        const filled = rights.includes(makeHandleId(right));
         return `
             position: relative;
             top: 8px;
@@ -38,7 +38,7 @@
             height: 5px;
             border: 1px solid var(--flow-point-color);
             border-radius: ${right.type === 'output' ? '0' : '100%'};
-            background-color: ${selected ? 'var(--flow-point-color)' : 'transparent'};
+            background-color: ${filled ? 'var(--flow-point-color)' : 'transparent'};
         `;
     };
 </script>
