@@ -42,7 +42,7 @@
         fitView();
     };
 
-    const ondrop = (e: DragEvent) => {
+    const ondrop = async (e: DragEvent) => {
         e.preventDefault();
 
         if (!e.dataTransfer) {
@@ -73,7 +73,7 @@
                     icon: plugin.icon,
                     type: plugin.type,
                     name: plugin.title,
-                    ...plugin.renderNode({config: {}}),
+                    ...(await plugin.renderNode({config: (await plugin.config({})).config ?? {}})),
                 },
                 position,
             } as PluginNode,
