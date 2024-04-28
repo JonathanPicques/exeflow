@@ -48,9 +48,9 @@
         height: 20px;
 
         color: var(--text-color);
-        border: 1px solid #fff;
+        border: 1px solid var(--flow-edge-color);
         border-radius: 50%;
-        background-color: var(--bg-color);
+        background-color: var(--background-color);
 
         cursor: pointer;
         font-size: 12px;
@@ -58,13 +58,13 @@
         text-align: center;
 
         transition: box-shadow linear 0.1s;
-    }
 
-    button:hover {
-        box-shadow: 0 0 4px 2px rgba(252, 252, 252, 0.998);
-    }
+        &:hover {
+            box-shadow: 0 0 4px 2px #ddd;
+        }
 
-    button:active {
-        box-shadow: 0 0 6px 2px rgba(252, 252, 252, 0.998);
+        &:active {
+            box-shadow: 0 0 6px 2px #ddd;
+        }
     }
 </style>

@@ -1,15 +1,27 @@
 .svelte-flow {
-    --bg-color: #111;
-    --text-color: #ddd;
-    --point-color: #ccc;
-    --node-bg-color: #222222aa;
-    --node-action-color: #f3ce39;
-    --node-trigger-color: #f54e9e;
-    --node-border-radius: 10px;
-    --xy-background-pattern-dots-color-default: #404040;
+    --xy-background-pattern-dots-color-default: var(--flow-grid-dots-color);
+}
 
-    color: var(--text-color);
-    background-color: var(--bg-color) !important;
+.svelte-flow__edge {
+    & path {
+        stroke: var(--flow-edge-color);
+    }
+}
+
+.svelte-flow__node {
+    & .svelte-flow__handle {
+        width: 6px !important;
+        height: 6px !important;
+    }
+}
+
+.svelte-flow__handle {
+    &.connectingto {
+        background-color: var(--color-error) !important;
+    }
+    &.valid {
+        background-color: var(--color-success) !important;
+    }
 }
 
 .svelte-flow__controls button {
@@ -17,24 +29,28 @@
     border-bottom: none;
 
     color: var(--text-color);
-    background-color: var(--bg-color);
-}
+    background-color: var(--background-color);
 
-.svelte-flow__controls button:hover {
-    background-color: rgb(37, 37, 37);
-}
+    & path {
+        fill: var(--text-color);
+    }
 
-.svelte-flow__controls button:first-child {
-    border-radius: 5px 5px 0 0;
-}
+    &:hover {
+        background-color: var(--background-color-hover);
+    }
 
-.svelte-flow__controls button:last-child {
-    border-bottom: 1px solid var(--text-color);
-    border-radius: 0 0 5px 5px;
-}
+    &:active {
+        background-color: var(--background-color-active);
+    }
 
-.svelte-flow__controls button path {
-    fill: var(--text-color);
+    &:first-child {
+        border-radius: 5px 5px 0 0;
+    }
+
+    &:last-child {
+        border-bottom: 1px solid var(--text-color);
+        border-radius: 0 0 5px 5px;
+    }
 }
 
 .svelte-flow__attribution {

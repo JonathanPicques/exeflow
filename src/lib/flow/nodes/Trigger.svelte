@@ -23,9 +23,9 @@
             top: 8px;
             width: 5px;
             height: 5px;
-            border: 1px solid var(--point-color);
+            border: 1px solid var(--flow-point-color);
             border-radius: ${right.type === 'output' ? '0' : '100%'};
-            background-color: ${selected ? 'var(--point-color)' : 'transparent'};
+            background-color: ${selected ? 'var(--flow-point-color)' : 'transparent'};
         `;
     };
 </script>
@@ -55,8 +55,8 @@
 
         color: var(--text-color);
         border: 2px solid transparent;
-        border-radius: 5px;
-        background-color: var(--node-bg-color);
+        border-radius: var(--flow-node-border-radius);
+        background-color: var(--flow-node-background-color);
 
         text-align: center;
         font-family: 'Fira Mono', Monospace;
@@ -65,7 +65,7 @@
     }
 
     :global(.svelte-flow__node-trigger.selected) {
-        border: 2px solid var(--node-trigger-color);
+        border: 2px solid var(--trigger-color);
     }
 
     .head {
@@ -76,7 +76,7 @@
     }
 
     .head > span {
-        color: var(--node-trigger-color);
+        color: var(--trigger-color);
         font-size: 16px;
         font-weight: bold;
     }
@@ -98,7 +98,7 @@
     .return > span {
         flex-grow: 1;
 
-        color: var(--point-color);
+        color: var(--flow-point-color);
         font-size: 12px;
         text-align: end;
     }

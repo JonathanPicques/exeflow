@@ -15,9 +15,7 @@
         <input name="password" type="password" required />
     </label>
     <label>
-        Login:
-        <input type="submit" />
+        <button type="submit">Login</button>
+        <a href="/auth/register">Register instead</a>
     </label>
 </form>
-
-<a href="/auth/register">Register instead</a>

@@ -1,0 +1,57 @@
+:root {
+    --action-color: #f3ce39;
+    --trigger-color: #f54e9e;
+}
+
+:root[color-scheme='dark'] {
+    /* Main */
+    --text-color: #ddd;
+    --background-color: #111;
+    --background-color-hover: #373737;
+    --background-color-active: #404040;
+    /* General */
+    --color-error: #e15757;
+    --color-success: #55dd99;
+    /* Flow theme */
+    --flow-edge-color: #ddd;
+    --flow-point-color: #ddd;
+    --flow-grid-dots-color: #404040;
+    --flow-node-border-radius: 5px;
+    --flow-node-background-color: #222a;
+}
+
+:root[color-scheme='light'] {
+    /* Main */
+    --text-color: #111;
+    --background-color: #eee;
+    --background-color-hover: #ccc;
+    --background-color-active: #aaa;
+    /* General */
+    --color-error: #d13434;
+    --color-success: #55dd99;
+    /* Flow theme */
+    --flow-edge-color: #111;
+    --flow-point-color: #111;
+    --flow-grid-dots-color: #404040;
+    --flow-node-border-radius: 5px;
+    --flow-node-background-color: #fffc;
+}
+
+body {
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+    margin: 20px auto;
+}
+
+form label input[type='text'],
+form label input[type='email'],
+form label input[type='password'] {
+    width: 100%;
+}

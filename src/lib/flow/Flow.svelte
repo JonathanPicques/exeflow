@@ -154,18 +154,3 @@
     <Controls />
     <Background />
 </SvelteFlow>
-
-<style>
-    :global(.svelte-flow .svelte-flow__handle.connectingto) {
-        background-color: #ff6060 !important;
-    }
-
-    :global(.svelte-flow .svelte-flow__handle.valid) {
-        background-color: #55dd99 !important;
-    }
-
-    :global(.svelte-flow .svelte-flow__node .svelte-flow__handle) {
-        width: 8px;
-        height: 8px;
-    }
-</style>

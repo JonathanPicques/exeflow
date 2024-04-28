@@ -25,9 +25,7 @@
         <input name="confirmPassword" type="password" required />
     </label>
     <label>
-        Register:
-        <input type="submit" />
+        <button type="submit">Register</button>
+        <a href="/auth/login">Login instead</a>
     </label>
 </form>
-
-<a href="/auth/login">Login instead</a>

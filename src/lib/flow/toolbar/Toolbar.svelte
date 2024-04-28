@@ -41,18 +41,18 @@
     }
 
     .action {
-        color: var(--node-action-color);
+        color: var(--action-color);
 
         &:hover {
-            border: 2px solid var(--node-action-color);
+            border: 2px solid var(--action-color);
         }
     }
 
     .trigger {
-        color: var(--node-trigger-color);
+        color: var(--trigger-color);
 
         &:hover {
-            border: 2px solid var(--node-trigger-color);
+            border: 2px solid var(--trigger-color);
         }
     }
 
@@ -71,7 +71,7 @@
         padding: 0.5rem 1rem;
         border: 2px solid transparent;
         border-radius: 5px;
-        background-color: var(--node-bg-color);
+        background-color: var(--flow-node-background-color);
 
         & > img {
             pointer-events: none;
