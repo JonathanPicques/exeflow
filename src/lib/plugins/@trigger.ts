@@ -1,18 +1,21 @@
-import type {JsonSchema, InferJsonSchemaRecord} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/schema/schema';
 
-export interface Trigger<Config, Signature extends TriggerSignature = TriggerSignature> {
+export interface Trigger<Config> {
     type: 'trigger';
     //
     icon: string;
     title: string;
     description: string;
     //
+    form: (args: FormArgs<Config>) => JsonSchema | Promise<JsonSchema>;
     config: (args: ConfigArgs<Config>) => ConfigResult<Config> | Promise<ConfigResult<Config>>;
-    renderForm: (args: RenderFormArgs<Config>) => JsonSchema | Promise<JsonSchema>;
-    renderNode: (args: RenderNodeArgs<Config, Signature>) => Signature | Promise<Signature>;
 }
 
 export type TriggerId = string;
+
+interface FormArgs<Config> {
+    config: Config;
+}
 
 interface ConfigArgs<Config> {
     form?: unknown;
@@ -21,29 +24,9 @@ interface ConfigArgs<Config> {
 
 interface ConfigResult<Config> {
     valid: boolean;
-    props?: unknown;
     config: Config;
-}
-
-interface RenderFormArgs<Config> {
-    config: Config;
-    props?: unknown;
-}
-
-interface RenderNodeArgs<Config, Signature extends TriggerSignature> {
-    config: Config;
-    params?: InferJsonSchemaRecord<Signature['returns']['values']>;
-}
-
-export interface TriggerSignature {
     outputs: string[];
-    //
-    returns: {order: string[]; values: Record<string, JsonSchema>};
+    results: Record<string, JsonSchema>;
 }
 
-export const trigger = <Config, Signature extends TriggerSignature = TriggerSignature>(trigger: Omit<Trigger<Config, Signature>, 'type'>) => ({type: 'trigger', ...trigger});
-export const emptyTriggerSignature: TriggerSignature = {
-    outputs: [],
-    //
-    returns: {order: [], values: {}},
-};
+export const trigger = <Config>(trigger: Omit<Trigger<Config>, 'type'>) => ({type: 'trigger', ...trigger});

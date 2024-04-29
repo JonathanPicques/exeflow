@@ -1,4 +1,4 @@
-import {action, type ActionSignature} from './@action';
+import {action} from './@action';
 
 interface Config {
     token: string;
@@ -6,42 +6,12 @@ interface Config {
     channel: string;
 }
 
-interface Signature extends ActionSignature {
-    inputs: ['in'];
-    outputs: ['out', 'on error'];
-    //
-    params: {
-        order: ['message'];
-        values: {
-            message: {type: 'string'};
-        };
-    };
-    returns: {
-        order: ['error'];
-        values: {
-            error: {type: 'string'};
-        };
-    };
-}
-
-export default action<Config, Signature>({
+export default action<Config>({
     icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/discord.svg',
     title: 'send message',
     description: 'send a message in a discord channel',
     //
-    config({form, config}) {
-        const typedForm = form as Partial<Config> | undefined;
-
-        return {
-            valid: true,
-            config: {
-                token: typedForm?.token ?? config?.token ?? 'sk-abc-123',
-                server: typedForm?.server ?? config?.server ?? 'sk-abc-123',
-                channel: typedForm?.channel ?? config?.channel ?? 'sk-abc-123',
-            },
-        };
-    },
-    renderForm({config}) {
+    form({config}) {
         return {
             type: 'object',
             required: ['token', 'server', 'channel'],
@@ -67,20 +37,19 @@ export default action<Config, Signature>({
             },
         };
     },
-    renderNode() {
+    config({form, config}) {
+        const typedForm = form as Partial<Config> | undefined;
+
         return {
+            valid: true,
+            config: {
+                token: typedForm?.token ?? config?.token ?? 'sk-abc-123',
+                server: typedForm?.server ?? config?.server ?? 'sk-abc-123',
+                channel: typedForm?.channel ?? config?.channel ?? 'sk-abc-123',
+            },
             inputs: ['in'],
             outputs: ['out', 'on error'],
-            params: {
-                order: ['message'],
-                values: {
-                    message: {type: 'string'},
-                },
-            },
-            returns: {
-                order: ['error'],
-                values: {error: {type: 'string'}},
-            },
+            results: {error: {type: 'string'}},
         };
     },
 });

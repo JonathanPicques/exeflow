@@ -17,8 +17,6 @@ export interface ActionNodeData {
     //
     inputs: string[];
     outputs: string[];
-    params: {order: string[]; values: Record<string, JsonSchema>};
-    returns: {order: string[]; values: Record<string, JsonSchema>};
     //
     [x: string]: unknown;
 }
@@ -31,7 +29,6 @@ export interface TriggerNodeData {
     icon: string;
     //
     outputs: string[];
-    returns: {order: string[]; values: Record<string, JsonSchema>};
     //
     [x: string]: unknown;
 }

@@ -1,8 +1,6 @@
 import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 
-import {emptyActionSignature} from '$lib/plugins/@action';
-import {emptyTriggerSignature} from '$lib/plugins/@trigger';
 import type {PluginNode} from './nodes';
 import type {PluginEdge} from './edges';
 import type {Action, ActionId} from '$lib/plugins/@action';
@@ -46,18 +44,17 @@ class GraphContext {
 
     public createNode = async (id: ActionId | TriggerId, type: Action<unknown>['type'] | Trigger<unknown>['type']) => {
         const plugin = this.plugin(id, type);
-        const {valid, config} = await plugin.config({});
-        const signature = valid ? await plugin.renderNode({config}) : type === 'action' ? emptyActionSignature : emptyTriggerSignature;
+        const {valid, config, results, ...rest} = await plugin.config({});
 
         return {
             id: `${Math.random()}`,
             type: plugin.type,
             data: {
                 id,
-                icon: plugin.icon,
                 type: plugin.type,
+                icon: plugin.icon,
                 name: plugin.title,
-                ...signature,
+                ...rest,
             },
             position: {x: 0, y: 0},
         } as PluginNode;

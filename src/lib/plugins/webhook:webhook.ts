@@ -1,4 +1,5 @@
-import {trigger, type TriggerSignature} from './@trigger';
+import {trigger} from './@trigger';
+import type {JsonSchema} from '$lib/schema/schema';
 
 interface Config {
     exposeBody: boolean;
@@ -6,17 +7,35 @@ interface Config {
     exposeHeaders: boolean;
 }
 
-interface Signature extends TriggerSignature {
-    outputs: ['out'];
-}
-
-export default trigger<Config, Signature>({
+export default trigger<Config>({
     icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/webhook.svg',
     title: 'webhook',
     description: 'runs a scenario when called via HTTP(s)',
     //
+    form({config}) {
+        return {
+            type: 'object',
+            properties: {
+                url: {type: 'string', const: 'http://webhook.exeflow.com/some-id'},
+                exposeBody: {type: 'boolean', default: config.exposeBody},
+                exposeMethod: {type: 'boolean', default: config.exposeMethod},
+                exposeHeaders: {type: 'boolean', default: config.exposeHeaders},
+            },
+        };
+    },
     config({form, config}) {
+        const results = {} as Record<string, JsonSchema>;
         const typedForm = form as Partial<Config> | undefined;
+
+        if (config?.exposeBody) {
+            results['body'] = {type: 'string'};
+        }
+        if (config?.exposeMethod) {
+            results['method'] = {type: 'string'};
+        }
+        if (config?.exposeHeaders) {
+            results['headers'] = {type: 'object', additionalProperties: {type: 'string'}};
+        }
 
         return {
             valid: true,
@@ -25,37 +44,8 @@ export default trigger<Config, Signature>({
                 exposeMethod: typedForm?.exposeMethod ?? config?.exposeMethod ?? false,
                 exposeHeaders: typedForm?.exposeHeaders ?? config?.exposeHeaders ?? false,
             },
-        };
-    },
-    renderForm() {
-        return {
-            type: 'object',
-            properties: {
-                url: {type: 'string', const: 'http://webhook.exeflow.com/some-id'},
-                exposeBody: {type: 'boolean'},
-                exposeMethod: {type: 'boolean'},
-                exposeHeaders: {type: 'boolean'},
-            },
-        };
-    },
-    renderNode({config}) {
-        const returns: Signature['returns'] = {order: [], values: {}};
-
-        if (config.exposeBody) {
-            returns.order.push('body');
-            returns.values['body'] = {type: 'string'};
-        }
-        if (config.exposeMethod) {
-            returns.order.push('method');
-            returns.values['method'] = {type: 'string'};
-        }
-        if (config.exposeHeaders) {
-            returns.order.push('headers');
-            returns.values['headers'] = {type: 'object', additionalProperties: {type: 'string'}};
-        }
-        return {
             outputs: ['out'],
-            returns,
+            results,
         };
     },
 });
