@@ -1,57 +1,41 @@
 :root {
-    --action-color: #f3ce39;
-    --trigger-color: #f54e9e;
+    --color-action: #f3ce39;
+    --color-trigger: #f54e9e;
 }
 
 :root[color-scheme='dark'] {
     /* Main */
-    --text-color: #ddd;
-    --background-color: #111;
-    --background-color-hover: #373737;
-    --background-color-active: #404040;
+    --color-fg: #ddd;
+    --color-bg: #111;
+    --color-bg-1: #373737;
+    --color-bg-2: #404040;
     /* General */
     --color-error: #e15757;
     --color-success: #55dd99;
     /* Flow theme */
-    --flow-edge-color: #ddd;
-    --flow-point-color: #ddd;
-    --flow-grid-dots-color: #404040;
-    --flow-node-border-radius: 5px;
-    --flow-node-background-color: #222a;
+    --flow-color-edge: #ddd;
+    --flow-color-point: #ddd;
+    --flow-color-node-bg: #222a;
+    --flow-color-grid-dots: #404040;
 }
 
 :root[color-scheme='light'] {
     /* Main */
-    --text-color: #111;
-    --background-color: #eee;
-    --background-color-hover: #ccc;
-    --background-color-active: #aaa;
+    --color-fg: #111;
+    --color-bg: #eee;
+    --color-bg-1: #ccc;
+    --color-bg-2: #aaa;
     /* General */
     --color-error: #d13434;
     --color-success: #55dd99;
     /* Flow theme */
-    --flow-edge-color: #111;
-    --flow-point-color: #111;
-    --flow-grid-dots-color: #404040;
-    --flow-node-border-radius: 5px;
-    --flow-node-background-color: #fffc;
+    --flow-color-edge: #111;
+    --flow-color-point: #111;
+    --flow-color-node-bg: #fffc;
+    --flow-color-grid-dots: #404040;
 }
 
 body {
-    color: var(--text-color);
-    background-color: var(--background-color);
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-    margin: 20px auto;
-}
-
-form label input[type='text'],
-form label input[type='email'],
-form label input[type='password'] {
-    width: 100%;
+    color: var(--color-fg);
+    background-color: var(--color-bg);
 }

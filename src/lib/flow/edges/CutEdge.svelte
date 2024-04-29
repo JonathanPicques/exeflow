@@ -47,10 +47,10 @@
         width: 20px;
         height: 20px;
 
-        color: var(--text-color);
-        border: 1px solid var(--flow-edge-color);
+        color: var(--color-fg);
+        border: 1px solid var(--flow-color-edge);
         border-radius: 50%;
-        background-color: var(--background-color);
+        background-color: var(--color-bg);
 
         cursor: pointer;
         font-size: 12px;

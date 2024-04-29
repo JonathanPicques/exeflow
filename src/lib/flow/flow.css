@@ -1,10 +1,11 @@
 .svelte-flow {
-    --xy-background-pattern-dots-color-default: var(--flow-grid-dots-color);
+    background-color: var(--color-bg) !important;
+    --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
 }
 
 .svelte-flow__edge {
     & path {
-        stroke: var(--flow-edge-color);
+        stroke: var(--flow-color-edge);
     }
 }
 
@@ -25,22 +26,22 @@
 }
 
 .svelte-flow__controls button {
-    border: 1px solid var(--text-color);
+    border: 1px solid var(--color-fg);
     border-bottom: none;
 
-    color: var(--text-color);
-    background-color: var(--background-color);
+    color: var(--color-fg);
+    background-color: var(--color-bg);
 
     & path {
-        fill: var(--text-color);
+        fill: var(--color-fg);
     }
 
     &:hover {
-        background-color: var(--background-color-hover);
+        background-color: var(--color-bg-1);
     }
 
     &:active {
-        background-color: var(--background-color-active);
+        background-color: var(--color-bg-2);
     }
 
     &:first-child {
@@ -48,7 +49,7 @@
     }
 
     &:last-child {
-        border-bottom: 1px solid var(--text-color);
+        border-bottom: 1px solid var(--color-fg);
         border-radius: 0 0 5px 5px;
     }
 }

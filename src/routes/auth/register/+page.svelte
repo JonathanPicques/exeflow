@@ -2,15 +2,6 @@
     export let form;
 </script>
 
-{#if form?.failed}<p>{form.message}</p>{/if}
-{#if form?.invalid}<p>Email and password fields are required</p>{/if}
-{#if form?.success}
-    <div>
-        <p>Account created!</p>
-        <p>Check your inbox ({form.email}) to validate your account</p>
-    </div>
-{/if}
-
 <form method="POST">
     <label>
         Email:
@@ -28,4 +19,25 @@
         <button type="submit">Register</button>
         <a href="/auth/login">Login instead</a>
     </label>
+
+    {#if form?.failed}<p>{form.message}</p>{/if}
+    {#if form?.invalid}<p>Email and password fields are required</p>{/if}
+    {#if form?.success}
+        <p>Account created! Check your inbox ({form.email}) to validate your account</p>
+    {/if}
 </form>
+
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+
+        gap: 10px;
+        margin: 20px auto;
+    }
+
+    input[type='email'],
+    input[type='password'] {
+        width: 100%;
+    }
+</style>
