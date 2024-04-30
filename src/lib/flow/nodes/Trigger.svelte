@@ -1,10 +1,22 @@
+<script lang="ts" context="module">
+    import type {TriggerNodeData} from '$lib/graph/nodes';
+
+    export const splitTriggerHandles = (nodeData: TriggerNodeData) => {
+        const hasOut = nodeData.outputs.find(o => o === 'out') !== undefined;
+        const outputsWithoutOut = nodeData.outputs.filter(o => o !== 'out');
+
+        return {
+            hasOut,
+            outputsWithoutOut,
+        };
+    };
+</script>
+
 <script lang="ts">
-    import {Handle, useEdges, Position} from '@xyflow/svelte';
+    import {useEdges} from '@xyflow/svelte';
     import type {NodeProps} from '@xyflow/svelte';
 
-    import {nodeRows} from '$lib/helper/nodeRows';
-    import {makeHandleId} from '$lib/graph/points';
-    import type {Point} from '$lib/graph/points';
+    import OutputHandle from '../edges/OutputHandle.svelte';
     import type {TriggerNode} from '$lib/graph/nodes';
 
     type $$Props = NodeProps<TriggerNode>;
@@ -12,45 +24,38 @@
     export let id: $$Props['id'];
     export let data: $$Props['data'];
 
-    const rows = nodeRows(data);
-    const edges = useEdges();
-
-    $: rights = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
-    $: rightHandleStyle = (right: Point) => {
-        const filled = rights.includes(makeHandleId(right));
-        return `
-            position: relative;
-            top: 8px;
-            width: 5px;
-            height: 5px;
-            border: 1px solid var(--flow-color-point);
-            border-radius: ${right.type === 'output' ? '0' : '100%'};
-            background-color: ${filled ? 'var(--flow-color-point)' : 'transparent'};
-        `;
-    };
+    let name = data.name;
+    let icon = data.icon;
+    let edges = useEdges();
+    let handles = splitTriggerHandles(data);
+    $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
 </script>
 
 <div class="head">
-    <img src={data.icon} alt="webhook" />
-    <span>{data.name}</span>
+    <div class="title">
+        <img src={icon} alt="webhook" />
+        <span>{name}</span>
+    </div>
+    {#if handles.hasOut}<OutputHandle id="out" connected={connectedOutputs.includes('out')} />{/if}
 </div>
 
-{#each rows as [_, right]}
-    <div class="row">
-        {#if right}
-            <div class={right.type}>
-                <span>{right.id}</span>
-                <Handle id={makeHandleId(right)} type="source" style={rightHandleStyle(right)} position={Position.Right} />
+{#if handles.outputsWithoutOut.length > 0}
+    <div class="handles">
+        {#each handles.outputsWithoutOut as output}
+            <div class="row">
+                <div class="output">
+                    {#if output}<OutputHandle id={output} connected={connectedOutputs.includes(output)}>{output}</OutputHandle>{/if}
+                </div>
             </div>
-        {/if}
+        {/each}
     </div>
-{/each}
+{/if}
 
 <style>
     :global(.svelte-flow__node-trigger) {
         display: flex;
-        padding: 10px;
-        min-width: 150px;
+        padding: 0.5rem;
+        min-width: 10rem;
         flex-direction: column;
 
         color: var(--color-fg);
@@ -70,36 +75,42 @@
 
     .head {
         display: flex;
+        flex-grow: 1;
         flex-direction: row;
 
-        gap: 10px;
+        gap: 0.6rem;
+
+        & .title {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+
+            gap: 0.5rem;
+            color: var(--color-trigger);
+            font-size: 1rem;
+            font-weight: bold;
+        }
     }
 
-    .head > span {
-        color: var(--color-trigger);
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    .row {
+    .handles {
         display: flex;
+        flex-grow: 1;
         padding-top: 5px;
-        flex-direction: row;
-    }
+        flex-direction: column;
 
-    .output,
-    .return {
-        display: flex;
-        flex-grow: 1;
-        flex-direction: row;
-    }
+        & .row {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: row;
 
-    .output > span,
-    .return > span {
-        flex-grow: 1;
+            gap: 1rem;
 
-        color: var(--flow-color-point);
-        font-size: 12px;
-        text-align: end;
+            & .input {
+                flex-grow: 1;
+            }
+            & .output {
+                flex-grow: 1;
+            }
+        }
     }
 </style>

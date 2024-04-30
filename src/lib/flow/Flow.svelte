@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Panel, Controls, Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
+    import {Panel, Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';
@@ -7,12 +7,10 @@
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
     import {layoutGraph} from '$lib/flow/dagre/dagre';
-    import {splitHandleId} from '$lib/graph/points';
     import {getGraphContext} from '$lib/graph/data';
     import {valid, compatible} from '$lib/schema/validate';
 
     import '@xyflow/svelte/dist/style.css';
-    import '$lib/flow/flow.css';
 
     export let initialFitView: boolean;
 
@@ -25,10 +23,10 @@
     const {fitView, screenToFlowPosition} = useSvelteFlow();
 
     const layout = () => {
-        const graph = layoutGraph({nodes: $nodes, edges: $edges});
+        const layout = layoutGraph({nodes: $nodes, edges: $edges});
 
-        $nodes = graph.nodes;
-        $edges = graph.edges;
+        $nodes = layout.nodes;
+        $edges = layout.edges;
         fitView();
     };
 
@@ -56,46 +54,28 @@
     };
 
     const onconnect = (connection: Connection) => {
-        const leftNode = $nodes.find(n => n.id === connection.target);
-        const rightNode = $nodes.find(n => n.id === connection.source);
-
-        if (!leftNode || !rightNode || !connection.sourceHandle || !connection.targetHandle) {
+        if (
+            !connection.sourceHandle ||
+            !connection.targetHandle ||
+            $nodes.find(n => n.id === connection.target) === undefined ||
+            $nodes.find(n => n.id === connection.source) === undefined
+        ) {
             throw new Error(`onconnect invalid args`);
         }
 
-        const {type: leftPointType} = splitHandleId(connection.targetHandle);
-        const {type: rightPointType} = splitHandleId(connection.sourceHandle);
-
-        if (leftPointType === 'input' && rightPointType === 'output') {
-            // FIXME: Make sure only one edge can exit from the source (right)
-            // edges.update(edges => edges.filter(e => e.sourceHandle !== connection.sourceHandle || e.targetHandle === connection.targetHandle));
-        } else if (leftPointType === 'param' && rightPointType === 'return' && leftNode.data.type === 'action') {
-            // FIXME: Make sure only one edge can enter into the target (left)
-            // edges.update(edges => edges.filter(e => e.sourceHandle === connection.sourceHandle || e.targetHandle !== connection.targetHandle));
-        } else {
-            throw new Error(`onconnect: ${leftPointType} and ${rightPointType} cannot be connected`);
-        }
+        // FIXME: Make sure only one edge can exit from the source (right)
+        // edges.update(edges => edges.filter(e => e.sourceHandle !== connection.sourceHandle || e.targetHandle === connection.targetHandle));
     };
     const isValidConnection = (connection: Edge | Connection) => {
-        const leftNode = $nodes.find(n => n.id === connection.target);
-        const rightNode = $nodes.find(n => n.id === connection.source);
-
-        if (!leftNode || !rightNode || !connection.sourceHandle || !connection.targetHandle) {
+        if (
+            !connection.sourceHandle ||
+            !connection.targetHandle ||
+            $nodes.find(n => n.id === connection.target) === undefined ||
+            $nodes.find(n => n.id === connection.source) === undefined
+        ) {
             return false;
         }
-
-        const {id: leftPointId, type: leftPointType} = splitHandleId(connection.targetHandle);
-        const {id: rightPointId, type: rightPointType} = splitHandleId(connection.sourceHandle);
-
-        if (leftPointType === 'input' && rightPointType === 'output') {
-            return true;
-        } else if (leftPointType === 'param' && rightPointType === 'return' && leftNode.data.type === 'action') {
-            const paramSchema = leftNode.data.params.values[leftPointId];
-            const returnSchema = rightNode.data.returns.values[rightPointId];
-
-            return compatible(paramSchema, returnSchema);
-        }
-        return false;
+        return true;
     };
 </script>
 
@@ -107,6 +87,27 @@
     <Panel position="top-center">
         <Toolbar />
     </Panel>
-    <Controls />
     <Background />
 </SvelteFlow>
+
+<style>
+    :global(.svelte-flow) {
+        background-color: var(--color-bg) !important;
+        --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
+    }
+
+    :global(.svelte-flow__edge) {
+        & path {
+            stroke: var(--flow-color-edge);
+        }
+    }
+
+    :global(.svelte-flow__handle) {
+        position: static !important;
+        transform: none !important;
+    }
+
+    :global(.svelte-flow__attribution) {
+        visibility: hidden;
+    }
+</style>
