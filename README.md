@@ -25,15 +25,25 @@ Exeflow is perfect for:
 
 - Run `pnpm install`
 - Run `supabase start`
-- Create a `.env` file and use the output from `supabase start`:
+- Run `cp .env.example .env`
+- Edit `.env`:
 ```toml
     EXEFLOW_URL="http://localhost:5173" # Must match [auth.additional_redirect_urls] in supabase/config.toml
-    SUPABASE_DB_URL="..."
-    SUPABASE_API_URL="..."
-    SUPABASE_ANON_KEY="..."
-    SUPABASE_SERVICE_ROLE_KEY="..."
+    SUPABASE_DB_URL="..." # from supabase start
+    SUPABASE_API_URL="..." # from supabase start
+    SUPABASE_ANON_KEY="..." # from supabase start
+    SUPABASE_SERVICE_ROLE_KEY="..." # from supabase start
 ```
 - Run `pnpm dev`
+
+#### Create a development user
+
+- Open [Supabase Studio](http://127.0.0.1:54323)
+- Click on `Authentication` in the sidebar
+- Click on `Add user` > `Create new user`
+- Fill the new user form and click on `Create user`
+
+### Usage
 
 When launched, you can access the following services:
 
