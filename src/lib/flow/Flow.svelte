@@ -2,13 +2,13 @@
     import {Panel, Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
+    import {valid} from '$lib/schema/validate';
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';
     import Toolbar from '$lib/flow/toolbar/Toolbar.svelte';
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
     import {layoutGraph} from '$lib/flow/dagre/dagre';
     import {getGraphContext} from '$lib/graph/data';
-    import {valid, compatible} from '$lib/schema/validate';
 
     import '@xyflow/svelte/dist/style.css';
 
@@ -96,10 +96,8 @@
         --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
     }
 
-    :global(.svelte-flow__edge) {
-        & path {
-            stroke: var(--flow-color-edge);
-        }
+    :global(.svelte-flow__edge) :global(path) {
+        stroke: var(--flow-color-edge);
     }
 
     :global(.svelte-flow__handle) {

@@ -13,6 +13,7 @@
             "pnpm-lock*": true,
             ".svelte-kit": true,
             ".prettierrc": true,
+            ".kanelrc.cjs": true,
             ".env.example": true,
             "tsconfig.json": true,
             "vite.config.ts": true,
@@ -39,6 +40,6 @@
         "deno.unstable": true,
         "deno.enablePaths": [
             "supabase/functions"
-        ]
+        ],
     }
 }

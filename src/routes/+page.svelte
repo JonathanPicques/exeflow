@@ -4,9 +4,8 @@
     import {_GET, _POST} from './api/project/fetch.client';
     import type {Project} from '$lib/projects/projects';
 
-    export let data;
-
-    let projects: Project[] = [];
+    let {data} = $props();
+    let projects: Project[] = $state([]);
 
     onMount(async () => {
         if (data.user) {
@@ -31,11 +30,11 @@
             {#each projects as project}
                 <li>
                     <a href="/project/{project.id}">{project.name}</a>
-                    <button on:click={() => removeProject(project.id)}>❌</button>
+                    <button onclick={() => removeProject(project.id)}>❌</button>
                 </li>
             {/each}
         </ul>
-        <button on:click={createProject}>Create new project</button>
+        <button onclick={createProject}>Create new project</button>
         <a href="/auth/logout" data-sveltekit-reload>Logout</a>
     </div>
 {:else}

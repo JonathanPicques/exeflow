@@ -19,12 +19,12 @@
 
         gap: 0.5rem;
 
-        & .svelte-flow__handle {
+        & :global(.svelte-flow__handle) {
             border-color: var(--flow-color-point);
             background-color: var(--color-fill);
 
-            &.connectingto,
-            &.connectingfrom {
+            &:global(.connectingto),
+            &:global(.connectingfrom) {
                 background-color: var(--flow-color-point);
             }
         }

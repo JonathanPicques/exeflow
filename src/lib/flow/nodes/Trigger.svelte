@@ -105,9 +105,6 @@
 
             gap: 1rem;
 
-            & .input {
-                flex-grow: 1;
-            }
             & .output {
                 flex-grow: 1;
             }
