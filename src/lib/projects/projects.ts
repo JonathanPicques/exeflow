@@ -5,6 +5,7 @@ import type {Db} from '$lib/supabase/db.server';
 import type {AuthUser} from '$lib/supabase/user';
 import type {PluginNode} from '$lib/graph/nodes';
 import type {PluginEdge} from '$lib/graph/edges';
+import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 
 export interface Project {
     id: string;
@@ -14,7 +15,11 @@ export interface Project {
 
 export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
     try {
-        return (await db.selectFrom('projects').select(['id', 'name', 'content']).where('id', '=', id).executeTakeFirstOrThrow()) as Project;
+        return (await db
+            .selectFrom('projects')
+            .select(['id', 'name', 'content'])
+            .where('id', '=', id as ProjectsId)
+            .executeTakeFirstOrThrow()) as Project;
     } catch (e) {
         if (e instanceof NoResultError) {
             throw new ProjectNotFoundError(id);
@@ -37,7 +42,10 @@ export const createProject = async (db: Db, {name, ownerId}: {name: Project['nam
 
 export const deleteProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
     try {
-        await db.deleteFrom('projects').where('id', '=', id).execute();
+        await db
+            .deleteFrom('projects')
+            .where('id', '=', id as ProjectsId)
+            .execute();
     } catch (e) {
         if (e instanceof NoResultError) {
             throw new ProjectNotFoundError(id);
@@ -50,7 +58,7 @@ export const updateProject = async (db: Db, {id, content}: Pick<Project, 'id' | 
     try {
         await db
             .updateTable('projects')
-            .where('id', '=', id)
+            .where('id', '=', id as ProjectsId)
             .set({content: JSON.stringify(content)})
             .execute();
     } catch (e) {

@@ -1,9 +1,9 @@
 import Pg from 'pg';
 import {SUPABASE_DB_URL} from '$env/static/private';
 import {Kysely, PostgresDialect} from 'kysely';
-import type {DB} from './db.server.types';
+import type {Database} from './gen/Database';
 
-export type Db = Kysely<DB>;
+export type Db = Kysely<Database>;
 
 const dialect = new PostgresDialect({
     pool: new Pg.Pool({
@@ -12,4 +12,4 @@ const dialect = new PostgresDialect({
     }),
 });
 
-export const db = () => new Kysely<DB>({dialect});
+export const db = () => new Kysely<Database>({dialect});
