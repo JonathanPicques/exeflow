@@ -5,7 +5,7 @@
     export let connected: boolean;
 </script>
 
-<div class="handle" style:--color-fill={connected ? 'var(--flow-color-point)' : 'transparent'}>
+<div class="handle" class:connected>
     <Handle {id} type="target" class="test" position={Position.Left} />
     <slot />
 </div>
@@ -18,14 +18,8 @@
 
         gap: 0.5rem;
 
-        & :global(.svelte-flow__handle) {
-            border-color: var(--flow-color-point);
-            background-color: var(--color-fill);
-
-            &:global(.connectingto),
-            &:global(.connectingfrom) {
-                background-color: var(--flow-color-point);
-            }
+        &.connected {
+            --color-fill: var(--flow-color-point);
         }
     }
 </style>

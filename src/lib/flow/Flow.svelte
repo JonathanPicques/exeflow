@@ -101,8 +101,15 @@
     }
 
     :global(.svelte-flow__handle) {
-        position: static !important;
-        transform: none !important;
+        position: static;
+        transform: none;
+        border-color: var(--flow-color-point);
+        background-color: var(--color-fill);
+    }
+
+    :global(.svelte-flow__handle.connectingto),
+    :global(.svelte-flow__handle.connectingfrom) {
+        --color-fill: var(--flow-color-point);
     }
 
     :global(.svelte-flow__attribution) {
