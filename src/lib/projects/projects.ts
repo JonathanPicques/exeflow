@@ -10,7 +10,11 @@ import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 export interface Project {
     id: string;
     name: string;
-    content: {nodes: PluginNode[]; edges: PluginEdge[]};
+    content: {
+        nodes: PluginNode[];
+        edges: PluginEdge[];
+        values: Record<string, unknown>;
+    };
 }
 
 export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
@@ -35,7 +39,7 @@ export const getProjects = async (db: Db, {ownerId}: {ownerId: AuthUser['id']}) 
 export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: AuthUser['id']}) => {
     return (await db
         .insertInto('projects')
-        .values({name, content: JSON.stringify({nodes: [], edges: []}), owner_id: ownerId})
+        .values({name, content: JSON.stringify({nodes: [], edges: [], values: {}}), owner_id: ownerId})
         .returning(['id', 'name', 'content'])
         .executeTakeFirstOrThrow()) as Project;
 };

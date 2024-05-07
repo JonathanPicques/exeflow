@@ -12,26 +12,35 @@
 
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
-    const context = setGraphContext({
-        nodes,
-        edges,
-        actions: data.actions,
-        triggers: data.triggers,
-    });
+    const values = writable(data.project.content.values);
 
     const keydown: KeyboardEventHandler<Window> = e => {
-        if (e.ctrlKey && e.key === 's') {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
             _PATCH({
                 id: data.project.id,
-                content: {nodes: $nodes, edges: $edges},
+                content: {
+                    nodes: $nodes,
+                    edges: $edges,
+                    values: $values,
+                },
             });
-        } else if (e.ctrlKey && e.key === 'k') {
+        } else if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
             nodes.set(data.project.content.nodes);
             edges.set(data.project.content.edges);
+            values.set(data.project.content.values);
         }
     };
+
+    setGraphContext({
+        nodes,
+        edges,
+        values,
+        //
+        actions: data.actions,
+        triggers: data.triggers,
+    });
 </script>
 
 <svelte:window on:keydown={keydown} />

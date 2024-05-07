@@ -48,3 +48,9 @@
         </nav>
     </div>
 {/if}
+<div>
+    <ul>
+        <li><a href="http://127.0.0.1:54323" target="_blank">Supabase Studio</a></li>
+        <li><a href="http://127.0.0.1:54324" target="_blank">Supabase Inbucket</a></li>
+    </ul>
+</div>

@@ -1,7 +1,6 @@
 import type {Node} from '@xyflow/svelte';
 import type {ActionId} from '$lib/plugins/@action';
 import type {TriggerId} from '$lib/plugins/@trigger';
-import type {JsonSchema} from '$lib/schema/schema';
 
 export type PluginNode = ActionNode | TriggerNode;
 export type ActionNode = Node<ActionNodeData>;
