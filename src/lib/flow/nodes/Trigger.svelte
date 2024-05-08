@@ -59,18 +59,16 @@
         flex-direction: column;
 
         color: var(--color-fg);
-        border: 2px solid transparent;
-        border-radius: 5px;
+        border: 0.15rem solid transparent;
+        border-radius: 0.3rem;
         background-color: var(--flow-color-node-bg);
 
-        text-align: center;
         font-family: 'Fira Mono', Monospace;
-        font-weight: 500;
-        letter-spacing: -0.2px;
+        font-weight: 400;
     }
 
     :global(.svelte-flow__node-trigger.selected) {
-        border: 2px solid var(--color-trigger);
+        border: 0.15rem solid var(--color-trigger);
     }
 
     .head {
@@ -83,6 +81,7 @@
         & .title {
             display: flex;
             flex-grow: 1;
+            align-items: center;
             justify-content: center;
 
             gap: 0.5rem;
@@ -95,7 +94,7 @@
     .handles {
         display: flex;
         flex-grow: 1;
-        padding-top: 5px;
+        padding-top: 0.4rem;
         flex-direction: column;
 
         & .row {

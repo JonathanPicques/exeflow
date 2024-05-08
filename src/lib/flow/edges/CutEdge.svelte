@@ -44,27 +44,25 @@
     }
 
     button {
-        width: 20px;
-        height: 20px;
+        width: 1.25rem;
+        height: 1.25rem;
 
         color: var(--color-fg);
-        border: 1px solid var(--flow-color-edge);
+        border: 0.1rem solid var(--flow-color-edge);
         border-radius: 50%;
         background-color: var(--color-bg);
 
         cursor: pointer;
-        font-size: 12px;
-        line-height: 1;
-        text-align: center;
+        font-size: 0.8rem;
 
         transition: box-shadow linear 0.1s;
 
         &:hover {
-            box-shadow: 0 0 4px 2px #ddd;
+            box-shadow: 0 0 0.2rem 0.1rem #ddd;
         }
 
         &:active {
-            box-shadow: 0 0 6px 2px #ddd;
+            box-shadow: 0 0 0.3rem 0.1rem #ddd;
         }
     }
 </style>

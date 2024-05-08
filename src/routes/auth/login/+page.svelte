@@ -24,8 +24,8 @@
         display: flex;
         flex-direction: column;
 
-        gap: 10px;
-        margin: 20px auto;
+        gap: 0.6rem;
+        margin: 1.3rem auto;
     }
 
     input[type='email'],

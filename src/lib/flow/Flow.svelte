@@ -98,9 +98,12 @@
 
     :global(.svelte-flow__edge) :global(path) {
         stroke: var(--flow-color-edge);
+        stroke-width: 0.1rem;
     }
 
     :global(.svelte-flow__handle) {
+        width: 0.4rem;
+        height: 0.4rem;
         position: static;
         transform: none;
         border-color: var(--flow-color-point);

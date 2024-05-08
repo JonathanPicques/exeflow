@@ -44,7 +44,7 @@
         color: var(--color-action);
 
         &:hover {
-            border: 2px solid var(--color-action);
+            border: 0.15rem solid var(--color-action);
         }
     }
 
@@ -52,25 +52,25 @@
         color: var(--color-trigger);
 
         &:hover {
-            border: 2px solid var(--color-trigger);
+            border: 0.15rem solid var(--color-trigger);
         }
     }
 
     .action,
     .trigger {
         display: flex;
+        gap: 0.6rem;
+        margin: 0.5rem;
+        padding: 0.5rem 1rem;
         align-items: center;
         flex-direction: row;
 
+        cursor: grab;
         font-family: 'Fira Mono', Monospace;
         font-weight: bold;
 
-        gap: 10px;
-        margin: 0.5rem;
-        cursor: grab;
-        padding: 0.5rem 1rem;
-        border: 2px solid transparent;
-        border-radius: 5px;
+        border: 0.15rem solid transparent;
+        border-radius: 0.3rem;
         background-color: var(--flow-color-node-bg);
 
         & > img {
