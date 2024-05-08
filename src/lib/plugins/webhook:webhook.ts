@@ -23,7 +23,7 @@ export default trigger<Config>({
             },
         };
     },
-    config({form, config}) {
+    data({form, config}) {
         const results = {} as Record<string, JsonSchema>;
         const typedForm = form as Partial<Config> | undefined;
 

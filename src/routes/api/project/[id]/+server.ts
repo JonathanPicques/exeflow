@@ -18,7 +18,7 @@ export const GET = async ({locals, params}) => {
 export const PATCH = async ({locals, params, request}) => {
     const body = await request.json();
 
-    if (valid(body, {type: 'object', required: ['edges', 'nodes'], properties: {edges: {}, nodes: {}}})) {
+    if (valid(body, {type: 'object', required: ['edges', 'nodes', 'values'], properties: {edges: {}, nodes: {}, values: {}}})) {
         try {
             await updateProject(locals.db, {id: params.id, content: body});
             return json({id: params.id});

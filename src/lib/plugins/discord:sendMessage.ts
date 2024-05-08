@@ -37,7 +37,7 @@ export default action<Config>({
             },
         };
     },
-    config({form, config}) {
+    data({form, config}) {
         const typedForm = form as Partial<Config> | undefined;
 
         return {

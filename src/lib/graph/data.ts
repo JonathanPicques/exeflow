@@ -46,7 +46,6 @@ class GraphContext {
 
     public createNode = async (id: ActionId | TriggerId, type: Action<unknown>['type'] | Trigger<unknown>['type']) => {
         const plugin = this.plugin(id, type);
-        const {valid, config, results, ...rest} = await plugin.config({});
 
         return {
             id: `${Math.random()}`,
@@ -56,7 +55,7 @@ class GraphContext {
                 type: plugin.type,
                 icon: plugin.icon,
                 name: plugin.title,
-                ...rest,
+                data: await plugin.data({}),
             },
             position: {x: 0, y: 0},
         } as PluginNode;

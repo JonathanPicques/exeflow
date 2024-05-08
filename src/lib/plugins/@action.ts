@@ -8,7 +8,7 @@ export interface Action<Config> {
     description: string;
     //
     form: (args: FormArgs<Config>) => JsonSchema | Promise<JsonSchema>;
-    config: (args: ConfigArgs<Config>) => ConfigResult<Config> | Promise<ConfigResult<Config>>;
+    data: (args: DataArgs<Config>) => ActionData<Config> | Promise<ActionData<Config>>;
 }
 
 export type ActionId = string;
@@ -17,12 +17,12 @@ interface FormArgs<Config> {
     config: Config;
 }
 
-interface ConfigArgs<Config> {
+interface DataArgs<Config> {
     form?: unknown;
     config?: Config;
 }
 
-interface ConfigResult<Config> {
+export interface ActionData<Config> {
     valid: boolean;
     config: Config;
     inputs: string[];

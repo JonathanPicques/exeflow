@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
     import type {ActionNodeData} from '$lib/graph/nodes';
 
-    export const splitActionHandles = (nodeData: ActionNodeData) => {
-        const hasIn = nodeData.inputs.find(i => i === 'in') !== undefined;
-        const hasOut = nodeData.outputs.find(o => o === 'out') !== undefined;
+    export const splitActionHandles = ({data}: ActionNodeData) => {
+        const hasIn = data.inputs.find(i => i === 'in') !== undefined;
+        const hasOut = data.outputs.find(o => o === 'out') !== undefined;
         const handleRows: {input: string | undefined; output: string | undefined}[] = [];
-        const inputsWithoutIn = nodeData.inputs.filter(i => i !== 'in');
-        const outputsWithoutOut = nodeData.outputs.filter(o => o !== 'out');
+        const inputsWithoutIn = data.inputs.filter(i => i !== 'in');
+        const outputsWithoutOut = data.outputs.filter(o => o !== 'out');
 
         for (let i = 0; i < Math.max(inputsWithoutIn.length, outputsWithoutOut.length); i += 1) {
             handleRows.push({input: inputsWithoutIn[i], output: outputsWithoutOut[i]});

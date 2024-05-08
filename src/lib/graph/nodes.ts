@@ -1,6 +1,6 @@
 import type {Node} from '@xyflow/svelte';
-import type {ActionId} from '$lib/plugins/@action';
-import type {TriggerId} from '$lib/plugins/@trigger';
+import type {ActionId, ActionData} from '$lib/plugins/@action';
+import type {TriggerId, TriggerData} from '$lib/plugins/@trigger';
 
 export type PluginNode = ActionNode | TriggerNode;
 export type ActionNode = Node<ActionNodeData>;
@@ -13,9 +13,7 @@ export interface ActionNodeData {
     //
     name: string;
     icon: string;
-    //
-    inputs: string[];
-    outputs: string[];
+    data: ActionData<unknown>;
     //
     [x: string]: unknown;
 }
@@ -26,8 +24,7 @@ export interface TriggerNodeData {
     //
     name: string;
     icon: string;
-    //
-    outputs: string[];
+    data: TriggerData<unknown>;
     //
     [x: string]: unknown;
 }

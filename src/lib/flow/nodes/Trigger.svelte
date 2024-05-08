@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
     import type {TriggerNodeData} from '$lib/graph/nodes';
 
-    export const splitTriggerHandles = (nodeData: TriggerNodeData) => {
-        const hasOut = nodeData.outputs.find(o => o === 'out') !== undefined;
-        const outputsWithoutOut = nodeData.outputs.filter(o => o !== 'out');
+    export const splitTriggerHandles = ({data}: TriggerNodeData) => {
+        const hasOut = data.outputs.find(o => o === 'out') !== undefined;
+        const outputsWithoutOut = data.outputs.filter(o => o !== 'out');
 
         return {
             hasOut,
