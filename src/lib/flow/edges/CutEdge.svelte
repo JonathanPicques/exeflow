@@ -32,7 +32,12 @@
 <BaseEdge {path} {style} {markerEnd} />
 <EdgeLabelRenderer>
     <div class="nopan nodrag" style:transform="translate(-50%, -50%) translate({labelX}px,{labelY}px)">
-        <button on:click={onEdgeClick}>×</button>
+        <button on:click={onEdgeClick}>
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8.53553" y="0.0502526" width="2" height="12" transform="rotate(45 8.53553 0.0502526)" fill="currentColor" />
+                <rect x="0.0502527" y="1.46447" width="2" height="12" transform="rotate(-45 0.0502527 1.46447)" fill="currentColor" />
+            </svg>
+        </button>
     </div>
 </EdgeLabelRenderer>
 
@@ -44,8 +49,11 @@
     }
 
     button {
+        display: flex;
         width: 1.25rem;
         height: 1.25rem;
+        align-items: center;
+        justify-content: center;
 
         color: var(--color-fg);
         border: 0.1rem solid var(--flow-color-edge);
