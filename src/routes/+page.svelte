@@ -1,7 +1,7 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import {_DELETE} from './api/project/[id]/fetch.client';
-    import {_GET, _POST} from './api/project/fetch.client';
+
+    import {fetchListProjects, fetchCreateProject, fetchDeleteProject} from './api/project.api';
     import type {Project} from '$lib/projects/projects';
 
     let {data} = $props();
@@ -9,16 +9,16 @@
 
     onMount(async () => {
         if (data.user) {
-            projects = await _GET();
+            projects = await fetchListProjects();
         }
     });
 
     const createProject = async () => {
-        projects = [...projects, await _POST({name: `Untitled project ${projects.length}`})];
+        projects = [...projects, await fetchCreateProject({name: `Untitled project ${projects.length}`})];
     };
 
     const removeProject = async (id: string) => {
-        await _DELETE({id});
+        await fetchDeleteProject({id});
         projects = projects.filter(p => p.id !== id);
     };
 </script>

@@ -3,10 +3,9 @@
     import {SvelteFlowProvider} from '@xyflow/svelte';
     import type {KeyboardEventHandler} from 'svelte/elements';
 
-    import {_PATCH} from '../../api/project/[id]/fetch.client.js';
-
     import Flow from '$lib/flow/Flow.svelte';
     import {setGraphContext} from '$lib/graph/data.js';
+    import {fetchUpdateProject} from '../../api/project.api.js';
 
     let {data} = $props();
 
@@ -17,7 +16,7 @@
     const keydown: KeyboardEventHandler<Window> = e => {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
-            _PATCH({
+            fetchUpdateProject({
                 id: data.project.id,
                 content: {
                     nodes: $nodes,
