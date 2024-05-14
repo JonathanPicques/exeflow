@@ -26,14 +26,14 @@
     export let data: $$Props['data'];
 
     const {triggers} = getGraphContext();
-    const {icon, title} = triggers[data.id]!;
+    const {icon, color, title} = triggers[data.id]!;
 
     let edges = useEdges();
     let handles = splitTriggerHandles(data);
     $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
 </script>
 
-<div class="head">
+<div class="head" style:--x-flow-color-plugin={color}>
     <div class="title">
         <img src={icon} alt="webhook" />
         <span>{title}</span>
@@ -42,7 +42,7 @@
 </div>
 
 {#if handles.outputsWithoutOut.length > 0}
-    <div class="handles">
+    <div class="handles" style:--x-flow-color-plugin={color}>
         {#each handles.outputsWithoutOut as output}
             <div class="row">
                 <div class="output">

@@ -4,6 +4,7 @@ export interface Action<Config> {
     type: 'action';
     //
     icon: string;
+    color: string;
     title: string;
     description: string;
     //

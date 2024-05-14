@@ -37,7 +37,7 @@
     export let data: $$Props['data'];
 
     const {actions} = getGraphContext();
-    const {icon, title} = actions[data.id]!;
+    const {icon, color, title} = actions[data.id]!;
 
     let edges = useEdges();
     let handles = splitActionHandles(data);
@@ -45,7 +45,7 @@
     $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
 </script>
 
-<div class="head">
+<div class="head" style:--x-flow-color-plugin={color}>
     {#if handles.hasIn}<InputHandle id="in" connected={connectedInputs.includes('in')} />{/if}
     <div class="title">
         <img src={icon} alt="webhook" />
@@ -55,7 +55,7 @@
 </div>
 
 {#if handles.handleRows.length > 0}
-    <div class="handles">
+    <div class="handles" style:--x-flow-color-plugin={color}>
         {#each handles.handleRows as { input, output }}
             <div class="row">
                 <div class="input">

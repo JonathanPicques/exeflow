@@ -8,6 +8,7 @@ interface Config {
 
 export default action<Config>({
     icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/discord.svg',
+    color: '#7289da',
     title: 'send message',
     description: 'send a message in a discord channel',
     //

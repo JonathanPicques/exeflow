@@ -9,6 +9,7 @@ interface Config {
 
 export default trigger<Config>({
     icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/webhook.svg',
+    color: '#c93762',
     title: 'webhook',
     description: 'runs a scenario when called via HTTP(s)',
     //

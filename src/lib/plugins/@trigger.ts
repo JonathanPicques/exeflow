@@ -4,6 +4,7 @@ export interface Trigger<Config> {
     type: 'trigger';
     //
     icon: string;
+    color: string;
     title: string;
     description: string;
     //

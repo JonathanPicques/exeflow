@@ -14,7 +14,6 @@
     --color-success: #55dd99;
     /* Flow theme */
     --flow-color-edge: #ddd;
-    --flow-color-point: #ddd;
     --flow-color-node-bg: #222a;
     --flow-color-grid-dots: #404040;
 }
@@ -30,7 +29,6 @@
     --color-success: #55dd99;
     /* Flow theme */
     --flow-color-edge: #111;
-    --flow-color-point: #111;
     --flow-color-node-bg: #fffc;
     --flow-color-grid-dots: #404040;
 }

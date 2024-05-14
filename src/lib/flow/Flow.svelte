@@ -106,13 +106,13 @@
         height: 0.4rem;
         position: static;
         transform: none;
-        border-color: var(--flow-color-point);
+        border-color: var(--x-flow-color-plugin);
         background-color: var(--color-fill);
     }
 
     :global(.svelte-flow__handle.connectingto),
     :global(.svelte-flow__handle.connectingfrom) {
-        --color-fill: var(--flow-color-point);
+        --color-fill: var(--x-flow-color-plugin);
     }
 
     :global(.svelte-flow__attribution) {

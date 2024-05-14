@@ -27,7 +27,7 @@
         gap: 0.5rem;
 
         &.connected {
-            --color-fill: var(--flow-color-point);
+            --color-fill: var(--x-flow-color-plugin);
         }
     }
 </style>
