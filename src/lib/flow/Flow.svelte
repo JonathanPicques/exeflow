@@ -12,21 +12,20 @@
 
     import '@xyflow/svelte/dist/style.css';
 
-    let {initialFitView = true} = $props();
-
+    const {fitView, screenToFlowPosition} = useSvelteFlow();
     const {nodes, edges, createNode, positionNode} = getGraphContext();
 
     const edgeTypes = {edge: CutEdge};
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};
     const defaultEdgeOptions = {type: 'edge'};
 
-    const {fitView, screenToFlowPosition} = useSvelteFlow();
-
-    const layout = () => {
+    export const layout = () => {
         const layout = layoutGraph({nodes: $nodes, edges: $edges});
 
         $nodes = layout.nodes;
         $edges = layout.edges;
+    };
+    export const fitToView = () => {
         fitView();
     };
 
@@ -79,11 +78,7 @@
     };
 </script>
 
-<SvelteFlow fitView={initialFitView} {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
-    <Panel position="top-right">
-        <button onclick={() => layout()}>Layout</button>
-        <button onclick={() => fitView()}>Fit view</button>
-    </Panel>
+<SvelteFlow fitView {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
     <Panel position="top-center">
         <Toolbar />
     </Panel>

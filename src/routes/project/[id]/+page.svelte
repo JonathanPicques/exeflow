@@ -7,6 +7,7 @@
     import {setGraphContext} from '$lib/graph/data.js';
     import {fetchUpdateProject} from '../../api/project.api.js';
 
+    let flow: Flow;
     let {data} = $props();
 
     const nodes = writable(data.project.content.nodes);
@@ -14,7 +15,9 @@
     const values = writable(data.project.content.values);
 
     const keydown: KeyboardEventHandler<Window> = e => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        if (e.key === 'c') {
+            flow.fitToView();
+        } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
             fetchUpdateProject({
                 id: data.project.id,
@@ -29,6 +32,8 @@
             nodes.set(data.project.content.nodes);
             edges.set(data.project.content.edges);
             values.set(data.project.content.values);
+        } else if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'l') {
+            flow.layout();
         }
     };
 
@@ -42,16 +47,11 @@
     });
 </script>
 
+<svelte:head>
+    <title>Exeflow</title>
+</svelte:head>
 <svelte:window on:keydown={keydown} />
 
-<main>
-    <SvelteFlowProvider>
-        <Flow initialFitView={data.project.content.nodes.length > 0} />
-    </SvelteFlowProvider>
-</main>
-
-<style>
-    main {
-        flex-grow: 1;
-    }
-</style>
+<SvelteFlowProvider>
+    <Flow bind:this={flow} />
+</SvelteFlowProvider>
