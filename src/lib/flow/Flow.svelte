@@ -12,7 +12,7 @@
 
     import '@xyflow/svelte/dist/style.css';
 
-    export let initialFitView: boolean;
+    let {initialFitView = true} = $props();
 
     const {nodes, edges, createNode, positionNode} = getGraphContext();
 
@@ -81,8 +81,8 @@
 
 <SvelteFlow fitView={initialFitView} {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
     <Panel position="top-right">
-        <button on:click={() => layout()}>Layout</button>
-        <button on:click={() => fitView()}>Fit view</button>
+        <button onclick={() => layout()}>Layout</button>
+        <button onclick={() => fitView()}>Fit view</button>
     </Panel>
     <Panel position="top-center">
         <Toolbar />

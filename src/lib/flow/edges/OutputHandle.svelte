@@ -1,12 +1,19 @@
 <script lang="ts">
     import {Handle, Position} from '@xyflow/svelte';
+    import type {Snippet} from 'svelte';
 
-    export let id: string;
-    export let connected: boolean;
+    interface Props {
+        id: string;
+        connected: boolean;
+        //
+        children?: Snippet;
+    }
+
+    let {id, children, connected}: Props = $props();
 </script>
 
 <div class="handle" class:connected>
-    <slot />
+    {@render children?.()}
     <Handle {id} type="source" position={Position.Right} />
 </div>
 

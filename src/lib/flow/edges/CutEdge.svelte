@@ -2,29 +2,20 @@
     import {useEdges, BaseEdge, getBezierPath, EdgeLabelRenderer} from '@xyflow/svelte';
     import type {EdgeProps} from '@xyflow/svelte';
 
-    type $$Props = EdgeProps;
-
-    export let id: $$Props['id'];
-    export let style: $$Props['style'] = undefined;
-    export let markerEnd: $$Props['markerEnd'] = undefined;
-    export let sourceX: $$Props['sourceX'];
-    export let sourceY: $$Props['sourceY'];
-    export let sourcePosition: $$Props['sourcePosition'];
-    export let targetX: $$Props['targetX'];
-    export let targetY: $$Props['targetY'];
-    export let targetPosition: $$Props['targetPosition'];
+    let {id, style, markerEnd, sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition}: EdgeProps = $props();
 
     const edges = useEdges();
 
-    // $: selected = $edges.find(e => e.id === id)?.selected ?? false;
-    $: [path, labelX, labelY] = getBezierPath({
-        sourceX,
-        sourceY,
-        sourcePosition,
-        targetX,
-        targetY,
-        targetPosition,
-    });
+    let [path, labelX, labelY] = $derived(
+        getBezierPath({
+            sourceX,
+            sourceY,
+            sourcePosition,
+            targetX,
+            targetY,
+            targetPosition,
+        }),
+    );
 
     const onEdgeClick = () => edges.update(eds => eds.filter(edge => edge.id !== id));
 </script>
@@ -32,7 +23,7 @@
 <BaseEdge {path} {style} {markerEnd} />
 <EdgeLabelRenderer>
     <div class="nopan nodrag" style:transform="translate(-50%, -50%) translate({labelX}px,{labelY}px)">
-        <button on:click={onEdgeClick}>
+        <button onclick={onEdgeClick}>
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="8.53553" y="0.0502526" width="2" height="12" transform="rotate(45 8.53553 0.0502526)" fill="currentColor" />
                 <rect x="0.0502527" y="1.46447" width="2" height="12" transform="rotate(-45 0.0502527 1.46447)" fill="currentColor" />
