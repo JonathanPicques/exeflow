@@ -1,3 +1,4 @@
+import {init} from '@paralleldrive/cuid2';
 import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 
@@ -12,6 +13,7 @@ class GraphContext {
     public readonly values: Writable<Record<string, unknown>>;
     public readonly actions: Record<ActionId, Action<unknown>>;
     public readonly triggers: Record<TriggerId, Trigger<unknown>>;
+    private readonly createId = init({length: 5});
 
     public constructor({nodes, edges, values, actions, triggers}: GraphContextOptions) {
         this.nodes = nodes;
@@ -21,17 +23,17 @@ class GraphContext {
         this.triggers = triggers;
     }
 
-    public action = (actionId: ActionId) => {
-        if (!this.actions[actionId]) {
-            throw new Error(`action ${actionId} not found`);
+    public action = (id: ActionId) => {
+        if (!this.actions[id]) {
+            throw new Error(`action ${id} not found`);
         }
-        return this.actions[actionId];
+        return this.actions[id];
     };
-    public trigger = (triggerId: TriggerId) => {
-        if (!this.triggers[triggerId]) {
-            throw new Error(`trigger ${triggerId} not found`);
+    public trigger = (id: TriggerId) => {
+        if (!this.triggers[id]) {
+            throw new Error(`trigger ${id} not found`);
         }
-        return this.triggers[triggerId];
+        return this.triggers[id];
     };
     public plugin = (id: ActionId | TriggerId, type: Action<unknown>['type'] | Trigger<unknown>['type']) => {
         switch (type) {
@@ -48,13 +50,11 @@ class GraphContext {
         const plugin = this.plugin(id, type);
 
         return {
-            id: `${Math.random()}`,
+            id: this.createId(),
             type: plugin.type,
             data: {
                 id,
                 type: plugin.type,
-                icon: plugin.icon,
-                name: plugin.title,
                 data: await plugin.data({}),
             },
             position: {x: 0, y: 0},

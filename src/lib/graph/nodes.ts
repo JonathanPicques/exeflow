@@ -10,9 +10,6 @@ export type PluginNodeData = ActionNodeData | TriggerNodeData;
 export interface ActionNodeData {
     id: ActionId;
     type: 'action';
-    //
-    name: string;
-    icon: string;
     data: ActionData<unknown>;
     //
     [x: string]: unknown;
@@ -21,9 +18,6 @@ export interface ActionNodeData {
 export interface TriggerNodeData {
     id: TriggerId;
     type: 'trigger';
-    //
-    name: string;
-    icon: string;
     data: TriggerData<unknown>;
     //
     [x: string]: unknown;

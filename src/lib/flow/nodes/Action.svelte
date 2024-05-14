@@ -28,6 +28,7 @@
 
     import InputHandle from '../edges/InputHandle.svelte';
     import OutputHandle from '../edges/OutputHandle.svelte';
+    import {getGraphContext} from '$lib/graph/data';
     import type {ActionNode} from '$lib/graph/nodes';
 
     type $$Props = NodeProps<ActionNode>;
@@ -35,8 +36,9 @@
     export let id: $$Props['id'];
     export let data: $$Props['data'];
 
-    let name = data.name;
-    let icon = data.icon;
+    const {actions} = getGraphContext();
+    const {icon, title} = actions[data.id]!;
+
     let edges = useEdges();
     let handles = splitActionHandles(data);
     $: connectedInputs = [...new Set($edges.filter(e => e.target === id).map(e => e.targetHandle))] as string[];
@@ -47,7 +49,7 @@
     {#if handles.hasIn}<InputHandle id="in" connected={connectedInputs.includes('in')} />{/if}
     <div class="title">
         <img src={icon} alt="webhook" />
-        <span>{name}</span>
+        <span>{title}</span>
     </div>
     {#if handles.hasOut}<OutputHandle id="out" connected={connectedOutputs.includes('out')} />{/if}
 </div>

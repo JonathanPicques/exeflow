@@ -17,6 +17,7 @@
     import type {NodeProps} from '@xyflow/svelte';
 
     import OutputHandle from '../edges/OutputHandle.svelte';
+    import {getGraphContext} from '$lib/graph/data';
     import type {TriggerNode} from '$lib/graph/nodes';
 
     type $$Props = NodeProps<TriggerNode>;
@@ -24,8 +25,9 @@
     export let id: $$Props['id'];
     export let data: $$Props['data'];
 
-    let name = data.name;
-    let icon = data.icon;
+    const {triggers} = getGraphContext();
+    const {icon, title} = triggers[data.id]!;
+
     let edges = useEdges();
     let handles = splitTriggerHandles(data);
     $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
@@ -34,7 +36,7 @@
 <div class="head">
     <div class="title">
         <img src={icon} alt="webhook" />
-        <span>{name}</span>
+        <span>{title}</span>
     </div>
     {#if handles.hasOut}<OutputHandle id="out" connected={connectedOutputs.includes('out')} />{/if}
 </div>
