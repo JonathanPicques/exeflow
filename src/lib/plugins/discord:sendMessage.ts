@@ -50,7 +50,9 @@ export default action<Config>({
             },
             inputs: ['in'],
             outputs: ['out'],
-            results: {error: {type: 'string'}},
+            results: {
+                error: {type: 'string'},
+            },
         };
     },
 });
