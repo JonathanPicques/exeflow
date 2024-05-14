@@ -5,8 +5,17 @@
 
     const {actions, triggers} = getGraphContext();
 
-    const sort = (a: [ActionId | TriggerId, unknown], b: [ActionId | TriggerId, unknown]) => a.length - b.length - a[0].localeCompare(b[0]);
-    const onDragStart = (e: DragEvent, id: ActionId | TriggerId, plugin: Action<unknown> | Trigger<unknown>) => {
+    type Plugin = Action<unknown> | Trigger<unknown>;
+    type PluginId = ActionId | TriggerId;
+
+    const sort = ([idA, pluginA]: [PluginId, Plugin], [idB, pluginB]: [PluginId, Plugin]) => {
+        const cmp = pluginB.type.localeCompare(pluginA.type);
+        if (cmp === 0) {
+            return idA.localeCompare(idB);
+        }
+        return cmp;
+    };
+    const onDragStart = (e: DragEvent, id: PluginId, plugin: Plugin) => {
         if (!e.dataTransfer) {
             return null;
         }
@@ -18,16 +27,10 @@
 </script>
 
 <aside>
-    {#each Object.entries(triggers).toSorted(sort) as [id, trigger]}
-        <div class="trigger" role="img" on:dragstart={e => onDragStart(e, id, trigger)} draggable={true}>
-            <img src={trigger.icon} alt="trigger icon" />
+    {#each [...Object.entries(triggers), ...Object.entries(actions)].toSorted(sort) as [id, trigger]}
+        <div class="plugin" role="img" draggable={true} style:--x-color-border={trigger.color} on:dragstart={e => onDragStart(e, id, trigger)}>
+            <img src={trigger.icon} alt="" />
             <span>{trigger.title}</span>
-        </div>
-    {/each}
-    {#each Object.entries(actions).toSorted(sort) as [id, action]}
-        <div class="action" role="img" on:dragstart={e => onDragStart(e, id, action)} draggable={true}>
-            <img src={action.icon} alt="action icon" />
-            <span>{action.title}</span>
         </div>
     {/each}
 </aside>
@@ -40,24 +43,7 @@
         justify-content: center;
     }
 
-    .action {
-        color: var(--color-action);
-
-        &:hover {
-            border: 0.15rem solid var(--color-action);
-        }
-    }
-
-    .trigger {
-        color: var(--color-trigger);
-
-        &:hover {
-            border: 0.15rem solid var(--color-trigger);
-        }
-    }
-
-    .action,
-    .trigger {
+    .plugin {
         display: flex;
         gap: 0.6rem;
         margin: 0.5rem;
@@ -70,11 +56,15 @@
         font-weight: bold;
 
         border: 0.15rem solid transparent;
-        border-radius: 0.3rem;
-        background-color: var(--flow-color-node-bg);
+        border-radius: var(--flow-border-radius-node);
+        background-color: var(--flow-color-node);
 
         & > img {
             pointer-events: none;
+        }
+
+        &:hover {
+            border: 0.15rem solid var(--x-color-border);
         }
     }
 </style>

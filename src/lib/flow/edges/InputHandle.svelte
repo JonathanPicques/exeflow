@@ -20,6 +20,7 @@
 <style>
     .handle {
         display: flex;
+        flex-grow: 1;
         align-items: center;
         flex-direction: row;
         justify-content: start;
@@ -27,7 +28,7 @@
         gap: 0.5rem;
 
         &.connected {
-            --color-fill: var(--x-flow-color-plugin);
+            --x-color-handle: var(--x-color-plugin);
         }
     }
 </style>

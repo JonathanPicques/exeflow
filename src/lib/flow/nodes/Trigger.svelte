@@ -1,17 +1,3 @@
-<script lang="ts" context="module">
-    import type {TriggerNodeData} from '$lib/graph/nodes';
-
-    export const splitTriggerHandles = ({data}: TriggerNodeData) => {
-        const hasOut = data.outputs.find(o => o === 'out') !== undefined;
-        const outputsWithoutOut = data.outputs.filter(o => o !== 'out');
-
-        return {
-            hasOut,
-            outputsWithoutOut,
-        };
-    };
-</script>
-
 <script lang="ts">
     import {useEdges} from '@xyflow/svelte';
     import type {NodeProps} from '@xyflow/svelte';
@@ -24,91 +10,88 @@
 
     export let id: $$Props['id'];
     export let data: $$Props['data'];
+    export let selected: $$Props['selected'] = undefined;
 
+    const [plugin] = data.id.split(':');
     const {triggers} = getGraphContext();
     const {icon, color, title} = triggers[data.id]!;
 
     let edges = useEdges();
-    let handles = splitTriggerHandles(data);
+    const {outputs} = data.data;
+
     $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
 </script>
 
-<div class="head" style:--x-flow-color-plugin={color}>
-    <div class="title">
-        <img src={icon} alt="webhook" />
-        <span>{title}</span>
+<div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
+    <div class="content">
+        <img src={icon} alt="" />
+        <div class="texts">
+            <span>{plugin}</span>
+            {#if title !== plugin}
+                <span>{title}</span>
+            {/if}
+        </div>
     </div>
-    {#if handles.hasOut}<OutputHandle id="out" connected={connectedOutputs.includes('out')} />{/if}
-</div>
-
-{#if handles.outputsWithoutOut.length > 0}
-    <div class="handles" style:--x-flow-color-plugin={color}>
-        {#each handles.outputsWithoutOut as output}
-            <div class="row">
-                <div class="output">
-                    {#if output}<OutputHandle id={output} connected={connectedOutputs.includes(output)}>{output}</OutputHandle>{/if}
-                </div>
-            </div>
+    <div class="outputs">
+        {#each outputs as output}
+            <OutputHandle id={output} connected={connectedOutputs.includes(output)}>
+                {#if outputs.length > 1}
+                    {output}
+                {/if}
+            </OutputHandle>
         {/each}
     </div>
-{/if}
+</div>
 
 <style>
-    :global(.svelte-flow__node-trigger) {
+    .node {
         display: flex;
         padding: 0.5rem;
         min-width: 10rem;
-        flex-direction: column;
 
-        color: var(--color-fg);
-        border: 0.15rem solid transparent;
-        border-radius: 0.3rem;
-        background-color: var(--flow-color-node-bg);
+        gap: 1rem;
+
+        border: 0.15rem solid var(--x-color-border, transparent);
+        border-radius: var(--flow-border-radius-node);
+        background-color: var(--flow-color-node);
 
         font-family: 'Fira Mono', Monospace;
-        font-weight: 400;
     }
 
-    :global(.svelte-flow__node-trigger.selected) {
-        border: 0.15rem solid var(--color-trigger);
-    }
-
-    .head {
+    .content {
+        gap: 1rem;
         display: flex;
-        flex-grow: 1;
-        flex-direction: row;
+        align-items: center;
 
-        gap: 0.6rem;
-
-        & .title {
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
-            justify-content: center;
-
-            gap: 0.5rem;
-            color: var(--color-trigger);
-            font-size: 1rem;
-            font-weight: bold;
+        & img {
+            height: 2rem;
         }
-    }
-
-    .handles {
-        display: flex;
-        flex-grow: 1;
-        padding-top: 0.4rem;
-        flex-direction: column;
-
-        & .row {
+        & .texts {
+            gap: 0.2rem;
             display: flex;
-            flex-grow: 1;
-            flex-direction: row;
+            flex-direction: column;
 
-            gap: 1rem;
+            & span:nth-child(1) {
+                color: var(--color-fg);
+                font-weight: bold;
 
-            & .output {
-                flex-grow: 1;
+                &::first-letter {
+                    text-transform: capitalize;
+                }
+            }
+            & span:nth-child(2) {
+                color: var(--color-fg-1);
+                font-size: 0.6rem;
+                font-weight: 200;
             }
         }
+    }
+
+    .outputs {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        gap: 0.5rem;
     }
 </style>

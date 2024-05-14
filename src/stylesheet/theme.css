@@ -6,6 +6,7 @@
 :root[color-scheme='dark'] {
     /* Main */
     --color-fg: #ddd;
+    --color-fg-1: #aaaaaa;
     --color-bg: #111;
     --color-bg-1: #373737;
     --color-bg-2: #404040;
@@ -14,13 +15,15 @@
     --color-success: #55dd99;
     /* Flow theme */
     --flow-color-edge: #ddd;
-    --flow-color-node-bg: #222a;
+    --flow-color-node: #222a;
     --flow-color-grid-dots: #404040;
+    --flow-border-radius-node: 0.6rem;
 }
 
 :root[color-scheme='light'] {
     /* Main */
     --color-fg: #111;
+    --color-fg-1: #7f7f7f;
     --color-bg: #eee;
     --color-bg-1: #ccc;
     --color-bg-2: #aaa;
@@ -29,8 +32,9 @@
     --color-success: #55dd99;
     /* Flow theme */
     --flow-color-edge: #111;
-    --flow-color-node-bg: #fffc;
+    --flow-color-node: #fffc;
     --flow-color-grid-dots: #404040;
+    --flow-border-radius-node: 0.6rem;
 }
 
 body {

@@ -49,7 +49,7 @@ export default action<Config>({
                 channel: typedForm?.channel ?? config?.channel ?? 'sk-abc-123',
             },
             inputs: ['in'],
-            outputs: ['out', 'on error'],
+            outputs: ['out'],
             results: {error: {type: 'string'}},
         };
     },

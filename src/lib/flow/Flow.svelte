@@ -96,23 +96,25 @@
         --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
     }
 
-    :global(.svelte-flow__edge) :global(path) {
+    :global(.svelte-flow__edge) :global(path),
+    :global(.svelte-flow__connection) :global(path) {
         stroke: var(--flow-color-edge);
         stroke-width: 0.1rem;
     }
 
     :global(.svelte-flow__handle) {
-        width: 0.4rem;
-        height: 0.4rem;
+        width: 0.5rem;
+        height: 0.5rem;
         position: static;
         transform: none;
-        border-color: var(--x-flow-color-plugin);
-        background-color: var(--color-fill);
+        border-width: 0.15rem;
+        border-color: var(--x-color-plugin);
+        background-color: var(--x-color-handle);
     }
 
     :global(.svelte-flow__handle.connectingto),
     :global(.svelte-flow__handle.connectingfrom) {
-        --color-fill: var(--x-flow-color-plugin);
+        --x-color-handle: var(--x-color-plugin);
     }
 
     :global(.svelte-flow__attribution) {
