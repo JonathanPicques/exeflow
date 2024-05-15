@@ -2,12 +2,12 @@ import {trigger} from './@trigger';
 
 interface Config {
     path: string;
+    method: string;
 }
 
 export default trigger<Config>({
     icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/webhook.svg',
     color: '#c93762',
-    title: 'webhook',
     description: 'triggered when called via HTTP(s)',
     //
     form({config}) {
@@ -15,21 +15,23 @@ export default trigger<Config>({
             type: 'object',
             properties: {
                 path: {type: 'string', default: config.path},
+                method: {type: 'string', enum: ['GET', 'POST', 'PATCH', 'DELETE'], default: config.method},
             },
         };
     },
     data({form, config}) {
         const typedForm = form as Partial<Config> | undefined;
 
+        const path = typedForm?.path ?? config?.path ?? '/';
+        const method = typedForm?.method ?? config?.method ?? 'GET';
+
         return {
             valid: true,
-            config: {
-                path: typedForm?.path ?? config?.path ?? '/',
-            },
+            title: `${method} ${path}`,
+            config: {path, method},
             outputs: ['out'],
             results: {
                 body: {type: 'string'},
-                method: {type: 'string', enum: ['GET', 'POST']},
                 headers: {type: 'object', additionalProperties: {type: 'string'}},
             },
         };

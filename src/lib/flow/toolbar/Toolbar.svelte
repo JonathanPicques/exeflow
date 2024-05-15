@@ -1,5 +1,6 @@
 <script lang="ts">
     import {getGraphContext} from '$lib/graph/data';
+    import {extractPluginName} from '$lib/helper/extractPluginId';
     import type {Action, ActionId} from '$lib/plugins/@action';
     import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
 
@@ -8,12 +9,8 @@
     type Plugin = Action<unknown> | Trigger<unknown>;
     type PluginId = ActionId | TriggerId;
 
-    const sort = ([idA, pluginA]: [PluginId, Plugin], [idB, pluginB]: [PluginId, Plugin]) => {
-        const cmp = pluginB.type.localeCompare(pluginA.type);
-        if (cmp === 0) {
-            return idA.localeCompare(idB);
-        }
-        return cmp;
+    const sort = ([, pluginA]: [PluginId, Plugin], [, pluginB]: [PluginId, Plugin]) => {
+        return pluginB.type.localeCompare(pluginA.type);
     };
     const onDragStart = (e: DragEvent, id: PluginId, plugin: Plugin) => {
         if (!e.dataTransfer) {
@@ -27,10 +24,10 @@
 </script>
 
 <aside>
-    {#each [...Object.entries(triggers), ...Object.entries(actions)].toSorted(sort) as [id, trigger]}
-        <div class="plugin" role="img" draggable={true} style:--x-color-border={trigger.color} on:dragstart={e => onDragStart(e, id, trigger)}>
-            <img src={trigger.icon} alt="" />
-            <span>{trigger.title}</span>
+    {#each [...Object.entries(triggers), ...Object.entries(actions)].toSorted(sort) as [id, plugin]}
+        <div role="img" class="plugin" title={plugin.description} draggable={true} style:--x-color-border={plugin.color} on:dragstart={e => onDragStart(e, id, plugin)}>
+            <img src={plugin.icon} alt="" />
+            <span>{extractPluginName(id)}</span>
         </div>
     {/each}
 </aside>

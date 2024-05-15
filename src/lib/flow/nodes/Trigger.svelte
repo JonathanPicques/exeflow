@@ -4,6 +4,7 @@
 
     import OutputHandle from '../edges/OutputHandle.svelte';
     import {getGraphContext} from '$lib/graph/data';
+    import {extractPluginName, extractPluginNamespace} from '$lib/helper/extractPluginId';
     import type {TriggerNode} from '$lib/graph/nodes';
 
     type $$Props = NodeProps<TriggerNode>;
@@ -12,12 +13,13 @@
     export let data: $$Props['data'];
     export let selected: $$Props['selected'] = undefined;
 
-    const [plugin] = data.id.split(':');
     const {triggers} = getGraphContext();
-    const {icon, color, title} = triggers[data.id]!;
+    const {icon, color} = triggers[data.id]!;
 
     let edges = useEdges();
-    const {outputs} = data.data;
+    const {title, outputs} = data.data;
+    const nodeTitle = title ?? extractPluginName(data.id);
+    const pluginNamespace = extractPluginNamespace(data.id);
 
     $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
 </script>
@@ -26,9 +28,9 @@
     <div class="content">
         <img src={icon} alt="" />
         <div class="texts">
-            <span>{plugin}</span>
-            {#if title !== plugin}
-                <span>{title}</span>
+            <span>{pluginNamespace}</span>
+            {#if nodeTitle !== pluginNamespace}
+                <span>{nodeTitle}</span>
             {/if}
         </div>
     </div>

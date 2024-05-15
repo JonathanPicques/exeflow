@@ -9,7 +9,6 @@ interface Config {
 export default action<Config>({
     icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/discord.svg',
     color: '#7289da',
-    title: 'send message',
     description: 'send a message in a discord channel',
     //
     form({config}) {
@@ -43,6 +42,7 @@ export default action<Config>({
 
         return {
             valid: true,
+            title: 'send message',
             config: {
                 token: typedForm?.token ?? config?.token ?? 'sk-abc-123',
                 server: typedForm?.server ?? config?.server ?? 'sk-abc-123',

@@ -5,7 +5,6 @@ export interface Trigger<Config> {
     //
     icon: string;
     color: string;
-    title: string;
     description: string;
     //
     form: (args: FormArgs<Config>) => JsonSchema | Promise<JsonSchema>;
@@ -25,6 +24,7 @@ interface DataArgs<Config> {
 
 export interface TriggerData<Config> {
     valid: boolean;
+    title?: string;
     config: Config;
     outputs: string[];
     results: Record<string, JsonSchema>;

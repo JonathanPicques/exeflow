@@ -5,7 +5,6 @@ export interface Action<Config> {
     //
     icon: string;
     color: string;
-    title: string;
     description: string;
     //
     form: (args: FormArgs<Config>) => JsonSchema | Promise<JsonSchema>;
@@ -25,6 +24,7 @@ interface DataArgs<Config> {
 
 export interface ActionData<Config> {
     valid: boolean;
+    title?: string;
     config: Config;
     inputs: string[];
     outputs: string[];
