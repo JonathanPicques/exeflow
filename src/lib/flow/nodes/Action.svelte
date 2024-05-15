@@ -74,6 +74,7 @@
     .content {
         gap: 1rem;
         display: flex;
+        flex-grow: 1;
         align-items: center;
 
         & img {
