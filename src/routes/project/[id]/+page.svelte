@@ -1,9 +1,11 @@
 <script lang="ts">
     import {writable} from 'svelte/store';
+    import {SplitPane} from '@rich_harris/svelte-split-pane';
     import {SvelteFlowProvider} from '@xyflow/svelte';
     import type {KeyboardEventHandler} from 'svelte/elements';
 
     import Flow from '$lib/flow/Flow.svelte';
+    import Inspector from '$lib/widgets/Inspector.svelte';
     import {setGraphContext} from '$lib/graph/data.js';
     import {fetchUpdateProject} from '../../api/project.api.js';
 
@@ -53,5 +55,23 @@
 <svelte:window on:keydown={keydown} />
 
 <SvelteFlowProvider>
-    <Flow bind:this={flow} />
+    <SplitPane type="horizontal" pos="80%" min="200px" max="-100px" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
+        <section slot="a" class="flow">
+            <Flow bind:this={flow} />
+        </section>
+        <section slot="b" class="inspector">
+            <Inspector />
+        </section>
+    </SplitPane>
 </SvelteFlowProvider>
+
+<style>
+    .inspector {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+        flex-wrap: wrap;
+        align-content: start;
+    }
+</style>

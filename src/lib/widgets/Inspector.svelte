@@ -23,27 +23,17 @@
     };
 </script>
 
-<aside>
-    {#each [...Object.entries(triggers), ...Object.entries(actions)].toSorted(sort) as [id, plugin]}
-        <div role="img" class="plugin" title={plugin.description} draggable={true} style:--x-color-border={plugin.color} on:dragstart={e => onDragStart(e, id, plugin)}>
-            <img src={plugin.icon} alt="" />
-            <span>{extractPluginName(id)}</span>
-        </div>
-    {/each}
-</aside>
+{#each [...Object.entries(triggers), ...Object.entries(actions)].toSorted(sort) as [id, plugin]}
+    <div role="img" class="plugin" title={plugin.description} draggable={true} style:--x-color-border={plugin.color} on:dragstart={e => onDragStart(e, id, plugin)}>
+        <img src={plugin.icon} alt="" />
+        <span>{extractPluginName(id)}</span>
+    </div>
+{/each}
 
 <style>
-    aside {
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        justify-content: center;
-    }
-
     .plugin {
         display: flex;
         gap: 0.6rem;
-        margin: 0.5rem;
         padding: 0.5rem 1rem;
         align-items: center;
         flex-direction: row;

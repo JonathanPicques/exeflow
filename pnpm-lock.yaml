@@ -14,6 +14,9 @@ importers:
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
+      '@rich_harris/svelte-split-pane':
+        specifier: ^1.1.1
+        version: 1.1.1(svelte@5.0.0-next.123)
       '@supabase/supabase-js':
         specifier: ^2.43.2
         version: 2.43.2
@@ -324,6 +327,11 @@ packages:
 
   '@polka/url@1.0.0-next.25':
     resolution: {integrity: sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==}
+
+  '@rich_harris/svelte-split-pane@1.1.1':
+    resolution: {integrity: sha512-y2RRLyrN6DCeIgwA423aAIv/T5JqQeOl2XogBQ/21DvA2IF7oyrLUtXMxmQL2va2NFdeJO6MDx6nDX5X7kau7A==}
+    peerDependencies:
+      svelte: ^3.54.0
 
   '@rollup/rollup-android-arm-eabi@4.17.2':
     resolution: {integrity: sha512-NM0jFxY8bB8QLkoKxIQeObCaDlJKewVlIEkuyYKm5An1tdVZ966w2+MPQ2l8LBZLjR+SgyV+nRkTIunzOYBMLQ==}
@@ -2200,6 +2208,10 @@ snapshots:
       '@noble/hashes': 1.4.0
 
   '@polka/url@1.0.0-next.25': {}
+
+  '@rich_harris/svelte-split-pane@1.1.1(svelte@5.0.0-next.123)':
+    dependencies:
+      svelte: 5.0.0-next.123
 
   '@rollup/rollup-android-arm-eabi@4.17.2':
     optional: true

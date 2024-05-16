@@ -1,10 +1,9 @@
 <script lang="ts">
-    import {Panel, Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
+    import {Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
     import {valid} from '$lib/schema/validate';
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';
-    import Toolbar from '$lib/flow/toolbar/Toolbar.svelte';
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
     import {layoutGraph} from '$lib/flow/dagre/dagre';
@@ -79,9 +78,6 @@
 </script>
 
 <SvelteFlow fitView {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
-    <Panel position="top-center">
-        <Toolbar />
-    </Panel>
     <Background />
 </SvelteFlow>
 
