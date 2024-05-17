@@ -6,27 +6,28 @@ interface JsonSchemaAll<T> {
     description?: string;
 }
 
-interface JsonSchemaAny extends JsonSchemaAll<any> {
+export interface JsonSchemaAny extends JsonSchemaAll<any> {
     type?: never;
 }
 
-interface JsonSchemaObject extends JsonSchemaAll<object> {
+export interface JsonSchemaObject extends JsonSchemaAll<object> {
     type: 'object';
     required?: string[];
     properties?: Record<string, JsonSchema>;
     additionalProperties?: boolean | JsonSchema;
 }
 
-interface JsonSchemaNumber extends JsonSchemaAll<number> {
+export interface JsonSchemaNumber extends JsonSchemaAll<number> {
     type: 'number';
 }
 
-interface JsonSchemaString extends JsonSchemaAll<string> {
+export interface JsonSchemaString extends JsonSchemaAll<string> {
     type: 'string';
     enum?: string[];
+    enumLabels?: string[];
 }
 
-interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {
+export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {
     type: 'boolean';
 }
 

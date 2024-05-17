@@ -1,0 +1,30 @@
+<script lang="ts">
+    import AnyPicker from '$lib/schema/editor/pickers/AnyPicker.svelte';
+    import StringPicker from '$lib/schema/editor/pickers/StringPicker.svelte';
+    import NumberPicker from '$lib/schema/editor/pickers/NumberPicker.svelte';
+    import ObjectPicker from '$lib/schema/editor/pickers/ObjectPicker.svelte';
+    import BooleanPicker from '$lib/schema/editor/pickers/BooleanPicker.svelte';
+    import type {JsonSchema} from '$lib/schema/schema';
+
+    interface Props {
+        value: unknown;
+        schema: JsonSchema;
+    }
+    let {value = $bindable(), schema}: Props = $props();
+    const picker = $derived.by(() => {
+        switch (schema.type) {
+            case 'string':
+                return StringPicker;
+            case 'number':
+                return NumberPicker;
+            case 'object':
+                return ObjectPicker;
+            case 'boolean':
+                return BooleanPicker;
+            default:
+                return AnyPicker;
+        }
+    });
+</script>
+
+<svelte:component this={picker} bind:value {schema} />
