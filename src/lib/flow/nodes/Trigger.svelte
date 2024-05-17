@@ -7,21 +7,15 @@
     import {extractPluginName, extractPluginNamespace} from '$lib/helper/extractPluginId';
     import type {TriggerNode} from '$lib/graph/nodes';
 
-    type $$Props = NodeProps<TriggerNode>;
-
-    export let id: $$Props['id'];
-    export let data: $$Props['data'];
-    export let selected: $$Props['selected'] = undefined;
-
+    let {id, data, selected = undefined}: NodeProps<TriggerNode> = $props();
+    const edges = useEdges();
     const {triggers} = getGraphContext();
+
     const {icon, color} = triggers[data.id]!;
-
-    let edges = useEdges();
-    const {title, outputs} = data.data;
-    const nodeTitle = title ?? extractPluginName(data.id);
-    const pluginNamespace = extractPluginNamespace(data.id);
-
-    $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
+    const {title, outputs} = $derived(data.data);
+    const nodeTitle = $derived(title ?? extractPluginName(data.id));
+    const pluginNamespace = $derived(extractPluginNamespace(data.id));
+    const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
 </script>
 
 <div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>

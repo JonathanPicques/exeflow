@@ -8,22 +8,16 @@
     import {extractPluginName, extractPluginNamespace} from '$lib/helper/extractPluginId';
     import type {ActionNode} from '$lib/graph/nodes';
 
-    type $$Props = NodeProps<ActionNode>;
-
-    export let id: $$Props['id'];
-    export let data: $$Props['data'];
-    export let selected: $$Props['selected'] = undefined;
-
+    let {id, data, selected = undefined}: NodeProps<ActionNode> = $props();
+    const edges = useEdges();
     const {actions} = getGraphContext();
+
     const {icon, color} = actions[data.id]!;
-
-    let edges = useEdges();
-    const {title, inputs, outputs} = data.data;
-    const nodeTitle = title ?? extractPluginName(data.id);
-    const pluginNamespace = extractPluginNamespace(data.id);
-
-    $: connectedInputs = [...new Set($edges.filter(e => e.target === id).map(e => e.targetHandle))] as string[];
-    $: connectedOutputs = [...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[];
+    const {title, inputs, outputs} = $derived(data.data);
+    const nodeTitle = $derived(title ?? extractPluginName(data.id));
+    const pluginNamespace = $derived(extractPluginNamespace(data.id));
+    const connectedInputs = $derived([...new Set($edges.filter(e => e.target === id).map(e => e.targetHandle))] as string[]);
+    const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
 </script>
 
 <div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
