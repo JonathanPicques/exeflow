@@ -1,6 +1,6 @@
 import {NoResultError} from 'kysely';
 
-import {AppError} from '$lib/helper/appError';
+import {AppError} from '$lib/helper/error';
 import type {Db} from '$lib/supabase/db.server';
 import type {AuthUser} from '$lib/supabase/user';
 import type {PluginNode} from '$lib/graph/nodes';

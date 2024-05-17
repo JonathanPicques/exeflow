@@ -23,6 +23,7 @@
 
         $nodes = layout.nodes;
         $edges = layout.edges;
+        fitToView();
     };
     export const fitToView = () => {
         fitView();

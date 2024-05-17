@@ -4,7 +4,7 @@
 
     import OutputHandle from '../edges/OutputHandle.svelte';
     import {getGraphContext} from '$lib/graph/data';
-    import {extractPluginName, extractPluginNamespace} from '$lib/helper/extractPluginId';
+    import {extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
     import type {TriggerNode} from '$lib/graph/nodes';
 
     let {id, data, selected = undefined}: NodeProps<TriggerNode> = $props();

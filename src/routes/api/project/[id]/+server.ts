@@ -1,7 +1,7 @@
 import {json, error} from '@sveltejs/kit';
 
 import {valid} from '$lib/schema/validate';
-import {AppError} from '$lib/helper/appError';
+import {AppError} from '$lib/helper/error';
 import {getProject, updateProject, deleteProject} from '$lib/projects/projects';
 
 export const GET = async ({locals, params}) => {

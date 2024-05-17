@@ -1,9 +1,10 @@
-import {action} from './@action';
+import {action} from '$lib/plugins/@action';
 
 interface Config {
     token: string;
     server: string;
     channel: string;
+    message: string;
 }
 
 export default action<Config>({
@@ -20,19 +21,25 @@ export default action<Config>({
                     type: 'string',
                     default: config.token,
                     //
-                    description: 'You discord bot token can be found here: https://acme.com/api-key',
+                    description: 'the discord bot token can be found here: https://acme.com/api-key',
                 },
                 server: {
                     type: 'string',
                     default: config.server,
                     //
-                    description: 'The message will be sent on this server',
+                    description: 'will be sent on this server',
                 },
                 channel: {
                     type: 'string',
                     default: config.channel,
                     //
-                    description: 'The message will be sent on this channel',
+                    description: 'will be sent on this channel',
+                },
+                message: {
+                    type: 'string',
+                    default: config.message,
+                    //
+                    description: 'message to send',
                 },
             },
         };
@@ -47,6 +54,7 @@ export default action<Config>({
                 token: typedForm?.token ?? config?.token ?? 'sk-abc-123',
                 server: typedForm?.server ?? config?.server ?? 'sk-abc-123',
                 channel: typedForm?.channel ?? config?.channel ?? 'sk-abc-123',
+                message: typedForm?.message ?? config?.message ?? '',
             },
             inputs: ['in'],
             outputs: ['out'],

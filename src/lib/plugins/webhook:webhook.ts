@@ -1,4 +1,4 @@
-import {trigger} from './@trigger';
+import {trigger} from '$lib/plugins/@trigger';
 
 interface Config {
     path: string;

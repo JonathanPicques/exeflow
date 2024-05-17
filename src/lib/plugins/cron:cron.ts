@@ -1,4 +1,7 @@
-import {trigger} from './@trigger';
+import cronstrue from 'cronstrue';
+
+import {trigger} from '$lib/plugins/@trigger';
+import {inlineThrowFn} from '$lib/helper/error';
 
 interface Config {
     interval: string;
@@ -20,12 +23,13 @@ export default trigger<Config>({
     data({form, config}) {
         const typedForm = form as Partial<Config> | undefined;
 
+        const interval = typedForm?.interval ?? config?.interval ?? '*/5 * * * *';
+        const intervalForHumans = inlineThrowFn(() => cronstrue.toString(interval, {use24HourTimeFormat: true}));
+
         return {
-            valid: true,
-            title: 'every 30 minutes',
-            config: {
-                interval: typedForm?.interval ?? config?.interval ?? '*/30 * * * *',
-            },
+            valid: intervalForHumans !== undefined,
+            title: intervalForHumans,
+            config: {interval},
             outputs: ['out'],
             results: {},
         };

@@ -1,9 +1,11 @@
+import {get} from 'svelte/store';
 import {init} from '@paralleldrive/cuid2';
 import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 
-import type {PluginNode} from './nodes';
-import type {PluginEdge} from './edges';
+import {zero} from '$lib/schema/validate';
+import type {PluginNode} from '$lib/graph/nodes';
+import type {PluginEdge} from '$lib/graph/edges';
 import type {Action, ActionId, ActionData} from '$lib/plugins/@action';
 import type {Trigger, TriggerId, TriggerData} from '$lib/plugins/@trigger';
 
@@ -27,6 +29,13 @@ class GraphContext {
         this.triggers = triggers;
     }
 
+    public node = (id: PluginNode['id']) => {
+        const node = get(this.nodes).find(n => n.id === id);
+        if (!node) {
+            throw new Error(`node ${id} not found`);
+        }
+        return node;
+    };
     public plugin = (id: PluginId, type: Plugin['type']) => {
         switch (type) {
             case 'action':
@@ -64,6 +73,26 @@ class GraphContext {
         } as PluginNode;
         this.nodes.update(nodes => [...nodes, node]);
         return node;
+    };
+    public getNodeForm = async (id: PluginNode['id']) => {
+        const node = this.node(id);
+        const plugin = this.plugin(node.data.id, node.data.type);
+        const schema = await plugin.form({config: node.data.data.config});
+        return {value: zero(schema), schema};
+    };
+    public updateNodeData = async (id: PluginNode['id'], form: unknown) => {
+        const node = this.node(id);
+        const plugin = this.plugin(node.data.id, node.data.type);
+        const newData = await plugin.data({form, config: node.data.data.config});
+
+        this.nodes.update(nodes =>
+            nodes.map(n => {
+                if (n.id === id) {
+                    return {...n, data: {...n.data, data: newData} as any};
+                }
+                return n;
+            }),
+        );
     };
 }
 

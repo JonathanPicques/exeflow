@@ -1,32 +1,27 @@
 <script lang="ts">
     import JsonSchemaEditor from '$lib/schema/editor/JsonSchemaEditor.svelte';
     import {getGraphContext} from '$lib/graph/data';
-    import type {PluginData} from '$lib/graph/data';
     import type {PluginNode} from '$lib/graph/nodes';
     import type {JsonSchema} from '$lib/schema/schema';
 
-    interface Props {
-        node: PluginNode;
-    }
-    let {node = $bindable()}: Props = $props();
-    const {plugin} = getGraphContext();
-    const {id, type, data} = $derived(node.data);
-
-    let p = $derived(plugin(id, type));
-    let form = $state<JsonSchema | Promise<JsonSchema>>({});
-    let config = $state();
-
-    const save = async () => {
-        node.data.data = (await p.data({config})) as PluginData;
-    };
+    let form = $state<{value: unknown; schema: JsonSchema}>();
+    let {node = $bindable()}: {node: PluginNode} = $props();
+    const {getNodeForm, updateNodeData} = getGraphContext();
 
     $effect(() => {
-        form = p.form({config: data.config});
-        config = $state.snapshot(data.config);
+        (async () => {
+            form = await getNodeForm(node.id);
+        })();
     });
 </script>
 
-{#await form then schema}
-    <JsonSchemaEditor bind:value={config} {schema} />
-    <button onclick={save}>Save</button>
-{/await}
+{#if form}
+    <JsonSchemaEditor bind:value={form.value} schema={form.schema} />
+    <button
+        onclick={() => {
+            form && updateNodeData(node.id, form.value);
+        }}
+    >
+        <span>Save</span>
+    </button>
+{/if}

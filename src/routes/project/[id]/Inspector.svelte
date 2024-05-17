@@ -1,7 +1,7 @@
 <script lang="ts">
     import InspectorEditor from './InspectorEditor.svelte';
     import {getGraphContext} from '$lib/graph/data';
-    import {extractPluginName} from '$lib/helper/extractPluginId';
+    import {extractPluginName} from '$lib/helper/plugin';
     import type {PluginNode} from '$lib/graph/nodes';
     import type {Plugin, PluginId} from '$lib/graph/data';
 
