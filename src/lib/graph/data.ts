@@ -50,10 +50,9 @@ class GraphContext {
         return this.triggers[id];
     };
 
-    public createNode = async (id: PluginId, type: Plugin['type']) => {
+    public createNode = async (id: PluginId, type: Plugin['type'], position: {x: number; y: number}) => {
         const plugin = this.plugin(id, type);
-
-        return {
+        const node = {
             id: this.createId(),
             type: plugin.type,
             data: {
@@ -61,11 +60,10 @@ class GraphContext {
                 type: plugin.type,
                 data: await plugin.data({}),
             },
-            position: {x: 0, y: 0},
+            position,
         } as PluginNode;
-    };
-    public positionNode = (node: PluginNode, position: {x: number; y: number}) => {
-        return {...node, position};
+        this.nodes.update(nodes => [...nodes, node]);
+        return node;
     };
 }
 

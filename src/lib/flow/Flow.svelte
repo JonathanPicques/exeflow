@@ -12,7 +12,7 @@
     import '@xyflow/svelte/dist/style.css';
 
     const {fitView, screenToFlowPosition} = useSvelteFlow();
-    const {nodes, edges, createNode, positionNode} = getGraphContext();
+    const {nodes, edges, createNode} = getGraphContext();
 
     const edgeTypes = {edge: CutEdge};
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};
@@ -40,7 +40,7 @@
         const position = screenToFlowPosition({x: e.clientX, y: e.clientY});
 
         if (valid(id, {type: 'string'}) && valid(type, {type: 'string', enum: ['action', 'trigger'] as const})) {
-            $nodes = [...$nodes, positionNode(await createNode(id, type), position)];
+            await createNode(id, type, position);
         }
     };
     const ondragover = (e: DragEvent) => {
