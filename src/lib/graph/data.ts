@@ -4,8 +4,12 @@ import type {Writable} from 'svelte/store';
 
 import type {PluginNode} from './nodes';
 import type {PluginEdge} from './edges';
-import type {Action, ActionId} from '$lib/plugins/@action';
-import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
+import type {Action, ActionId, ActionData} from '$lib/plugins/@action';
+import type {Trigger, TriggerId, TriggerData} from '$lib/plugins/@trigger';
+
+export type Plugin = Action<unknown> | Trigger<unknown>;
+export type PluginId = ActionId | TriggerId;
+export type PluginData = ActionData<unknown> | TriggerData<unknown>;
 
 class GraphContext {
     public readonly nodes: Writable<PluginNode[]>;
@@ -23,6 +27,16 @@ class GraphContext {
         this.triggers = triggers;
     }
 
+    public plugin = (id: PluginId, type: Plugin['type']) => {
+        switch (type) {
+            case 'action':
+                return this.action(id);
+            case 'trigger':
+                return this.trigger(id);
+            default:
+                throw new Error('unreachable');
+        }
+    };
     public action = (id: ActionId) => {
         if (!this.actions[id]) {
             throw new Error(`action ${id} not found`);
@@ -35,18 +49,8 @@ class GraphContext {
         }
         return this.triggers[id];
     };
-    public plugin = (id: ActionId | TriggerId, type: Action<unknown>['type'] | Trigger<unknown>['type']) => {
-        switch (type) {
-            case 'action':
-                return this.action(id);
-            case 'trigger':
-                return this.trigger(id);
-            default:
-                throw new Error('unreachable');
-        }
-    };
 
-    public createNode = async (id: ActionId | TriggerId, type: Action<unknown>['type'] | Trigger<unknown>['type']) => {
+    public createNode = async (id: PluginId, type: Plugin['type']) => {
         const plugin = this.plugin(id, type);
 
         return {

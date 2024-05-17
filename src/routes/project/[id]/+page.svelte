@@ -5,7 +5,7 @@
     import type {KeyboardEventHandler} from 'svelte/elements';
 
     import Flow from '$lib/flow/Flow.svelte';
-    import Inspector from '$lib/widgets/Inspector.svelte';
+    import Inspector from './Inspector.svelte';
     import {setGraphContext} from '$lib/graph/data.js';
     import {fetchUpdateProject} from '../../api/project.api.js';
 

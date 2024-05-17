@@ -1,13 +1,14 @@
 <script lang="ts">
+    import InspectorEditor from './InspectorEditor.svelte';
     import {getGraphContext} from '$lib/graph/data';
     import {extractPluginName} from '$lib/helper/extractPluginId';
-    import type {Action, ActionId} from '$lib/plugins/@action';
-    import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
+    import type {PluginNode} from '$lib/graph/nodes';
+    import type {Plugin, PluginId} from '$lib/graph/data';
 
-    const {actions, triggers} = getGraphContext();
+    const {nodes, actions, triggers} = getGraphContext();
 
-    type Plugin = Action<unknown> | Trigger<unknown>;
-    type PluginId = ActionId | TriggerId;
+    let node = $state<PluginNode>();
+    nodes.subscribe(nodes => (node = nodes.find(n => n.selected)));
 
     const sort = ([, pluginA]: [PluginId, Plugin], [, pluginB]: [PluginId, Plugin]) => {
         return pluginB.type.localeCompare(pluginA.type);
@@ -24,11 +25,15 @@
 </script>
 
 {#each [...Object.entries(triggers), ...Object.entries(actions)].toSorted(sort) as [id, plugin]}
-    <div role="img" class="plugin" title={plugin.description} draggable={true} style:--x-color-border={plugin.color} on:dragstart={e => onDragStart(e, id, plugin)}>
+    <div role="img" class="plugin" title={plugin.description} draggable={true} style:--x-color-border={plugin.color} ondragstart={e => onDragStart(e, id, plugin)}>
         <img src={plugin.icon} alt="" />
         <span>{extractPluginName(id)}</span>
     </div>
 {/each}
+
+{#if node}
+    <InspectorEditor bind:node />
+{/if}
 
 <style>
     .plugin {
