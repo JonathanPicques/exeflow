@@ -12,7 +12,7 @@
     const {triggers} = getGraphContext();
 
     const {icon, color} = triggers[data.id]!;
-    const {title, outputs} = $derived(data.data);
+    const {valid, title, outputs} = $derived(data.data);
     const nodeTitle = $derived(title ?? extractPluginName(data.id));
     const pluginNamespace = $derived(extractPluginNamespace(data.id));
     const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
@@ -22,9 +22,9 @@
     <div class="content">
         <img src={icon} alt="" />
         <div class="texts">
-            <span>{pluginNamespace}</span>
+            <span class:valid>{pluginNamespace}</span>
             {#if nodeTitle !== pluginNamespace}
-                <span>{nodeTitle}</span>
+                <span class:valid>{nodeTitle}</span>
             {/if}
         </div>
     </div>
@@ -72,6 +72,9 @@
                 color: var(--color-fg);
                 font-weight: bold;
 
+                &:not(.valid) {
+                    color: var(--color-error);
+                }
                 &::first-letter {
                     text-transform: capitalize;
                 }
@@ -80,6 +83,10 @@
                 color: var(--color-fg-1);
                 font-size: 0.6rem;
                 font-weight: 200;
+
+                &:not(.valid) {
+                    color: var(--color-error);
+                }
             }
         }
     }

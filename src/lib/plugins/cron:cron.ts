@@ -28,7 +28,7 @@ export default trigger<Config>({
 
         return {
             valid: intervalForHumans !== undefined,
-            title: intervalForHumans,
+            title: intervalForHumans ?? 'invalid interval',
             config: {interval},
             outputs: ['out'],
             results: {},
