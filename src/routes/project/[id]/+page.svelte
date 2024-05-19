@@ -16,25 +16,26 @@
     const edges = writable(data.project.content.edges);
     const values = writable(data.project.content.values);
 
+    const save = () => {
+        fetchUpdateProject({
+            id: data.project.id,
+            content: {
+                nodes: $nodes,
+                edges: $edges,
+                values: $values,
+            },
+        });
+    };
+
     const keydown: KeyboardEventHandler<Window> = e => {
         if (e.key === 'c') {
+            e.preventDefault();
             flow.fitToView();
         } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
-            fetchUpdateProject({
-                id: data.project.id,
-                content: {
-                    nodes: $nodes,
-                    edges: $edges,
-                    values: $values,
-                },
-            });
-        } else if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-            e.preventDefault();
-            nodes.set(data.project.content.nodes);
-            edges.set(data.project.content.edges);
-            values.set(data.project.content.values);
+            save();
         } else if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'l') {
+            e.preventDefault();
             flow.layout();
         }
     };
@@ -55,17 +56,37 @@
 <svelte:window on:keydown={keydown} />
 
 <SvelteFlowProvider>
-    <SplitPane type="horizontal" pos="80%" min="200px" max="-100px" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
-        <section slot="a" class="flow">
-            <Flow bind:this={flow} />
-        </section>
-        <section slot="b" class="inspector">
-            <Inspector />
-        </section>
-    </SplitPane>
+    <main>
+        <nav>
+            <button onclick={save}>Save</button>
+            <button onclick={() => flow.layout()}>Layout</button>
+            <button onclick={() => flow.fitToView()}>Fit to view</button>
+        </nav>
+        <SplitPane type="horizontal" min="200px" max="-100px" pos="80%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
+            <section slot="a" class="flow">
+                <Flow bind:this={flow} />
+            </section>
+            <section slot="b" class="inspector">
+                <Inspector />
+            </section>
+        </SplitPane>
+    </main>
 </SvelteFlowProvider>
 
 <style>
+    main {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+    }
+
+    nav {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid var(--color-bg-1);
+    }
+
     .inspector {
         display: flex;
         flex-direction: column;

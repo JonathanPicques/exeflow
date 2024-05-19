@@ -5,7 +5,7 @@
         value: unknown;
         schema: JsonSchema;
     }
-    let {value = $bindable(), schema}: Props = $props();
+    let {value = $bindable()}: Props = $props();
 </script>
 
 <input type="text" bind:value />
