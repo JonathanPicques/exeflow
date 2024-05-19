@@ -1,5 +1,6 @@
 import cronstrue from 'cronstrue';
 
+import icon from '$lib/plugins/icons/cron.svg';
 import {trigger} from '$lib/plugins/@trigger';
 import {inlineThrowFn} from '$lib/helper/error';
 
@@ -8,7 +9,7 @@ interface Config {
 }
 
 export default trigger<Config>({
-    icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/scheduler.svg',
+    icon,
     color: '#a55ffe',
     description: 'triggered at the scheduled interval',
     //

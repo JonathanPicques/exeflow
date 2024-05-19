@@ -1,3 +1,4 @@
+import icon from '$lib/plugins/icons/mail.svg';
 import {action} from '$lib/plugins/@action';
 
 interface Config {
@@ -14,7 +15,7 @@ interface Config {
 }
 
 export default action<Config>({
-    icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/smtp.svg',
+    icon,
     color: '#f3ce39',
     description: 'send a mail',
     //

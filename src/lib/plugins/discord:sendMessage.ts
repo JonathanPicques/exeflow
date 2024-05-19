@@ -1,3 +1,4 @@
+import icon from '$lib/plugins/icons/discord.svg';
 import {action} from '$lib/plugins/@action';
 
 interface Config {
@@ -8,7 +9,7 @@ interface Config {
 }
 
 export default action<Config>({
-    icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/discord.svg',
+    icon,
     color: '#7289da',
     description: 'send a message in a discord channel',
     //

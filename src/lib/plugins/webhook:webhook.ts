@@ -1,3 +1,4 @@
+import icon from '$lib/plugins/icons/webhook.svg';
 import {trigger} from '$lib/plugins/@trigger';
 
 interface Config {
@@ -6,7 +7,7 @@ interface Config {
 }
 
 export default trigger<Config>({
-    icon: 'https://storage.googleapis.com/voltask-assets/plugins-icons/webhook.svg',
+    icon,
     color: '#c93762',
     description: 'triggered when called via HTTP(s)',
     //
