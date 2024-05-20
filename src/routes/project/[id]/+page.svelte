@@ -14,7 +14,6 @@
 
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
-    const values = writable(data.project.content.values);
 
     const save = () => {
         fetchUpdateProject({
@@ -22,7 +21,6 @@
             content: {
                 nodes: $nodes,
                 edges: $edges,
-                values: $values,
             },
         });
     };
@@ -43,7 +41,6 @@
     setGraphContext({
         nodes,
         edges,
-        values,
         //
         actions: data.actions,
         triggers: data.triggers,

@@ -10,7 +10,9 @@
             // Zen mode
             ".npmrc": true,
             ".eslint*": true,
+            "LICENCE.md": true,
             "pnpm-lock*": true,
+            ".gitignore": true,
             ".svelte-kit": true,
             ".prettierrc": true,
             ".kanelrc.cjs": true,

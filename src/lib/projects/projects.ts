@@ -13,7 +13,6 @@ export interface Project {
     content: {
         nodes: PluginNode[];
         edges: PluginEdge[];
-        values: Record<string, unknown>;
     };
 }
 
@@ -39,7 +38,7 @@ export const getProjects = async (db: Db, {ownerId}: {ownerId: AuthUser['id']}) 
 export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: AuthUser['id']}) => {
     return (await db
         .insertInto('projects')
-        .values({name, content: JSON.stringify({nodes: [], edges: [], values: {}}), owner_id: ownerId})
+        .values({name, content: JSON.stringify({nodes: [], edges: []}), owner_id: ownerId})
         .returning(['id', 'name', 'content'])
         .executeTakeFirstOrThrow()) as Project;
 };

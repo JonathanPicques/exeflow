@@ -16,15 +16,13 @@ export type PluginData = ActionData<unknown> | TriggerData<unknown>;
 class GraphContext {
     public readonly nodes: Writable<PluginNode[]>;
     public readonly edges: Writable<PluginEdge[]>;
-    public readonly values: Writable<Record<string, unknown>>;
     public readonly actions: Record<ActionId, Action<unknown>>;
     public readonly triggers: Record<TriggerId, Trigger<unknown>>;
     private readonly createId = init({length: 5});
 
-    public constructor({nodes, edges, values, actions, triggers}: GraphContextOptions) {
+    public constructor({nodes, edges, actions, triggers}: GraphContextOptions) {
         this.nodes = nodes;
         this.edges = edges;
-        this.values = values;
         this.actions = actions;
         this.triggers = triggers;
     }
@@ -99,7 +97,6 @@ class GraphContext {
 interface GraphContextOptions {
     nodes: Writable<PluginNode[]>;
     edges: Writable<PluginEdge[]>;
-    values: Writable<Record<string, unknown>>;
     //
     actions: Record<ActionId, Action<unknown>>;
     triggers: Record<TriggerId, Trigger<unknown>>;
