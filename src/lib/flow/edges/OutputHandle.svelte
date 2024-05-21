@@ -8,7 +8,6 @@
         //
         children?: Snippet;
     }
-
     let {id, children, connected}: Props = $props();
 </script>
 

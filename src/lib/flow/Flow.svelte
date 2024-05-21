@@ -11,8 +11,8 @@
 
     import '@xyflow/svelte/dist/style.css';
 
-    const {fitView, screenToFlowPosition} = useSvelteFlow();
     const {nodes, edges, createNode} = getGraphContext();
+    const {fitView, screenToFlowPosition} = useSvelteFlow();
 
     const edgeTypes = {edge: CutEdge};
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};

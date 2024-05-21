@@ -5,9 +5,9 @@
     import type {PluginNode} from '$lib/graph/nodes';
     import type {Plugin, PluginId} from '$lib/graph/data';
 
+    let node = $state<PluginNode>();
     const {nodes, actions, triggers} = getGraphContext();
 
-    let node = $state<PluginNode>();
     nodes.subscribe(nodes => (node = nodes.find(n => n.selected)));
 
     const sort = ([, pluginA]: [PluginId, Plugin], [, pluginB]: [PluginId, Plugin]) => {
