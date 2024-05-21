@@ -27,8 +27,8 @@ export const layoutGraph = <N extends Node, E extends Edge>({nodes, edges}: {nod
             return {
                 ...node,
                 position: {
-                    x: x - nodeWidth / 2,
-                    y: y - nodeHeight / 2,
+                    x: x - (node.measured?.width ?? node.width ?? nodeWidth) / 2,
+                    y: y - (node.measured?.height ?? node.height ?? nodeHeight) / 2,
                 },
                 targetPosition: Position.Left,
                 sourcePosition: Position.Right,
