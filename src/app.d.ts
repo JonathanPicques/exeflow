@@ -1,6 +1,5 @@
 import type {Db} from '$lib/supabase/db.server';
 import type {Kysely} from 'kysely';
-import type {AuthUser} from '$lib/api/user';
 import type {User, SupabaseClient} from '@supabase/supabase-js';
 
 // See https://kit.svelte.dev/docs/types#app
@@ -12,7 +11,7 @@ declare global {
             db: Db;
             supabase: SupabaseClient;
             //
-            user: () => Promise<AuthUser | undefined>;
+            user: () => Promise<User | undefined>;
         }
         interface PageData {}
         interface PageState {}

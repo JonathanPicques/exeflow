@@ -1,8 +1,8 @@
 import {NoResultError} from 'kysely';
+import type {User} from '@supabase/supabase-js';
 
 import {AppError} from '$lib/helper/error';
 import type {Db} from '$lib/supabase/db.server';
-import type {AuthUser} from '$lib/supabase/user';
 import type {PluginNode} from '$lib/graph/nodes';
 import type {PluginEdge} from '$lib/graph/edges';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
@@ -31,11 +31,11 @@ export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
     }
 };
 
-export const getProjects = async (db: Db, {ownerId}: {ownerId: AuthUser['id']}) => {
+export const getProjects = async (db: Db, {ownerId}: {ownerId: User['id']}) => {
     return (await db.selectFrom('projects').select(['id', 'name', 'content']).where('owner_id', '=', ownerId).execute()) as Project[];
 };
 
-export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: AuthUser['id']}) => {
+export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: User['id']}) => {
     return (await db
         .insertInto('projects')
         .values({name, content: JSON.stringify({nodes: [], edges: []}), owner_id: ownerId})
