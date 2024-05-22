@@ -21,7 +21,7 @@
 <div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
     <div class="content">
         <img src={icon} alt="" />
-        <div class="texts">
+        <div>
             <span class:valid>{pluginNamespace}</span>
             {#if nodeTitle !== pluginNamespace}
                 <span class:valid>{nodeTitle}</span>
@@ -63,7 +63,7 @@
         & img {
             height: 2rem;
         }
-        & .texts {
+        & div {
             gap: 0.2rem;
             display: flex;
             flex-direction: column;
@@ -74,9 +74,6 @@
 
                 &:not(.valid) {
                     color: var(--color-error);
-                }
-                &::first-letter {
-                    text-transform: capitalize;
                 }
             }
             & span:nth-child(2) {

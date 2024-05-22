@@ -69,8 +69,8 @@
         if (
             !connection.sourceHandle ||
             !connection.targetHandle ||
-            $nodes.find(n => n.id === connection.target) === undefined ||
-            $nodes.find(n => n.id === connection.source) === undefined
+            $nodes.find(n => n.id === connection.source) === undefined ||
+            $nodes.find(n => n.id === connection.target) === undefined
         ) {
             return false;
         }
