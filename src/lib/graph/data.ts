@@ -92,6 +92,38 @@ class GraphContext {
             }),
         );
     };
+
+    public exportNodes = (ids: PluginNode['id'][]) => {
+        return {
+            nodes: get(this.nodes)
+                .filter(n => ids.includes(n.id))
+                .map(({id, data, type, position}) => ({id, data, type, position}) as PluginNode),
+            edges: get(this.edges)
+                .filter(e => ids.includes(e.source) && ids.includes(e.target))
+                .map(({id, source, sourceHandle, target, targetHandle}) => ({id, source, sourceHandle, target, targetHandle}) as PluginEdge),
+        };
+    };
+    public importNodes = ({nodes, edges, offset = {x: 0, y: 0}}: {nodes: PluginNode[]; edges: PluginEdge[]; offset?: {x: number; y: number}}) => {
+        const mapping: Record<PluginNode['id'], PluginNode['id']> = {};
+
+        for (const node of nodes) {
+            mapping[node.id] = this.createId();
+        }
+        const importedNodes = structuredClone(nodes);
+        const importedEdges = structuredClone(edges);
+        for (const importedNode of importedNodes) {
+            importedNode.id = mapping[importedNode.id];
+            importedNode.position.x += offset.x;
+            importedNode.position.y += offset.y;
+        }
+        for (const importedEdge of importedEdges) {
+            importedEdge.id = importedEdge.id.replace(importedEdge.source, mapping[importedEdge.source]).replace(importedEdge.target, mapping[importedEdge.target]);
+            importedEdge.source = mapping[importedEdge.source];
+            importedEdge.target = mapping[importedEdge.target];
+        }
+        this.nodes.update(nodes => [...nodes, ...importedNodes]);
+        this.edges.update(edges => [...edges, ...importedEdges]);
+    };
 }
 
 interface GraphContextOptions {
