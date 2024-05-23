@@ -2,7 +2,7 @@ import {json, error} from '@sveltejs/kit';
 
 import {valid} from '$lib/schema/validate';
 import {AppError} from '$lib/helper/error';
-import {getProjects, createProject} from '$lib/projects/projects';
+import {getProjects, createProject} from './project.service';
 
 export const GET = async ({locals}) => {
     const user = await locals.user();

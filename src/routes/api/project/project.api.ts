@@ -1,4 +1,4 @@
-import type {Project} from '$lib/projects/projects';
+import type {Project} from './project.service';
 
 export const fetchListProjects = async () => {
     return (await (await fetch(`/api/project`, {method: 'GET'})).json()) as Project[];

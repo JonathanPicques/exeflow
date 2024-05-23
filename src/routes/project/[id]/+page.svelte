@@ -7,7 +7,7 @@
     import Flow from '$lib/flow/Flow.svelte';
     import Inspector from './Inspector.svelte';
     import {setGraphContext} from '$lib/graph/data';
-    import {fetchUpdateProject} from '../../api/project.api';
+    import {fetchUpdateProject} from '../../api/project/project.api';
 
     let flow: Flow;
     let {data} = $props();

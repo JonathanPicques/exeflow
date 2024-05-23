@@ -1,4 +1,4 @@
-import {getProject} from '$lib/projects/projects';
+import {getProject} from '../../api/project/project.service';
 
 export const load = async ({locals, params}) => {
     return {

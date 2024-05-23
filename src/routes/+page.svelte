@@ -1,8 +1,8 @@
 <script lang="ts">
     import {onMount} from 'svelte';
 
-    import {fetchListProjects, fetchCreateProject, fetchDeleteProject} from './api/project.api';
-    import type {Project} from '$lib/projects/projects';
+    import {fetchListProjects, fetchCreateProject, fetchDeleteProject} from './api/project/project.api';
+    import type {Project} from './api/project/project.service';
 
     let {data} = $props();
     let projects: Project[] = $state([]);
