@@ -6,6 +6,7 @@ import type {Writable} from 'svelte/store';
 import {zero} from '$lib/schema/validate';
 import type {PluginNode} from '$lib/graph/nodes';
 import type {PluginEdge} from '$lib/graph/edges';
+import type {JsonSchema} from '$lib/schema/schema';
 import type {Action, ActionId, ActionData} from '$lib/plugins/@action';
 import type {Trigger, TriggerId, TriggerData} from '$lib/plugins/@trigger';
 
@@ -97,10 +98,10 @@ class GraphContext {
         return {
             nodes: get(this.nodes)
                 .filter(n => ids.includes(n.id))
-                .map(({id, data, type, position}) => ({id, data, type, position}) as PluginNode),
+                .map(({id, type, data, position}) => ({id, type, data, position}) as PluginNode),
             edges: get(this.edges)
                 .filter(e => ids.includes(e.source) && ids.includes(e.target))
-                .map(({id, source, sourceHandle, target, targetHandle}) => ({id, source, sourceHandle, target, targetHandle}) as PluginEdge),
+                .map(({id, source, target, sourceHandle, targetHandle}) => ({id, source, target, sourceHandle, targetHandle}) as PluginEdge),
         };
     };
     public importNodes = ({nodes, edges, offset = {x: 0, y: 0}}: {nodes: PluginNode[]; edges: PluginEdge[]; offset?: {x: number; y: number}}) => {
@@ -135,5 +136,47 @@ interface GraphContextOptions {
 }
 
 const key = Symbol('graph');
+
+export const nodeSchema = {
+    type: 'object',
+    required: ['id', 'type', 'data', 'position'],
+    properties: {
+        id: {
+            type: 'string',
+        },
+        type: {
+            type: 'string',
+            enum: ['action', 'trigger'],
+        },
+        data: {},
+        position: {
+            type: 'object',
+            required: ['x', 'y'],
+            properties: {
+                x: {type: 'number'},
+                y: {type: 'number'},
+            },
+        },
+    },
+} satisfies JsonSchema;
+export const edgeSchema = {
+    type: 'object',
+    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle'],
+    properties: {
+        id: {type: 'string'},
+        source: {type: 'string'},
+        target: {type: 'string'},
+        sourceHandle: {type: 'string'},
+        targetHandle: {type: 'string'},
+    },
+} satisfies JsonSchema;
+export const graphSchema = {
+    type: 'object',
+    required: ['nodes', 'edges'],
+    properties: {
+        nodes: {type: 'array', items: nodeSchema},
+        edges: {type: 'array', items: edgeSchema},
+    },
+} satisfies JsonSchema;
 export const getGraphContext = () => getContext<GraphContext>(key);
 export const setGraphContext = (options: GraphContextOptions) => setContext(key, new GraphContext(options));

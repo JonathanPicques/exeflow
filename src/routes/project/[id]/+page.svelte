@@ -6,8 +6,10 @@
 
     import Flow from '$lib/flow/Flow.svelte';
     import Inspector from './Inspector.svelte';
-    import {setGraphContext} from '$lib/graph/data';
+
+    import {valid} from '$lib/schema/validate';
     import {fetchUpdateProject} from '../../api/project/project.api';
+    import {graphSchema, setGraphContext} from '$lib/graph/data';
 
     let flow: Flow;
     let {data} = $props();
@@ -54,11 +56,16 @@
 
     const exportToClipboard = () => {
         const data = exportNodes($nodes.filter(n => n.selected).map(n => n.id));
-        navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+        if (valid(data, graphSchema)) {
+            navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+        }
     };
     const importFromClipboard = () => {
-        navigator.clipboard.readText().then(data => {
-            importNodes(JSON.parse(data));
+        navigator.clipboard.readText().then(text => {
+            const data = JSON.parse(text);
+            if (valid(data, graphSchema)) {
+                importNodes(data);
+            }
         });
     };
 </script>
