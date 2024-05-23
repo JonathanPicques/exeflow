@@ -10,6 +10,11 @@ export interface JsonSchemaAny extends JsonSchemaAll<any> {
     type?: never;
 }
 
+export interface JsonSchemaArray extends JsonSchemaAll<any[]> {
+    type: 'array';
+    items?: JsonSchema;
+}
+
 export interface JsonSchemaObject extends JsonSchemaAll<object> {
     type: 'object';
     required?: string[];
@@ -31,7 +36,7 @@ export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {
     type: 'boolean';
 }
 
-export type JsonSchema = JsonSchemaAny | JsonSchemaObject | JsonSchemaNumber | JsonSchemaString | JsonSchemaBoolean;
+export type JsonSchema = JsonSchemaAny | JsonSchemaArray | JsonSchemaObject | JsonSchemaNumber | JsonSchemaString | JsonSchemaBoolean;
 export type InferJsonSchema<T extends JsonSchema> = T extends JsonSchemaAny
     ? InferJsonSchemaAny<T>
     : T extends JsonSchemaNumber
@@ -40,12 +45,16 @@ export type InferJsonSchema<T extends JsonSchema> = T extends JsonSchemaAny
         ? InferJsonSchemaString<T>
         : T extends JsonSchemaBoolean
           ? InferJsonSchemaBoolean<T>
-          : T extends JsonSchemaObject
-            ? InferJsonSchemaObject<T>
-            : never;
+          : T extends JsonSchemaArray
+            ? InferJsonSchemaArray<T>
+            : T extends JsonSchemaObject
+              ? InferJsonSchemaObject<T>
+              : never;
 export type InferJsonSchemaRecord<T extends Record<string, JsonSchema>> = {[K in keyof T]: InferJsonSchema<T[K]>};
 
 type InferJsonSchemaAny<T extends JsonSchemaAny> = Const<T, any>;
+
+type InferJsonSchemaArray<T extends JsonSchemaArray> = Const<T, InferJsonSchema<T['items'] extends {} ? T['items'] : {}>[]>;
 type InferJsonSchemaObject<T extends JsonSchemaObject> = Const<T, MapObject<T>>;
 type InferJsonSchemaNumber<T extends JsonSchemaNumber> = Const<T, number>;
 type InferJsonSchemaString<T extends JsonSchemaString> = Const<T, T['enum'] extends (infer E)[] ? E : string>;

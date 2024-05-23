@@ -13,6 +13,10 @@ test('InferJsonSchema', () => {
     expectTypeOf<InferJsonSchema<{type: 'boolean'; const: true}>>().toEqualTypeOf<true>();
     expectTypeOf<InferJsonSchema<{type: 'boolean'; const: false}>>().toEqualTypeOf<false>();
 
+    expectTypeOf<InferJsonSchema<{type: 'array'; items: {}}>>().toEqualTypeOf<any[]>();
+    expectTypeOf<InferJsonSchema<{type: 'array'; items: {type: 'string'}}>>().toEqualTypeOf<string[]>();
+    expectTypeOf<InferJsonSchema<{type: 'array'; const: [12, '13', false]}>>().toEqualTypeOf<[12, '13', false]>();
+
     expectTypeOf<InferJsonSchema<{type: 'object'}>>().toEqualTypeOf<Record<string, unknown>>();
     expectTypeOf<InferJsonSchema<{type: 'object'; const: {id: '123'}}>>().toMatchTypeOf<{id: '123'}>();
     expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}}>>().toMatchTypeOf<{id?: string}>();
