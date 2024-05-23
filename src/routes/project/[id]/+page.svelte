@@ -15,6 +15,14 @@
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
 
+    const {exportNodes, importNodes} = setGraphContext({
+        nodes,
+        edges,
+        //
+        actions: data.actions,
+        triggers: data.triggers,
+    });
+
     const save = () => {
         fetchUpdateProject({
             id: data.project.id,
@@ -26,9 +34,15 @@
     };
 
     const keydown: KeyboardEventHandler<Window> = e => {
-        if (e.key === 'c') {
+        if (!e.ctrlKey && !e.metaKey && e.key === 'c') {
             e.preventDefault();
             flow.fitToView();
+        } else if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+            e.preventDefault();
+            exportToClipboard();
+        } else if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+            e.preventDefault();
+            importFromClipboard();
         } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
             save();
@@ -38,13 +52,15 @@
         }
     };
 
-    setGraphContext({
-        nodes,
-        edges,
-        //
-        actions: data.actions,
-        triggers: data.triggers,
-    });
+    const exportToClipboard = () => {
+        const data = exportNodes($nodes.filter(n => n.selected).map(n => n.id));
+        navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+    };
+    const importFromClipboard = () => {
+        navigator.clipboard.readText().then(data => {
+            importNodes(JSON.parse(data));
+        });
+    };
 </script>
 
 <svelte:head>
