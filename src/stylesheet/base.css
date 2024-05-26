@@ -2,6 +2,33 @@
 *::before,
 *::after {
     box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        transition: background-color 0.2s;
+        border-radius: 3px;
+        background-color: rgba(130, 130, 130, 0.4);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        border-radius: 3px;
+        background-color: rgba(130, 130, 130, 0.5);
+    }
+
+    &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+        display: none;
+    }
+
+    &::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
 }
 
 body,

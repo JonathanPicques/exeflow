@@ -50,8 +50,6 @@
         border: 0.15rem solid var(--x-color-border, transparent);
         border-radius: var(--flow-border-radius-node);
         background-color: var(--flow-color-node);
-
-        font-family: 'Fira Mono', Monospace;
     }
 
     .content {

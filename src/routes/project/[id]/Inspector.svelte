@@ -44,7 +44,7 @@
         flex-direction: row;
 
         cursor: grab;
-        font-family: 'Fira Mono', Monospace;
+        font-family: var(--flow-font);
         font-weight: bold;
 
         border: 0.15rem solid transparent;

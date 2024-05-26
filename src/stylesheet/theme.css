@@ -1,6 +1,6 @@
 :root {
-    --color-action: #f3ce39;
-    --color-trigger: #f54e9e;
+    --font: 'Arial';
+    --flow-font: 'Fira Mono', Monospace;
 }
 
 :root[color-scheme='dark'] {
@@ -39,5 +39,6 @@
 
 body {
     color: var(--color-fg);
+    font-family: var(--font);
     background-color: var(--color-bg);
 }
