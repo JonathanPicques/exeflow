@@ -38,12 +38,11 @@
         justify-content: center;
 
         color: var(--color-fg);
+        cursor: pointer;
         border: 0.1rem solid var(--flow-color-edge);
+        font-size: 0.8rem;
         border-radius: 50%;
         background-color: var(--color-bg);
-
-        cursor: pointer;
-        font-size: 0.8rem;
 
         transition: box-shadow linear 0.1s;
 

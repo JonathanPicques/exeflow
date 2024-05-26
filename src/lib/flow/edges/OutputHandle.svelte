@@ -18,13 +18,12 @@
 
 <style>
     .handle {
+        gap: 0.5rem;
         display: flex;
         flex-grow: 1;
         align-items: center;
         flex-direction: row;
         justify-content: end;
-
-        gap: 0.5rem;
 
         &.connected {
             --x-color-handle: var(--x-color-plugin);

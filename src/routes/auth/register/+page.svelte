@@ -29,11 +29,10 @@
 
 <style>
     form {
-        display: flex;
-        flex-direction: column;
-
         gap: 0.6rem;
+        display: flex;
         margin: 1.3rem auto;
+        flex-direction: column;
     }
 
     input[type='email'],

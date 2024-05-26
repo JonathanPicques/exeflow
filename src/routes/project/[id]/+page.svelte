@@ -2,7 +2,6 @@
     import {writable} from 'svelte/store';
     import {SplitPane} from '@rich_harris/svelte-split-pane';
     import {SvelteFlowProvider} from '@xyflow/svelte';
-    import type {KeyboardEventHandler} from 'svelte/elements';
 
     import Flow from '$lib/flow/Flow.svelte';
     import Inspector from './Inspector.svelte';
@@ -35,25 +34,6 @@
         });
     };
 
-    const keydown: KeyboardEventHandler<Window> = e => {
-        if (!e.ctrlKey && !e.metaKey && e.key === 'c') {
-            e.preventDefault();
-            flow.fitToView();
-        } else if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
-            e.preventDefault();
-            exportToClipboard();
-        } else if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
-            e.preventDefault();
-            importFromClipboard();
-        } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-            e.preventDefault();
-            save();
-        } else if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'l') {
-            e.preventDefault();
-            flow.layout();
-        }
-    };
-
     const exportToClipboard = () => {
         const data = exportNodes($nodes.filter(n => n.selected).map(n => n.id));
         if (valid(data, graphSchema)) {
@@ -73,7 +53,6 @@
 <svelte:head>
     <title>Exeflow</title>
 </svelte:head>
-<svelte:window on:keydown={keydown} />
 
 <SvelteFlowProvider>
     <main>
@@ -81,6 +60,10 @@
             <button onclick={save}>Save</button>
             <button onclick={() => flow.layout()}>Layout</button>
             <button onclick={() => flow.fitToView()}>Fit to view</button>
+            {#if true}
+                <button onclick={exportToClipboard}>Copy</button>
+                <button onclick={importFromClipboard}>Paste</button>
+            {/if}
         </nav>
         <SplitPane type="horizontal" min="200px" max="-100px" pos="80%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
             <section slot="a" class="flow">
@@ -101,18 +84,16 @@
     }
 
     nav {
-        display: flex;
         gap: 1rem;
+        display: flex;
         padding: 1rem;
         border-bottom: 1px solid var(--color-bg-1);
     }
 
     .inspector {
-        display: flex;
-        flex-direction: column;
         gap: 0.5rem;
+        display: grid;
         padding: 1rem;
-        flex-wrap: wrap;
         align-content: start;
     }
 </style>

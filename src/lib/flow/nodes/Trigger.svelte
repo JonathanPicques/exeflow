@@ -22,9 +22,9 @@
     <div class="content">
         <img src={icon} alt="" />
         <div>
-            <span class:valid>{pluginNamespace}</span>
+            <span class:valid class="name">{pluginNamespace}</span>
             {#if nodeTitle !== pluginNamespace}
-                <span class:valid>{nodeTitle}</span>
+                <span class:valid class="title">{nodeTitle}</span>
             {/if}
         </div>
     </div>
@@ -41,11 +41,10 @@
 
 <style>
     .node {
+        gap: 1rem;
         display: flex;
         padding: 0.5rem;
         min-width: 10rem;
-
-        gap: 1rem;
 
         border: 0.15rem solid var(--x-color-border, transparent);
         border-radius: var(--flow-border-radius-node);
@@ -66,7 +65,7 @@
             display: flex;
             flex-direction: column;
 
-            & span:nth-child(1) {
+            & .name {
                 color: var(--color-fg);
                 font-weight: bold;
 
@@ -74,7 +73,7 @@
                     color: var(--color-error);
                 }
             }
-            & span:nth-child(2) {
+            & .title {
                 color: var(--color-fg-1);
                 font-size: 0.6rem;
                 font-weight: 200;
@@ -87,10 +86,9 @@
     }
 
     .outputs {
+        gap: 0.5rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
-
-        gap: 0.5rem;
     }
 </style>

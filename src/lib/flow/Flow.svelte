@@ -78,7 +78,7 @@
     };
 </script>
 
-<SvelteFlow fitView {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} on:drop={ondrop} on:dragover={ondragover}>
+<SvelteFlow {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} {ondrop} {ondragover}>
     <Background />
 </SvelteFlow>
 
