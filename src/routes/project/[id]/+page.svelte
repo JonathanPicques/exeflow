@@ -7,6 +7,7 @@
     import Inspector from './Inspector.svelte';
 
     import {valid} from '$lib/schema/validate';
+    import {shortcut} from '$lib/helper/shortcut';
     import {fetchUpdateProject} from '../../api/project/project.api';
     import {graphSchema, setGraphContext} from '$lib/graph/data';
 
@@ -34,6 +35,9 @@
         });
     };
 
+    const layout = () => flow.layout();
+    const fitToView = () => flow.fitToView();
+
     const exportToClipboard = () => {
         const data = exportNodes($nodes.filter(n => n.selected).map(n => n.id));
         if (valid(data, graphSchema)) {
@@ -57,12 +61,12 @@
 <SvelteFlowProvider>
     <main>
         <nav>
-            <button onclick={save}>Save</button>
-            <button onclick={() => flow.layout()}>Layout</button>
-            <button onclick={() => flow.fitToView()}>Fit to view</button>
+            <button onclick={save} use:shortcut={['ctrl+s', save]}>Save</button>
+            <button onclick={layout} use:shortcut={['ctrl+alt+l', layout]}>Layout</button>
+            <button onclick={fitToView} use:shortcut={['ctrl+alt+c', fitToView]}>Fit to view</button>
             {#if true}
-                <button onclick={exportToClipboard}>Copy</button>
-                <button onclick={importFromClipboard}>Paste</button>
+                <button onclick={exportToClipboard} use:shortcut={['ctrl+c', exportToClipboard]}>Copy</button>
+                <button onclick={importFromClipboard} use:shortcut={['ctrl+v', importFromClipboard]}>Paste</button>
             {/if}
         </nav>
         <SplitPane type="horizontal" min="200px" max="-100px" pos="80%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
