@@ -104,7 +104,7 @@ class GraphContext {
                 .map(({id, source, target, sourceHandle, targetHandle}) => ({id, source, target, sourceHandle, targetHandle}) as PluginEdge),
         };
     };
-    public importNodes = ({nodes, edges, offset = {x: 0, y: 0}}: {nodes: PluginNode[]; edges: PluginEdge[]; offset?: {x: number; y: number}}) => {
+    public importNodes = ({nodes, edges}: {nodes: PluginNode[]; edges: PluginEdge[]}, offset = {x: 0, y: 0}) => {
         const mapping: Record<PluginNode['id'], PluginNode['id']> = {};
 
         for (const node of nodes) {
