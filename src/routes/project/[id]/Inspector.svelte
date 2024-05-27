@@ -1,7 +1,7 @@
 <script lang="ts">
     import InspectorEditor from './InspectorEditor.svelte';
     import {getGraphContext} from '$lib/graph/data';
-    import {extractPluginName} from '$lib/helper/plugin';
+    import {humanPluginName, extractPluginName} from '$lib/helper/plugin';
     import type {PluginNode} from '$lib/graph/nodes';
     import type {Plugin, PluginId} from '$lib/graph/data';
 
@@ -29,7 +29,7 @@
 </script>
 
 {#if node}
-    <h1>{extractPluginName(node.data.id)}</h1>
+    <h1>{humanPluginName(extractPluginName(node.data.id))}</h1>
 
     <InspectorEditor bind:node />
 {:else}
@@ -40,7 +40,7 @@
         <div role="img" class="plugin" title={plugin.description} draggable={true} style:--x-color-border={plugin.color} ondragstart={e => onDragStart(e, id, plugin)}>
             <img src={plugin.icon} alt="" />
             <div>
-                <span class="name">{extractPluginName(id)}</span>
+                <span class="name">{humanPluginName(extractPluginName(id))}</span>
                 <span class="description">{plugin.description}</span>
             </div>
         </div>
