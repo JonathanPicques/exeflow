@@ -2,7 +2,7 @@ import cronstrue from 'cronstrue';
 
 import icon from '$lib/plugins/icons/cron.svg';
 import {trigger} from '$lib/plugins/@trigger';
-import {inlineThrowFn} from '$lib/helper/error';
+import {tryFunction} from '$lib/helper/error';
 
 interface Config {
     interval: string;
@@ -25,7 +25,7 @@ export default trigger<Config>({
         const typedForm = form as Partial<Config> | undefined;
 
         const interval = typedForm?.interval ?? config?.interval ?? '*/5 * * * *';
-        const intervalForHumans = inlineThrowFn(() => cronstrue.toString(interval, {use24HourTimeFormat: true}));
+        const intervalForHumans = tryFunction(() => cronstrue.toString(interval, {use24HourTimeFormat: true}));
 
         return {
             valid: intervalForHumans !== undefined,
