@@ -8,7 +8,7 @@
     --color-fg: #ddd;
     --color-fg-1: #aaaaaa;
     --color-bg: #111;
-    --color-bg-1: #373737;
+    --color-bg-1: #1e1e1e;
     --color-bg-2: #404040;
     /* General */
     --color-error: #e15757;
@@ -25,7 +25,7 @@
     --color-fg: #111;
     --color-fg-1: #7f7f7f;
     --color-bg: #eee;
-    --color-bg-1: #ccc;
+    --color-bg-1: #e3e3e3;
     --color-bg-2: #aaa;
     /* General */
     --color-error: #d13434;
@@ -41,4 +41,36 @@ body {
     color: var(--color-fg);
     font-family: var(--font);
     background-color: var(--color-bg);
+}
+
+input[type='text'],
+input[type='email'],
+input[type='search'],
+input[type='password'] {
+    border: none;
+    padding: 0.8em 1em;
+    border-radius: 0.5em;
+
+    color: var(--color-fg);
+    background-color: var(--color-bg-1);
+}
+
+button:not(.custom) {
+    padding: 0.8em 1em;
+
+    color: var(--color-fg);
+    font-weight: bold;
+    border-radius: 0.5em;
+    background-color: var(--color-bg-1);
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease;
+
+    &:hover {
+        background-color: var(--color-bg-2);
+    }
+    &:active {
+        transform: translate(0.1rem, 0.1rem);
+    }
 }
