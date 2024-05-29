@@ -1,7 +1,7 @@
 <script lang="ts">
     import InspectorEditor from './InspectorEditor.svelte';
     import {getGraphContext} from '$lib/graph/data';
-    import {humanPluginName, extractPluginName} from '$lib/helper/plugin';
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
     import type {PluginNode} from '$lib/graph/nodes';
     import type {Plugin, PluginId} from '$lib/graph/data';
 
@@ -11,8 +11,8 @@
 
     nodes.subscribe(nodes => (node = nodes.find(n => n.selected)));
 
-    const sort = ([, pluginA]: [PluginId, Plugin], [, pluginB]: [PluginId, Plugin]) => {
-        return pluginB.type.localeCompare(pluginA.type);
+    const sort = ([idA]: [PluginId, Plugin], [idB]: [PluginId, Plugin]) => {
+        return extractPluginNamespace(idA).localeCompare(extractPluginNamespace(idB));
     };
     const onDragStart = (e: DragEvent, id: PluginId, plugin: Plugin) => {
         if (!e.dataTransfer) {
@@ -37,7 +37,7 @@
     <input type="search" bind:value={filter} placeholder="Filter nodes..." />
 
     {#each [...Object.entries(triggers), ...Object.entries(actions)].filter(filterPlugins).toSorted(sort) as [id, plugin]}
-        <div role="img" class="plugin" title={plugin.description} draggable={true} style:--x-color-border={plugin.color} ondragstart={e => onDragStart(e, id, plugin)}>
+        <div role="img" class="plugin" title={extractPluginNamespace(id)} draggable={true} style:--x-color-border={plugin.color} ondragstart={e => onDragStart(e, id, plugin)}>
             <img src={plugin.icon} alt="" />
             <div>
                 <span class="name">{humanPluginName(extractPluginName(id))}</span>

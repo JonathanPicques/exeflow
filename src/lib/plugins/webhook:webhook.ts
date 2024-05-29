@@ -21,10 +21,9 @@ export default trigger<Config>({
         };
     },
     data({form, config}) {
-        const typedForm = form as Partial<Config> | undefined;
-
-        const path = typedForm?.path ?? config?.path ?? '/';
-        const method = typedForm?.method ?? config?.method ?? 'GET';
+        const f = form as Partial<Config> | undefined;
+        const path = f?.path ?? config?.path ?? '/';
+        const method = f?.method ?? config?.method ?? 'GET';
 
         return {
             valid: true,

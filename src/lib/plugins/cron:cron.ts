@@ -22,9 +22,8 @@ export default trigger<Config>({
         };
     },
     data({form, config}) {
-        const typedForm = form as Partial<Config> | undefined;
-
-        const interval = typedForm?.interval ?? config?.interval ?? '*/5 * * * *';
+        const f = form as Partial<Config> | undefined;
+        const interval = f?.interval ?? config?.interval ?? '*/5 * * * *';
         const intervalForHumans = tryFunction(() => cronstrue.toString(interval, {use24HourTimeFormat: true}));
 
         return {

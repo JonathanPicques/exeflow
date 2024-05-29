@@ -1,5 +1,5 @@
 import icon from '$lib/plugins/icons/mail.svg';
-import {action} from '$lib/plugins/@action';
+import {trigger} from '$lib/plugins/@trigger';
 
 interface Config {
     tls: boolean;
@@ -8,16 +8,13 @@ interface Config {
     user: string;
     password: string;
     //
-    to: string;
-    from: string;
-    bodyText: string;
-    bodyHtml: string;
+    inbox: string;
 }
 
-export default action<Config>({
+export default trigger<Config>({
     icon,
     color: '#f3ce39',
-    description: 'send a mail',
+    description: 'triggered when receiving a mail',
     //
     form({config}) {
         return {
@@ -29,10 +26,7 @@ export default action<Config>({
                 user: {type: 'string', default: config.user},
                 password: {type: 'string', default: config.password},
                 //
-                to: {type: 'string', default: config.to},
-                from: {type: 'string', default: config.from},
-                bodyText: {type: 'string', default: config.bodyText},
-                bodyHtml: {type: 'string', default: config.bodyHtml},
+                inbox: {type: 'string', default: config.inbox},
             },
         };
     },
@@ -41,7 +35,7 @@ export default action<Config>({
 
         return {
             valid: true,
-            title: 'send mail',
+            title: 'receive mail',
             config: {
                 tls: f?.tls ?? config?.tls ?? true,
                 host: f?.host ?? config?.host ?? '',
@@ -49,12 +43,8 @@ export default action<Config>({
                 user: f?.user ?? config?.user ?? '',
                 password: f?.password ?? config?.password ?? '',
                 //
-                to: f?.to ?? config?.to ?? '',
-                from: f?.from ?? config?.from ?? '',
-                bodyText: f?.bodyText ?? config?.bodyText ?? '',
-                bodyHtml: f?.bodyHtml ?? config?.bodyHtml ?? '',
+                inbox: f?.inbox ?? config?.inbox ?? 'INBOX',
             },
-            inputs: ['in'],
             outputs: ['out'],
             results: {},
         };
