@@ -24,7 +24,7 @@
             default:
                 return AnyPicker;
         }
-    });
+    }) as typeof AnyPicker;
 </script>
 
 <svelte:component this={picker} bind:value {schema} />
