@@ -1,15 +1,15 @@
 import Mousetrap from 'mousetrap';
 
-type ShortcutOptions = [string | string[], () => void];
+type Clickable = HTMLAnchorElement | HTMLButtonElement | HTMLInputElement;
 
-export const shortcut = (_: HTMLElement, options: ShortcutOptions) => {
+export const shortcut = (element: Clickable, shortcut: string | string[]) => {
     const trap = new Mousetrap();
     const action = {
-        update([keys, handler]: ShortcutOptions) {
+        update(shortcut: string | string[]) {
             trap.reset();
-            trap.bind(keys, e => {
+            trap.bind(shortcut, e => {
                 e.preventDefault();
-                handler();
+                element.click();
             });
         },
         destroy() {
@@ -17,6 +17,6 @@ export const shortcut = (_: HTMLElement, options: ShortcutOptions) => {
         },
     };
 
-    action.update(options);
+    action.update(shortcut);
     return action;
 };

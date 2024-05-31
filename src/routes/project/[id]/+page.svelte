@@ -61,12 +61,12 @@
 <SvelteFlowProvider>
     <main>
         <nav>
-            <button onclick={save} use:shortcut={['ctrl+s', save]}>Save</button>
-            <button onclick={layout} use:shortcut={['ctrl+alt+l', layout]}>Layout</button>
-            <button onclick={fitToView} use:shortcut={['ctrl+alt+c', fitToView]}>Fit to view</button>
+            <button onclick={save} use:shortcut={'ctrl+s'}>Save</button>
+            <button onclick={layout} use:shortcut={'ctrl+alt+l'}>Layout</button>
+            <button onclick={fitToView} use:shortcut={'ctrl+alt+c'}>Fit to view</button>
             {#if true}
-                <button onclick={exportToClipboard} use:shortcut={['ctrl+c', exportToClipboard]}>Copy</button>
-                <button onclick={importFromClipboard} use:shortcut={['ctrl+v', importFromClipboard]}>Paste</button>
+                <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
+                <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
             {/if}
         </nav>
         <SplitPane type="horizontal" min="200px" max="-100px" pos="80%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
