@@ -4,6 +4,7 @@
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
     import type {PluginNode} from '$lib/graph/nodes';
     import type {Plugin, PluginId} from '$lib/graph/data';
+    import InspectorTrigger from './InspectorTrigger.svelte';
 
     let node = $state<PluginNode>();
     let filter = $state('');
@@ -31,6 +32,9 @@
 {#if node}
     <h1>{humanPluginName(extractPluginName(node.data.id))}</h1>
 
+    {#if node.data.type === 'trigger'}
+        <InspectorTrigger {node} />
+    {/if}
     <InspectorEditor bind:node />
 {:else}
     <h1>Nodes</h1>
