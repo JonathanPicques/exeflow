@@ -1,20 +1,23 @@
 import dagre from '@dagrejs/dagre';
-import type {Node, Edge} from '@xyflow/svelte';
+import type {Graph} from '$lib/graph/data';
 
 const nodeWidth = 150;
 const nodeHeight = 100;
 
-export const layoutGraph = <N extends Node, E extends Edge>({nodes, edges}: {nodes: N[]; edges: E[]}): {nodes: N[]; edges: E[]} => {
+export const layoutGraph = ({nodes, edges}: Graph): Graph => {
     const graph = new dagre.graphlib.Graph();
 
     graph.setGraph({rankdir: 'LR'});
     graph.setDefaultEdgeLabel(() => ({}));
 
+    for (const node of nodes) {
+        graph.setNode(node.id, {
+            width: node.measured?.width ?? nodeWidth,
+            height: node.measured?.height ?? nodeHeight,
+        });
+    }
     for (const edge of edges) {
         graph.setEdge(edge.source, edge.target);
-    }
-    for (const node of nodes) {
-        graph.setNode(node.id, {width: node.measured?.width ?? nodeWidth, height: node.measured?.height ?? nodeHeight});
     }
 
     dagre.layout(graph);

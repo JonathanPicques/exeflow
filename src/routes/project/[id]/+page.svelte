@@ -17,7 +17,7 @@
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
 
-    const {exportNodes, importNodes} = setGraphContext({
+    const {exportGraph, importGraph} = setGraphContext({
         nodes,
         edges,
         //
@@ -39,7 +39,7 @@
     const fitToView = () => flow.fitToView();
 
     const exportToClipboard = () => {
-        const data = exportNodes($nodes.filter(n => n.selected).map(n => n.id));
+        const data = exportGraph($nodes.filter(n => n.selected).map(n => n.id));
         if (valid(data, graphSchema)) {
             navigator.clipboard.writeText(JSON.stringify(data, null, 2));
         }
@@ -48,7 +48,7 @@
         navigator.clipboard.readText().then(text => {
             const data = JSON.parse(text);
             if (valid(data, graphSchema)) {
-                importNodes(data);
+                importGraph(data);
             }
         });
     };

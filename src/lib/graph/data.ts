@@ -10,6 +10,7 @@ import type {JsonSchema} from '$lib/schema/schema';
 import type {Action, ActionId, ActionData} from '$lib/plugins/@action';
 import type {Trigger, TriggerId, TriggerData} from '$lib/plugins/@trigger';
 
+export type Graph = {nodes: PluginNode[]; edges: PluginEdge[]};
 export type Plugin = Action<unknown> | Trigger<unknown>;
 export type PluginId = ActionId | TriggerId;
 export type PluginData = ActionData<unknown> | TriggerData<unknown>;
@@ -94,7 +95,7 @@ class GraphContext {
         );
     };
 
-    public exportNodes = (ids: PluginNode['id'][]) => {
+    public exportGraph = (ids: PluginNode['id'][]): Graph => {
         return {
             nodes: get(this.nodes)
                 .filter(n => ids.includes(n.id))
@@ -104,7 +105,7 @@ class GraphContext {
                 .map(({id, source, target, sourceHandle, targetHandle}) => ({id, source, target, sourceHandle, targetHandle}) as PluginEdge),
         };
     };
-    public importNodes = ({nodes, edges}: {nodes: PluginNode[]; edges: PluginEdge[]}, offset = {x: 0, y: 0}) => {
+    public importGraph = ({nodes, edges}: Graph, offset = {x: 0, y: 0}) => {
         const mapping: Record<PluginNode['id'], PluginNode['id']> = {};
 
         for (const node of nodes) {

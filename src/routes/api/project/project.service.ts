@@ -3,17 +3,13 @@ import type {User} from '@supabase/supabase-js';
 
 import {AppError} from '$lib/helper/error';
 import type {Db} from '$lib/supabase/db.server';
-import type {PluginNode} from '$lib/graph/nodes';
-import type {PluginEdge} from '$lib/graph/edges';
+import type {Graph} from '$lib/graph/data';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 
 export interface Project {
     id: string;
     name: string;
-    content: {
-        nodes: PluginNode[];
-        edges: PluginEdge[];
-    };
+    content: Graph;
 }
 
 export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {

@@ -1,5 +1,7 @@
 import type {JsonSchema} from '$lib/schema/schema';
 
+export type ActionId = string;
+
 export interface Action<Config> {
     type: 'action';
     //
@@ -11,7 +13,14 @@ export interface Action<Config> {
     data: (args: DataArgs<Config>) => ActionData<Config> | Promise<ActionData<Config>>;
 }
 
-export type ActionId = string;
+export interface ActionData<Config> {
+    valid: boolean;
+    title?: string;
+    config: Config;
+    inputs: string[];
+    outputs: string[];
+    results: Record<string, JsonSchema>;
+}
 
 interface FormArgs<Config> {
     config: Config;
@@ -20,15 +29,6 @@ interface FormArgs<Config> {
 interface DataArgs<Config> {
     form?: unknown;
     config?: Config;
-}
-
-export interface ActionData<Config> {
-    valid: boolean;
-    title?: string;
-    config: Config;
-    inputs: string[];
-    outputs: string[];
-    results: Record<string, JsonSchema>;
 }
 
 export const action = <Config>(action: Omit<Action<Config>, 'type'>) => ({type: 'action', ...action});

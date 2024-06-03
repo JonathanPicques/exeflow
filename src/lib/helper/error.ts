@@ -21,9 +21,9 @@ export class AppError extends Error {
 }
 
 /**
- * Returns what the specified function would return, or a default value if an exception was thrown.
+ * Returns what the specified function would return, or a default value if an exception was thrown
  * @param fn - a function returning a value
- * @param defaultValue - returned when an exception is thrown, `undefined` if not specified.
+ * @param defaultValue - returned when an exception is thrown, `undefined` if not specified
  * @example
  * ```ts
  * tryFunction(() => 'welcome') => 'welcome'
