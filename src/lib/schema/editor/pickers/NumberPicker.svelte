@@ -9,3 +9,9 @@
 </script>
 
 <input type="number" bind:value />
+
+<style>
+    input {
+        width: 100%;
+    }
+</style>

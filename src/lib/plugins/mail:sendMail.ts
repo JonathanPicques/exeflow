@@ -4,7 +4,7 @@ import {action} from '$lib/plugins/@action';
 interface Config {
     tls: boolean;
     host: string;
-    port: string;
+    port: number;
     user: string;
     password: string;
     //
@@ -25,7 +25,7 @@ export default action<Config>({
             properties: {
                 tls: {type: 'boolean', default: config.tls},
                 host: {type: 'string', default: config.host},
-                port: {type: 'string', default: config.port},
+                port: {type: 'number', default: config.port},
                 user: {type: 'string', default: config.user},
                 password: {type: 'string', default: config.password},
                 //
@@ -45,7 +45,7 @@ export default action<Config>({
             config: {
                 tls: f?.tls ?? config?.tls ?? true,
                 host: f?.host ?? config?.host ?? '',
-                port: f?.port ?? config?.port ?? '',
+                port: f?.port ?? config?.port ?? 587,
                 user: f?.user ?? config?.user ?? '',
                 password: f?.password ?? config?.password ?? '',
                 //

@@ -19,3 +19,9 @@
 {:else}
     <input type="text" bind:value placeholder={schema.placeholder} />
 {/if}
+
+<style>
+    input {
+        width: 100%;
+    }
+</style>

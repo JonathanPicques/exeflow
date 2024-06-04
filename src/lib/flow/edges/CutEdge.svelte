@@ -44,7 +44,9 @@
         border-radius: 50%;
         background-color: var(--color-bg);
 
-        transition: box-shadow linear 0.1s;
+        @media screen and (prefers-reduced-motion: no-preference) {
+            transition: box-shadow linear 0.1s;
+        }
 
         &:hover {
             box-shadow: 0 0 0.2rem 0.1rem #ddd;

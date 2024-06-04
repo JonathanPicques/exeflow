@@ -10,6 +10,7 @@
     --color-bg: #111;
     --color-bg-1: #1e1e1e;
     --color-bg-2: #404040;
+    --color-bg-3: #606060;
     /* General */
     --color-error: #e15757;
     --color-success: #55dd99;
@@ -27,6 +28,7 @@
     --color-bg: #eee;
     --color-bg-1: #e3e3e3;
     --color-bg-2: #aaa;
+    --color-bg-3: #888;
     /* General */
     --color-error: #d13434;
     --color-success: #55dd99;
@@ -45,14 +47,28 @@ body {
 
 input[type='text'],
 input[type='email'],
+input[type='number'],
 input[type='search'],
 input[type='password'] {
-    border: none;
+    border: 0.15rem solid transparent;
     padding: 0.8em 1em;
     border-radius: 0.5em;
 
     color: var(--color-fg);
     background-color: var(--color-bg-1);
+
+    @media screen and (prefers-reduced-motion: no-preference) {
+        transition:
+            border 0.15s ease,
+            background-color 0.15s ease;
+    }
+
+    &:focus {
+        border: 0.15rem solid var(--color-fg);
+    }
+    &:hover {
+        background-color: var(--color-bg-2);
+    }
 }
 
 button:not(.custom) {
@@ -63,14 +79,16 @@ button:not(.custom) {
     border-radius: 0.5em;
     background-color: var(--color-bg-1);
 
-    transition:
-        transform 0.15s ease,
-        background-color 0.15s ease;
+    @media screen and (prefers-reduced-motion: no-preference) {
+        transition:
+            transform 0.15s ease,
+            background-color 0.15s ease;
+    }
 
     &:hover {
         background-color: var(--color-bg-2);
     }
     &:active {
-        transform: translate(0.1rem, 0.1rem);
+        background-color: var(--color-bg-3);
     }
 }
