@@ -82,9 +82,16 @@
 
 <style>
     main {
+        height: 100%;
         display: flex;
+        overflow: hidden;
         flex-grow: 1;
         flex-direction: column;
+
+        & > :global(div) > :global(.container) {
+            /** Fix svelte-split-pane overflow in panes */
+            overflow: hidden;
+        }
     }
 
     nav {
@@ -95,9 +102,6 @@
     }
 
     .inspector {
-        gap: 0.5rem;
-        display: grid;
         padding: 1rem;
-        align-content: start;
     }
 </style>

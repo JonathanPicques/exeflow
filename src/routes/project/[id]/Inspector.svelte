@@ -29,29 +29,58 @@
     };
 </script>
 
-{#if node}
-    <h1>{humanPluginName(extractPluginName(node.data.id))}</h1>
+<div class="main">
+    {#if node}
+        <h1>{humanPluginName(extractPluginName(node.data.id))}</h1>
 
-    {#if node.data.type === 'trigger'}
-        <InspectorTrigger {node} />
-    {/if}
-    <InspectorEditor bind:node />
-{:else}
-    <h1>Nodes</h1>
-    <input type="search" bind:value={filter} placeholder="Filter nodes..." />
-
-    {#each [...Object.entries(triggers), ...Object.entries(actions)].filter(filterPlugins).toSorted(sort) as [id, plugin]}
-        <div role="img" class="plugin" title={extractPluginNamespace(id)} draggable={true} style:--x-color-border={plugin.color} ondragstart={e => onDragStart(e, id, plugin)}>
-            <img src={plugin.icon} alt="" />
-            <div>
-                <span class="name">{humanPluginName(extractPluginName(id))}</span>
-                <span class="description">{plugin.description}</span>
-            </div>
+        <div class="list">
+            {#if node.data.type === 'trigger'}
+                <InspectorTrigger {node} />
+            {/if}
+            <InspectorEditor bind:node />
         </div>
-    {/each}
-{/if}
+    {:else}
+        <h1>Nodes</h1>
+        <input type="search" bind:value={filter} placeholder="Filter nodes..." />
+
+        <div class="list">
+            {#each [...Object.entries(triggers), ...Object.entries(actions)].filter(filterPlugins).toSorted(sort) as [id, plugin]}
+                <div
+                    role="img"
+                    class="plugin"
+                    title={extractPluginNamespace(id)}
+                    style:--x-color-border={plugin.color}
+                    draggable={true}
+                    ondragstart={e => onDragStart(e, id, plugin)}
+                >
+                    <img src={plugin.icon} alt="" />
+                    <div>
+                        <span class="name">{humanPluginName(extractPluginName(id))}</span>
+                        <span class="description">{plugin.description}</span>
+                    </div>
+                </div>
+            {/each}
+        </div>
+    {/if}
+</div>
 
 <style>
+    .main {
+        gap: 1rem;
+        height: 100%;
+        display: grid;
+        overflow: hidden;
+        align-content: start;
+    }
+
+    .list {
+        gap: 0.5rem;
+        height: 100%;
+        display: grid;
+        overflow: auto;
+        padding-right: 0.5rem;
+    }
+
     .plugin {
         gap: 1rem;
         display: flex;
