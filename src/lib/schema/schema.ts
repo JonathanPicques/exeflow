@@ -30,6 +30,7 @@ export interface JsonSchemaString extends JsonSchemaAll<string> {
     type: 'string';
     enum?: string[];
     enumLabels?: string[];
+    placeholder?: string;
 }
 
 export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {

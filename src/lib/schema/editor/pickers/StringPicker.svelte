@@ -17,5 +17,5 @@
         {/each}
     </select>
 {:else}
-    <input type="text" bind:value />
+    <input type="text" bind:value placeholder={schema.placeholder} />
 {/if}
