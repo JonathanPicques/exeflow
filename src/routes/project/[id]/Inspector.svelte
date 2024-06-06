@@ -1,16 +1,21 @@
 <script lang="ts">
     import InspectorEditor from './InspectorEditor.svelte';
+    import InspectorTrigger from './InspectorTrigger.svelte';
+
     import {getGraphContext} from '$lib/graph/data';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
     import type {PluginNode} from '$lib/graph/nodes';
     import type {Plugin, PluginId} from '$lib/graph/data';
-    import InspectorTrigger from './InspectorTrigger.svelte';
+
+    const {plugin, nodes, actions, triggers} = getGraphContext();
 
     let node = $state<PluginNode>();
     let filter = $state('');
-    const {nodes, actions, triggers} = getGraphContext();
+    let nodePlugin = $derived(node && plugin(node.data.id, node.data.type));
 
-    nodes.subscribe(nodes => (node = nodes.find(n => n.selected)));
+    nodes.subscribe(nodes => {
+        node = nodes.find(n => n.selected);
+    });
 
     const sort = ([idA]: [PluginId, Plugin], [idB]: [PluginId, Plugin]) => {
         return extractPluginNamespace(idA).localeCompare(extractPluginNamespace(idB));
@@ -30,8 +35,11 @@
 </script>
 
 <div class="main">
-    {#if node}
-        <h1>{humanPluginName(extractPluginName(node.data.id))}</h1>
+    {#if node && nodePlugin}
+        <h1>
+            <img src={nodePlugin.icon} alt="" />
+            <span>{humanPluginName(extractPluginName(node.data.id))}</span>
+        </h1>
 
         <div class="list">
             {#if node.data.type === 'trigger'}
@@ -65,6 +73,16 @@
 </div>
 
 <style>
+    h1 {
+        gap: 0.5rem;
+        display: flex;
+        align-items: center;
+
+        & > img {
+            height: 2rem;
+        }
+    }
+
     .main {
         gap: 1rem;
         height: 100%;
