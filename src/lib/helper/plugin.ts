@@ -1,7 +1,7 @@
 import type {PluginId} from '$lib/graph/data';
 
 /**
- * Returns a eye pleasing human readable string from the given plugin name
+ * Returns an eye pleasing human readable string from the given plugin name
  * @example
  * ```ts
  * humanPluginName('sendMessage') => 'send message'

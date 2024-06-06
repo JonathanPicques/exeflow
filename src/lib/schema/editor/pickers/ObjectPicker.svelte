@@ -11,7 +11,7 @@
 
 {#each Object.entries(schema.properties ?? {}) as [key, subSchema] (key)}
     <fieldset>
-        <legend title={subSchema.description}>{key}</legend>
+        <legend title={subSchema.description}>{subSchema.title ?? key}</legend>
         <JsonSchemaEditor bind:value={value[key]} schema={subSchema} />
     </fieldset>
 {/each}

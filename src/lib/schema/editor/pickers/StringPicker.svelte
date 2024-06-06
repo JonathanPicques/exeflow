@@ -16,12 +16,16 @@
             </option>
         {/each}
     </select>
-{:else}
+{:else if schema.format === undefined}
     <input type="text" bind:value placeholder={schema.placeholder} />
+{:else if schema.format === 'text'}
+    <textarea bind:value rows="3" placeholder={schema.placeholder}></textarea>
 {/if}
 
 <style>
-    input {
+    input,
+    textarea {
         width: 100%;
+        resize: vertical;
     }
 </style>

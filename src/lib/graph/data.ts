@@ -29,30 +29,30 @@ class GraphContext {
         this.triggers = triggers;
     }
 
-    public node = (id: PluginNode['id']) => {
+    public findNode = (id: PluginNode['id']) => {
         const node = get(this.nodes).find(n => n.id === id);
         if (!node) {
             throw new Error(`node ${id} not found`);
         }
         return node;
     };
-    public plugin = (id: PluginId, type: Plugin['type']) => {
+    public findPlugin = (id: PluginId, type: Plugin['type']) => {
         switch (type) {
             case 'action':
-                return this.action(id);
+                return this.findAction(id);
             case 'trigger':
-                return this.trigger(id);
+                return this.findTrigger(id);
             default:
                 throw new Error('unreachable');
         }
     };
-    public action = (id: ActionId) => {
+    public findAction = (id: ActionId) => {
         if (!this.actions[id]) {
             throw new Error(`action ${id} not found`);
         }
         return this.actions[id];
     };
-    public trigger = (id: TriggerId) => {
+    public findTrigger = (id: TriggerId) => {
         if (!this.triggers[id]) {
             throw new Error(`trigger ${id} not found`);
         }
@@ -60,7 +60,7 @@ class GraphContext {
     };
 
     public createNode = async (id: PluginId, type: Plugin['type'], position: {x: number; y: number}) => {
-        const plugin = this.plugin(id, type);
+        const plugin = this.findPlugin(id, type);
         const node = {
             id: this.createId(),
             type: plugin.type,
@@ -75,14 +75,14 @@ class GraphContext {
         return node;
     };
     public getNodeForm = async (id: PluginNode['id']) => {
-        const node = this.node(id);
-        const plugin = this.plugin(node.data.id, node.data.type);
+        const node = this.findNode(id);
+        const plugin = this.findPlugin(node.data.id, node.data.type);
         const schema = await plugin.form({config: node.data.data.config});
         return {value: zero(schema), schema};
     };
     public updateNodeData = async (id: PluginNode['id'], form: unknown) => {
-        const node = this.node(id);
-        const plugin = this.plugin(node.data.id, node.data.type);
+        const node = this.findNode(id);
+        const plugin = this.findPlugin(node.data.id, node.data.type);
         const newData = await plugin.data({form, config: node.data.data.config});
 
         this.nodes.update(nodes =>

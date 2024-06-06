@@ -31,8 +31,8 @@ export default action<Config>({
                 //
                 to: {type: 'string', default: config.to},
                 from: {type: 'string', default: config.from},
-                bodyText: {type: 'string', default: config.bodyText},
-                bodyHtml: {type: 'string', default: config.bodyHtml},
+                bodyHtml: {type: 'string', title: 'mail in html', format: 'text', default: config.bodyHtml},
+                bodyText: {type: 'string', title: 'mail in plain text', format: 'text', default: config.bodyText},
             },
         };
     },

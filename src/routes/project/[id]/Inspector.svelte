@@ -7,11 +7,11 @@
     import type {PluginNode} from '$lib/graph/nodes';
     import type {Plugin, PluginId} from '$lib/graph/data';
 
-    const {plugin, nodes, actions, triggers} = getGraphContext();
+    const {nodes, actions, triggers, findPlugin} = getGraphContext();
 
     let node = $state<PluginNode>();
+    let plugin = $derived(node && findPlugin(node.data.id, node.data.type));
     let filter = $state('');
-    let nodePlugin = $derived(node && plugin(node.data.id, node.data.type));
 
     nodes.subscribe(nodes => {
         node = nodes.find(n => n.selected);
@@ -35,9 +35,9 @@
 </script>
 
 <div class="main">
-    {#if node && nodePlugin}
+    {#if node && plugin}
         <h1>
-            <img src={nodePlugin.icon} alt="" />
+            <img src={plugin.icon} alt="" />
             <span>{humanPluginName(extractPluginName(node.data.id))}</span>
         </h1>
 

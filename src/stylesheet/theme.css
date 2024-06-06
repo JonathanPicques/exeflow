@@ -45,6 +45,7 @@ body {
     background-color: var(--color-bg);
 }
 
+textarea,
 input[type='text'],
 input[type='email'],
 input[type='number'],
