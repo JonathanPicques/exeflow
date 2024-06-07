@@ -24,6 +24,7 @@
 
 <style>
     input,
+    select,
     textarea {
         width: 100%;
         resize: vertical;

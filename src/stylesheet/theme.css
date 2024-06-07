@@ -56,6 +56,7 @@ dialog {
     }
 }
 
+select,
 textarea,
 input[type='text'],
 input[type='email'],
@@ -87,6 +88,7 @@ button:not(.custom) {
     padding: 0.8em 1em;
 
     color: var(--color-fg);
+    border: 0.15rem solid transparent;
     font-weight: bold;
     border-radius: 0.5em;
     background-color: var(--color-bg-1);
@@ -97,6 +99,9 @@ button:not(.custom) {
             background-color 0.15s ease;
     }
 
+    &:focus {
+        border: 0.15rem solid var(--color-fg);
+    }
     &:hover {
         background-color: var(--color-bg-2);
     }
