@@ -51,7 +51,8 @@ export default trigger<Config>({
             },
             outputs: ['out'],
             results: {
-                error: {type: 'string'},
+                author: {type: 'string'},
+                message: {type: 'string'},
             },
         };
     },

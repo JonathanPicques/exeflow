@@ -45,6 +45,17 @@ body {
     background-color: var(--color-bg);
 }
 
+dialog {
+    color: var(--color-fg);
+    border: none;
+    border-radius: 0.5em;
+    background-color: var(--color-bg);
+
+    &::backdrop {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+}
+
 textarea,
 input[type='text'],
 input[type='email'],
