@@ -4,8 +4,9 @@
     interface Props {
         value: boolean;
         schema: JsonSchemaBoolean;
+        onchange?: () => void;
     }
-    let {value = $bindable()}: Props = $props();
+    let {value = $bindable(), onchange}: Props = $props();
 </script>
 
-<input type="checkbox" bind:checked={value} />
+<input type="checkbox" bind:checked={value} onblur={onchange} />

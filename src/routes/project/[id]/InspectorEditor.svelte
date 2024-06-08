@@ -16,12 +16,11 @@
 </script>
 
 {#if form}
-    <JsonSchemaEditor bind:value={form.value} schema={form.schema} />
-    <button
-        onclick={() => {
+    <JsonSchemaEditor
+        bind:value={form.value}
+        schema={form.schema}
+        onchange={() => {
             form && updateNodeData(node.id, form.value);
         }}
-    >
-        <span>Save</span>
-    </button>
+    />
 {/if}

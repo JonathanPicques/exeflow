@@ -4,12 +4,13 @@
     interface Props {
         value: string;
         schema: JsonSchemaString;
+        onchange?: () => void;
     }
-    let {value = $bindable(), schema}: Props = $props();
+    let {value = $bindable(), schema, onchange}: Props = $props();
 </script>
 
 {#if schema.enum}
-    <select bind:value>
+    <select bind:value {onchange}>
         {#each schema.enum as enumValue, i}
             <option value={enumValue}>
                 {schema.enumLabels?.[i] ?? enumValue}
@@ -17,9 +18,9 @@
         {/each}
     </select>
 {:else if schema.format === undefined}
-    <input type="text" bind:value placeholder={schema.placeholder} />
+    <input type="text" bind:value placeholder={schema.placeholder} onblur={onchange} />
 {:else if schema.format === 'text'}
-    <textarea bind:value rows="3" placeholder={schema.placeholder}></textarea>
+    <textarea rows={3} bind:value placeholder={schema.placeholder} onblur={onchange}></textarea>
 {/if}
 
 <style>

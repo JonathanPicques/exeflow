@@ -9,8 +9,9 @@
     interface Props {
         value: unknown;
         schema: JsonSchema;
+        onchange?: () => void;
     }
-    let {value = $bindable(), schema}: Props = $props();
+    let {value = $bindable(), schema, onchange}: Props = $props();
     const picker = $derived.by(() => {
         switch (schema.type) {
             case 'string':
@@ -27,4 +28,4 @@
     }) as typeof AnyPicker;
 </script>
 
-<svelte:component this={picker} bind:value {schema} />
+<svelte:component this={picker} bind:value {schema} {onchange} />

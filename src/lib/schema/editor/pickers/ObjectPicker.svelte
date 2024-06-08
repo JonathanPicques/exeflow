@@ -5,14 +5,15 @@
     interface Props {
         value: Record<string, unknown>;
         schema: JsonSchemaObject;
+        onchange?: () => void;
     }
-    let {value = $bindable(), schema}: Props = $props();
+    let {value = $bindable(), schema, onchange}: Props = $props();
 </script>
 
 {#each Object.entries(schema.properties ?? {}) as [key, subSchema] (key)}
     <fieldset>
         <legend title={subSchema.description}>{subSchema.title ?? key}</legend>
-        <JsonSchemaEditor bind:value={value[key]} schema={subSchema} />
+        <JsonSchemaEditor bind:value={value[key]} schema={subSchema} {onchange} />
     </fieldset>
 {/each}
 

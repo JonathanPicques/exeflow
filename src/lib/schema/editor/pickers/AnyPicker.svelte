@@ -4,11 +4,12 @@
     interface Props {
         value: unknown;
         schema: JsonSchema;
+        onchange?: () => void;
     }
-    let {value = $bindable()}: Props = $props();
+    let {value = $bindable(), onchange}: Props = $props();
 </script>
 
-<input type="text" bind:value />
+<input type="text" bind:value onblur={onchange} />
 
 <style>
     input {
