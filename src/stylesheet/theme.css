@@ -64,8 +64,8 @@ input[type='number'],
 input[type='search'],
 input[type='password'] {
     border: 0.15rem solid transparent;
-    padding: 0.8em 1em;
-    border-radius: 0.5em;
+    padding: 0.8rem 1rem;
+    border-radius: 0.5rem;
 
     color: var(--color-fg);
     background-color: var(--color-bg-1);
@@ -84,8 +84,17 @@ input[type='password'] {
     }
 }
 
+select {
+    padding: 0.8rem 1rem;
+    appearance: none;
+    background-size: 1.5rem;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI2U4ZWFlZCI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 0.8rem) center;
+}
+
 button:not(.custom) {
-    padding: 0.8em 1em;
+    padding: 0.8rem 1rem;
 
     color: var(--color-fg);
     border: 0.15rem solid transparent;
