@@ -12,4 +12,7 @@ export default action({
     data(args) {
         throw new Error('not implemented');
     },
+    exec: function* (args) {
+        throw new Error('not implemented');
+    },
 });

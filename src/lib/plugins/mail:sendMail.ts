@@ -59,4 +59,7 @@ export default action<Config>({
             results: {},
         };
     },
+    exec: function* (args) {
+        throw new Error('not implemented');
+    },
 });
