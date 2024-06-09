@@ -11,7 +11,7 @@
     const {nodes, actions, triggers, findPlugin} = getGraphContext();
 
     let node = $state<PluginNode>();
-    let plugin = $derived(node && findPlugin(node.data.id, node.data.type));
+    let plugin = $derived(node && findPlugin(node));
     let filter = $state('');
 
     nodes.subscribe(nodes => {

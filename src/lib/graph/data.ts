@@ -43,12 +43,12 @@ class GraphContext {
         return this.findNode(edge.target) as ActionNode;
     };
 
-    public findPlugin = (id: PluginId, type: Plugin['type']) => {
-        switch (type) {
+    public findPlugin = (node: PluginNode) => {
+        switch (node.type) {
             case 'action':
-                return this.findAction(id);
+                return this.findAction(node.data.id);
             case 'trigger':
-                return this.findTrigger(id);
+                return this.findTrigger(node.data.id);
             default:
                 throw new Error('unreachable');
         }
@@ -67,29 +67,25 @@ class GraphContext {
     };
 
     public createNode = async (id: PluginId, type: Plugin['type'], position: {x: number; y: number}) => {
-        const plugin = this.findPlugin(id, type);
-        const node = {
+        const {data} = type === 'action' ? this.findAction(id) : this.findTrigger(id);
+        const newNode = {
             id: this.createId(),
-            type: plugin.type,
-            data: {
-                id,
-                type: plugin.type,
-                data: await plugin.data({}),
-            },
+            type,
+            data: {id, data: await data({})},
             position,
         } as PluginNode;
-        this.nodes.update(nodes => [...nodes, node]);
-        return node;
+        this.nodes.update(nodes => [...nodes, newNode]);
+        return newNode;
     };
     public getNodeForm = async (id: PluginNode['id']) => {
         const node = this.findNode(id);
-        const plugin = this.findPlugin(node.data.id, node.data.type);
+        const plugin = this.findPlugin(node);
         const schema = await plugin.form({config: node.data.data.config});
         return {value: zero(schema), schema};
     };
     public updateNodeData = async (id: PluginNode['id'], form: unknown) => {
         const node = this.findNode(id);
-        const plugin = this.findPlugin(node.data.id, node.data.type);
+        const plugin = this.findPlugin(node);
         const newData = await plugin.data({form, config: node.data.data.config});
 
         this.nodes.update(nodes =>
@@ -147,19 +143,19 @@ const key = Symbol('graph');
 
 export const nodeSchema = {
     type: 'object',
-    required: ['id', 'type', 'data', 'position'],
+    required: ['id', 'type', 'data', 'position'] as const,
     properties: {
         id: {
             type: 'string',
         },
         type: {
             type: 'string',
-            enum: ['action', 'trigger'],
+            enum: ['action', 'trigger'] as const,
         },
         data: {},
         position: {
             type: 'object',
-            required: ['x', 'y'],
+            required: ['x', 'y'] as const,
             properties: {
                 x: {type: 'number'},
                 y: {type: 'number'},
@@ -169,7 +165,7 @@ export const nodeSchema = {
 } satisfies JsonSchema;
 export const edgeSchema = {
     type: 'object',
-    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle'],
+    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle'] as const,
     properties: {
         id: {type: 'string'},
         source: {type: 'string'},
@@ -180,7 +176,7 @@ export const edgeSchema = {
 } satisfies JsonSchema;
 export const graphSchema = {
     type: 'object',
-    required: ['nodes', 'edges'],
+    required: ['nodes', 'edges'] as const,
     properties: {
         nodes: {type: 'array', items: nodeSchema},
         edges: {type: 'array', items: edgeSchema},
