@@ -123,8 +123,8 @@ class GraphContext {
             importedEdge.source = mapping[importedEdge.source];
             importedEdge.target = mapping[importedEdge.target];
         }
-        this.nodes.update(nodes => [...nodes, ...importedNodes]);
-        this.edges.update(edges => [...edges, ...importedEdges]);
+        this.nodes.update(nodes => [...nodes.map(n => ({...n, selected: false})), ...importedNodes.map(n => ({...n, selected: true}))]);
+        this.edges.update(edges => [...edges.map(e => ({...e, selected: false})), ...importedEdges.map(e => ({...e, selected: true}))]);
     };
 }
 
