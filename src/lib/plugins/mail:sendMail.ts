@@ -10,6 +10,7 @@ interface Config {
     //
     to: string;
     from: string;
+    subject: string;
     bodyText: string;
     bodyHtml: string;
 }
@@ -31,6 +32,7 @@ export default action<Config>({
                 //
                 to: {type: 'string', default: config.to},
                 from: {type: 'string', default: config.from},
+                subject: {type: 'string', default: config.subject},
                 bodyHtml: {type: 'string', title: 'mail in html', format: 'text', default: config.bodyHtml},
                 bodyText: {type: 'string', title: 'mail in plain text', format: 'text', default: config.bodyText},
             },
@@ -51,6 +53,7 @@ export default action<Config>({
                 //
                 to: f?.to ?? config?.to ?? '',
                 from: f?.from ?? config?.from ?? '',
+                subject: f?.subject ?? config?.subject ?? '',
                 bodyText: f?.bodyText ?? config?.bodyText ?? '',
                 bodyHtml: f?.bodyHtml ?? config?.bodyHtml ?? '',
             },
@@ -59,8 +62,12 @@ export default action<Config>({
             results: {},
         };
     },
-    exec: function* (args) {
-        console.log('mail:sendMail', {args});
+    exec: async function* ({config}) {
+        const {tls, host, port, user, password} = config;
+        const {to, from, subject, bodyText, bodyHtml} = config;
+
+        console.log({tls, host, port, user, password});
+        console.log({to, from, subject, bodyText, bodyHtml});
         return {out: 'out', results: {}};
     },
 });
