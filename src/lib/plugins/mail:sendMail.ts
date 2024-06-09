@@ -60,6 +60,7 @@ export default action<Config>({
         };
     },
     exec: function* (args) {
-        throw new Error('not implemented');
+        console.log('mail:sendMail', {args});
+        return {out: 'out', results: {}};
     },
 });

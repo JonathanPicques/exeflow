@@ -65,6 +65,7 @@ export default action<Config>({
         };
     },
     exec: function* (args) {
-        throw new Error('not implemented');
+        console.log('discord:sendMessage', {args});
+        return {out: 'out', results: {}};
     },
 });

@@ -38,7 +38,8 @@ export default action<Config>({
         };
     },
     exec: function* (args) {
-        throw new Error('not implemented');
+        console.log('webhook:response', {args});
+        return {out: 'out', results: {}};
     },
 });
 

@@ -4,9 +4,9 @@ import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 
 import {zero} from '$lib/schema/validate';
-import type {PluginNode} from '$lib/graph/nodes';
 import type {PluginEdge} from '$lib/graph/edges';
 import type {JsonSchema} from '$lib/schema/schema';
+import type {PluginNode, ActionNode} from '$lib/graph/nodes';
 import type {Action, ActionId, ActionData} from '$lib/plugins/@action';
 import type {Trigger, TriggerId, TriggerData} from '$lib/plugins/@trigger';
 
@@ -36,6 +36,14 @@ class GraphContext {
         }
         return node;
     };
+    public findNextActionNode = (id: PluginNode['id'], out: string) => {
+        const edge = get(this.edges).find(e => e.source === id && e.sourceHandle === out);
+        if (!edge) {
+            return undefined;
+        }
+        return this.findNode(edge.target) as ActionNode;
+    };
+
     public findPlugin = (id: PluginId, type: Plugin['type']) => {
         switch (type) {
             case 'action':

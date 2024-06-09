@@ -1,41 +1,57 @@
 <script lang="ts">
-    import JsonSchemaEditor from '$lib/schema/editor/JsonSchemaEditor.svelte';
-
-    import {zero} from '$lib/schema/validate';
     import {getGraphContext} from '$lib/graph/data';
-    import type {PluginNode} from '$lib/graph/nodes';
-    import type {JsonSchema} from '$lib/schema/schema';
+    import type {ActionExecStep} from '$lib/plugins/@action';
+    import type {ActionNode, TriggerNode} from '$lib/graph/nodes';
 
-    const {findPlugin} = getGraphContext();
+    const {findAction, findNextActionNode} = getGraphContext();
 
-    let {node}: {node: PluginNode} = $props();
-    let plugin = $derived(findPlugin(node.data.id, node.data.type));
+    let {node}: {node: TriggerNode} = $props();
 
-    let value = $state<Record<string, unknown>>({});
-    let schema = $state<JsonSchema>();
+    let logs = $state([] as {node: ActionNode; step: ActionExecStep}[]);
     let dialog: HTMLDialogElement;
 
-    const run = (args: Record<string, unknown>) => {
-        //
+    const run = async () => {
+        const runAction = async function* (node: ActionNode): AsyncGenerator<{node: ActionNode; step: ActionExecStep}> {
+            const action = findAction(node.data.id);
+            const generator = action.exec({config: node.data.data.config});
+
+            let iterator = await generator.next();
+            do {
+                const step = iterator.value;
+                yield {node, step};
+                if (step.out) {
+                    const nextNode = findNextActionNode(node.id, step.out);
+
+                    if (nextNode) {
+                        yield* runAction(nextNode);
+                    }
+                }
+                iterator = await generator.next();
+            } while (!iterator.done);
+        };
+
+        const nextNode = findNextActionNode(node.id, 'out');
+        if (nextNode) {
+            for await (const step of runAction(nextNode)) {
+                logs.push(step);
+            }
+        }
     };
     const show = () => {
-        const {results} = node.data.data;
-
-        if (Object.keys(results).length > 0) {
-            schema = {type: 'object', properties: results};
-            value = zero(schema) as Record<string, unknown>;
-            dialog.showModal();
-        } else {
-            run({});
-        }
+        run();
+        dialog.showModal();
     };
 </script>
 
 <button onclick={show}>Run</button>
 <dialog bind:this={dialog}>
-    {#if value && schema}
-        <JsonSchemaEditor bind:value {schema} />
-        <button onclick={() => run(value)}>Run</button>
-        <button onclick={() => dialog.close()}>Cancel</button>
-    {/if}
+    {#each logs as log}
+        <fieldset>
+            <legend>{log.node.data.id}</legend>
+            <p>
+                {log.step.out}
+            </p>
+        </fieldset>
+    {/each}
+    <button onclick={() => dialog.close()}>Close</button>
 </dialog>
