@@ -2,11 +2,11 @@
     import InspectorEditor from './InspectorEditor.svelte';
     import InspectorTrigger from './InspectorTrigger.svelte';
 
-    import {isTriggerNode} from '$lib/graph/nodes';
-    import {getGraphContext} from '$lib/graph/data';
+    import {isTriggerNode} from '$lib/core/graph/nodes';
+    import {getGraphContext} from '$lib/core/core';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
-    import type {PluginNode} from '$lib/graph/nodes';
-    import type {Plugin, PluginId} from '$lib/graph/data';
+    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {Plugin, PluginId} from '$lib/core/core';
 
     const {nodes, actions, triggers, findPlugin} = getGraphContext();
 

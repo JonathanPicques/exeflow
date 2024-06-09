@@ -2,7 +2,7 @@
     import {BaseEdge, getBezierPath, EdgeLabelRenderer} from '@xyflow/svelte';
     import type {EdgeProps} from '@xyflow/svelte';
 
-    import {getGraphContext} from '$lib/graph/data';
+    import {getGraphContext} from '$lib/core/core';
 
     let {id, style, markerEnd, sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition}: EdgeProps = $props();
     const {edges} = getGraphContext();

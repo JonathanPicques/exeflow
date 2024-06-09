@@ -9,7 +9,7 @@
     import {valid} from '$lib/schema/validate';
     import {shortcut} from '$lib/helper/shortcut';
     import {fetchUpdateProject} from '../../api/project/project.api';
-    import {graphSchema, setGraphContext} from '$lib/graph/data';
+    import {graphSchema, setGraphContext} from '$lib/core/core';
 
     let flow: Flow;
     let {data} = $props();

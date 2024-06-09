@@ -4,9 +4,10 @@
 
     import InputHandle from '../edges/InputHandle.svelte';
     import OutputHandle from '../edges/OutputHandle.svelte';
-    import {getGraphContext} from '$lib/graph/data';
+
+    import {getGraphContext} from '$lib/core/core';
     import {extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
-    import type {ActionNode} from '$lib/graph/nodes';
+    import type {ActionNode} from '$lib/core/graph/nodes';
 
     let {id, data, selected = undefined}: NodeProps<ActionNode> = $props();
     const edges = useEdges();

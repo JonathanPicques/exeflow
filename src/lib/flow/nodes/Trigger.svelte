@@ -3,9 +3,10 @@
     import type {NodeProps} from '@xyflow/svelte';
 
     import OutputHandle from '../edges/OutputHandle.svelte';
-    import {getGraphContext} from '$lib/graph/data';
+
+    import {getGraphContext} from '$lib/core/core';
     import {extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
-    import type {TriggerNode} from '$lib/graph/nodes';
+    import type {TriggerNode} from '$lib/core/graph/nodes';
 
     let {id, data, selected = undefined}: NodeProps<TriggerNode> = $props();
     const edges = useEdges();

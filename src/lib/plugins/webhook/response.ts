@@ -1,5 +1,5 @@
-import icon from '$lib/plugins/icons/webhook.svg';
-import {action} from '$lib/plugins/@action';
+import icon from '$lib/plugins/webhook/icon.svg';
+import {action} from '$lib/core/plugins/action';
 
 interface Config {
     data: string;

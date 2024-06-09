@@ -1,10 +1,10 @@
-import icon from '$lib/plugins/icons/supabase.svg';
-import {action} from '$lib/plugins/@action';
+import icon from '$lib/plugins/supabase/icon.svg';
+import {action} from '$lib/core/plugins/action';
 
 export default action({
     icon,
     color: '#3ecf8e',
-    description: 'create an user with email/password',
+    description: 'delete an user',
     //
     form(args) {
         throw new Error('not implemented');

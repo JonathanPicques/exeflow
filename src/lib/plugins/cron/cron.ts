@@ -1,7 +1,7 @@
 import cronstrue from 'cronstrue';
 
-import icon from '$lib/plugins/icons/cron.svg';
-import {trigger} from '$lib/plugins/@trigger';
+import icon from '$lib/plugins/cron/icon.svg';
+import {trigger} from '$lib/core/plugins/trigger';
 import {tryFunction} from '$lib/helper/error';
 
 interface Config {

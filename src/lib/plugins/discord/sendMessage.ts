@@ -1,16 +1,17 @@
-import icon from '$lib/plugins/icons/discord.svg';
-import {trigger} from '$lib/plugins/@trigger';
+import icon from '$lib/plugins/discord/icon.svg';
+import {action} from '$lib/core/plugins/action';
 
 interface Config {
     token: string;
     server: string;
     channel: string;
+    message: string;
 }
 
-export default trigger<Config>({
+export default action<Config>({
     icon,
     color: '#7289da',
-    description: 'triggered when receiving a message in a channel',
+    description: 'send a message in a channel',
     //
     form({config}) {
         return {
@@ -35,6 +36,12 @@ export default trigger<Config>({
                     //
                     description: 'will be sent on this channel',
                 },
+                message: {
+                    type: 'string',
+                    default: config.message,
+                    //
+                    description: 'message to send',
+                },
             },
         };
     },
@@ -43,16 +50,17 @@ export default trigger<Config>({
 
         return {
             valid: true,
-            title: 'receive message',
+            title: 'send message',
             config: {
                 token: f?.token ?? config?.token ?? 'sk-abc-123',
                 server: f?.server ?? config?.server ?? 'sk-abc-123',
                 channel: f?.channel ?? config?.channel ?? 'sk-abc-123',
+                message: f?.message ?? config?.message ?? '',
             },
+            inputs: ['in'],
             outputs: ['out'],
             results: {
-                author: {type: 'string'},
-                message: {type: 'string'},
+                error: {type: 'string'},
             },
         };
     },

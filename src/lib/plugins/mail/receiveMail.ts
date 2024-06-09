@@ -1,5 +1,5 @@
-import icon from '$lib/plugins/icons/mail.svg';
-import {trigger} from '$lib/plugins/@trigger';
+import icon from '$lib/plugins/mail/icon.svg';
+import {trigger} from '$lib/core/plugins/trigger';
 
 interface Config {
     tls: boolean;

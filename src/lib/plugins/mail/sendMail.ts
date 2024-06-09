@@ -1,5 +1,5 @@
-import icon from '$lib/plugins/icons/mail.svg';
-import {action} from '$lib/plugins/@action';
+import icon from '$lib/plugins/mail/icon.svg';
+import {action} from '$lib/core/plugins/action';
 
 interface Config {
     tls: boolean;

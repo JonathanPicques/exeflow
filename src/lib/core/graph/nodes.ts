@@ -1,6 +1,8 @@
 import type {Node} from '@xyflow/svelte';
-import type {ActionId, ActionData} from '$lib/plugins/@action';
-import type {TriggerId, TriggerData} from '$lib/plugins/@trigger';
+
+import type {JsonSchema} from '$lib/schema/schema';
+import type {ActionId, ActionData} from '$lib/core/plugins/action';
+import type {TriggerId, TriggerData} from '$lib/core/plugins/trigger';
 
 export type PluginNode = ActionNode | TriggerNode;
 export type PluginNodeData = ActionNodeData | TriggerNodeData;
@@ -27,3 +29,26 @@ export interface TriggerNodeData {
 
 export const isActionNode = (node: PluginNode): node is ActionNode => node.type === 'action';
 export const isTriggerNode = (node: PluginNode): node is TriggerNode => node.type === 'trigger';
+
+export const nodeSchema = {
+    type: 'object',
+    required: ['id', 'type', 'data', 'position'] as const,
+    properties: {
+        id: {
+            type: 'string',
+        },
+        type: {
+            type: 'string',
+            enum: ['action', 'trigger'] as const,
+        },
+        data: {},
+        position: {
+            type: 'object',
+            required: ['x', 'y'] as const,
+            properties: {
+                x: {type: 'number'},
+                y: {type: 'number'},
+            },
+        },
+    },
+} satisfies JsonSchema;

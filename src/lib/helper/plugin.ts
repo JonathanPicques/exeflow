@@ -1,4 +1,62 @@
-import type {PluginId} from '$lib/graph/data';
+import type {PluginId} from '$lib/core/core';
+import type {Action, ActionId} from '$lib/core/plugins/action';
+import type {ActionServer} from '$lib/core/plugins/action.server';
+import type {Trigger, TriggerId} from '$lib/core/plugins/trigger';
+import type {TriggerServer} from '$lib/core/plugins/trigger.server';
+
+/**
+ * Returns all plugins (actions and triggers) from the $lib/plugins directory
+ */
+export const loadPlugins = async () => {
+    const actions: Record<ActionId, Action<unknown>> = {};
+    const triggers: Record<TriggerId, Trigger<unknown>> = {};
+    const pluginModules = import.meta.glob('$lib/plugins/**/*.ts');
+
+    for (const [path, module] of Object.entries(pluginModules)) {
+        if (path.endsWith('.server.ts')) continue;
+
+        const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.ts', '');
+        const plugin = ((await module()) as {default: Action<unknown> | Trigger<unknown>}).default;
+
+        switch (plugin.type) {
+            case 'action':
+                actions[id] = plugin;
+                break;
+            case 'trigger':
+                triggers[id] = plugin;
+                break;
+            default:
+                throw new Error(`malformed plugin ${id}`);
+        }
+    }
+    return {actions, triggers};
+};
+
+/**
+ * Returns all server-side plugins (actions and triggers) from the $lib/plugins directory
+ */
+export const loadServerPlugins = async () => {
+    const actions: Record<ActionId, ActionServer<unknown>> = {};
+    const triggers: Record<TriggerId, TriggerServer<unknown>> = {};
+    const pluginModules = import.meta.glob('$lib/plugins/**/*.server.ts');
+
+    for (const [path, module] of Object.entries(pluginModules)) {
+        const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.server.ts', '');
+        const plugin = ((await module()) as {default: ActionServer<unknown> | TriggerServer<unknown>}).default;
+
+        switch (plugin.type) {
+            case 'actionServer':
+                actions[id] = plugin;
+                break;
+            case 'triggerServer':
+                triggers[id] = plugin;
+                break;
+            default:
+                throw new Error(`malformed server plugin ${id}`);
+        }
+    }
+    return {actions, triggers};
+};
 
 /**
  * Returns an eye pleasing human readable string from the given plugin name

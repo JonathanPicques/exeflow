@@ -1,5 +1,5 @@
-import icon from '$lib/plugins/icons/webhook.svg';
-import {trigger} from '$lib/plugins/@trigger';
+import icon from '$lib/plugins/webhook/icon.svg';
+import {trigger} from '$lib/core/plugins/trigger';
 
 interface Config {
     path: string;

@@ -1,5 +1,5 @@
 import dagre from '@dagrejs/dagre';
-import type {Graph} from '$lib/graph/data';
+import type {Graph} from '$lib/core/core';
 
 const nodeWidth = 150;
 const nodeHeight = 100;

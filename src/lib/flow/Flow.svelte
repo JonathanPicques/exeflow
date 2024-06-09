@@ -7,7 +7,7 @@
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
     import {layoutGraph} from '$lib/flow/dagre/dagre';
-    import {getGraphContext} from '$lib/graph/data';
+    import {getGraphContext} from '$lib/core/core';
 
     import '@xyflow/svelte/dist/style.css';
 

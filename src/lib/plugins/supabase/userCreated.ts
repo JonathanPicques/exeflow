@@ -1,5 +1,5 @@
-import icon from '$lib/plugins/icons/supabase.svg';
-import {trigger} from '$lib/plugins/@trigger';
+import icon from '$lib/plugins/supabase/icon.svg';
+import {trigger} from '$lib/core/plugins/trigger';
 
 export default trigger({
     icon,

@@ -31,4 +31,4 @@ interface DataArgs<Config> {
     config?: Config;
 }
 
-export const action = <Config>(action: Omit<Action<Config>, 'type'>) => ({type: 'action', ...action});
+export const action = <Config>(action: Omit<Action<Config>, 'type'>): Action<Config> => ({type: 'action', ...action});

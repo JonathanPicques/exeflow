@@ -3,7 +3,7 @@ import type {User} from '@supabase/supabase-js';
 
 import {AppError} from '$lib/helper/error';
 import type {Db} from '$lib/supabase/db.server';
-import type {Graph} from '$lib/graph/data';
+import type {Graph} from '$lib/core/core';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 
 export interface Project {

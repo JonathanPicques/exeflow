@@ -30,4 +30,4 @@ interface DataArgs<Config> {
     config?: Config;
 }
 
-export const trigger = <Config>(trigger: Omit<Trigger<Config>, 'type'>) => ({type: 'trigger', ...trigger});
+export const trigger = <Config>(trigger: Omit<Trigger<Config>, 'type'>): Trigger<Config> => ({type: 'trigger', ...trigger});

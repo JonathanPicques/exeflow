@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {TriggerNode} from '$lib/graph/nodes';
+    import type {TriggerNode} from '$lib/core/graph/nodes';
 
     let {node}: {node: TriggerNode} = $props();
 
