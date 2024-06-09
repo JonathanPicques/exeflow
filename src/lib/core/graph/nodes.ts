@@ -41,7 +41,14 @@ export const nodeSchema = {
             type: 'string',
             enum: ['action', 'trigger'] as const,
         },
-        data: {},
+        data: {
+            type: 'object',
+            required: ['id', 'data'] as const,
+            properties: {
+                id: {type: 'string'},
+                data: {},
+            },
+        },
         position: {
             type: 'object',
             required: ['x', 'y'] as const,

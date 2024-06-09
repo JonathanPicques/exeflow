@@ -1,8 +1,8 @@
 import type {PluginId} from '$lib/core/core';
+import type {ServerAction} from '$lib/core/plugins/action.server';
+import type {ServerTrigger} from '$lib/core/plugins/trigger.server';
 import type {Action, ActionId} from '$lib/core/plugins/action';
-import type {ActionServer} from '$lib/core/plugins/action.server';
 import type {Trigger, TriggerId} from '$lib/core/plugins/trigger';
-import type {TriggerServer} from '$lib/core/plugins/trigger.server';
 
 /**
  * Returns all plugins (actions and triggers) from the $lib/plugins directory
@@ -33,22 +33,22 @@ export const loadPlugins = async () => {
 };
 
 /**
- * Returns all server-side plugins (actions and triggers) from the $lib/plugins directory
+ * Returns all server plugins (server actions and server triggers) from the $lib/plugins directory
  */
 export const loadServerPlugins = async () => {
-    const actions: Record<ActionId, ActionServer<unknown>> = {};
-    const triggers: Record<TriggerId, TriggerServer<unknown>> = {};
+    const actions: Record<ActionId, ServerAction<unknown>> = {};
+    const triggers: Record<TriggerId, ServerTrigger<unknown>> = {};
     const pluginModules = import.meta.glob('$lib/plugins/**/*.server.ts');
 
     for (const [path, module] of Object.entries(pluginModules)) {
         const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.server.ts', '');
-        const plugin = ((await module()) as {default: ActionServer<unknown> | TriggerServer<unknown>}).default;
+        const plugin = ((await module()) as {default: ServerAction<unknown> | ServerTrigger<unknown>}).default;
 
         switch (plugin.type) {
-            case 'actionServer':
+            case 'serverAction':
                 actions[id] = plugin;
                 break;
-            case 'triggerServer':
+            case 'serverTrigger':
                 triggers[id] = plugin;
                 break;
             default:

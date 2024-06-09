@@ -1,7 +1,7 @@
 import type {Action} from '$lib/core/plugins/action';
 
-export interface ActionServer<Config> {
-    type: 'actionServer';
+export interface ServerAction<Config> {
+    type: 'serverAction';
     //
     exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep> | AsyncGenerator<ExecStep, ExecStep>;
 }
@@ -15,4 +15,4 @@ interface ExecStep {
     results: Record<string, unknown>;
 }
 
-export const actionServer = <Config>(_: Action<Config>, actionServer: Omit<ActionServer<Config>, 'type'>): ActionServer<Config> => ({type: 'actionServer', ...actionServer});
+export const serverAction = <Config>(_: Action<Config>, serverAction: Omit<ServerAction<Config>, 'type'>): ServerAction<Config> => ({type: 'serverAction', ...serverAction});

@@ -1,7 +1,7 @@
 import type {Trigger} from '$lib/core/plugins/trigger';
 
-export interface TriggerServer<Config> {
-    type: 'triggerServer';
+export interface ServerTrigger<Config> {
+    type: 'serverTrigger';
     //
     exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep> | AsyncGenerator<ExecStep, ExecStep>;
 }
@@ -15,4 +15,4 @@ interface ExecStep {
     results: Record<string, unknown>;
 }
 
-export const triggerServer = <Config>(_: Trigger<Config>, TriggerServer: Omit<TriggerServer<Config>, 'type'>): TriggerServer<Config> => ({type: 'triggerServer', ...TriggerServer});
+export const serverTrigger = <Config>(_: Trigger<Config>, serverTrigger: Omit<ServerTrigger<Config>, 'type'>): ServerTrigger<Config> => ({type: 'serverTrigger', ...serverTrigger});

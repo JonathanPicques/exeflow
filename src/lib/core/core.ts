@@ -17,14 +17,21 @@ export type Graph = {nodes: PluginNode[]; edges: PluginEdge[]};
 export type Plugin = Action<unknown> | Trigger<unknown>;
 export type PluginId = ActionId | TriggerId;
 
-class GraphContext {
+interface Options {
+    nodes: Writable<PluginNode[]>;
+    edges: Writable<PluginEdge[]>;
+    actions: Record<ActionId, Action<unknown>>;
+    triggers: Record<TriggerId, Trigger<unknown>>;
+}
+
+export class GraphContext {
     public readonly nodes: Writable<PluginNode[]>;
     public readonly edges: Writable<PluginEdge[]>;
     public readonly actions: Record<ActionId, Action<unknown>>;
     public readonly triggers: Record<TriggerId, Trigger<unknown>>;
     private readonly createId = init({length: 5});
 
-    public constructor({nodes, edges, actions, triggers}: GraphContextOptions) {
+    public constructor({nodes, edges, actions, triggers}: Options) {
         this.nodes = nodes;
         this.edges = edges;
         this.actions = actions;
@@ -134,16 +141,9 @@ class GraphContext {
     };
 }
 
-interface GraphContextOptions {
-    nodes: Writable<PluginNode[]>;
-    edges: Writable<PluginEdge[]>;
-    actions: Record<ActionId, Action<unknown>>;
-    triggers: Record<TriggerId, Trigger<unknown>>;
-}
-
 const key = Symbol('graph');
 export const getGraphContext = () => getContext<GraphContext>(key);
-export const setGraphContext = (options: GraphContextOptions) => setContext(key, new GraphContext(options));
+export const setGraphContext = (options: Options) => setContext(key, new GraphContext(options));
 
 export const graphSchema = {
     type: 'object',
