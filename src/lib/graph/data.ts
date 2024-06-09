@@ -6,14 +6,13 @@ import type {Writable} from 'svelte/store';
 import {zero} from '$lib/schema/validate';
 import type {PluginEdge} from '$lib/graph/edges';
 import type {JsonSchema} from '$lib/schema/schema';
+import type {Action, ActionId} from '$lib/plugins/@action';
+import type {Trigger, TriggerId} from '$lib/plugins/@trigger';
 import type {PluginNode, ActionNode} from '$lib/graph/nodes';
-import type {Action, ActionId, ActionData} from '$lib/plugins/@action';
-import type {Trigger, TriggerId, TriggerData} from '$lib/plugins/@trigger';
 
 export type Graph = {nodes: PluginNode[]; edges: PluginEdge[]};
 export type Plugin = Action<unknown> | Trigger<unknown>;
 export type PluginId = ActionId | TriggerId;
-export type PluginData = ActionData<unknown> | TriggerData<unknown>;
 
 class GraphContext {
     public readonly nodes: Writable<PluginNode[]>;

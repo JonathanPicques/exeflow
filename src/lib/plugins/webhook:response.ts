@@ -37,10 +37,6 @@ export default action<Config>({
             results: {},
         };
     },
-    exec: function* (args) {
-        console.log('webhook:response', {args});
-        return {out: 'out', results: {}};
-    },
 });
 
 const statusCodeMessages: Record<string, string> = {

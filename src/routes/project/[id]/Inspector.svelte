@@ -2,6 +2,7 @@
     import InspectorEditor from './InspectorEditor.svelte';
     import InspectorTrigger from './InspectorTrigger.svelte';
 
+    import {isTriggerNode} from '$lib/graph/nodes';
     import {getGraphContext} from '$lib/graph/data';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
     import type {PluginNode} from '$lib/graph/nodes';
@@ -42,7 +43,7 @@
         </h1>
 
         <div class="list">
-            {#if node.data.type === 'trigger'}
+            {#if isTriggerNode(node)}
                 <InspectorTrigger {node} />
             {/if}
             <InspectorEditor bind:node />

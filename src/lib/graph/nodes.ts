@@ -22,3 +22,11 @@ export interface TriggerNodeData {
     //
     [x: string]: unknown;
 }
+
+export const isActionNode = (node: PluginNode): node is ActionNode => {
+    return node.type === 'action';
+};
+
+export const isTriggerNode = (node: PluginNode): node is TriggerNode => {
+    return node.type === 'trigger';
+};

@@ -11,7 +11,6 @@ export interface Action<Config> {
     //
     form: (args: FormArgs<Config>) => JsonSchema | Promise<JsonSchema>;
     data: (args: DataArgs<Config>) => ActionData<Config> | Promise<ActionData<Config>>;
-    exec: (args: ExecArgs<Config>) => Generator<ActionExecStep, ActionExecStep> | AsyncGenerator<ActionExecStep, ActionExecStep>;
 }
 
 export interface ActionData<Config> {
@@ -23,11 +22,6 @@ export interface ActionData<Config> {
     results: Record<string, JsonSchema>;
 }
 
-export interface ActionExecStep {
-    out: string | undefined;
-    results: Record<string, unknown>;
-}
-
 interface FormArgs<Config> {
     config: Config;
 }
@@ -35,10 +29,6 @@ interface FormArgs<Config> {
 interface DataArgs<Config> {
     form?: unknown;
     config?: Config;
-}
-
-interface ExecArgs<Config> {
-    config: Config;
 }
 
 export const action = <Config>(action: Omit<Action<Config>, 'type'>) => ({type: 'action', ...action});

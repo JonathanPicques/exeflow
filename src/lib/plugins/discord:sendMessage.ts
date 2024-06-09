@@ -64,8 +64,4 @@ export default action<Config>({
             },
         };
     },
-    exec: function* (args) {
-        console.log('discord:sendMessage', {args});
-        return {out: 'out', results: {}};
-    },
 });
