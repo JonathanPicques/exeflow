@@ -9,7 +9,6 @@
         const response = await fetch(`exec/${node.id}`, {method: 'POST', body: JSON.stringify({nodes: $nodes, edges: $edges})});
         if (!response.ok) throw new Error();
         if (!response.body) throw new Error();
-
         const bodyReader = response.body.pipeThrough(new TextDecoderStream()).getReader();
 
         while (true) {
