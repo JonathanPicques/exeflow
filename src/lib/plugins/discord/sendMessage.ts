@@ -38,6 +38,7 @@ export default action<Config>({
                 },
                 message: {
                     type: 'string',
+                    format: 'text',
                     default: config.message,
                     //
                     description: 'message to send',
