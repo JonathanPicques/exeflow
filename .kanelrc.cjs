@@ -6,7 +6,7 @@ const tablesToIgnore = ['kysely_migration', 'kysely_migration_lock'];
 dotenv.config();
 module.exports = {
     schemas: ['public'],
-    connection: process.env.SUPABASE_DB_URL,
+    connection: process.env.EXEFLOW_SUPABASE_DB_URL,
 
     typeFilter: type => (type.kind === 'table' && tablesToIgnore.includes(type.name) ? false : true),
     enumStyle: 'type',
