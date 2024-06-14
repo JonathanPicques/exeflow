@@ -21,8 +21,9 @@ export const PATCH = async ({locals, params, request}) => {
     if (
         valid(body, {
             type: 'object',
-            required: ['content'],
+            required: ['image', 'content'],
             properties: {
+                image: {type: 'string'},
                 content: {
                     type: 'object',
                     required: ['edges', 'nodes'],
@@ -32,7 +33,7 @@ export const PATCH = async ({locals, params, request}) => {
         })
     ) {
         try {
-            await updateProject(locals.db, {id: params.id, content: body.content});
+            await updateProject(locals.db, {id: params.id, image: body.image, content: body.content});
             return json({id: params.id});
         } catch (e) {
             if (e instanceof AppError) {

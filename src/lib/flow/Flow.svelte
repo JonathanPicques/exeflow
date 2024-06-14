@@ -1,5 +1,6 @@
 <script lang="ts">
-    import {Background, SvelteFlow, useSvelteFlow} from '@xyflow/svelte';
+    import {toPng} from 'html-to-image';
+    import {Background, SvelteFlow, getNodesBounds, getViewportForBounds, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
     import {valid} from '$lib/schema/validate';
@@ -27,6 +28,28 @@
     };
     export const fitToView = () => {
         fitView();
+    };
+    export const screenshot = async () => {
+        const width = 1280;
+        const height = 720;
+        const bounds = getNodesBounds($nodes);
+        const viewport = getViewportForBounds(bounds, width, height, 0.5, 2.0, 0.2);
+        const viewportElement = document.querySelector<HTMLElement>('.svelte-flow__viewport');
+
+        if (viewport && viewportElement) {
+            return await toPng(viewportElement, {
+                width,
+                height,
+                //
+                style: {
+                    width: `${width}px`,
+                    height: `${height}px`,
+                    transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                    backgroundColor: 'transparent',
+                },
+            });
+        }
+        return 'data:null';
     };
 
     const ondrop = async (e: DragEvent) => {

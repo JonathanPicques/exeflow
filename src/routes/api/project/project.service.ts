@@ -9,6 +9,7 @@ import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 export interface Project {
     id: string;
     name: string;
+    image: string;
     content: Graph;
 }
 
@@ -16,7 +17,7 @@ export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
     try {
         return (await db
             .selectFrom('projects')
-            .select(['id', 'name', 'content'])
+            .select(['id', 'name', 'image', 'content'])
             .where('id', '=', id as ProjectsId)
             .executeTakeFirstOrThrow()) as Project;
     } catch (e) {
@@ -28,14 +29,14 @@ export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
 };
 
 export const getProjects = async (db: Db, {ownerId}: {ownerId: User['id']}) => {
-    return (await db.selectFrom('projects').select(['id', 'name', 'content']).where('owner_id', '=', ownerId).execute()) as Project[];
+    return (await db.selectFrom('projects').select(['id', 'name', 'image', 'content']).where('owner_id', '=', ownerId).execute()) as Project[];
 };
 
 export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: User['id']}) => {
     return (await db
         .insertInto('projects')
         .values({name, content: JSON.stringify({nodes: [], edges: []}), owner_id: ownerId})
-        .returning(['id', 'name', 'content'])
+        .returning(['id', 'name', 'image', 'content'])
         .executeTakeFirstOrThrow()) as Project;
 };
 
@@ -53,11 +54,12 @@ export const deleteProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
     }
 };
 
-export const updateProject = async (db: Db, {id, content}: Pick<Project, 'id' | 'content'>) => {
+export const updateProject = async (db: Db, {id, image, content}: Pick<Project, 'id' | 'image' | 'content'>) => {
     try {
         await db
             .updateTable('projects')
             .where('id', '=', id as ProjectsId)
+            .set({image})
             .set({content: JSON.stringify(content)})
             .execute();
     } catch (e) {

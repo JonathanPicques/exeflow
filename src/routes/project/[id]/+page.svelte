@@ -25,9 +25,10 @@
         triggers: data.triggers,
     });
 
-    const save = () => {
+    const save = async () => {
         fetchUpdateProject({
             id: data.project.id,
+            image: await flow.screenshot(),
             content: {
                 nodes: $nodes,
                 edges: $edges,

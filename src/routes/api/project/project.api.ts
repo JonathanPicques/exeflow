@@ -14,11 +14,11 @@ export const fetchCreateProject = async ({name}: Pick<Project, 'name'>) => {
     ).json()) as Project;
 };
 
-export const fetchUpdateProject = async ({id, content}: Pick<Project, 'id' | 'content'>) => {
+export const fetchUpdateProject = async ({id, image, content}: Pick<Project, 'id' | 'image' | 'content'>) => {
     return (await (
         await fetch(`/api/project/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({content}),
+            body: JSON.stringify({image, content}),
         })
     ).json()) as {id: string};
 };

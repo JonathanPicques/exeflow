@@ -9,6 +9,8 @@ export default interface ProjectsTable {
 
   name: ColumnType<string, string, string>;
 
+  image: ColumnType<string, string | undefined, string>;
+
   content: ColumnType<unknown | null, unknown | null, unknown | null>;
 
   owner_id: ColumnType<string, string, string>;
