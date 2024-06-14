@@ -18,7 +18,7 @@ export const fetchUpdateProject = async ({id, content}: Pick<Project, 'id' | 'co
     return (await (
         await fetch(`/api/project/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify(content),
+            body: JSON.stringify({content}),
         })
     ).json()) as {id: string};
 };

@@ -25,18 +25,17 @@ export const POST = async ({locals, request}) => {
     const body = await request.json();
 
     if (user) {
-        let name = 'New project';
         if (valid(body, {type: 'object', required: ['name'], properties: {name: {type: 'string'}}})) {
-            name = body.name;
-        }
-        try {
-            return json(await createProject(locals.db, {name, ownerId: user.id}));
-        } catch (e) {
-            if (e instanceof AppError) {
-                return e.response();
+            try {
+                return json(await createProject(locals.db, {name: body.name, ownerId: user.id}));
+            } catch (e) {
+                if (e instanceof AppError) {
+                    return e.response();
+                }
+                throw e;
             }
-            throw e;
         }
+        throw error(400);
     }
     throw error(401);
 };
