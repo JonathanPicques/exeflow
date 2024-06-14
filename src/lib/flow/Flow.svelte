@@ -32,10 +32,9 @@
         fitView();
     };
     export const screenshot = async () => {
-        const width = 1280;
-        const height = 720;
-        const bounds = getNodesBounds($nodes);
-        const viewport = getViewportForBounds(bounds, width, height, 0.5, 2.0, 0.2);
+        const width = 320;
+        const height = 180;
+        const viewport = getViewportForBounds(getNodesBounds($nodes), width, height, 0.5, 2.0, 0.2);
         const viewportElement = document.querySelector<HTMLElement>('.svelte-flow__viewport');
 
         if (viewport && viewportElement) {

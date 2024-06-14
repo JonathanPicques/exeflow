@@ -1,4 +1,5 @@
 <script lang="ts">
+    import empty from './empty.svg';
     import {fetchCreateProject, fetchDeleteProject} from '../api/project/project.api';
     import type {Project} from '../api/project/project.service';
 
@@ -15,16 +16,47 @@
     };
 </script>
 
-<div>
+<main>
     <h1>My projects</h1>
-    <ul>
+    <div>
+        <button onclick={createProject}>Create new project</button>
+        <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+    </div>
+    <div class="projects">
         {#each projects as project}
-            <li>
-                <a href="/project/{project.id}">{project.name}</a>
-                <button onclick={() => removeProject(project.id)}>❌</button>
-            </li>
+            <div class="project">
+                <img src={project.image === 'data:null' ? empty : project.image} alt="" />
+                <div style:display="flex">
+                    <a href="/project/{project.id}" style:flex-grow="1">{project.name}</a>
+                    <button class="custom" onclick={() => removeProject(project.id)}>❌</button>
+                </div>
+            </div>
         {/each}
-    </ul>
-    <button onclick={createProject}>Create new project</button>
-    <a href="/auth/logout" data-sveltekit-reload>Logout</a>
-</div>
+    </div>
+</main>
+
+<style>
+    main {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+    }
+
+    .project {
+        padding: 1rem;
+
+        & img {
+            width: 320px;
+            height: 180px;
+            border-radius: 0.5rem;
+            background-color: var(--color-bg-1);
+        }
+    }
+
+    .projects {
+        flex-grow: 1;
+        display: grid;
+        grid-gap: 1rem 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
+</style>
