@@ -13,11 +13,13 @@
     import '@xyflow/svelte/dist/style.css';
 
     const {nodes, edges, createNode} = getGraphContext();
-    const {fitView, screenToFlowPosition} = useSvelteFlow();
+    const {fitView, getViewport, setViewport, screenToFlowPosition} = useSvelteFlow();
 
     const edgeTypes = {edge: CutEdge};
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};
     const defaultEdgeOptions = {type: 'edge'};
+
+    export {getViewport, setViewport};
 
     export const layout = () => {
         const layout = layoutGraph({nodes: $nodes, edges: $edges});

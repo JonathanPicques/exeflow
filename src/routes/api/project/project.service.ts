@@ -1,5 +1,6 @@
 import {NoResultError} from 'kysely';
 import type {User} from '@supabase/supabase-js';
+import type {Viewport} from '@xyflow/svelte';
 
 import {AppError} from '$lib/helper/error';
 import type {Db} from '$lib/supabase/db.server';
@@ -10,7 +11,7 @@ export interface Project {
     id: string;
     name: string;
     image: string;
-    content: Graph;
+    content: Graph & {viewport?: Viewport};
 }
 
 export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
@@ -59,8 +60,10 @@ export const updateProject = async (db: Db, {id, image, content}: Pick<Project, 
         await db
             .updateTable('projects')
             .where('id', '=', id as ProjectsId)
-            .set({image})
-            .set({content: JSON.stringify(content)})
+            .set({
+                image,
+                content: JSON.stringify(content),
+            })
             .execute();
     } catch (e) {
         if (e instanceof NoResultError) {

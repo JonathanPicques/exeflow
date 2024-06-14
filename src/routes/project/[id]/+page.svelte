@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {onMount} from 'svelte';
     import {writable} from 'svelte/store';
     import {SplitPane} from '@rich_harris/svelte-split-pane';
     import {SvelteFlowProvider} from '@xyflow/svelte';
@@ -32,6 +33,7 @@
             content: {
                 nodes: $nodes,
                 edges: $edges,
+                viewport: flow.getViewport(),
             },
         });
     };
@@ -53,6 +55,14 @@
             }
         });
     };
+
+    onMount(() => {
+        const {viewport} = data.project.content;
+
+        if (viewport) {
+            flow.setViewport(viewport);
+        }
+    });
 </script>
 
 <svelte:head>
