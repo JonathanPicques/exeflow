@@ -15,8 +15,10 @@
 
     const {icon, color} = actions[data.id]!;
     const {valid, title, inputs, outputs} = $derived(data.data);
+
+    const nodeName = $derived(extractPluginNamespace(data.id));
     const nodeTitle = $derived(title ?? extractPluginName(data.id));
-    const pluginNamespace = $derived(extractPluginNamespace(data.id));
+
     const connectedInputs = $derived([...new Set($edges.filter(e => e.target === id).map(e => e.targetHandle))] as string[]);
     const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
 </script>
@@ -34,8 +36,8 @@
     <div class="content">
         <img src={icon} alt="" />
         <div>
-            <span class:valid class="name">{pluginNamespace}</span>
-            {#if nodeTitle !== pluginNamespace}
+            <span class:valid class="name">{nodeName}</span>
+            {#if nodeName !== nodeTitle}
                 <span class:valid class="title">{nodeTitle}</span>
             {/if}
         </div>
