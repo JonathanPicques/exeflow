@@ -1,4 +1,4 @@
-import { type ColumnType, type Selectable, type Insertable, type Updateable } from 'kysely';
+import type { ColumnType, Selectable, Insertable, Updateable } from 'kysely';
 
 /** Identifier type for public.projects */
 export type ProjectsId = string & { __brand: 'ProjectsId' };
@@ -16,6 +16,8 @@ export default interface ProjectsTable {
   owner_id: ColumnType<string, string, string>;
 
   created_at: ColumnType<Date, Date | string | undefined, Date | string>;
+
+  updated_at: ColumnType<Date, Date | string | undefined, Date | string>;
 }
 
 export type Projects = Selectable<ProjectsTable>;

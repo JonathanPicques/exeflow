@@ -30,7 +30,12 @@ export const getProject = async (db: Db, {id}: Pick<Project, 'id'>) => {
 };
 
 export const getProjects = async (db: Db, {ownerId}: {ownerId: User['id']}) => {
-    return (await db.selectFrom('projects').select(['id', 'name', 'image', 'content']).where('owner_id', '=', ownerId).execute()) as Project[];
+    return (await db
+        .selectFrom('projects')
+        .select(['id', 'name', 'image', 'content'])
+        .where('owner_id', '=', ownerId)
+        .orderBy(['updated_at desc', 'created_at desc'])
+        .execute()) as Project[];
 };
 
 export const createProject = async (db: Db, {name, ownerId}: {name: Project['name']; ownerId: User['id']}) => {
@@ -63,6 +68,7 @@ export const updateProject = async (db: Db, {id, image, content}: Pick<Project, 
             .set({
                 image,
                 content: JSON.stringify(content),
+                updated_at: new Date(),
             })
             .execute();
     } catch (e) {
