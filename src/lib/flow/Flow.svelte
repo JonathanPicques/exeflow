@@ -29,7 +29,8 @@
         fitToView();
     };
     export const fitToView = () => {
-        fitView();
+        const duration = window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
+        fitView({duration});
     };
     export const screenshot = async () => {
         const width = 320;
