@@ -1,4 +1,4 @@
-import icon from '$lib/plugins/mail/icon.svg';
+import icon from './icon.svg';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 

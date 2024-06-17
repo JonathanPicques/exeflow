@@ -1,4 +1,4 @@
-import icon from '$lib/plugins/webhook/icon.svg';
+import icon from './icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -25,13 +25,13 @@ export default trigger<typeof configSchema>({
             },
         };
     },
-    data({form, config, isConstant}) {
+    data({form, config, constant}) {
         const path = form?.path ?? config?.path ?? '/';
         const method = form?.method ?? config?.method ?? 'GET';
 
         return {
             valid: true,
-            title: isConstant(path) && isConstant(method) ? `${method} ${path}` : undefined,
+            title: constant(path) && constant(method) ? `${method} ${path}` : undefined,
             config: {value: {path, method}, schema: configSchema},
             outputs: ['out'],
             results: {

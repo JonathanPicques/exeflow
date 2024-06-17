@@ -1,4 +1,4 @@
-import icon from '$lib/plugins/webhook/icon.svg';
+import icon from './icon.svg';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -25,12 +25,12 @@ export default action<typeof configSchema>({
             },
         };
     },
-    data({form, config, isConstant}) {
+    data({form, config, constant}) {
         const statusCode = form?.statusCode ?? config?.statusCode ?? 200;
         const statusCodeMessage = statusCodeMessages[statusCode.toString()];
 
         return {
-            valid: !isConstant(statusCode) || statusCodeMessage !== undefined,
+            valid: !constant(statusCode) || statusCodeMessage !== undefined,
             title: statusCodeMessage ? `${statusCode} ${statusCodeMessage}` : undefined,
             config: {
                 value: {

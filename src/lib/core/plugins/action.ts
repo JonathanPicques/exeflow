@@ -16,7 +16,7 @@ export interface Action<Config extends JsonSchema> {
 export interface ActionData<Config extends JsonSchema> {
     valid: boolean;
     title?: string;
-    config: {value: unknown; schema: Config};
+    config: {value: InferJsonSchema<Config>; schema: Config};
     inputs: string[];
     outputs: string[];
     results: Record<string, JsonSchema>;
@@ -25,14 +25,14 @@ export interface ActionData<Config extends JsonSchema> {
 interface FormArgs<Config extends JsonSchema> {
     config: InferJsonSchema<Config>;
     //
-    isConstant: (config: unknown) => boolean;
+    constant: (config: unknown) => boolean;
 }
 
 interface DataArgs<Config extends JsonSchema> {
     form?: Partial<InferJsonSchema<Config>>;
     config?: InferJsonSchema<Config>;
     //
-    isConstant: (config: unknown) => boolean;
+    constant: (config: unknown) => boolean;
 }
 
 export const action = <Config extends JsonSchema>(action: Omit<Action<Config>, 'type'>): Action<Config> => ({type: 'action', ...action});

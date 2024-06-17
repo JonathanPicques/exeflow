@@ -16,7 +16,7 @@ export interface Trigger<Config extends JsonSchema> {
 export interface TriggerData<Config extends JsonSchema> {
     valid: boolean;
     title?: string;
-    config: {value: unknown; schema: Config};
+    config: {value: InferJsonSchema<Config>; schema: Config};
     outputs: string[];
     results: Record<string, JsonSchema>;
 }
@@ -24,14 +24,14 @@ export interface TriggerData<Config extends JsonSchema> {
 interface FormArgs<Config extends JsonSchema> {
     config: InferJsonSchema<Config>;
     //
-    isConstant: (config: unknown) => boolean;
+    constant: (config: unknown) => boolean;
 }
 
 interface DataArgs<Config extends JsonSchema> {
     form?: Partial<InferJsonSchema<Config>>;
     config?: InferJsonSchema<Config>;
     //
-    isConstant: (config: unknown) => boolean;
+    constant: (config: unknown) => boolean;
 }
 
 export const trigger = <Config extends JsonSchema>(trigger: Omit<Trigger<Config>, 'type'>): Trigger<Config> => ({type: 'trigger', ...trigger});

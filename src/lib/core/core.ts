@@ -4,9 +4,9 @@ import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 
 import {zero} from '$lib/schema/validate';
+import {constant} from '$lib/helper/parse';
 import {nodeSchema} from '$lib/core/graph/nodes';
 import {edgeSchema} from '$lib/core/graph/edges';
-import {isConstant} from '$lib/helper/parse';
 
 import type {PluginEdge} from '$lib/core/graph/edges';
 import type {JsonSchema} from '$lib/schema/schema';
@@ -82,7 +82,7 @@ export class GraphContext {
         const newNode = {
             id: this.createId(),
             type,
-            data: {id, data: await data({isConstant})},
+            data: {id, data: await data({constant})},
             position,
         } as PluginNode;
         this.nodes.update(nodes => [...nodes, newNode]);
@@ -94,7 +94,7 @@ export class GraphContext {
         const schema = await plugin.form({
             config: node.data.data.config.value,
             //
-            isConstant,
+            constant,
         });
         return {value: zero(schema), schema};
     };
@@ -105,7 +105,7 @@ export class GraphContext {
             form: form as Partial<any>,
             config: node.data.data.config.value,
             //
-            isConstant,
+            constant,
         });
 
         this.nodes.update(nodes =>

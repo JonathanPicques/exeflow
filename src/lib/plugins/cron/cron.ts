@@ -1,6 +1,6 @@
 import cronstrue from 'cronstrue';
 
-import icon from '$lib/plugins/cron/icon.svg';
+import icon from './icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
 import {tryFunction} from '$lib/helper/error';
 import type {JsonSchema} from '$lib/schema/schema';
@@ -27,9 +27,9 @@ export default trigger<typeof configSchema>({
             },
         };
     },
-    data({form, config, isConstant}) {
+    data({form, config, constant}) {
         const interval = form?.interval ?? config?.interval ?? '*/5 * * * *';
-        const intervalForHumans = isConstant(interval) ? tryFunction(() => cronstrue.toString(interval, {use24HourTimeFormat: true})) : 'dynamic interval';
+        const intervalForHumans = constant(interval) ? tryFunction(() => cronstrue.toString(interval, {use24HourTimeFormat: true})) : 'dynamic interval';
 
         return {
             valid: intervalForHumans !== undefined,

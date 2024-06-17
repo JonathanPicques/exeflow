@@ -1,4 +1,4 @@
-import icon from '$lib/plugins/mistral/icon.svg';
+import icon from './icon.svg';
 import {action} from '$lib/core/plugins/action';
 
 export default action({
