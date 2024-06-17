@@ -1,13 +1,14 @@
 import type {Action} from '$lib/core/plugins/action';
+import type {JsonSchema, InferJsonSchema} from '$lib/schema/schema';
 
-export interface ServerAction<Config> {
+export interface ServerAction<Config extends JsonSchema> {
     type: 'serverAction';
     //
     exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep> | AsyncGenerator<ExecStep, ExecStep>;
 }
 
-interface ExecArgs<Config> {
-    config: Config;
+interface ExecArgs<Config extends JsonSchema> {
+    config: InferJsonSchema<Config>;
 }
 
 interface ExecStep {
@@ -15,4 +16,7 @@ interface ExecStep {
     results: Record<string, unknown>;
 }
 
-export const serverAction = <Config>(_: Action<Config>, serverAction: Omit<ServerAction<Config>, 'type'>): ServerAction<Config> => ({type: 'serverAction', ...serverAction});
+export const serverAction = <Config extends JsonSchema>(_: Action<Config>, serverAction: Omit<ServerAction<Config>, 'type'>): ServerAction<Config> => ({
+    type: 'serverAction',
+    ...serverAction,
+});

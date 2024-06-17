@@ -1,5 +1,7 @@
+import {resolve} from '$lib/helper/parse.server';
 import type {ActionId} from './plugins/action';
 import type {TriggerId} from './plugins/trigger';
+import type {JsonSchema} from '$lib/schema/schema';
 import type {GraphContext} from './core';
 import type {ServerAction} from './plugins/action.server';
 import type {ServerTrigger} from './plugins/trigger.server';
@@ -8,8 +10,8 @@ import type {PluginNode, ActionNode, TriggerNode} from './graph/nodes';
 interface ExecuteArgs<T extends PluginNode> {
     node: T;
     context: GraphContext;
-    serverActions: Record<ActionId, ServerAction<unknown>>;
-    serverTriggers: Record<TriggerId, ServerTrigger<unknown>>;
+    serverActions: Record<ActionId, ServerAction<JsonSchema>>;
+    serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>>;
 }
 
 interface ExecuteStep {
@@ -20,7 +22,7 @@ interface ExecuteStep {
 const execute = async function* ({node, context, serverActions, serverTriggers}: ExecuteArgs<ActionNode>): AsyncGenerator<ExecuteStep> {
     const serverAction = serverActions[node.data.id];
     if (!serverAction) throw new Error(`server action ${node.data.id} not found`);
-    const generator = serverAction.exec({config: node.data.data.config});
+    const generator = serverAction.exec({config: resolve(node.data.data.config.value, node.data.data.config.schema)});
 
     while (true) {
         const {done, value} = await generator.next();

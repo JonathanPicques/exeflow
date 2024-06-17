@@ -1,13 +1,14 @@
 import type {Trigger} from '$lib/core/plugins/trigger';
+import type {JsonSchema, InferJsonSchema} from '$lib/schema/schema';
 
-export interface ServerTrigger<Config> {
+export interface ServerTrigger<Config extends JsonSchema> {
     type: 'serverTrigger';
     //
     exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep> | AsyncGenerator<ExecStep, ExecStep>;
 }
 
-interface ExecArgs<Config> {
-    config: Config;
+interface ExecArgs<Config extends JsonSchema> {
+    config: InferJsonSchema<Config>;
 }
 
 interface ExecStep {
@@ -15,4 +16,7 @@ interface ExecStep {
     results: Record<string, unknown>;
 }
 
-export const serverTrigger = <Config>(_: Trigger<Config>, serverTrigger: Omit<ServerTrigger<Config>, 'type'>): ServerTrigger<Config> => ({type: 'serverTrigger', ...serverTrigger});
+export const serverTrigger = <Config extends JsonSchema>(_: Trigger<Config>, serverTrigger: Omit<ServerTrigger<Config>, 'type'>): ServerTrigger<Config> => ({
+    type: 'serverTrigger',
+    ...serverTrigger,
+});

@@ -1,8 +1,8 @@
-import type {JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema, InferJsonSchema} from '$lib/schema/schema';
 
 export type ActionId = string;
 
-export interface Action<Config> {
+export interface Action<Config extends JsonSchema> {
     type: 'action';
     //
     icon: string;
@@ -13,22 +13,26 @@ export interface Action<Config> {
     data: (args: DataArgs<Config>) => ActionData<Config> | Promise<ActionData<Config>>;
 }
 
-export interface ActionData<Config> {
+export interface ActionData<Config extends JsonSchema> {
     valid: boolean;
     title?: string;
-    config: Config;
+    config: {value: unknown; schema: Config};
     inputs: string[];
     outputs: string[];
     results: Record<string, JsonSchema>;
 }
 
-interface FormArgs<Config> {
-    config: Config;
+interface FormArgs<Config extends JsonSchema> {
+    config: InferJsonSchema<Config>;
+    //
+    isConstant: (config: unknown) => boolean;
 }
 
-interface DataArgs<Config> {
-    form?: unknown;
-    config?: Config;
+interface DataArgs<Config extends JsonSchema> {
+    form?: Partial<InferJsonSchema<Config>>;
+    config?: InferJsonSchema<Config>;
+    //
+    isConstant: (config: unknown) => boolean;
 }
 
-export const action = <Config>(action: Omit<Action<Config>, 'type'>): Action<Config> => ({type: 'action', ...action});
+export const action = <Config extends JsonSchema>(action: Omit<Action<Config>, 'type'>): Action<Config> => ({type: 'action', ...action});

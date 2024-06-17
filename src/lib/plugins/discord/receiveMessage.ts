@@ -1,13 +1,18 @@
 import icon from '$lib/plugins/discord/icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
+import type {JsonSchema} from '$lib/schema/schema';
 
-interface Config {
-    token: string;
-    server: string;
-    channel: string;
-}
+const configSchema = {
+    type: 'object',
+    required: ['token', 'server', 'channel'] as const,
+    properties: {
+        token: {type: 'string'},
+        server: {type: 'string'},
+        channel: {type: 'string'},
+    },
+} satisfies JsonSchema;
 
-export default trigger<Config>({
+export default trigger<typeof configSchema>({
     icon,
     color: '#7289da',
     description: 'triggered when receiving a message in a channel',
@@ -39,15 +44,16 @@ export default trigger<Config>({
         };
     },
     data({form, config}) {
-        const f = form as Partial<Config> | undefined;
-
         return {
             valid: true,
             title: 'receive message',
             config: {
-                token: f?.token ?? config?.token ?? 'sk-abc-123',
-                server: f?.server ?? config?.server ?? 'sk-abc-123',
-                channel: f?.channel ?? config?.channel ?? 'sk-abc-123',
+                value: {
+                    token: form?.token ?? config?.token ?? 'sk-abc-123',
+                    server: form?.server ?? config?.server ?? 'sk-abc-123',
+                    channel: form?.channel ?? config?.channel ?? 'sk-abc-123',
+                },
+                schema: configSchema,
             },
             outputs: ['out'],
             results: {

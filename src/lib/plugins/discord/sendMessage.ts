@@ -1,14 +1,19 @@
 import icon from '$lib/plugins/discord/icon.svg';
 import {action} from '$lib/core/plugins/action';
+import type {JsonSchema} from '$lib/schema/schema';
 
-interface Config {
-    token: string;
-    server: string;
-    channel: string;
-    message: string;
-}
+const configSchema = {
+    type: 'object',
+    required: ['token', 'server', 'channel', 'message'] as const,
+    properties: {
+        token: {type: 'string'},
+        server: {type: 'string'},
+        channel: {type: 'string'},
+        message: {type: 'string'},
+    },
+} satisfies JsonSchema;
 
-export default action<Config>({
+export default action<typeof configSchema>({
     icon,
     color: '#7289da',
     description: 'send a message in a channel',
@@ -16,7 +21,7 @@ export default action<Config>({
     form({config}) {
         return {
             type: 'object',
-            required: ['token', 'server', 'channel'],
+            required: ['token', 'server', 'channel', 'message'],
             properties: {
                 token: {
                     type: 'string',
@@ -47,16 +52,17 @@ export default action<Config>({
         };
     },
     data({form, config}) {
-        const f = form as Partial<Config> | undefined;
-
         return {
             valid: true,
             title: 'send message',
             config: {
-                token: f?.token ?? config?.token ?? 'sk-abc-123',
-                server: f?.server ?? config?.server ?? 'sk-abc-123',
-                channel: f?.channel ?? config?.channel ?? 'sk-abc-123',
-                message: f?.message ?? config?.message ?? '',
+                value: {
+                    token: form?.token ?? config?.token ?? 'sk-abc-123',
+                    server: form?.server ?? config?.server ?? 'sk-abc-123',
+                    channel: form?.channel ?? config?.channel ?? 'sk-abc-123',
+                    message: form?.message ?? config?.message ?? '',
+                },
+                schema: configSchema,
             },
             inputs: ['in'],
             outputs: ['out'],

@@ -1,12 +1,17 @@
 import icon from '$lib/plugins/webhook/icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
+import type {JsonSchema} from '$lib/schema/schema';
 
-interface Config {
-    path: string;
-    method: string;
-}
+const configSchema = {
+    type: 'object',
+    required: ['path', 'method'] as const,
+    properties: {
+        path: {type: 'string'},
+        method: {type: 'string'},
+    },
+} satisfies JsonSchema;
 
-export default trigger<Config>({
+export default trigger<typeof configSchema>({
     icon,
     color: '#c93762',
     description: 'triggered when called via HTTP(s)',
@@ -20,15 +25,14 @@ export default trigger<Config>({
             },
         };
     },
-    data({form, config}) {
-        const f = form as Partial<Config> | undefined;
-        const path = f?.path ?? config?.path ?? '/';
-        const method = f?.method ?? config?.method ?? 'GET';
+    data({form, config, isConstant}) {
+        const path = form?.path ?? config?.path ?? '/';
+        const method = form?.method ?? config?.method ?? 'GET';
 
         return {
             valid: true,
-            title: `${method} ${path}`,
-            config: {path, method},
+            title: isConstant(path) && isConstant(method) ? `${method} ${path}` : undefined,
+            config: {value: {path, method}, schema: configSchema},
             outputs: ['out'],
             results: {
                 body: {type: 'string'},

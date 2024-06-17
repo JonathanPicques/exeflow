@@ -1,17 +1,22 @@
 import icon from '$lib/plugins/mail/icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
+import type {JsonSchema} from '$lib/schema/schema';
 
-interface Config {
-    tls: boolean;
-    host: string;
-    port: string;
-    user: string;
-    password: string;
-    //
-    inbox: string;
-}
+const configSchema = {
+    type: 'object',
+    required: ['tls', 'host', 'port', 'user', 'password', 'inbox'],
+    properties: {
+        tls: {type: 'boolean'},
+        host: {type: 'string'},
+        port: {type: 'string'},
+        user: {type: 'string'},
+        password: {type: 'string'},
+        //
+        inbox: {type: 'string'},
+    },
+} satisfies JsonSchema;
 
-export default trigger<Config>({
+export default trigger<typeof configSchema>({
     icon,
     color: '#f3ce39',
     description: 'triggered when receiving a mail',
@@ -19,6 +24,7 @@ export default trigger<Config>({
     form({config}) {
         return {
             type: 'object',
+            required: ['tls', 'host', 'port', 'user', 'password', 'inbox'],
             properties: {
                 tls: {type: 'boolean', default: config.tls},
                 host: {type: 'string', default: config.host},
@@ -31,19 +37,20 @@ export default trigger<Config>({
         };
     },
     data({form, config}) {
-        const f = form as Partial<Config> | undefined;
-
         return {
             valid: true,
             title: 'receive mail',
             config: {
-                tls: f?.tls ?? config?.tls ?? true,
-                host: f?.host ?? config?.host ?? '',
-                port: f?.port ?? config?.port ?? '',
-                user: f?.user ?? config?.user ?? '',
-                password: f?.password ?? config?.password ?? '',
-                //
-                inbox: f?.inbox ?? config?.inbox ?? 'INBOX',
+                value: {
+                    tls: form?.tls ?? config?.tls ?? true,
+                    host: form?.host ?? config?.host ?? '',
+                    port: form?.port ?? config?.port ?? '',
+                    user: form?.user ?? config?.user ?? '',
+                    password: form?.password ?? config?.password ?? '',
+                    //
+                    inbox: form?.inbox ?? config?.inbox ?? 'INBOX',
+                },
+                schema: configSchema,
             },
             outputs: ['out'],
             results: {},

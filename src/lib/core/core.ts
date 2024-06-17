@@ -6,6 +6,7 @@ import type {Writable} from 'svelte/store';
 import {zero} from '$lib/schema/validate';
 import {nodeSchema} from '$lib/core/graph/nodes';
 import {edgeSchema} from '$lib/core/graph/edges';
+import {isConstant} from '$lib/helper/parse';
 
 import type {PluginEdge} from '$lib/core/graph/edges';
 import type {JsonSchema} from '$lib/schema/schema';
@@ -14,21 +15,21 @@ import type {Trigger, TriggerId} from '$lib/core/plugins/trigger';
 import type {PluginNode, ActionNode} from '$lib/core/graph/nodes';
 
 export type Graph = {nodes: PluginNode[]; edges: PluginEdge[]};
-export type Plugin = Action<unknown> | Trigger<unknown>;
+export type Plugin = Action<JsonSchema> | Trigger<JsonSchema>;
 export type PluginId = ActionId | TriggerId;
 
 interface Options {
     nodes: Writable<PluginNode[]>;
     edges: Writable<PluginEdge[]>;
-    actions: Record<ActionId, Action<unknown>>;
-    triggers: Record<TriggerId, Trigger<unknown>>;
+    actions: Record<ActionId, Action<JsonSchema>>;
+    triggers: Record<TriggerId, Trigger<JsonSchema>>;
 }
 
 export class GraphContext {
     public readonly nodes: Writable<PluginNode[]>;
     public readonly edges: Writable<PluginEdge[]>;
-    public readonly actions: Record<ActionId, Action<unknown>>;
-    public readonly triggers: Record<TriggerId, Trigger<unknown>>;
+    public readonly actions: Record<ActionId, Action<JsonSchema>>;
+    public readonly triggers: Record<TriggerId, Trigger<JsonSchema>>;
     private readonly createId = init({length: 5});
 
     public constructor({nodes, edges, actions, triggers}: Options) {
@@ -81,7 +82,7 @@ export class GraphContext {
         const newNode = {
             id: this.createId(),
             type,
-            data: {id, data: await data({})},
+            data: {id, data: await data({isConstant})},
             position,
         } as PluginNode;
         this.nodes.update(nodes => [...nodes, newNode]);
@@ -90,13 +91,22 @@ export class GraphContext {
     public getNodeForm = async (id: PluginNode['id']) => {
         const node = this.findNode(id);
         const plugin = this.findPlugin(node);
-        const schema = await plugin.form({config: node.data.data.config});
+        const schema = await plugin.form({
+            config: node.data.data.config.value,
+            //
+            isConstant,
+        });
         return {value: zero(schema), schema};
     };
     public updateNodeData = async (id: PluginNode['id'], form: unknown) => {
         const node = this.findNode(id);
         const plugin = this.findPlugin(node);
-        const newData = await plugin.data({form, config: node.data.data.config});
+        const newData = await plugin.data({
+            form: form as Partial<any>,
+            config: node.data.data.config.value,
+            //
+            isConstant,
+        });
 
         this.nodes.update(nodes =>
             nodes.map(n => {

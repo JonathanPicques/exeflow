@@ -16,13 +16,13 @@ export interface TriggerNode extends Node<TriggerNodeData> {
 
 export interface ActionNodeData {
     id: ActionId;
-    data: ActionData<unknown>;
+    data: ActionData<JsonSchema>;
     //
     [x: string]: unknown;
 }
 export interface TriggerNodeData {
     id: TriggerId;
-    data: TriggerData<unknown>;
+    data: TriggerData<JsonSchema>;
     //
     [x: string]: unknown;
 }

@@ -1,12 +1,17 @@
 import icon from '$lib/plugins/webhook/icon.svg';
 import {action} from '$lib/core/plugins/action';
+import type {JsonSchema} from '$lib/schema/schema';
 
-interface Config {
-    data: string;
-    statusCode: number;
-}
+const configSchema = {
+    type: 'object',
+    required: ['data', 'statusCode'] as const,
+    properties: {
+        data: {type: 'string'},
+        statusCode: {type: 'number'},
+    },
+} satisfies JsonSchema;
 
-export default action<Config>({
+export default action<typeof configSchema>({
     icon,
     color: '#c93762',
     description: 'send a response back to the webhook',
@@ -20,17 +25,19 @@ export default action<Config>({
             },
         };
     },
-    data({form, config}) {
-        const f = form as Partial<Config> | undefined;
-        const statusCode = f?.statusCode ?? config?.statusCode ?? 200;
+    data({form, config, isConstant}) {
+        const statusCode = form?.statusCode ?? config?.statusCode ?? 200;
         const statusCodeMessage = statusCodeMessages[statusCode.toString()];
 
         return {
-            valid: statusCodeMessage !== undefined,
+            valid: !isConstant(statusCode) || statusCodeMessage !== undefined,
             title: statusCodeMessage ? `${statusCode} ${statusCodeMessage}` : undefined,
             config: {
-                data: f?.data ?? config?.data ?? '{"success": true}',
-                statusCode,
+                value: {
+                    data: form?.data ?? config?.data ?? '{"success": true}',
+                    statusCode,
+                },
+                schema: configSchema,
             },
             inputs: ['in'],
             outputs: ['out'],

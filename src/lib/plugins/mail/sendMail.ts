@@ -1,21 +1,25 @@
 import icon from '$lib/plugins/mail/icon.svg';
 import {action} from '$lib/core/plugins/action';
+import type {JsonSchema} from '$lib/schema/schema';
 
-interface Config {
-    tls: boolean;
-    host: string;
-    port: number;
-    user: string;
-    password: string;
-    //
-    to: string;
-    from: string;
-    subject: string;
-    bodyText: string;
-    bodyHtml: string;
-}
+const configSchema = {
+    type: 'object',
+    properties: {
+        tls: {type: 'boolean'},
+        host: {type: 'string'},
+        port: {type: 'number'},
+        user: {type: 'string'},
+        password: {type: 'string'},
+        //
+        to: {type: 'string'},
+        from: {type: 'string'},
+        subject: {type: 'string'},
+        bodyHtml: {type: 'string', title: 'mail in html', format: 'text'},
+        bodyText: {type: 'string', title: 'mail in plain text', format: 'text'},
+    },
+} satisfies JsonSchema;
 
-export default action<Config>({
+export default action<typeof configSchema>({
     icon,
     color: '#f3ce39',
     description: 'send a mail',
@@ -39,23 +43,24 @@ export default action<Config>({
         };
     },
     data({form, config}) {
-        const f = form as Partial<Config> | undefined;
-
         return {
             valid: true,
             title: 'send mail',
             config: {
-                tls: f?.tls ?? config?.tls ?? true,
-                host: f?.host ?? config?.host ?? '',
-                port: f?.port ?? config?.port ?? 587,
-                user: f?.user ?? config?.user ?? '',
-                password: f?.password ?? config?.password ?? '',
-                //
-                to: f?.to ?? config?.to ?? '',
-                from: f?.from ?? config?.from ?? '',
-                subject: f?.subject ?? config?.subject ?? '',
-                bodyText: f?.bodyText ?? config?.bodyText ?? '',
-                bodyHtml: f?.bodyHtml ?? config?.bodyHtml ?? '',
+                value: {
+                    tls: form?.tls ?? config?.tls ?? true,
+                    host: form?.host ?? config?.host ?? '',
+                    port: form?.port ?? config?.port ?? 587,
+                    user: form?.user ?? config?.user ?? '',
+                    password: form?.password ?? config?.password ?? '',
+                    //
+                    to: form?.to ?? config?.to ?? '',
+                    from: form?.from ?? config?.from ?? '',
+                    subject: form?.subject ?? config?.subject ?? '',
+                    bodyText: form?.bodyText ?? config?.bodyText ?? '',
+                    bodyHtml: form?.bodyHtml ?? config?.bodyHtml ?? '',
+                },
+                schema: configSchema,
             },
             inputs: ['in'],
             outputs: ['out'],
