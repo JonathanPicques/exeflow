@@ -6,12 +6,13 @@ export type PluginEdge = Edge;
 
 export const edgeSchema = {
     type: 'object',
-    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle'] as const,
+    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle', 'selected'] as const,
     properties: {
         id: {type: 'string'},
         source: {type: 'string'},
         target: {type: 'string'},
         sourceHandle: {type: 'string'},
         targetHandle: {type: 'string'},
+        selected: {type: 'boolean'},
     },
 } satisfies JsonSchema;

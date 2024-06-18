@@ -18,7 +18,7 @@
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
 
-    const {exportGraph, importGraph} = setGraphContext({
+    const {exportGraph, exportSelection, importSelection} = setGraphContext({
         nodes,
         edges,
         //
@@ -27,12 +27,14 @@
     });
 
     const save = async () => {
+        const {nodes, edges} = exportGraph();
+
         fetchUpdateProject({
             id: data.project.id,
             image: await flow.screenshot(),
             content: {
-                nodes: $nodes,
-                edges: $edges,
+                nodes,
+                edges,
                 viewport: flow.getViewport(),
             },
         });
@@ -42,7 +44,7 @@
     const fitToView = () => flow.fitToView();
 
     const exportToClipboard = () => {
-        const data = exportGraph($nodes.filter(n => n.selected).map(n => n.id));
+        const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
         if (valid(data, graphSchema)) {
             navigator.clipboard.writeText(JSON.stringify(data, null, 2));
         }
@@ -51,7 +53,7 @@
         navigator.clipboard.readText().then(text => {
             const data = JSON.parse(text);
             if (valid(data, graphSchema)) {
-                importGraph(data);
+                importSelection(data);
             }
         });
     };

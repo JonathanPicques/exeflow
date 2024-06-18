@@ -118,17 +118,20 @@ export class GraphContext {
         );
     };
 
-    public exportGraph = (ids: PluginNode['id'][]): Graph => {
+    public exportGraph = () => {
+        return this.exportSelection(get(this.nodes).map(n => n.id));
+    };
+    public exportSelection = (ids: PluginNode['id'][]): Graph => {
         return {
             nodes: get(this.nodes)
                 .filter(n => ids.includes(n.id))
-                .map(({id, type, data, position}) => ({id, type, data, position}) as PluginNode),
+                .map(this.serializeNode),
             edges: get(this.edges)
                 .filter(e => ids.includes(e.source) && ids.includes(e.target))
-                .map(({id, source, target, sourceHandle, targetHandle}) => ({id, source, target, sourceHandle, targetHandle}) as PluginEdge),
+                .map(this.serializeEdge),
         };
     };
-    public importGraph = ({nodes, edges}: Graph, offset = {x: 0, y: 0}) => {
+    public importSelection = ({nodes, edges}: Graph, offset = {x: 0, y: 0}) => {
         const mapping: Record<PluginNode['id'], PluginNode['id']> = {};
 
         for (const node of nodes) {
@@ -149,6 +152,9 @@ export class GraphContext {
         this.nodes.update(nodes => [...nodes.map(n => ({...n, selected: false})), ...importedNodes.map(n => ({...n, selected: true}))]);
         this.edges.update(edges => [...edges.map(e => ({...e, selected: false})), ...importedEdges.map(e => ({...e, selected: true}))]);
     };
+
+    private serializeNode = ({id, type, data, position, selected}: PluginNode) => ({id, type, data, position, selected}) as PluginNode;
+    private serializeEdge = ({id, source, target, sourceHandle, targetHandle, selected}: PluginEdge) => ({id, source, target, sourceHandle, targetHandle, selected}) as PluginEdge;
 }
 
 const key = Symbol('graph');
