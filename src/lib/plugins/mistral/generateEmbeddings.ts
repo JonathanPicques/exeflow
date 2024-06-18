@@ -3,7 +3,7 @@ import {action} from '$lib/core/plugins/action';
 
 export default action({
     icon,
-    color: '#fecd00',
+    color: '#ff7000',
     description: 'generate embeddings',
     //
     form(args) {

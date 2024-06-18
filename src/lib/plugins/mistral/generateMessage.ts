@@ -16,7 +16,7 @@ const configSchema = {
 
 export default action<typeof configSchema>({
     icon,
-    color: '#fecd00',
+    color: '#ff7000',
     description: `generate a message from a prompt using Mistral's LLMs`,
     //
     form({config}) {

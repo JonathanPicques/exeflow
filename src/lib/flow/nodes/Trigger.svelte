@@ -5,7 +5,7 @@
     import OutputHandle from '../edges/OutputHandle.svelte';
 
     import {getGraphContext} from '$lib/core/core';
-    import {extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
     import type {TriggerNode} from '$lib/core/graph/nodes';
 
     let {id, data, selected = undefined}: NodeProps<TriggerNode> = $props();
@@ -15,8 +15,8 @@
     const {icon, color} = triggers[data.id]!;
     const {valid, title, outputs} = $derived(data.data);
 
-    const nodeName = $derived(extractPluginNamespace(data.id));
-    const nodeTitle = $derived(title ?? extractPluginName(data.id));
+    const nodeName = $derived(humanPluginName(extractPluginNamespace(data.id)));
+    const nodeTitle = $derived(title ?? humanPluginName(extractPluginName(data.id)));
 
     const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
 </script>

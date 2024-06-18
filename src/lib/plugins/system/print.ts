@@ -12,7 +12,7 @@ const configSchema = {
 
 export default action<typeof configSchema>({
     icon,
-    color: '#c93762',
+    color: '#0c8ce9',
     description: 'prints a text to the console',
     //
     form({config}) {

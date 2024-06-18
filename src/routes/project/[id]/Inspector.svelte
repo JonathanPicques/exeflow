@@ -31,7 +31,12 @@
         e.dataTransfer.effectAllowed = 'move';
     };
     const filterPlugins = ([id, plugin]: [PluginId, Plugin]) => {
-        return id.includes(filter) || plugin.description.includes(filter);
+        return (
+            id.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
+            plugin.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
+            humanPluginName(extractPluginName(id).toLocaleLowerCase()).includes(filter.toLocaleLowerCase()) ||
+            humanPluginName(extractPluginNamespace(id).toLocaleLowerCase()).includes(filter.toLocaleLowerCase())
+        );
     };
 </script>
 
