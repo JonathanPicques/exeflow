@@ -2,8 +2,8 @@ import {error} from '@sveltejs/kit';
 import {writable} from 'svelte/store';
 
 import {valid} from '$lib/schema/validate';
-import {isTriggerNode} from '$lib/core/graph/nodes.js';
-import {executeTrigger} from '$lib/core/core.server.js';
+import {isTriggerNode} from '$lib/core/graph/nodes';
+import {executeTrigger} from '$lib/core/core.server';
 import {graphSchema, GraphContext} from '$lib/core/core';
 import {loadPlugins, loadServerPlugins} from '$lib/helper/plugin';
 
