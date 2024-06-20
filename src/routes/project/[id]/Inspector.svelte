@@ -43,7 +43,19 @@
 <div class="main">
     {#if node && plugin}
         <h1>
-            <img src={plugin.icon} alt="" />
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+            <img
+                src={plugin.icon}
+                alt=""
+                onclick={() => {
+                    navigator.clipboard.writeText(
+                        Object.keys(node!.data.data.results)
+                            .map(result => `\${node:${node!.id}:${result}}`)
+                            .join(' '),
+                    );
+                }}
+            />
             <span>{humanPluginName(extractPluginName(node.data.id))}</span>
         </h1>
 
