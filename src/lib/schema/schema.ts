@@ -10,6 +10,10 @@ export interface JsonSchemaAny extends JsonSchemaAll<any> {
     type?: never;
 }
 
+export interface JsonSchemaAnyOf extends JsonSchemaAll<any> {
+    anyOf: JsonSchema[];
+}
+
 export interface JsonSchemaArray extends JsonSchemaAll<any[]> {
     type: 'array';
     items?: JsonSchema;
@@ -38,23 +42,27 @@ export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {
     type: 'boolean';
 }
 
-export type JsonSchema = JsonSchemaAny | JsonSchemaArray | JsonSchemaObject | JsonSchemaNumber | JsonSchemaString | JsonSchemaBoolean;
+export type JsonSchema = JsonSchemaAnyOf | JsonSchemaAny | JsonSchemaArray | JsonSchemaObject | JsonSchemaNumber | JsonSchemaString | JsonSchemaBoolean;
 export type InferJsonSchema<T extends JsonSchema> = T extends JsonSchemaAny
     ? InferJsonSchemaAny<T>
-    : T extends JsonSchemaNumber
-      ? InferJsonSchemaNumber<T>
-      : T extends JsonSchemaString
-        ? InferJsonSchemaString<T>
-        : T extends JsonSchemaBoolean
-          ? InferJsonSchemaBoolean<T>
-          : T extends JsonSchemaArray
-            ? InferJsonSchemaArray<T>
-            : T extends JsonSchemaObject
-              ? InferJsonSchemaObject<T>
-              : never;
+    : T extends JsonSchemaAnyOf
+      ? InferJsonSchemaAnyOf<T>
+      : T extends JsonSchemaNumber
+        ? InferJsonSchemaNumber<T>
+        : T extends JsonSchemaString
+          ? InferJsonSchemaString<T>
+          : T extends JsonSchemaBoolean
+            ? InferJsonSchemaBoolean<T>
+            : T extends JsonSchemaArray
+              ? InferJsonSchemaArray<T>
+              : T extends JsonSchemaObject
+                ? InferJsonSchemaObject<T>
+                : never;
+
 export type InferJsonSchemaRecord<T extends Record<string, JsonSchema>> = {[K in keyof T]: InferJsonSchema<T[K]>};
 
 type InferJsonSchemaAny<T extends JsonSchemaAny> = Const<T, any>;
+type InferJsonSchemaAnyOf<T extends JsonSchemaAnyOf> = Const<T, InferJsonSchema<T['anyOf'][number]>>;
 
 type InferJsonSchemaArray<T extends JsonSchemaArray> = Const<T, InferJsonSchema<T['items'] extends {} ? T['items'] : {}>[]>;
 type InferJsonSchemaObject<T extends JsonSchemaObject> = Const<T, MapObject<T>>;

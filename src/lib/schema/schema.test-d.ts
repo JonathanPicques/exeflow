@@ -21,4 +21,9 @@ test('InferJsonSchema', () => {
     expectTypeOf<InferJsonSchema<{type: 'object'; const: {id: '123'}}>>().toMatchTypeOf<{id: '123'}>();
     expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}}>>().toMatchTypeOf<{id?: string}>();
     expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}; required: ['id']}>>().toMatchTypeOf<{id: string}>();
+
+    expectTypeOf<InferJsonSchema<{anyOf: [{type: 'string'}, {type: 'number'}, {type: 'boolean'}, {type: 'array'; items: {type: 'string'}}]}>>().toEqualTypeOf<
+        string | number | boolean | string[]
+    >();
+    // expectTypeOf<InferJsonSchema<{anyOf: [{type: 'object'; required: ['x']; properties: {x: {type: 'string'}}}]}>>().toEqualTypeOf<{x: string}>();
 });
