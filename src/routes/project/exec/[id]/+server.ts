@@ -22,7 +22,7 @@ export const POST = async ({params, request}) => {
                 try {
                     const node = context.findNode(id);
                     if (!isTriggerNode(node)) throw new Error(`can not execute an action`);
-                    for await (const step of executeTrigger({node, context, serverActions: serverPlugins.actions, serverTriggers: serverPlugins.triggers})) {
+                    for await (const step of executeTrigger({out: 'out', node, context, serverActions: serverPlugins.actions, serverTriggers: serverPlugins.triggers})) {
                         controller.enqueue(JSON.stringify(step));
                         controller.enqueue('\n');
                     }

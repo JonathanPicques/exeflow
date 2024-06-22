@@ -25,6 +25,7 @@ interface ActionExecuteArgs<T extends PluginNode> {
 }
 
 interface TriggerExecuteArgs<T extends PluginNode> {
+    out: string;
     node: T;
     context: GraphContext;
     serverActions: Record<ActionId, ServerAction<JsonSchema>>;
@@ -51,8 +52,8 @@ export const executeAction = async function* ({node, context, serverActions}: Ac
     }
 };
 
-export const executeTrigger = async function* ({node, context, serverActions}: TriggerExecuteArgs<TriggerNode>) {
-    const next = context.findNextActionNode(node.id, 'out'); // TODO: determine out
+export const executeTrigger = async function* ({out, node, context, serverActions}: TriggerExecuteArgs<TriggerNode>) {
+    const next = context.findNextActionNode(node.id, out);
     if (next) {
         yield* executeAction({node: next, context, serverActions});
     }

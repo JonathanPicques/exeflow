@@ -28,7 +28,3 @@ export const zero = <T extends JsonSchema>(schema: T): InferJsonSchema<T> => {
 export const valid = <T extends JsonSchema>(data: unknown, schema: T): data is InferJsonSchema<T> => {
     return validator.validate(schema, data);
 };
-
-export const compatible = (lhs: JsonSchema, rhs: JsonSchema) => {
-    return lhs.type === rhs.type;
-};

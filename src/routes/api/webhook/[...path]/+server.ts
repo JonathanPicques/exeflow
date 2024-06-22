@@ -26,7 +26,7 @@ const execute = async (db: Db, path: string, method: string) => {
                 const webhookMethod = webhook.data.data.config.value.method as string;
 
                 if ((path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod) {
-                    for await (const step of executeTrigger({node: webhook, context, serverActions: serverPlugins.actions, serverTriggers: serverPlugins.triggers})) {
+                    for await (const step of executeTrigger({out: 'out', node: webhook, context, serverActions: serverPlugins.actions, serverTriggers: serverPlugins.triggers})) {
                         console.log(step);
                     }
                 }

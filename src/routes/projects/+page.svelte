@@ -54,9 +54,9 @@
     }
 
     .projects {
-        flex-grow: 1;
         display: grid;
         grid-gap: 1rem 1rem;
+        flex-grow: 1;
         grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     }
 </style>

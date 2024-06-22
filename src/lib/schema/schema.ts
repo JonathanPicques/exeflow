@@ -11,6 +11,7 @@ export interface JsonSchemaAny extends JsonSchemaAll<any> {
 }
 
 export interface JsonSchemaAnyOf extends JsonSchemaAll<any> {
+    type?: never;
     anyOf: JsonSchema[];
 }
 
