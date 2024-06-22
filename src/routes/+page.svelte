@@ -10,7 +10,7 @@
             {#if me}
                 <span>Hello {me.email}</span>
                 <ul>
-                    <li><a href="/projects">Projects</a></li>
+                    <li><a href="/home">Projects</a></li>
                     <li><a href="/auth/logout" data-sveltekit-reload>Logout</a></li>
                 </ul>
             {:else}
