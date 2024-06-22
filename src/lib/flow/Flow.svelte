@@ -26,10 +26,10 @@
 
         $nodes = layout.nodes;
         $edges = layout.edges;
-        fitToView();
+        fitToView({smooth: false});
     };
-    export const fitToView = () => {
-        const duration = window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
+    export const fitToView = ({smooth} = {smooth: true}) => {
+        const duration = smooth && window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
         fitView({duration});
     };
     export const screenshot = async () => {
