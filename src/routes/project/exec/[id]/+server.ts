@@ -7,7 +7,11 @@ import {executeTrigger} from '$lib/core/core.server';
 import {graphSchema, GraphContext} from '$lib/core/core';
 import {loadPlugins, loadServerPlugins} from '$lib/helper/plugin';
 
-export const POST = async ({params, request}) => {
+export const POST = async ({locals, params, request}) => {
+    if ((await locals.user()) === undefined) {
+        throw error(403);
+    }
+
     const id = params.id;
     const graph = await request.json();
 
