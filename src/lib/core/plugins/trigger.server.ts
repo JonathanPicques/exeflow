@@ -9,6 +9,7 @@ export interface ServerTrigger<Config extends JsonSchema> {
 
 interface ExecArgs<Config extends JsonSchema> {
     config: InferJsonSchema<Config>;
+    request?: Request;
 }
 
 interface ExecStep {

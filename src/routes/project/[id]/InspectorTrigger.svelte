@@ -15,7 +15,7 @@
             const {done, value} = await bodyReader.read();
             if (done) break;
             console.log(
-                ...value
+                value
                     .split('\n')
                     .filter(v => v.trim() !== '')
                     .flatMap(v => JSON.parse(v)),
