@@ -1,7 +1,7 @@
 import {json, error} from '@sveltejs/kit';
 
 import {valid} from '$lib/schema/validate';
-import type {JsonSchema} from '$lib/schema/schema.js';
+import type {JsonSchema} from '$lib/schema/schema';
 
 const postSchema = {
     type: 'object',

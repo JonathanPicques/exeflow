@@ -1,8 +1,8 @@
 import {json, error} from '@sveltejs/kit';
 
 import {valid} from '$lib/schema/validate';
+import type {JsonSchema} from '$lib/schema/schema';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
-import type {JsonSchema} from '$lib/schema/schema.js';
 
 const patchSchema = {
     type: 'object',

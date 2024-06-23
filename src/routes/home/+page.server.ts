@@ -1,6 +1,6 @@
 import {redirect} from '@sveltejs/kit';
 
-import type {Project} from '../api/project/project.js';
+import type {Project} from '../api/project/project';
 
 export const load = async ({locals}) => {
     const user = await locals.user();
