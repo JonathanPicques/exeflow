@@ -5,6 +5,7 @@ import {graphSchema} from '$lib/core/core';
 import type {JsonSchema} from '$lib/schema/schema';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggerNode} from '$lib/core/graph/nodes';
+import type {TriggersNodeId, TriggersPluginId} from '$lib/supabase/gen/public/Triggers';
 
 const patchSchema = {
     type: 'object',
@@ -23,7 +24,7 @@ export const PATCH = async ({locals, params, request}) => {
     if (!valid(body, patchSchema)) throw error(400);
 
     const triggerNodes = body.content.nodes.filter(n => n.type === 'trigger') as TriggerNode[];
-    const triggerNodeIds = triggerNodes.map(n => n.id);
+    const triggerNodeIds = triggerNodes.map(n => n.id as TriggersNodeId);
 
     await locals.db.transaction().execute(async trx => {
         await trx
@@ -38,10 +39,10 @@ export const PATCH = async ({locals, params, request}) => {
                 return trx
                     .insertInto('triggers')
                     .values({
-                        node_id: triggerNode.id,
+                        node_id: triggerNode.id as TriggersNodeId,
+                        plugin_id: triggerNode.data.id as TriggersPluginId,
                         project_id: params.id as ProjectsId,
                         //
-                        type: triggerNode.type,
                         query,
                     })
                     .onConflict(oc => oc.constraint('public_triggers_pkey').doUpdateSet({query}))

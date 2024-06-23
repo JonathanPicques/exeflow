@@ -2,19 +2,20 @@ import type { ProjectsId } from './Projects';
 import type { ColumnType, Selectable, Insertable, Updateable } from 'kysely';
 
 /** Identifier type for public.triggers */
-export type TriggersId = string & { __brand: 'TriggersId' };
+export type TriggersNodeId = string & { __brand: 'TriggersNodeId' };
+
+/** Identifier type for public.triggers */
+export type TriggersPluginId = string & { __brand: 'TriggersPluginId' };
 
 /** Represents the table public.triggers */
 export default interface TriggersTable {
-  id: ColumnType<TriggersId, TriggersId | undefined, TriggersId>;
+  node_id: ColumnType<TriggersNodeId, TriggersNodeId, TriggersNodeId>;
 
-  project_id: ColumnType<ProjectsId | null, ProjectsId | null, ProjectsId | null>;
+  plugin_id: ColumnType<TriggersPluginId, TriggersPluginId, TriggersPluginId>;
 
-  type: ColumnType<string | null, string | null, string | null>;
+  project_id: ColumnType<ProjectsId, ProjectsId, ProjectsId>;
 
   query: ColumnType<string | null, string | null, string | null>;
-
-  node_id: ColumnType<string | null, string | null, string | null>;
 
   created_at: ColumnType<Date, Date | string | undefined, Date | string>;
 
