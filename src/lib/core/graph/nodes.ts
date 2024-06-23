@@ -32,7 +32,7 @@ export const isTriggerNode = (node: PluginNode): node is TriggerNode => node.typ
 
 export const nodeSchema = {
     type: 'object',
-    required: ['id', 'type', 'data', 'position', 'selected'] as const,
+    required: ['id', 'type', 'data', 'position'] as const,
     properties: {
         id: {
             type: 'string',
