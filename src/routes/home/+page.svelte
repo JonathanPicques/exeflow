@@ -1,17 +1,17 @@
 <script lang="ts">
     import empty from './empty.svg';
-    import {fetchCreateProject, fetchDeleteProject} from '../api/project/project.api';
-    import type {Project} from '../api/project/project.service';
+    import {postProject, deleteProject} from '../api/project/project';
+    import type {Project} from '../api/project/project';
 
     let {data} = $props();
     let projects: Project[] = $state(data.projects);
 
     const createProject = async () => {
-        projects = [...projects, await fetchCreateProject({name: `Untitled project ${projects.length}`})];
+        projects = [...projects, await postProject({name: `Untitled project ${projects.length}`})];
     };
 
     const removeProject = async (id: string) => {
-        await fetchDeleteProject({id});
+        await deleteProject({id});
         projects = projects.filter(p => p.id !== id);
     };
 </script>

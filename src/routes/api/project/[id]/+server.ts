@@ -1,58 +1,54 @@
 import {json, error} from '@sveltejs/kit';
 
 import {valid} from '$lib/schema/validate';
-import {AppError} from '$lib/helper/error';
-import {getProject, updateProject, deleteProject} from '../project.service';
+import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
+import type {JsonSchema} from '$lib/schema/schema.js';
 
-export const GET = async ({locals, params}) => {
-    try {
-        return json(await getProject(locals.db, {id: params.id}));
-    } catch (e) {
-        if (e instanceof AppError) {
-            return e.response();
-        }
-        throw e;
-    }
-};
+const patchSchema = {
+    type: 'object',
+    required: ['image', 'content'] as const,
+    properties: {
+        image: {type: 'string'},
+        content: {
+            type: 'object',
+            required: ['edges', 'nodes'] as const,
+            properties: {edges: {}, nodes: {}},
+        },
+    },
+} satisfies JsonSchema;
 
 export const PATCH = async ({locals, params, request}) => {
-    const body = await request.json();
+    const user = await locals.user();
+    if (!user) throw error(401);
 
-    if (
-        valid(body, {
-            type: 'object',
-            required: ['image', 'content'],
-            properties: {
-                image: {type: 'string'},
-                content: {
-                    type: 'object',
-                    required: ['edges', 'nodes'],
-                    properties: {edges: {}, nodes: {}},
-                },
-            },
+    const body = await request.json();
+    if (!valid(body, patchSchema)) throw error(400);
+
+    const {numUpdatedRows} = await locals.db
+        .updateTable('projects')
+        .where('id', '=', params.id as ProjectsId)
+        .where('owner_id', '=', user.id)
+        .set({
+            image: body.image,
+            content: JSON.stringify(body.content),
+            updated_at: new Date(),
         })
-    ) {
-        try {
-            await updateProject(locals.db, {id: params.id, image: body.image, content: body.content});
-            return json({id: params.id});
-        } catch (e) {
-            if (e instanceof AppError) {
-                throw e.error();
-            }
-            throw e;
-        }
-    }
-    throw error(400, 'invalid body');
+        .executeTakeFirst();
+    if (numUpdatedRows < 1) throw error(500);
+
+    return json({id: params.id});
 };
 
 export const DELETE = async ({locals, params}) => {
-    try {
-        await deleteProject(locals.db, {id: params.id});
-        return json({id: params.id});
-    } catch (e) {
-        if (e instanceof AppError) {
-            return e.response();
-        }
-        throw e;
-    }
+    const user = await locals.user();
+    if (!user) throw error(401);
+
+    const {numDeletedRows} = await locals.db
+        .deleteFrom('projects')
+        .where('id', '=', params.id as ProjectsId)
+        .where('owner_id', '=', user.id)
+        .executeTakeFirst();
+    if (numDeletedRows < 1) throw error(500);
+
+    return json({id: params.id});
 };

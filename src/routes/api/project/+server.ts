@@ -1,41 +1,29 @@
 import {json, error} from '@sveltejs/kit';
 
 import {valid} from '$lib/schema/validate';
-import {AppError} from '$lib/helper/error';
-import {getProjects, createProject} from './project.service';
+import type {JsonSchema} from '$lib/schema/schema.js';
 
-export const GET = async ({locals}) => {
-    const user = await locals.user();
-
-    if (user) {
-        try {
-            return json(await getProjects(locals.db, {ownerId: user.id}));
-        } catch (e) {
-            if (e instanceof AppError) {
-                return e.response();
-            }
-            throw e;
-        }
-    }
-    throw error(401);
-};
+const postSchema = {
+    type: 'object',
+    required: ['name'] as const,
+    properties: {
+        name: {type: 'string'},
+    },
+} satisfies JsonSchema;
 
 export const POST = async ({locals, request}) => {
     const user = await locals.user();
-    const body = await request.json();
+    if (!user) throw error(401);
 
-    if (user) {
-        if (valid(body, {type: 'object', required: ['name'], properties: {name: {type: 'string'}}})) {
-            try {
-                return json(await createProject(locals.db, {name: body.name, ownerId: user.id}));
-            } catch (e) {
-                if (e instanceof AppError) {
-                    return e.response();
-                }
-                throw e;
-            }
-        }
-        throw error(400);
-    }
-    throw error(401);
+    const body = await request.json();
+    if (!valid(body, postSchema)) throw error(400);
+
+    const project = await locals.db
+        .insertInto('projects')
+        .values({name: body.name, content: JSON.stringify({nodes: [], edges: []}), owner_id: user.id})
+        .returning(['id', 'name', 'image', 'content'])
+        .executeTakeFirst();
+    if (!project) throw error(500);
+
+    return json(project);
 };

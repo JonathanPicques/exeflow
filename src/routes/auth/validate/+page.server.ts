@@ -12,5 +12,5 @@ export const load = async ({url, locals}) => {
         }
         return {error: true, code: errorCode ?? '403', description: errorDescription ?? 'unable to validate you account'};
     }
-    return {error: true, code: errorCode ?? '001', description: errorDescription ?? 'validation failed'};
+    return {error: true, code: errorCode ?? '400', description: errorDescription ?? 'validation failed'};
 };

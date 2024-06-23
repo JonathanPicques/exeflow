@@ -1,9 +1,8 @@
 import {fail, redirect} from '@sveltejs/kit';
 
 export const load = async ({locals}) => {
-    if (await locals.user()) {
-        throw redirect(303, '/home');
-    }
+    const user = await locals.user();
+    if (user) throw redirect(303, '/home');
 };
 
 export const actions = {

@@ -2,10 +2,7 @@ import {json, error} from '@sveltejs/kit';
 
 export const GET = async ({locals}) => {
     const user = await locals.user();
+    if (!user) throw error(401);
 
-    if (user) {
-        const {id, email} = user;
-        return json({id, email});
-    }
-    throw error(403);
+    return json({id: user.id, email: user.email});
 };

@@ -9,7 +9,7 @@
 
     import {valid} from '$lib/schema/validate';
     import {shortcut} from '$lib/helper/shortcut';
-    import {fetchUpdateProject} from '../../api/project/project.api';
+    import {patchProject} from '../../api/project/project';
     import {graphSchema, setGraphContext} from '$lib/core/core';
 
     let flow: Flow;
@@ -29,7 +29,7 @@
     const save = async () => {
         const {nodes, edges} = exportGraph();
 
-        fetchUpdateProject({
+        patchProject({
             id: data.project.id,
             image: await flow.screenshot(),
             content: {

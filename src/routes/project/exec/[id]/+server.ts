@@ -8,9 +8,8 @@ import {graphSchema, GraphContext} from '$lib/core/core';
 import {loadPlugins, loadServerPlugins} from '$lib/helper/plugin';
 
 export const POST = async ({locals, params, request}) => {
-    if ((await locals.user()) === undefined) {
-        throw error(403);
-    }
+    const user = await locals.user();
+    if (!user) throw error(401);
 
     const id = params.id;
     const graph = await request.json();
@@ -48,5 +47,5 @@ export const POST = async ({locals, params, request}) => {
             },
         });
     }
-    throw error(400, 'invalid body');
+    throw error(400);
 };
