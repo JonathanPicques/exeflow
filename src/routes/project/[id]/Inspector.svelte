@@ -30,12 +30,21 @@
         e.dataTransfer.setData('application/exeflow+plugin:type', plugin.type);
         e.dataTransfer.effectAllowed = 'move';
     };
+
     const filterPlugins = ([id, plugin]: [PluginId, Plugin]) => {
+        if (filter.includes('type:action') && plugin.type !== 'action') return false;
+        if (filter.includes('type:trigger') && plugin.type !== 'trigger') return false;
+
+        const finalFilter = filter
+            .replaceAll(/\s*type:action\s*/gm, '')
+            .replaceAll(/\s*type:trigger\s*/gm, '')
+            .toLocaleLowerCase();
+
         return (
-            id.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
-            plugin.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
-            humanPluginName(extractPluginName(id).toLocaleLowerCase()).includes(filter.toLocaleLowerCase()) ||
-            humanPluginName(extractPluginNamespace(id).toLocaleLowerCase()).includes(filter.toLocaleLowerCase())
+            id.toLocaleLowerCase().includes(finalFilter) ||
+            plugin.description.toLocaleLowerCase().includes(finalFilter) ||
+            humanPluginName(extractPluginName(id)).toLocaleLowerCase().includes(finalFilter) ||
+            humanPluginName(extractPluginNamespace(id)).toLocaleLowerCase().includes(finalFilter)
         );
     };
 </script>
