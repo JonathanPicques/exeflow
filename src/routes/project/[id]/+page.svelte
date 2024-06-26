@@ -72,16 +72,16 @@
 </svelte:head>
 
 <SvelteFlowProvider>
+    <nav>
+        <button onclick={save} use:shortcut={'ctrl+s'}>Save</button>
+        <button onclick={layout} use:shortcut={'ctrl+alt+l'}>Layout</button>
+        <button onclick={fitToView} use:shortcut={'ctrl+alt+c'}>Fit to view</button>
+        {#if true}
+            <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
+            <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
+        {/if}
+    </nav>
     <main>
-        <nav>
-            <button onclick={save} use:shortcut={'ctrl+s'}>Save</button>
-            <button onclick={layout} use:shortcut={'ctrl+alt+l'}>Layout</button>
-            <button onclick={fitToView} use:shortcut={'ctrl+alt+c'}>Fit to view</button>
-            {#if true}
-                <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
-                <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
-            {/if}
-        </nav>
         <SplitPane type="horizontal" min="200px" max="-100px" pos="80%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
             <section slot="a" class="flow">
                 <Flow bind:this={flow} />
@@ -94,24 +94,18 @@
 </SvelteFlowProvider>
 
 <style>
-    main {
-        height: 100%;
-        display: flex;
-        overflow: hidden;
-        flex-grow: 1;
-        flex-direction: column;
-
-        & > :global(div) > :global(.container) {
-            /** Fix svelte-split-pane overflow in panes */
-            overflow: hidden;
-        }
-    }
-
     nav {
         gap: 1rem;
         display: flex;
         padding: 1rem;
         border-bottom: 1px solid var(--color-bg-1);
+    }
+
+    main {
+        display: flex;
+        overflow: hidden;
+        flex-grow: 1;
+        flex-direction: column;
     }
 
     .inspector {
