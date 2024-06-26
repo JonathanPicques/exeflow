@@ -1,16 +1,16 @@
 export const load = async ({url, locals}) => {
     const code = url.searchParams.get('code') as string | undefined;
     const error = url.searchParams.get('error') as string | undefined;
-    const errorCode = url.searchParams.get('error_code') as string | undefined;
     const errorDescription = url.searchParams.get('error_description') as string | undefined;
 
-    if (code && !error) {
-        const result = await locals.supabase.auth.exchangeCodeForSession(code);
+    if (error) return {error: true, description: errorDescription ?? 'unable to validate you account'};
+    if (!code) return {error: true, description: 'validation code is missing'};
 
-        if (result.data.user) {
-            return {success: true};
-        }
-        return {error: true, code: errorCode ?? '403', description: errorDescription ?? 'unable to validate you account'};
+    try {
+        const result = await locals.supabase.auth.exchangeCodeForSession(code);
+        if (result.error) throw result.error;
+        return {success: true};
+    } catch (e) {
+        return {error: true, description: (e as Error).toString()};
     }
-    return {error: true, code: errorCode ?? '400', description: errorDescription ?? 'validation failed'};
 };

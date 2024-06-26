@@ -2,16 +2,24 @@
     let {data} = $props();
 </script>
 
-<div>
+<main>
     {#if data.success}
-        <h1>Your account is validated!</h1>
-        <ul>
-            <li><a href="/">Start automating!</a></li>
-        </ul>
+        <h1>Account validated!</h1>
+        <a href="/home">Start automating!</a>
     {/if}
     {#if data.error}
-        <h1>There was an error while validating your account!</h1>
-        <p>Error #{data.code}</p>
+        <h1>There was an error while validating your account</h1>
         <p>{data.description}</p>
     {/if}
-</div>
+</main>
+
+<style>
+    main {
+        gap: 1rem;
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+</style>

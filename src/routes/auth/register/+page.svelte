@@ -2,36 +2,37 @@
     let {form} = $props();
 </script>
 
-<form method="POST">
-    <label>
-        Email:
-        <input name="email" type="email" value={form?.email ?? ''} required />
-    </label>
-    <label>
-        Password:
-        <input name="password" type="password" required />
-    </label>
-    <label>
-        Confirm Password:
-        <input name="confirmPassword" type="password" required />
-    </label>
-    <label>
+<main>
+    <form method="POST">
+        <h1>
+            <a href="/">Exeflow</a>
+        </h1>
+        <input name="email" type="email" placeholder="Email" value={form?.email ?? ''} required />
+        <input name="password" type="password" placeholder="Password" required />
+        <input name="confirmPassword" type="password" placeholder="Confirm password" required />
         <button type="submit">Register</button>
         <a href="/auth/login">Login instead</a>
-    </label>
 
-    {#if form?.failed}<p>{form.message}</p>{/if}
-    {#if form?.invalid}<p>Email and password fields are required</p>{/if}
-    {#if form?.success}
-        <p>Account created! Check your inbox ({form.email}) to validate your account</p>
-    {/if}
-</form>
+        {#if form?.failed}<p>{form.message}</p>{/if}
+        {#if form?.invalid}<p>Email and password fields are required</p>{/if}
+        {#if form?.success}
+            <p>Account created! Check your inbox ({form.email}) to validate your account</p>
+        {/if}
+    </form>
+</main>
 
 <style>
-    form {
-        gap: 0.6rem;
+    main {
         display: flex;
-        margin: 1.3rem auto;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    form {
+        gap: 0.5rem;
+        width: 16rem;
+        display: flex;
         flex-direction: column;
     }
 

@@ -2,28 +2,32 @@
     let {form} = $props();
 </script>
 
-<form method="POST">
-    <label>
-        Email:
-        <input name="email" type="email" value={form?.email ?? ''} required />
-    </label>
-    <label>
-        Password:
-        <input name="password" type="password" required />
-    </label>
-    <label>
+<main>
+    <form method="POST">
+        <h1>
+            <a href="/">Exeflow</a>
+        </h1>
+        <input name="email" type="email" value={form?.email ?? ''} placeholder="Email" required />
+        <input name="password" type="password" placeholder="Password" required />
         <button type="submit">Login</button>
         <a href="/auth/register">Register instead</a>
-    </label>
-    {#if form?.failed}<p class="error">{form.message}</p>{/if}
-    {#if form?.invalid}<p class="error">Email and password are required</p>{/if}
-</form>
+        {#if form?.failed}<p class="error">{form.message}</p>{/if}
+        {#if form?.invalid}<p class="error">Email and password are required</p>{/if}
+    </form>
+</main>
 
 <style>
-    form {
-        gap: 0.6rem;
+    main {
         display: flex;
-        margin: 1.3rem auto;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    form {
+        gap: 0.5rem;
+        width: 16rem;
+        display: flex;
         flex-direction: column;
     }
 
