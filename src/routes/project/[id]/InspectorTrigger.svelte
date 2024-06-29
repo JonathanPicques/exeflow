@@ -5,8 +5,8 @@
     let {node}: {node: TriggerNode} = $props();
     const {nodes, edges} = getGraphContext();
 
-    const exec = async () => {
-        const response = await fetch(`exec/${node.id}`, {method: 'POST', body: JSON.stringify({nodes: $nodes, edges: $edges})});
+    const run = async () => {
+        const response = await fetch(`run/${node.id}`, {method: 'POST', body: JSON.stringify({nodes: $nodes, edges: $edges})});
         if (!response.ok) throw new Error();
         if (!response.body) throw new Error();
         const bodyReader = response.body.pipeThrough(new TextDecoderStream()).getReader();
@@ -22,6 +22,16 @@
             );
         }
     };
+
+    const open = () => {
+        const path = node.data.data.config.value.path;
+        window.open(`/api/webhook${path}`);
+    };
 </script>
 
-<button onclick={exec}>Exec</button>
+<div>
+    <button onclick={run}>Run</button>
+    {#if node.data.id === 'webhook:webhook' && node.data.data.config.value.method === 'GET'}
+        <button onclick={open}>Open in new tab</button>
+    {/if}
+</div>
