@@ -33,10 +33,13 @@ export interface JsonSchemaNumber extends JsonSchemaAll<number> {
 
 export interface JsonSchemaString extends JsonSchemaAll<string> {
     type: 'string';
-    enum?: string[];
     format?: 'text';
-    enumLabels?: string[];
     placeholder?: string;
+    //
+    enum?: string[];
+    enumLabels?: string[];
+    //
+    suggestions?: string[];
 }
 
 export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {

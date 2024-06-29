@@ -1,4 +1,6 @@
 <script lang="ts">
+    import '@xyflow/svelte/dist/style.css';
+
     import {toPng} from 'html-to-image';
     import {Background, SvelteFlow, getNodesBounds, getViewportForBounds, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
@@ -10,10 +12,11 @@
     import {layoutGraph} from '$lib/flow/dagre/dagre';
     import {getGraphContext} from '$lib/core/core';
 
-    import '@xyflow/svelte/dist/style.css';
-
     const {nodes, edges, createNode} = getGraphContext();
     const {fitView, getViewport, setViewport, screenToFlowPosition} = useSvelteFlow();
+
+    const minZoom = 1;
+    const maxZoom = 4;
 
     const edgeTypes = {edge: CutEdge};
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};
@@ -32,10 +35,8 @@
         const duration = smooth && window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
         fitView({duration});
     };
-    export const screenshot = async () => {
-        const width = 320;
-        const height = 180;
-        const viewport = getViewportForBounds(getNodesBounds($nodes), width, height, 0.5, 2.0, 0.2);
+    export const screenshot = async ({width = 320, height = 180} = {}) => {
+        const viewport = getViewportForBounds(getNodesBounds($nodes), width, height, 0.1, 10, 0.2);
         const viewportElement = document.querySelector<HTMLElement>('.svelte-flow__viewport');
 
         if (viewport && viewportElement) {
@@ -103,7 +104,7 @@
     };
 </script>
 
-<SvelteFlow {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {onconnect} {isValidConnection} {ondrop} {ondragover}>
+<SvelteFlow {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {minZoom} {maxZoom} {onconnect} {isValidConnection} {ondrop} {ondragover}>
     <Background />
 </SvelteFlow>
 

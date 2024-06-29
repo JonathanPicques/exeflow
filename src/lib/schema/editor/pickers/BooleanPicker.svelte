@@ -2,6 +2,7 @@
     import type {JsonSchemaBoolean} from '$lib/schema/schema';
 
     interface Props {
+        id: string;
         value: boolean;
         schema: JsonSchemaBoolean;
         onchange?: () => void;

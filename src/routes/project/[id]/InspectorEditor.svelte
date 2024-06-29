@@ -18,6 +18,7 @@
 {#if form}
     <JsonSchemaEditor
         bind:value={form.value}
+        id={node.id}
         schema={form.schema}
         onchange={() => {
             form && updateNodeData(node.id, form.value);

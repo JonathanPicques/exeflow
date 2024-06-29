@@ -24,7 +24,7 @@ export const POST = async ({locals, params, request}) => {
             async start(stream) {
                 try {
                     const node = context.findNode(id);
-                    if (!isTriggerNode(node)) throw new Error(`can not execute an action`);
+                    if (!isTriggerNode(node)) throw new Error(`cannot execute an action`);
                     for await (const step of executeTrigger({
                         node,
                         signal: controller.signal,

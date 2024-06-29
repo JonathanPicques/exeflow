@@ -14,6 +14,10 @@ const configSchema = {
     },
 } satisfies JsonSchema;
 
+const urls = ['https://api.mistral.ai'];
+const models = ['mistral-small', 'mistral-medium', 'mistral-large'];
+const apiKeys = ['${env:MISTRAL_API_KEY}'];
+
 export default action<typeof configSchema>({
     icon,
     color: '#ff7000',
@@ -24,10 +28,10 @@ export default action<typeof configSchema>({
             type: 'object',
             required: ['model', 'prompt'],
             properties: {
-                url: {type: 'string', default: config.url},
-                apiKey: {type: 'string', default: config.apiKey},
+                url: {type: 'string', default: config.url, suggestions: urls},
+                apiKey: {type: 'string', default: config.apiKey, suggestions: apiKeys},
                 //
-                model: {type: 'string', default: config.model},
+                model: {type: 'string', default: config.model, suggestions: models},
                 prompt: {type: 'string', format: 'text', default: config.prompt},
             },
         };
@@ -40,7 +44,7 @@ export default action<typeof configSchema>({
                     url: form?.url ?? config?.url ?? 'https://api.mistral.ai',
                     apiKey: form?.apiKey ?? config?.apiKey ?? '',
                     //
-                    model: form?.model ?? config?.model ?? 'mistral',
+                    model: form?.model ?? config?.model ?? 'mistral-small',
                     prompt: form?.prompt ?? config?.prompt ?? '',
                 },
                 schema: configSchema,

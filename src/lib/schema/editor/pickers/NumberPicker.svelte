@@ -2,6 +2,7 @@
     import type {JsonSchemaNumber} from '$lib/schema/schema';
 
     interface Props {
+        id: string;
         value: number;
         schema: JsonSchemaNumber;
         onchange?: () => void;
