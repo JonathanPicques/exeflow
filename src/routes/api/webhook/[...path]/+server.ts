@@ -28,7 +28,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
 
     const controller = new AbortController();
     const responseStream = new ReadableStream({
-        async start(controller) {
+        async start(stream) {
             try {
                 for (const {content} of projects) {
                     const {nodes, edges} = content as Graph;
@@ -49,8 +49,9 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
                                     serverActions: serverPlugins.actions,
                                     serverTriggers: serverPlugins.triggers,
                                 })) {
+                                    if (controller.signal.aborted) return;
                                     if (step.node.pluginId === 'webhook:response' && valid(step.node.config, {type: 'object', required: ['data'], properties: {data: {}}})) {
-                                        controller.enqueue(step.node.config.data);
+                                        stream.enqueue(step.node.config.data);
                                     }
                                 }
                             }
@@ -58,10 +59,10 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
                     }
                 }
             } catch (e) {
+                stream.error(e);
                 console.error(e);
-                controller.error(e);
             } finally {
-                controller.close();
+                stream.close();
             }
         },
         cancel() {

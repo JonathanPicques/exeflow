@@ -17,23 +17,24 @@ export const POST = async ({locals, params, request}) => {
     if (valid(graph, graphSchema)) {
         const plugins = await loadPlugins();
         const context = new GraphContext({nodes: writable(graph.nodes), edges: writable(graph.edges), actions: plugins.actions, triggers: plugins.triggers});
+        const controller = new AbortController();
         const serverPlugins = await loadServerPlugins();
 
-        const controller = new AbortController();
         const responseStream = new ReadableStream({
-            async start(controller) {
+            async start(stream) {
                 try {
                     const node = context.findNode(id);
                     if (!isTriggerNode(node)) throw new Error(`can not execute an action`);
                     for await (const step of executeTrigger({node, context, serverActions: serverPlugins.actions, serverTriggers: serverPlugins.triggers})) {
-                        controller.enqueue(JSON.stringify(step));
-                        controller.enqueue('\n');
+                        if (controller.signal.aborted) return;
+                        stream.enqueue(JSON.stringify(step));
+                        stream.enqueue('\n');
                     }
                 } catch (e) {
+                    stream.error(e);
                     console.error(e);
-                    controller.error(e);
                 } finally {
-                    controller.close();
+                    stream.close();
                 }
             },
             cancel() {
