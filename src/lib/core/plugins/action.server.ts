@@ -9,6 +9,7 @@ export interface ServerAction<Config extends JsonSchema> {
 
 interface ExecArgs<Config extends JsonSchema> {
     config: InferJsonSchema<Config>;
+    signal: AbortSignal;
 }
 
 interface ExecStep {

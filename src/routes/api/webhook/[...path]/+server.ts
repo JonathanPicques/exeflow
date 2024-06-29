@@ -44,6 +44,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
                             if ((path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod) {
                                 for await (const step of executeTrigger({
                                     node: webhook,
+                                    signal: controller.signal,
                                     context,
                                     request,
                                     serverActions: serverPlugins.actions,

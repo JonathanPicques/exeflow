@@ -27,23 +27,25 @@ interface ExecuteStep {
 
 interface ActionExecuteArgs<T extends PluginNode> {
     node: T;
+    signal: AbortSignal;
     context: GraphContext;
     serverActions: Record<ActionId, ServerAction<JsonSchema>>;
 }
 
 interface TriggerExecuteArgs<T extends PluginNode> {
     node: T;
+    signal: AbortSignal;
     context: GraphContext;
     request?: Request;
     serverActions: Record<ActionId, ServerAction<JsonSchema>>;
     serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>>;
 }
 
-export const executeAction = async function* ({node, context, serverActions}: ActionExecuteArgs<ActionNode>, data: ExecuteData = {}): AsyncGenerator<ExecuteStep> {
+export const executeAction = async function* ({node, signal, context, serverActions}: ActionExecuteArgs<ActionNode>, data: ExecuteData = {}): AsyncGenerator<ExecuteStep> {
     const serverAction = serverActions[node.data.id];
     if (!serverAction) throw new Error(`server action ${node.data.id} not found`);
     const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data});
-    const generator = serverAction.exec({config});
+    const generator = serverAction.exec({config, signal});
 
     while (true) {
         const {done, value} = await generator.next();
@@ -58,24 +60,24 @@ export const executeAction = async function* ({node, context, serverActions}: Ac
             ...value,
         };
         data[node.id] = value.results;
-        if (value.out) {
+        if (value.out && !signal.aborted) {
             const next = context.findNextActionNode(node.id, value.out);
             if (next) {
-                yield* executeAction({node: next, context, serverActions}, data);
+                yield* executeAction({node: next, signal, context, serverActions}, data);
             }
         }
         if (done) break;
     }
 };
 
-export const executeTrigger = async function* ({node, context, request, serverActions, serverTriggers}: TriggerExecuteArgs<TriggerNode>): AsyncGenerator<ExecuteStep> {
+export const executeTrigger = async function* ({node, signal, context, request, serverActions, serverTriggers}: TriggerExecuteArgs<TriggerNode>): AsyncGenerator<ExecuteStep> {
     const serverTrigger = serverTriggers[node.data.id];
     if (!serverTrigger) throw new Error(`server trigger ${node.data.id} not found`);
 
     let first = true;
     const data: ExecuteData = {};
     const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data});
-    const generator = serverTrigger.exec({config, request});
+    const generator = serverTrigger.exec({config, signal, request});
 
     while (true) {
         const {done, value} = await generator.next();
@@ -91,10 +93,10 @@ export const executeTrigger = async function* ({node, context, request, serverAc
         };
         first = false;
         data[node.id] = value.results;
-        if (value.out) {
+        if (value.out && !signal.aborted) {
             const next = context.findNextActionNode(node.id, value.out);
             if (next) {
-                yield* executeAction({node: next, context, serverActions}, data);
+                yield* executeAction({node: next, signal, context, serverActions}, data);
             }
         }
         if (done) break;
