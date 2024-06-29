@@ -7,7 +7,7 @@ const configSchema = {
     properties: {
         tls: {type: 'boolean'},
         host: {type: 'string'},
-        port: {type: 'number'},
+        port: {type: 'string'},
         user: {type: 'string'},
         password: {type: 'string'},
         //
@@ -29,10 +29,10 @@ export default action<typeof configSchema>({
             type: 'object',
             properties: {
                 tls: {type: 'boolean', default: config.tls},
-                host: {type: 'string', default: config.host},
-                port: {type: 'number', default: config.port},
-                user: {type: 'string', default: config.user},
-                password: {type: 'string', default: config.password},
+                host: {type: 'string', default: config.host, suggestions: ['${env:SMTP_HOST}']},
+                port: {type: 'string', default: config.port, suggestions: ['${env:SMTP_PORT}', '587', '465', '2525']},
+                user: {type: 'string', default: config.user, suggestions: ['${env:SMTP_USER}']},
+                password: {type: 'string', default: config.password, suggestions: ['${env:SMTP_PASSWORD}']},
                 //
                 to: {type: 'string', default: config.to},
                 from: {type: 'string', default: config.from},
@@ -50,7 +50,7 @@ export default action<typeof configSchema>({
                 value: {
                     tls: form?.tls ?? config?.tls ?? true,
                     host: form?.host ?? config?.host ?? '',
-                    port: form?.port ?? config?.port ?? 587,
+                    port: form?.port ?? config?.port ?? '587',
                     user: form?.user ?? config?.user ?? '',
                     password: form?.password ?? config?.password ?? '',
                     //
