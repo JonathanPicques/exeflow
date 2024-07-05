@@ -4,6 +4,8 @@ interface JsonSchemaAll<T> {
     //
     title?: string;
     description?: string;
+    //
+    suggestions?: string[];
 }
 
 export interface JsonSchemaAny extends JsonSchemaAll<any> {
@@ -38,8 +40,6 @@ export interface JsonSchemaString extends JsonSchemaAll<string> {
     //
     enum?: string[];
     enumLabels?: string[];
-    //
-    suggestions?: string[];
 }
 
 export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {

@@ -8,7 +8,7 @@ const configSchema = {
     properties: {
         tls: {type: 'boolean'},
         host: {type: 'string'},
-        port: {type: 'string'},
+        port: {type: 'number'},
         user: {type: 'string'},
         password: {type: 'string'},
         //
@@ -28,7 +28,7 @@ export default trigger<typeof configSchema>({
             properties: {
                 tls: {type: 'boolean', default: config.tls},
                 host: {type: 'string', default: config.host, suggestions: ['${env:IMAP_HOST}']},
-                port: {type: 'string', default: config.port, suggestions: ['${env:IMAP_PORT}']},
+                port: {type: 'number', default: config.port, suggestions: ['${env:IMAP_PORT}', '993', '143']},
                 user: {type: 'string', default: config.user, suggestions: ['${env:IMAP_USER}']},
                 password: {type: 'string', default: config.password, suggestions: ['${env:IMAP_PASSWORD}']},
                 //
@@ -44,7 +44,7 @@ export default trigger<typeof configSchema>({
                 value: {
                     tls: form?.tls ?? config?.tls ?? true,
                     host: form?.host ?? config?.host ?? '',
-                    port: form?.port ?? config?.port ?? '',
+                    port: form?.port ?? config?.port ?? 993,
                     user: form?.user ?? config?.user ?? '',
                     password: form?.password ?? config?.password ?? '',
                     //

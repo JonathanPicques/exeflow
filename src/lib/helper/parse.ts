@@ -20,21 +20,16 @@ interface Variables {
 export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema: T, variables: Variables): InferJsonSchema<T> => {
     switch (schema.type) {
         case 'string':
-            return (value as string)
-                .replace(envRegex, match => {
-                    const name = match.substring(6, match.length - 1); // extract NAME from ${env:NAME}
-                    if (name.startsWith('EXEFLOW_')) {
-                        console.error(`${match} is a reserved env variable`);
-                        return '';
-                    }
-                    return variables.env[name] ?? '';
-                })
-                .replaceAll(nodeRegex, match => {
-                    const [nodeId, result] = match.substring(7, match.length - 1).split(':'); // extract NODE_ID:RESULT from ${node:NODE_ID:RESULT}
-                    return (variables.node[nodeId]?.[result] as string) ?? '';
-                }) as InferJsonSchema<T>;
+            return evaluate(value, variables) as InferJsonSchema<T>;
         case 'number':
+            if (typeof value === 'string') {
+                return parseFloat(evaluate(value, variables)) as InferJsonSchema<T>;
+            }
+            return value;
         case 'boolean':
+            if (typeof value === 'string') {
+                return new Boolean(evaluate(value, variables)).valueOf() as InferJsonSchema<T>;
+            }
             return value;
         case 'object': {
             return Object.keys(schema.properties ?? {}).reduce((obj, key) => {
@@ -61,12 +56,22 @@ export const constant = (value: unknown): boolean => {
         case 'number':
         case 'boolean':
             return true;
-        case 'object': {
-            if (Array.isArray(value)) {
-                return value.every(v => constant(v));
-            }
-            return Object.values(value as Record<string, unknown>).every(v => constant(v));
-        }
     }
     throw new Error(`constant not yet implemented for ${value} of type ${typeof value}`);
+};
+
+const evaluate = (str: string, variables: Variables): string => {
+    return str
+        .replace(envRegex, match => {
+            const name = match.substring(6, match.length - 1); // extract NAME from ${env:NAME}
+            if (name.startsWith('EXEFLOW_')) {
+                console.error(`${match} is a reserved env variable`);
+                return '';
+            }
+            return variables.env[name] ?? '';
+        })
+        .replaceAll(nodeRegex, match => {
+            const [nodeId, result] = match.substring(7, match.length - 1).split(':'); // extract NODE_ID:RESULT from ${node:NODE_ID:RESULT}
+            return (variables.node[nodeId]?.[result] as string) ?? '';
+        });
 };
