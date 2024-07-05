@@ -19,17 +19,18 @@
             </option>
         {/each}
     </select>
-{:else if schema.suggestions}
-    <input type="text" bind:value list={joinId(id, 'suggestions')} placeholder={schema.placeholder} onblur={onchange} />
-    <datalist id={joinId(id, 'suggestions')}>
-        {#each schema.suggestions! as suggestion}
-            <option value={suggestion}>{suggestion}</option>
-        {/each}
-    </datalist>
 {:else if schema.format === 'text'}
     <textarea bind:value rows={3} placeholder={schema.placeholder} onblur={onchange}></textarea>
 {:else}
-    <input type="text" bind:value placeholder={schema.placeholder} onblur={onchange} />
+    {@const listId = joinId(id, 'suggestions')}
+    {@const suggestions = schema.suggestions || []}
+
+    <input type="text" bind:value list={listId} placeholder={schema.placeholder} onblur={onchange} />
+    <datalist id={listId}>
+        {#each suggestions as suggestion}
+            <option value={suggestion}>{suggestion}</option>
+        {/each}
+    </datalist>
 {/if}
 
 <style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {joinId} from '$lib/helper/html';
     import type {JsonSchemaBoolean} from '$lib/schema/schema';
 
     interface Props {
@@ -7,7 +8,7 @@
         schema: JsonSchemaBoolean;
         onchange?: () => void;
     }
-    let {value = $bindable(), onchange}: Props = $props();
+    let {id, value = $bindable(), schema, onchange}: Props = $props();
 
     const toggleExpression = (e: Event) => {
         e.preventDefault();
@@ -27,7 +28,15 @@
 </script>
 
 {#if typeof value === 'string'}
-    <input type="text" bind:value onblur={onchange} oncontextmenu={toggleExpression} />
+    {@const listId = joinId(id, 'suggestions')}
+    {@const suggestions = schema.suggestions || []}
+
+    <input type="text" bind:value list={listId} onblur={onchange} oncontextmenu={toggleExpression} />
+    <datalist id={listId}>
+        {#each suggestions as suggestion}
+            <option value={suggestion}>{suggestion}</option>
+        {/each}
+    </datalist>
 {:else}
     <input type="checkbox" bind:checked={value} onblur={onchange} oncontextmenu={toggleExpression} />
 {/if}
