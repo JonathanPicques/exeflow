@@ -14,8 +14,9 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
     const triggers = await db
         .selectFrom('triggers')
         .select('project_id')
-        .where('query', '=', `${method} ${path}`)
         .where('plugin_id', '=', 'webhook:webhook' as TriggersPluginId)
+        .where(e => e.ref('config', '->').key('value').key('path'), '=', JSON.stringify(path))
+        .where(e => e.ref('config', '->').key('value').key('method'), '=', JSON.stringify(method))
         .execute();
     if (triggers.length === 0) throw error(404);
 
@@ -78,7 +79,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
     });
 };
 
-export const GET = ({locals, params, request}) => execute(locals.db, request, params.path || '/', 'GET');
-export const POST = ({locals, params, request}) => execute(locals.db, request, params.path || '/', 'POST');
-export const PATCH = ({locals, params, request}) => execute(locals.db, request, params.path || '/', 'PATCH');
-export const DELETE = ({locals, params, request}) => execute(locals.db, request, params.path || '/', 'DELETE');
+export const GET = ({locals, params, request}) => execute(locals.db, request, `/${params.path}`, 'GET');
+export const POST = ({locals, params, request}) => execute(locals.db, request, `/${params.path}`, 'POST');
+export const PATCH = ({locals, params, request}) => execute(locals.db, request, `/${params.path}`, 'PATCH');
+export const DELETE = ({locals, params, request}) => execute(locals.db, request, `/${params.path}`, 'DELETE');

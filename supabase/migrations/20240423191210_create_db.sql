@@ -17,7 +17,7 @@ create table public.triggers (
     plugin_id text not null,
     project_id bigint not null,
     --
-    query text,
+    config jsonb,
     --
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone not null default now(),

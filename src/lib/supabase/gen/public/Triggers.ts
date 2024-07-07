@@ -15,7 +15,7 @@ export default interface TriggersTable {
 
   project_id: ColumnType<ProjectsId, ProjectsId, ProjectsId>;
 
-  query: ColumnType<string | null, string | null, string | null>;
+  config: ColumnType<{value: Record<string, unknown>, schema: {}}>;
 
   created_at: ColumnType<Date, Date | string | undefined, Date | string>;
 

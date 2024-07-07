@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {fetchMe} from './api/me/me.api';
+    import {fetchMe} from './api/me/me';
 </script>
 
 <nav>

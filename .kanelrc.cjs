@@ -15,6 +15,14 @@ module.exports = {
     preRenderHooks: [makeKyselyHook()],
     postRenderHooks: [
         (path, lines) => {
+            if (path.endsWith('Triggers.ts')) {
+                return lines.map(line => {
+                    if (line === '  config: ColumnType<unknown | null, unknown | null, unknown | null>;') {
+                        return `  config: ColumnType<{value: Record<string, unknown>, schema: {}}>;`;
+                    }
+                    return line;
+                });
+            }
             if (path.endsWith('Database.ts')) {
                 return lines.map(line => {
                     if (line.startsWith('export default')) {

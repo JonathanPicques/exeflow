@@ -34,8 +34,6 @@ export const PATCH = async ({locals, params, request}) => {
             .execute();
         await Promise.all(
             triggerNodes.map(triggerNode => {
-                const query = triggerNode.data.id === 'webhook:webhook' ? `${triggerNode.data.data.config.value.method} ${triggerNode.data.data.config.value.path}` : null;
-
                 return trx
                     .insertInto('triggers')
                     .values({
@@ -43,9 +41,14 @@ export const PATCH = async ({locals, params, request}) => {
                         plugin_id: triggerNode.data.id as TriggersPluginId,
                         project_id: params.id as ProjectsId,
                         //
-                        query,
+                        config: triggerNode.data.data.config,
                     })
-                    .onConflict(oc => oc.constraint('public_triggers_pkey').doUpdateSet({query}))
+                    .onConflict(oc =>
+                        oc.constraint('public_triggers_pkey').doUpdateSet({
+                            config: triggerNode.data.data.config,
+                            updated_at: new Date(),
+                        }),
+                    )
                     .execute();
             }),
         );
