@@ -104,13 +104,13 @@ export const executeTrigger = async function* ({node, signal, context, request, 
 };
 
 export const importServerPlugins = async () => {
-    const pluginModules = import.meta.glob('$lib/plugins/**/*.server.ts');
     const serverActions: Record<ActionId, ServerAction<JsonSchema>> = {};
     const serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>> = {};
+    const serverPluginModules = import.meta.glob('$lib/plugins/**/*.server.ts', {eager: true, import: 'default'});
 
-    for (const [path, module] of Object.entries(pluginModules)) {
+    for (const [path, module] of Object.entries(serverPluginModules)) {
         const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.server.ts', '');
-        const plugin = ((await module()) as {default: ServerAction<JsonSchema> | ServerTrigger<JsonSchema>}).default;
+        const plugin = module as ServerAction<JsonSchema> | ServerTrigger<JsonSchema>;
 
         switch (plugin.type) {
             case 'serverAction':

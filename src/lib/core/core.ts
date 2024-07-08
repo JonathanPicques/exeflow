@@ -173,11 +173,11 @@ export const graphSchema = {
 export const importPlugins = async () => {
     const actions: Record<ActionId, Action<JsonSchema>> = {};
     const triggers: Record<TriggerId, Trigger<JsonSchema>> = {};
-    const pluginModules = import.meta.glob(['$lib/plugins/**/*.ts', '!$lib/plugins/**/*.server.ts']);
+    const pluginModules = import.meta.glob(['$lib/plugins/**/*.ts', '!$lib/plugins/**/*.server.ts'], {eager: true, import: 'default'});
 
     for (const [path, module] of Object.entries(pluginModules)) {
         const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.ts', ''); // transforms '/src/lib/plugins/discord/sendMessage.ts' to 'discord:sendMessage'
-        const plugin = ((await module()) as {default: Action<JsonSchema> | Trigger<JsonSchema>}).default;
+        const plugin = module as Action<JsonSchema> | Trigger<JsonSchema>;
 
         switch (plugin.type) {
             case 'action':
