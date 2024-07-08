@@ -169,3 +169,26 @@ export const graphSchema = {
         edges: {type: 'array', items: edgeSchema},
     },
 } satisfies JsonSchema;
+
+export const importPlugins = async () => {
+    const actions: Record<ActionId, Action<JsonSchema>> = {};
+    const triggers: Record<TriggerId, Trigger<JsonSchema>> = {};
+    const pluginModules = import.meta.glob(['$lib/plugins/**/*.ts', '!$lib/plugins/**/*.server.ts']);
+
+    for (const [path, module] of Object.entries(pluginModules)) {
+        const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.ts', ''); // transforms '/src/lib/plugins/discord/sendMessage.ts' to 'discord:sendMessage'
+        const plugin = ((await module()) as {default: Action<JsonSchema> | Trigger<JsonSchema>}).default;
+
+        switch (plugin.type) {
+            case 'action':
+                actions[id] = plugin;
+                break;
+            case 'trigger':
+                triggers[id] = plugin;
+                break;
+            default:
+                throw new Error(`malformed plugin ${id}`);
+        }
+    }
+    return {actions, triggers};
+};

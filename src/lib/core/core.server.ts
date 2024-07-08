@@ -102,3 +102,26 @@ export const executeTrigger = async function* ({node, signal, context, request, 
         if (done) break;
     }
 };
+
+export const importServerPlugins = async () => {
+    const pluginModules = import.meta.glob('$lib/plugins/**/*.server.ts');
+    const serverActions: Record<ActionId, ServerAction<JsonSchema>> = {};
+    const serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>> = {};
+
+    for (const [path, module] of Object.entries(pluginModules)) {
+        const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.server.ts', '');
+        const plugin = ((await module()) as {default: ServerAction<JsonSchema> | ServerTrigger<JsonSchema>}).default;
+
+        switch (plugin.type) {
+            case 'serverAction':
+                serverActions[id] = plugin;
+                break;
+            case 'serverTrigger':
+                serverTriggers[id] = plugin;
+                break;
+            default:
+                throw new Error(`malformed server plugin ${id}`);
+        }
+    }
+    return {serverActions, serverTriggers};
+};

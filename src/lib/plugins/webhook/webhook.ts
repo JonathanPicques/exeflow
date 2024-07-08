@@ -2,12 +2,14 @@ import icon from './icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
 
+const methods = ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE', 'OPTIONS'];
+
 const configSchema = {
     type: 'object',
     required: ['path', 'method'] as const,
     properties: {
         path: {type: 'string'},
-        method: {type: 'string'},
+        method: {type: 'string', enum: methods},
     },
 } satisfies JsonSchema;
 
@@ -21,7 +23,7 @@ export default trigger<typeof configSchema>({
             type: 'object',
             properties: {
                 path: {type: 'string', default: config.path},
-                method: {type: 'string', enum: ['GET', 'POST', 'PATCH', 'DELETE'], default: config.method},
+                method: {type: 'string', enum: methods, default: config.method},
             },
         };
     },
