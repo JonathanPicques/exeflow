@@ -18,11 +18,18 @@ export const GET = async ({locals, params}) => {
 
     const logs = await locals.db
         .selectFrom('logs')
-        .select(['plugin_id', 'config', 'results', 'created_at'])
+        .select(['config', 'results', 'plugin_id', 'created_at'])
         .where('exec_id', '=', params.exec_id as LogsExecId)
         .where('project_id', '=', params.id as ProjectsId)
         .orderBy('created_at')
         .execute();
 
-    return json(logs);
+    return json(
+        logs.map(({plugin_id, config, results, created_at}) => ({
+            config,
+            results,
+            pluginId: plugin_id,
+            createdAt: created_at,
+        })),
+    );
 };

@@ -5,6 +5,7 @@
     import {SvelteFlowProvider} from '@xyflow/svelte';
 
     import Flow from '$lib/flow/Flow.svelte';
+    import Logs from './Logs.svelte';
     import Inspector from './Inspector.svelte';
 
     import {valid} from '$lib/schema/validate';
@@ -13,6 +14,8 @@
     import {graphSchema, setGraphContext} from '$lib/core/core';
 
     let flow: Flow;
+    let dialog: HTMLDialogElement;
+
     let {data} = $props();
 
     const nodes = writable(data.project.content.nodes);
@@ -42,6 +45,9 @@
 
     const layout = () => flow.layout();
     const fitToView = () => flow.fitToView();
+
+    const showLogs = () => dialog.showModal();
+    const closeLogs = () => dialog.close();
 
     const exportToClipboard = () => {
         const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
@@ -77,6 +83,9 @@
         <button onclick={layout} use:shortcut={'ctrl+alt+l'}>Layout</button>
         <button onclick={fitToView} use:shortcut={'ctrl+alt+c'}>Fit to view</button>
         {#if true}
+            <button onclick={showLogs}>Logs</button>
+        {/if}
+        {#if true}
             <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
             <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
         {/if}
@@ -92,6 +101,11 @@
             </section>
         </SplitPane>
     </main>
+
+    <dialog bind:this={dialog}>
+        <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
+        <button onclick={closeLogs}>Close</button>
+    </dialog>
 </SvelteFlowProvider>
 
 <style>
@@ -106,6 +120,12 @@
         display: flex;
         overflow: hidden;
         flex-grow: 1;
+        flex-direction: column;
+    }
+
+    dialog:modal {
+        gap: 1rem;
+        display: flex;
         flex-direction: column;
     }
 

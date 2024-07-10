@@ -20,8 +20,8 @@ export const GET = async ({locals, params}) => {
         .selectFrom('logs')
         .select([
             'exec_id',
-            sql<Date>`max(created_at)`.as('ended_at'),
             sql<Date>`min(created_at)`.as('started_at'),
+            sql<Date>`max(created_at)`.as('finished_at'),
             sql<string[]>`json_agg(plugin_id order by "index" asc)`.as('plugins'),
         ])
         .groupBy('exec_id')
@@ -29,10 +29,17 @@ export const GET = async ({locals, params}) => {
         .where('project_id', '=', params.id as ProjectsId);
     const query = await locals.db
         .selectFrom(inner.as('inner'))
-        .select(['exec_id', 'plugins', 'ended_at', 'started_at'])
-        .orderBy(['started_at', 'ended_at'])
+        .select(['exec_id', 'plugins', 'started_at', 'finished_at'])
+        .orderBy(['started_at', 'finished_at'])
         //
         .execute();
 
-    return json(query);
+    return json(
+        query.map(({plugins, exec_id, started_at, finished_at}) => ({
+            execId: exec_id,
+            plugins,
+            startedAt: started_at,
+            finishedAt: finished_at,
+        })),
+    );
 };
