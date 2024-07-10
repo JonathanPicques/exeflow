@@ -103,8 +103,8 @@
     </main>
 
     <dialog bind:this={dialog}>
+        <button onclick={closeLogs} style:align-self="end">Close</button>
         <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
-        <button onclick={closeLogs}>Close</button>
     </dialog>
 </SvelteFlowProvider>
 
@@ -123,10 +123,14 @@
         flex-direction: column;
     }
 
-    dialog:modal {
-        gap: 1rem;
-        display: flex;
-        flex-direction: column;
+    dialog {
+        padding: 1rem;
+
+        &:modal {
+            gap: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
     }
 
     .inspector {

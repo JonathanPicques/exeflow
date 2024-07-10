@@ -25,12 +25,12 @@ export const GET = async ({locals, params}) => {
             sql<string[]>`json_agg(plugin_id order by "index" asc)`.as('plugins'),
         ])
         .groupBy('exec_id')
-        .orderBy('exec_id')
+        .orderBy('exec_id desc')
         .where('project_id', '=', params.id as ProjectsId);
     const query = await locals.db
         .selectFrom(inner.as('inner'))
         .select(['exec_id', 'plugins', 'started_at', 'finished_at'])
-        .orderBy(['started_at', 'finished_at'])
+        .orderBy(['started_at desc', 'finished_at desc'])
         //
         .execute();
 

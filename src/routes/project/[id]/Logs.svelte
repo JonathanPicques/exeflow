@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {fetchLogs} from '../../api/project/logs';
+    import {fetchLogsGroups} from '../../api/project/logs';
     import type {Action} from '$lib/core/plugins/action';
     import type {Trigger} from '$lib/core/plugins/trigger';
     import type {JsonSchema} from '$lib/schema/schema';
@@ -13,35 +13,32 @@
     let {actions, triggers, projectId}: Props = $props();
 </script>
 
-<div class="logs">
-    {#await fetchLogs(projectId)}
-        Loading...
-    {:then logs}
-        {#each logs as log}
-            <div class="item">
-                <span>{log.startedAt}</span>
-                <span>{log.finishedAt}</span>
-
+<div class="main">
+    {#await fetchLogsGroups(projectId) then logsGroups}
+        {#each logsGroups as logGroup}
+            <div class="group">
                 <div class="plugins">
-                    {#each log.plugins as plugin}
+                    {#each logGroup.plugins as plugin}
                         {@const image = actions[plugin]?.icon ?? triggers[plugin]?.icon ?? 'data:null'}
 
-                        <img src={image} alt="" />
+                        <img src={image} alt="" title={plugin} />
                     {/each}
                 </div>
+                <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>
             </div>
         {/each}
     {/await}
 </div>
 
 <style>
-    .logs {
+    .main {
         gap: 1rem;
         display: flex;
         flex-direction: column;
     }
 
-    .item {
+    .group {
+        gap: 0.5rem;
         display: flex;
         padding: 1rem;
         overflow: hidden;
@@ -53,6 +50,7 @@
     }
 
     .plugins {
+        height: 3rem;
         display: flex;
         overflow: auto;
         flex-direction: row;

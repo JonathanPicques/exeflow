@@ -21,7 +21,7 @@ export const GET = async ({locals, params}) => {
         .select(['config', 'results', 'plugin_id', 'created_at'])
         .where('exec_id', '=', params.exec_id as LogsExecId)
         .where('project_id', '=', params.id as ProjectsId)
-        .orderBy('created_at')
+        .orderBy('created_at desc')
         .execute();
 
     return json(

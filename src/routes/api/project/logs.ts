@@ -1,7 +1,7 @@
 import type {Project} from './project';
 import type {PluginId} from '$lib/core/core';
 
-export interface Logs {
+export interface LogsGroups {
     execId: string;
     plugins: PluginId[];
     startedAt: Date;
@@ -13,16 +13,16 @@ export interface LogsEntry {
     createdAt: Date;
 }
 
-export const fetchLogs = async (projectId: Project['id']) => {
+export const fetchLogsGroups = async (projectId: Project['id']) => {
     const response = await fetch(`/api/project/${projectId}/logs`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });
 
-    return (await response.json()) as Logs[];
+    return (await response.json()) as LogsGroups[];
 };
 
-export const fetchLogsEntries = async (projectId: Project['id'], logsExecId: Logs['execId']) => {
+export const fetchLogsEntries = async (projectId: Project['id'], logsExecId: LogsGroups['execId']) => {
     const response = await fetch(`/api/project/${projectId}/logs/${logsExecId}`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
