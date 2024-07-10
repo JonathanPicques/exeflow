@@ -11,7 +11,7 @@ import type {TriggerNode} from '$lib/core/graph/nodes';
 
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggersPluginId} from '$lib/supabase/gen/public/Triggers';
-import type {LogsExecId, LogsNodeId, LogsPluginId} from '$lib/supabase/gen/public/Logs.js';
+import type {LogsExecId, LogsNodeId, LogsPluginId} from '$lib/supabase/gen/public/Logs';
 
 const log = (db: Db, index: number, execId: string, nodeId: string, pluginId: string, projectId: string, config: unknown, results: unknown) => {
     db.insertInto('logs')

@@ -3,8 +3,9 @@ import {json, error} from '@sveltejs/kit';
 import {valid} from '$lib/schema/validate';
 import {graphSchema} from '$lib/core/core';
 import type {JsonSchema} from '$lib/schema/schema';
-import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggerNode} from '$lib/core/graph/nodes';
+
+import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggersNodeId, TriggersPluginId} from '$lib/supabase/gen/public/Triggers';
 
 const patchSchema = {
