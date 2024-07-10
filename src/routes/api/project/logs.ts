@@ -13,7 +13,7 @@ export interface LogsEntry {
     createdAt: Date;
 }
 
-export const fetchLogsGroups = async (projectId: Project['id']) => {
+export const getLogsGroups = async (projectId: Project['id']) => {
     const response = await fetch(`/api/project/${projectId}/logs`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
@@ -22,11 +22,19 @@ export const fetchLogsGroups = async (projectId: Project['id']) => {
     return (await response.json()) as LogsGroups[];
 };
 
-export const fetchLogsEntries = async (projectId: Project['id'], logsExecId: LogsGroups['execId']) => {
+export const getLogsEntries = async (projectId: Project['id'], logsExecId: LogsGroups['execId']) => {
     const response = await fetch(`/api/project/${projectId}/logs/${logsExecId}`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });
 
     return (await response.json()) as LogsEntry[];
+};
+
+export const deleteLogsGroups = async (projectId: Project['id']) => {
+    await fetch(`/api/project/${projectId}/logs`, {method: 'DELETE'});
+};
+
+export const deleteLogsEntries = async (projectId: Project['id'], logsExecId: LogsGroups['execId']) => {
+    await fetch(`/api/project/${projectId}/logs/${logsExecId}`, {method: 'DELETE'});
 };

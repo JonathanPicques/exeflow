@@ -29,9 +29,5 @@ export const patchProject = async ({id, image, content}: Pick<Project, 'id' | 'i
 };
 
 export const deleteProject = async ({id}: Pick<Project, 'id'>) => {
-    const response = await fetch(`/api/project/${id}`, {
-        method: 'DELETE',
-    });
-
-    return (await response.json()) as {id: string};
+    await fetch(`/api/project/${id}`, {method: 'DELETE'});
 };

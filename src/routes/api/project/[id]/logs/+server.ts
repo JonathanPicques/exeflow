@@ -43,3 +43,25 @@ export const GET = async ({locals, params}) => {
         })),
     );
 };
+
+export const DELETE = async ({locals, params}) => {
+    const user = await locals.user();
+    if (!user) throw error(401);
+
+    const project = await locals.db
+        .selectFrom('projects')
+        .select('id')
+        .where('id', '=', params.id as ProjectsId)
+        .where('owner_id', '=', user.id)
+        .limit(1)
+        .executeTakeFirst();
+    if (!project) throw error(404);
+
+    const {numDeletedRows} = await locals.db
+        .deleteFrom('logs')
+        .where('project_id', '=', params.id as ProjectsId)
+        .executeTakeFirst();
+    if (numDeletedRows < 1) throw error(500);
+
+    return new Response(null, {status: 200});
+};

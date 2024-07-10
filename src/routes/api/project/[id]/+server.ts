@@ -81,5 +81,5 @@ export const DELETE = async ({locals, params}) => {
         .executeTakeFirst();
     if (numDeletedRows < 1) throw error(500);
 
-    return json({id: params.id});
+    return new Response(null, {status: 200});
 };

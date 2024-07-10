@@ -1,9 +1,9 @@
 <script lang="ts">
-    import {fetchMe} from './api/me/me';
+    import {getMe} from './api/me/me';
 </script>
 
 <nav>
-    {#await fetchMe()}
+    {#await getMe()}
         <div style:visibility="hidden">
             <span>Loading</span>
         </div>

@@ -1,6 +1,6 @@
 import {valid} from '$lib/schema/validate';
 
-export const fetchMe = async () => {
+export const getMe = async () => {
     const response = await fetch(`/api/me`, {method: 'GET'});
 
     if (response.status === 200) {

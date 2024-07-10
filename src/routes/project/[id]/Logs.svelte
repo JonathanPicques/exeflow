@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {fetchLogsGroups} from '../../api/project/logs';
+    import {getLogsGroups} from '../../api/project/logs';
     import type {Action} from '$lib/core/plugins/action';
     import type {Trigger} from '$lib/core/plugins/trigger';
     import type {JsonSchema} from '$lib/schema/schema';
@@ -14,7 +14,7 @@
 </script>
 
 <div class="main">
-    {#await fetchLogsGroups(projectId) then logsGroups}
+    {#await getLogsGroups(projectId) then logsGroups}
         {#each logsGroups as logGroup}
             <div class="group">
                 <div class="plugins">
