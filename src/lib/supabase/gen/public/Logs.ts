@@ -22,6 +22,8 @@ export default interface LogsTable {
 
   out: ColumnType<string | null, string | null, string | null>;
 
+  index: ColumnType<number, number, number>;
+
   config: ColumnType<unknown, unknown, unknown>;
 
   results: ColumnType<unknown, unknown, unknown>;

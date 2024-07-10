@@ -13,16 +13,19 @@ import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggersPluginId} from '$lib/supabase/gen/public/Triggers';
 import type {LogsExecId, LogsNodeId, LogsPluginId} from '$lib/supabase/gen/public/Logs.js';
 
-const log = (db: Db, id: string, nodeId: string, pluginId: string, projectId: string, config: unknown, results: unknown) => {
+const log = (db: Db, index: number, execId: string, nodeId: string, pluginId: string, projectId: string, config: unknown, results: unknown) => {
     db.insertInto('logs')
         .values({
-            exec_id: id as LogsExecId,
+            exec_id: execId as LogsExecId,
             node_id: nodeId as LogsNodeId,
             plugin_id: pluginId as LogsPluginId,
             project_id: projectId as ProjectsId,
             //
+            index,
             config,
             results,
+            //
+            created_at: new Date(),
         })
         .execute()
         .catch(e => {
@@ -52,6 +55,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
     const responseStream = new ReadableStream({
         async start(stream) {
             try {
+                let index = 0;
                 for (const {id: projectId, content} of projects) {
                     const {nodes, edges} = content as Graph;
                     const webhooks = nodes.filter(n => n.type === 'trigger' && n.data.id === 'webhook:webhook') as TriggerNode[];
@@ -69,7 +73,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
                                     if (step.pluginId === 'webhook:response' && valid(step.config, {type: 'object', required: ['data'], properties: {data: {}}})) {
                                         stream.enqueue(step.config.data);
                                     }
-                                    log(db, executionId, step.nodeId, step.pluginId, projectId, step.config, step.results);
+                                    log(db, index++, executionId, step.nodeId, step.pluginId, projectId, step.config, step.results);
                                 }
                             }
                         }

@@ -19,6 +19,7 @@ create table public.logs (
     project_id bigint not null,
     --
     out text,
+    index int4 not null,
     config jsonb not null,
     results jsonb not null,
     --
