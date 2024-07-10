@@ -12,6 +12,22 @@ create table public.projects (
     constraint public_projects_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade
 ) tablespace pg_default;
 
+create table public.logs (
+    exec_id uuid not null,
+    node_id text not null,
+    plugin_id text not null,
+    project_id bigint not null,
+    --
+    out text,
+    config jsonb not null,
+    results jsonb not null,
+    --
+    created_at timestamp with time zone not null default now(),
+    --
+    constraint public_logs_pkey primary key (exec_id, node_id, plugin_id, project_id),
+    constraint public_logs_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
+) tablespace pg_default;
+
 create table public.triggers (
     node_id text not null,
     plugin_id text not null,

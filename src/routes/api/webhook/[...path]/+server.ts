@@ -1,5 +1,6 @@
 import {error} from '@sveltejs/kit';
 import {writable} from 'svelte/store';
+import {randomUUID} from 'crypto';
 
 import {valid} from '$lib/schema/validate';
 import {GraphContext, importPlugins} from '$lib/core/core';
@@ -7,7 +8,27 @@ import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
 import type {Db} from '$lib/supabase/db.server';
 import type {Graph} from '$lib/core/core';
 import type {TriggerNode} from '$lib/core/graph/nodes';
+
+import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggersPluginId} from '$lib/supabase/gen/public/Triggers';
+import type {LogsExecId, LogsNodeId, LogsPluginId} from '$lib/supabase/gen/public/Logs.js';
+
+const log = (db: Db, id: string, nodeId: string, pluginId: string, projectId: string, config: unknown, results: unknown) => {
+    db.insertInto('logs')
+        .values({
+            exec_id: id as LogsExecId,
+            node_id: nodeId as LogsNodeId,
+            plugin_id: pluginId as LogsPluginId,
+            project_id: projectId as ProjectsId,
+            //
+            config,
+            results,
+        })
+        .execute()
+        .catch(e => {
+            console.error('failed to log', e); // silently ignore
+        });
+};
 
 const execute = async (db: Db, request: Request, path: string, method: string) => {
     const triggerRows = await db
@@ -20,9 +41,10 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
     if (triggerRows.length === 0) throw error(404);
 
     const triggerProjectIds = triggerRows.map(t => t.project_id);
-    const projects = await db.selectFrom('projects').select('content').where('id', 'in', triggerProjectIds).execute();
+    const projects = await db.selectFrom('projects').select(['id', 'content']).where('id', 'in', triggerProjectIds).execute();
     if (projects.length === 0) throw error(404);
 
+    const executionId = randomUUID();
     const {actions, triggers} = await importPlugins();
     const {serverActions, serverTriggers} = await importServerPlugins();
 
@@ -30,7 +52,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
     const responseStream = new ReadableStream({
         async start(stream) {
             try {
-                for (const {content} of projects) {
+                for (const {id: projectId, content} of projects) {
                     const {nodes, edges} = content as Graph;
                     const webhooks = nodes.filter(n => n.type === 'trigger' && n.data.id === 'webhook:webhook') as TriggerNode[];
 
@@ -47,6 +69,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
                                     if (step.pluginId === 'webhook:response' && valid(step.config, {type: 'object', required: ['data'], properties: {data: {}}})) {
                                         stream.enqueue(step.config.data);
                                     }
+                                    log(db, executionId, step.nodeId, step.pluginId, projectId, step.config, step.results);
                                 }
                             }
                         }
