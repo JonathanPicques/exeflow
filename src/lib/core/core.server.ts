@@ -14,14 +14,12 @@ interface ExecuteData {
 }
 
 interface ExecuteStep {
+    nodeId: PluginNode['id'];
+    pluginId: PluginId;
+    pluginType: Plugin['type'];
+    //
     out?: string;
-    node: {
-        id: PluginNode['id'];
-        config: unknown;
-        pluginId: PluginId;
-        pluginType: Plugin['type'];
-    };
-    first?: boolean;
+    config: unknown;
     results: Record<string, unknown>;
 }
 
@@ -44,20 +42,20 @@ interface TriggerExecuteArgs<T extends PluginNode> {
 export const executeAction = async function* ({node, signal, context, serverActions}: ActionExecuteArgs<ActionNode>, data: ExecuteData = {}): AsyncGenerator<ExecuteStep> {
     const serverAction = serverActions[node.data.id];
     if (!serverAction) throw new Error(`server action ${node.data.id} not found`);
+
     const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data});
     const generator = serverAction.exec({config, signal});
 
     while (true) {
         const {done, value} = await generator.next();
         yield {
-            node: {
-                id: node.id,
-                config,
-                pluginId: node.data.id,
-                pluginType: node.type,
-            },
-            first: true,
-            ...value,
+            nodeId: node.id,
+            pluginId: node.data.id,
+            pluginType: node.type,
+            //
+            out: value.out,
+            config,
+            results: value.results,
         };
         data[node.id] = value.results;
         if (value.out && !signal.aborted) {
@@ -74,7 +72,6 @@ export const executeTrigger = async function* ({node, signal, context, request, 
     const serverTrigger = serverTriggers[node.data.id];
     if (!serverTrigger) throw new Error(`server trigger ${node.data.id} not found`);
 
-    let first = true;
     const data: ExecuteData = {};
     const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data});
     const generator = serverTrigger.exec({config, signal, request});
@@ -82,16 +79,14 @@ export const executeTrigger = async function* ({node, signal, context, request, 
     while (true) {
         const {done, value} = await generator.next();
         yield {
-            node: {
-                id: node.id,
-                config,
-                pluginId: node.data.id,
-                pluginType: node.type,
-            },
-            first,
-            ...value,
+            nodeId: node.id,
+            pluginId: node.data.id,
+            pluginType: node.type,
+            //
+            out: value.out,
+            config,
+            results: value.results,
         };
-        first = false;
         data[node.id] = value.results;
         if (value.out && !signal.aborted) {
             const next = context.findNextActionNode(node.id, value.out);

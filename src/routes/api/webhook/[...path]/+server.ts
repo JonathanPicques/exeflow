@@ -44,8 +44,8 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
                             if ((path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod) {
                                 for await (const step of executeTrigger({node: webhook, signal: controller.signal, context, request, serverActions, serverTriggers})) {
                                     if (controller.signal.aborted) return;
-                                    if (step.node.pluginId === 'webhook:response' && valid(step.node.config, {type: 'object', required: ['data'], properties: {data: {}}})) {
-                                        stream.enqueue(step.node.config.data);
+                                    if (step.pluginId === 'webhook:response' && valid(step.config, {type: 'object', required: ['data'], properties: {data: {}}})) {
+                                        stream.enqueue(step.config.data);
                                     }
                                 }
                             }
