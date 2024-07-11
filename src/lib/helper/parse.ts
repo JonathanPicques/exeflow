@@ -28,7 +28,14 @@ export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema:
             return value;
         case 'boolean':
             if (typeof value === 'string') {
-                return new Boolean(evaluate(value, variables)).valueOf() as InferJsonSchema<T>;
+                switch (evaluate(value, variables)) {
+                    case 'true':
+                    case 'True':
+                    case 'TRUE':
+                        return true as InferJsonSchema<T>;
+                    default:
+                        return false as InferJsonSchema<T>;
+                }
             }
             return value;
         case 'object': {
