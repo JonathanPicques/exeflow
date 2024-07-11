@@ -44,7 +44,7 @@ export default action<typeof configSchema>({
                     url: form?.url ?? config?.url ?? 'https://api.mistral.ai',
                     apiKey: form?.apiKey ?? config?.apiKey ?? '',
                     //
-                    model: form?.model ?? config?.model ?? 'mistral-small',
+                    model: form?.model ?? config?.model ?? models[0],
                     prompt: form?.prompt ?? config?.prompt ?? '',
                 },
                 schema: configSchema,

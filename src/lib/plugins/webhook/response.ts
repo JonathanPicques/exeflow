@@ -4,9 +4,9 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
-    required: ['data', 'statusCode'] as const,
+    required: ['body', 'statusCode'] as const,
     properties: {
-        data: {type: 'string'},
+        body: {type: 'string'},
         statusCode: {type: 'number'},
     },
 } satisfies JsonSchema;
@@ -20,7 +20,7 @@ export default action<typeof configSchema>({
         return {
             type: 'object',
             properties: {
-                data: {type: 'string', default: config.data},
+                body: {type: 'string', format: 'text', default: config.body},
                 statusCode: {type: 'number', title: 'status code', default: config.statusCode},
             },
         };
@@ -34,7 +34,7 @@ export default action<typeof configSchema>({
             title: statusCodeMessage ? `${statusCode} ${statusCodeMessage}` : undefined,
             config: {
                 value: {
-                    data: form?.data ?? config?.data ?? '{"success": true}',
+                    body: form?.body ?? config?.body ?? '{"success": true}',
                     statusCode,
                 },
                 schema: configSchema,
