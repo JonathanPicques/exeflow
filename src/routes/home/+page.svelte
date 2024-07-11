@@ -21,8 +21,7 @@
         <a href="/">Home</a>
     </div>
     <div>
-        <span>{data.user.email}</span>
-        <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+        <span>{data.user.email}</span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
     </div>
 </nav>
 
@@ -34,7 +33,9 @@
     <div class="projects">
         {#each projects as project}
             <div class="project">
-                <a href="/project/{project.id}"><img src={project.image === 'data:null' ? empty : project.image} alt="" /></a>
+                <a href="/project/{project.id}">
+                    <img src={project.image === 'data:null' ? empty : project.image} alt="" width="320px" height="180px" />
+                </a>
                 <div style:display="flex">
                     <a href="/project/{project.id}" style:flex-grow="1">{project.name}</a>
                     <button class="custom" onclick={() => removeProject(project.id)}>❌</button>
@@ -62,7 +63,6 @@
 
     .project {
         & img {
-            width: 100%;
             border-radius: 0.5rem;
             background-color: var(--color-bg-1);
         }

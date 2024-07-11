@@ -23,7 +23,7 @@
 
 <div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
     <div class="content">
-        <img src={icon} alt="" />
+        <img src={icon} alt="" width="32px" height="32px" />
         <div>
             <span class:valid class="name">{nodeName}</span>
             {#if nodeName !== nodeTitle}
@@ -60,9 +60,6 @@
         flex-grow: 1;
         align-items: center;
 
-        & img {
-            height: 2rem;
-        }
         & div {
             gap: 0.2rem;
             display: flex;

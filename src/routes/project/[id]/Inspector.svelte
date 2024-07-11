@@ -57,6 +57,8 @@
             <img
                 src={plugin.icon}
                 alt=""
+                width="32px"
+                height="32px"
                 onclick={() => {
                     navigator.clipboard.writeText(
                         Object.keys(node!.data.data.results)
@@ -88,7 +90,7 @@
                     draggable={true}
                     ondragstart={e => onDragStart(e, id, plugin)}
                 >
-                    <img src={plugin.icon} alt="" />
+                    <img src={plugin.icon} alt="" width="48px" height="48px" />
                     <div>
                         <span class="name">{humanPluginName(extractPluginName(id))}</span>
                         <span class="description">{plugin.description}</span>
@@ -142,7 +144,6 @@
         background-color: var(--flow-color-node);
 
         & img {
-            height: 3rem;
             pointer-events: none;
         }
 

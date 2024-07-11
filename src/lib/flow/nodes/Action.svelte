@@ -34,7 +34,7 @@
         {/each}
     </div>
     <div class="content">
-        <img src={icon} alt="" />
+        <img src={icon} alt="" width="32px" height="32px" />
         <div>
             <span class:valid class="name">{nodeName}</span>
             {#if nodeName !== nodeTitle}

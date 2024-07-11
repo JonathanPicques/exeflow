@@ -21,7 +21,7 @@
                     {#each logGroup.plugins as plugin}
                         {@const image = actions[plugin]?.icon ?? triggers[plugin]?.icon ?? 'data:null'}
 
-                        <img src={image} alt="" title={plugin} />
+                        <img src={image} alt="" title={plugin} width="32px" height="32px" />
                     {/each}
                 </div>
                 <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>

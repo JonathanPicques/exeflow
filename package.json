@@ -22,7 +22,7 @@
         "@supabase/supabase-js": "^2.44.3",
         "@types/mousetrap": "^1.6.15",
         "@types/nodemailer": "^6.4.15",
-        "@xyflow/svelte": "^0.1.10",
+        "@xyflow/svelte": "^0.1.11",
         "ajv": "^8.16.0",
         "cronstrue": "^2.50.0",
         "html-to-image": "^1.11.11",
@@ -41,7 +41,7 @@
         "eslint": "^9.6.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-svelte": "^2.41.0",
-        "kanel": "^3.9.0",
+        "kanel": "^3.9.1",
         "kanel-kysely": "^0.5.0",
         "kysely": "^0.27.4",
         "pg": "^8.12.0",
@@ -52,6 +52,6 @@
         "tslib": "^2.6.3",
         "typescript": "^5.5.3",
         "vite": "^5.3.3",
-        "vitest": "^2.0.1"
+        "vitest": "^2.0.2"
     }
 }
