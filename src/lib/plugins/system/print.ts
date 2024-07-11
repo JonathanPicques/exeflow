@@ -19,7 +19,7 @@ export default action<typeof configSchema>({
         return {
             type: 'object',
             properties: {
-                text: {type: 'string', default: config.text},
+                text: {type: 'string', format: 'text', default: config.text},
             },
         };
     },

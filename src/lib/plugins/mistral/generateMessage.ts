@@ -4,7 +4,7 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
-    required: ['model', 'prompt'],
+    required: ['url', 'apiKey', 'model', 'prompt'],
     properties: {
         url: {type: 'string'},
         apiKey: {type: 'string'},
@@ -26,7 +26,7 @@ export default action<typeof configSchema>({
     form({config}) {
         return {
             type: 'object',
-            required: ['model', 'prompt'],
+            required: ['url', 'apiKey', 'model', 'prompt'],
             properties: {
                 url: {type: 'string', default: config.url, suggestions: urls},
                 apiKey: {type: 'string', default: config.apiKey, suggestions: apiKeys},
