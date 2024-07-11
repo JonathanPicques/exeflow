@@ -18,10 +18,14 @@
         {#each logsGroups as logGroup}
             <div class="group">
                 <div class="plugins">
-                    {#each logGroup.plugins as plugin}
+                    {#each logGroup.plugins as plugin, i}
+                        {@const last = i === logGroup.plugins.length - 1}
                         {@const image = actions[plugin]?.icon ?? triggers[plugin]?.icon ?? 'data:null'}
 
                         <img src={image} alt="" title={plugin} width="32px" height="32px" />
+                        {#if !last}
+                            <span>➡</span>
+                        {/if}
                     {/each}
                 </div>
                 <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>
@@ -50,9 +54,11 @@
     }
 
     .plugins {
+        gap: 0.5rem;
         height: 3rem;
         display: flex;
         overflow: auto;
+        align-items: center;
         flex-direction: row;
     }
 </style>
