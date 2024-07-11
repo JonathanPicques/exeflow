@@ -15,22 +15,28 @@
 
 <div class="main">
     {#await getLogsGroups(projectId) then logsGroups}
-        {#each logsGroups as logGroup}
-            <div class="group">
-                <div class="plugins">
-                    {#each logGroup.plugins as plugin, i}
-                        {@const last = i === logGroup.plugins.length - 1}
-                        {@const image = actions[plugin]?.icon ?? triggers[plugin]?.icon ?? 'data:null'}
-
-                        <img src={image} alt="" title={plugin} width="32px" height="32px" />
-                        {#if !last}
-                            <span>➡</span>
-                        {/if}
-                    {/each}
-                </div>
-                <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>
+        {#if logsGroups.length === 0}
+            <div class="empty">
+                <span>No executions yet</span>
             </div>
-        {/each}
+        {:else}
+            {#each logsGroups as logGroup}
+                <div class="group">
+                    <div class="plugins">
+                        {#each logGroup.plugins as plugin, i}
+                            {@const last = i === logGroup.plugins.length - 1}
+                            {@const image = actions[plugin]?.icon ?? triggers[plugin]?.icon ?? 'data:null'}
+
+                            <img src={image} alt="" title={plugin} width="32px" height="32px" />
+                            {#if !last}
+                                <span>➡</span>
+                            {/if}
+                        {/each}
+                    </div>
+                    <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>
+                </div>
+            {/each}
+        {/if}
     {/await}
 </div>
 
@@ -41,6 +47,16 @@
         flex-direction: column;
     }
 
+    .empty {
+        display: flex;
+        padding: 5rem;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 0.5rem;
+        background-color: var(--color-bg-1);
+    }
+
     .group {
         gap: 0.5rem;
         display: flex;
@@ -49,7 +65,7 @@
         max-width: 40rem;
         flex-direction: column;
 
-        border-radius: 1rem;
+        border-radius: 0.5rem;
         background-color: var(--color-bg-1);
     }
 

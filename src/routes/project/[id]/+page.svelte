@@ -136,6 +136,7 @@
         }
 
         & .title {
+            gap: 1rem;
             display: flex;
             align-items: center;
 
