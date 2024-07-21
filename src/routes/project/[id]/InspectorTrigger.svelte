@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {page} from '$app/stores';
     import {getGraphContext} from '$lib/core/core';
     import type {TriggerNode} from '$lib/core/graph/nodes';
 
@@ -25,7 +26,16 @@
 
     const open = () => {
         const path = node.data.data.config.value.path;
-        window.open(`/api/webhook${path}`);
+
+        window.open(`/api/triggers/webhook${path}`);
+    };
+
+    const copy = () => {
+        const url = new URL(location.href);
+        const nodeId = node.id;
+        const projectId = $page.params.id;
+
+        window.navigator.clipboard.writeText(`${url.protocol}//${url.hostname}:${url.port}/api/triggers/run/${projectId}/${nodeId}`);
     };
 </script>
 
@@ -34,4 +44,5 @@
     {#if node.data.id === 'webhook:webhook' && node.data.data.config.value.method === 'GET'}
         <button onclick={open}>Open in new tab</button>
     {/if}
+    <button onclick={copy}>Copy trigger URL</button>
 </div>
