@@ -25,18 +25,21 @@ export default trigger<typeof configSchema>({
                 token: {
                     type: 'string',
                     default: config.token,
+                    suggestions: ['${env:DISCORD_TOKEN}'],
                     //
-                    description: 'the discord bot token can be found here: https://acme.com/api-key',
+                    description: 'guide to create a discord bot token: https://discord.com/developers/docs/quick-start/getting-started',
                 },
                 server: {
                     type: 'string',
                     default: config.server,
+                    suggestions: ['${env:DISCORD_SERVER}'],
                     //
                     description: 'will be sent on this server',
                 },
                 channel: {
                     type: 'string',
                     default: config.channel,
+                    suggestions: ['${env:DISCORD_CHANNEL}'],
                     //
                     description: 'will be sent on this channel',
                 },
@@ -49,9 +52,9 @@ export default trigger<typeof configSchema>({
             title: 'receive message',
             config: {
                 value: {
-                    token: form?.token ?? config?.token ?? 'sk-abc-123',
-                    server: form?.server ?? config?.server ?? 'sk-abc-123',
-                    channel: form?.channel ?? config?.channel ?? 'sk-abc-123',
+                    token: form?.token ?? config?.token ?? '',
+                    server: form?.server ?? config?.server ?? '',
+                    channel: form?.channel ?? config?.channel ?? '',
                 },
                 schema: configSchema,
             },
