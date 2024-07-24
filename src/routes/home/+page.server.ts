@@ -4,7 +4,7 @@ import type {Project} from '../api/project/project';
 
 export const load = async ({locals}) => {
     const user = await locals.user();
-    if (!user) throw redirect(301, '/auth/login');
+    if (!user) throw redirect(302, '/auth/login');
 
     const projects = (await locals.db
         .selectFrom('projects')

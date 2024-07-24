@@ -2,7 +2,7 @@ import {fail, redirect} from '@sveltejs/kit';
 
 export const load = async ({locals}) => {
     const user = await locals.user();
-    if (user) throw redirect(303, '/home');
+    if (user) throw redirect(302, '/home');
 };
 
 export const actions = {
@@ -15,7 +15,7 @@ export const actions = {
             const result = await locals.supabase.auth.signInWithPassword({email, password});
 
             if (result.data.user) {
-                throw redirect(303, '/home');
+                throw redirect(302, '/home');
             }
             return fail(403, {email, failed: true, message: result.error?.message ?? 'login failed'});
         }

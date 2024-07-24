@@ -13,7 +13,7 @@
                 <a href="/home">Home</a>
             </div>
             <div>
-                <span>{me.email}</span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+                <span><a href="/auth/profile">{me.email}</a></span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
             </div>
         {:else}
             <div style:flex-grow="1">

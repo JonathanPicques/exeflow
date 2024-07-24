@@ -25,7 +25,7 @@
         <a href="/">Landing page</a>
     </div>
     <div>
-        <span>{data.user.email}</span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+        <span><a href="/auth/profile">{data.user.email}</a></span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
     </div>
 </nav>
 
