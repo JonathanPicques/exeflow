@@ -157,19 +157,6 @@ export class GraphContext {
     private serializeEdge = ({id, source, target, sourceHandle, targetHandle, selected}: PluginEdge) => ({id, source, target, sourceHandle, targetHandle, selected}) as PluginEdge;
 }
 
-const key = Symbol('graph');
-export const getGraphContext = () => getContext<GraphContext>(key);
-export const setGraphContext = (options: Options) => setContext(key, new GraphContext(options));
-
-export const graphSchema = {
-    type: 'object',
-    required: ['nodes', 'edges'] as const,
-    properties: {
-        nodes: {type: 'array', items: nodeSchema},
-        edges: {type: 'array', items: edgeSchema},
-    },
-} satisfies JsonSchema;
-
 export const importPlugins = async () => {
     const actions: Record<ActionId, Action<JsonSchema>> = {};
     const triggers: Record<TriggerId, Trigger<JsonSchema>> = {};
@@ -192,3 +179,16 @@ export const importPlugins = async () => {
     }
     return {actions, triggers};
 };
+
+const key = Symbol('graph');
+export const getGraphContext = () => getContext<GraphContext>(key);
+export const setGraphContext = (options: Options) => setContext(key, new GraphContext(options));
+
+export const graphSchema = {
+    type: 'object',
+    required: ['nodes', 'edges'] as const,
+    properties: {
+        nodes: {type: 'array', items: nodeSchema},
+        edges: {type: 'array', items: edgeSchema},
+    },
+} satisfies JsonSchema;

@@ -2,6 +2,10 @@
     let {form} = $props();
 </script>
 
+<svelte:head>
+    <title>Exeflow - Login</title>
+</svelte:head>
+
 <main>
     <form method="POST">
         <h1>

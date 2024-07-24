@@ -74,7 +74,7 @@
 </script>
 
 <svelte:head>
-    <title>Exeflow</title>
+    <title>Exeflow - {data.project.name}</title>
 </svelte:head>
 
 <SvelteFlowProvider>

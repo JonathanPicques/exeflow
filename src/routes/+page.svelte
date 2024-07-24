@@ -10,11 +10,10 @@
     {:then me}
         {#if me}
             <div style:flex-grow="1">
-                <a href="/home">Projects</a>
+                <a href="/home">Home</a>
             </div>
             <div>
-                <span>{me.email}</span>
-                <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+                <span>{me.email}</span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
             </div>
         {:else}
             <div style:flex-grow="1">
@@ -27,6 +26,10 @@
         {/if}
     {/await}
 </nav>
+
+<svelte:head>
+    <title>Exeflow</title>
+</svelte:head>
 
 <main>
     <h1>Landing page</h1>

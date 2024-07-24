@@ -16,9 +16,13 @@
     };
 </script>
 
+<svelte:head>
+    <title>Exeflow - Home</title>
+</svelte:head>
+
 <nav>
     <div style:flex-grow="1">
-        <a href="/">Home</a>
+        <a href="/">Landing page</a>
     </div>
     <div>
         <span>{data.user.email}</span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>

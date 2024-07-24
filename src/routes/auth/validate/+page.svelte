@@ -2,6 +2,10 @@
     let {data} = $props();
 </script>
 
+<svelte:head>
+    <title>Exeflow - Validate email</title>
+</svelte:head>
+
 <main>
     {#if data.success}
         <h1>Account validated!</h1>
