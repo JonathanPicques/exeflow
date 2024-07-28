@@ -79,17 +79,21 @@
     };
 
     const onconnect = (connection: Connection) => {
-        if (
-            !connection.sourceHandle ||
-            !connection.targetHandle ||
-            $nodes.find(n => n.id === connection.target) === undefined ||
-            $nodes.find(n => n.id === connection.source) === undefined
-        ) {
-            throw new Error(`onconnect invalid args`);
-        }
-
-        // FIXME: Make sure only one edge can exit from the source (right)
-        // edges.update(edges => edges.filter(e => e.sourceHandle !== connection.sourceHandle || e.targetHandle === connection.targetHandle));
+        edges.update(edges =>
+            edges.filter(e => {
+                // Makes sure only one edge can exit from a source (right)
+                if (e.source === connection.source) {
+                    // Only keep the last one and disconnect the other one
+                    return (
+                        e.source === connection.source &&
+                        e.target === connection.target && //
+                        e.sourceHandle === connection.sourceHandle &&
+                        e.targetHandle === connection.targetHandle
+                    );
+                }
+                return true;
+            }),
+        );
     };
     const isValidConnection = (connection: Edge | Connection) => {
         if (
