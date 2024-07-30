@@ -28,3 +28,8 @@ export const zero = <T extends JsonSchema>(schema: T): InferJsonSchema<T> => {
 export const valid = <T extends JsonSchema>(data: unknown, schema: T): data is InferJsonSchema<T> => {
     return validator.validate(schema, data);
 };
+
+export const ensureValid = <T extends JsonSchema>(data: unknown, schema: T, errorMessage = 'cannot validate value against schema'): InferJsonSchema<T> => {
+    if (validator.validate(schema, data)) return data as InferJsonSchema<T>;
+    throw new Error(errorMessage);
+};

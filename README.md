@@ -28,7 +28,9 @@ Exeflow is perfect for:
 - Run `cp .env.example .env`
 - Edit `.env`:
 ```toml
-    EXEFLOW_URL="http://localhost:5173" # Must match [auth.additional_redirect_urls] in supabase/config.toml
+    EXEFLOW_ROOT_URL="http://localhost:5173" # Must match [auth.additional_redirect_urls] in supabase/config.toml
+    EXEFLOW_WEBHOOK_URL="http://localhost:5173"
+    EXEFLOW_TRIGGER_URL="http://host.docker.internal:5173"
     EXEFLOW_SUPABASE_DB_URL="..." # from supabase start
     EXEFLOW_SUPABASE_API_URL="..." # from supabase start
     EXEFLOW_SUPABASE_ANON_KEY="..." # from supabase start
