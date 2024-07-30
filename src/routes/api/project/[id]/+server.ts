@@ -1,7 +1,10 @@
+import {sql} from 'kysely';
 import {json, error} from '@sveltejs/kit';
 
 import {valid} from '$lib/schema/validate';
 import {graphSchema} from '$lib/core/core';
+import {triggerRootUrl} from '$lib/core/conf.server';
+import type {Db} from '$lib/supabase/db.server';
 import type {JsonSchema} from '$lib/schema/schema';
 import type {TriggerNode} from '$lib/core/graph/nodes';
 
@@ -17,6 +20,28 @@ const patchSchema = {
     },
 } satisfies JsonSchema;
 
+const jobname = ({node_id, plugin_id, project_id}: {node_id: string; plugin_id: string; project_id: string}) => `${project_id}:${plugin_id}:${node_id}`;
+
+const schedule = async ({trx, cron, node_id, plugin_id, project_id}: {trx: Db; cron: string; node_id: string; plugin_id: string; project_id: string}) => {
+    const triggerUrl = `${triggerRootUrl}/api/triggers/run/${project_id}/${node_id}`;
+
+    await sql`select
+      cron.schedule(
+        ${jobname({node_id, plugin_id, project_id})},
+        ${cron},
+        $$
+        select
+          net.http_post(
+              url:=${sql.lit(triggerUrl)},
+              headers:='{"Content-Type": "application/json"}'::jsonb
+          ) as request_id;
+        $$
+      );`.execute(trx);
+};
+const unschedule = async ({trx, node_id, plugin_id, project_id}: {trx: Db; node_id: string; plugin_id: string; project_id: string}) => {
+    await sql`select cron.unschedule(${jobname({node_id, plugin_id, project_id})});`.execute(trx);
+};
+
 export const PATCH = async ({locals, params, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
@@ -28,15 +53,26 @@ export const PATCH = async ({locals, params, request}) => {
     const triggerNodeIds = triggerNodes.map(n => n.id as TriggersNodeId);
 
     await locals.db.transaction().execute(async trx => {
-        await trx
+        const triggersDeleted = await trx
             .deleteFrom('triggers')
+            .returning(['node_id', 'plugin_id', 'project_id'])
             .where('node_id', 'not in', triggerNodeIds)
             .where('project_id', '=', params.id as ProjectsId)
             .execute();
+
         await Promise.all(
-            triggerNodes.map(triggerNode => {
-                return trx
+            triggersDeleted
+                .filter(trigger => trigger.plugin_id === 'cron:cron')
+                .map(async ({node_id, plugin_id, project_id}) => {
+                    await unschedule({trx, node_id, plugin_id, project_id});
+                }),
+        );
+
+        await Promise.all(
+            triggerNodes.map(async triggerNode => {
+                const newTrigger = await trx
                     .insertInto('triggers')
+                    .returning(['node_id', 'plugin_id', 'project_id'])
                     .values({
                         node_id: triggerNode.id as TriggersNodeId,
                         plugin_id: triggerNode.data.id as TriggersPluginId,
@@ -50,7 +86,17 @@ export const PATCH = async ({locals, params, request}) => {
                             updated_at: new Date(),
                         }),
                     )
-                    .execute();
+                    .executeTakeFirst();
+
+                if (newTrigger?.plugin_id === 'cron:cron') {
+                    const cron = triggerNode.data.data.config.value.interval;
+
+                    if (valid(cron, {type: 'string'})) {
+                        const {node_id, plugin_id, project_id} = newTrigger;
+
+                        await schedule({trx, cron, node_id, plugin_id, project_id});
+                    }
+                }
             }),
         );
     });
@@ -74,12 +120,28 @@ export const DELETE = async ({locals, params}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const {numDeletedRows} = await locals.db
-        .deleteFrom('projects')
-        .where('id', '=', params.id as ProjectsId)
-        .where('owner_id', '=', user.id)
-        .executeTakeFirst();
-    if (numDeletedRows < 1) throw error(500);
+    await locals.db.transaction().execute(async trx => {
+        const triggersDeleted = await trx
+            .deleteFrom('triggers')
+            .returning(['node_id', 'plugin_id', 'project_id'])
+            .where('project_id', '=', params.id as ProjectsId)
+            .execute();
+
+        await Promise.all(
+            triggersDeleted
+                .filter(trigger => trigger.plugin_id === 'cron:cron')
+                .map(async ({node_id, plugin_id, project_id}) => {
+                    await unschedule({trx, node_id, plugin_id, project_id});
+                }),
+        );
+
+        const {numDeletedRows} = await trx
+            .deleteFrom('projects')
+            .where('id', '=', params.id as ProjectsId)
+            .where('owner_id', '=', user.id)
+            .executeTakeFirst();
+        if (numDeletedRows < 1) throw error(500);
+    });
 
     return new Response(null, {status: 200});
 };
