@@ -14,7 +14,8 @@ create table public.projects (
     --
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone not null default now(),
-    constraint projects_pkey primary key (id),
+    --
+    constraint public_projects_pkey primary key (id),
     constraint public_projects_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade
 ) tablespace pg_default;
 
@@ -35,6 +36,18 @@ create table public.logs (
     constraint public_logs_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
 ) tablespace pg_default;
 
+create table public.secrets (
+    key text not null,
+    value text not null,
+    owner_id uuid not null,
+    --
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone not null default now(),
+    --
+    constraint public_secrets_pkey primary key (key, owner_id),
+    constraint public_secrets_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade
+) tablespace pg_default;
+
 create table public.triggers (
     node_id text not null,
     plugin_id text not null,
@@ -44,6 +57,7 @@ create table public.triggers (
     --
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone not null default now(),
+    --
     constraint public_triggers_pkey primary key (node_id, plugin_id, project_id),
     constraint public_triggers_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
 ) tablespace pg_default;

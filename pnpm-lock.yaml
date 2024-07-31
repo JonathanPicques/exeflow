@@ -12,11 +12,11 @@ importers:
         specifier: ^1.1.3
         version: 1.1.3
       '@langchain/community':
-        specifier: ^0.2.21
-        version: 0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0)
+        specifier: ^0.2.22
+        version: 0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0)
       '@langchain/core':
         specifier: ^0.2.18
-        version: 0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+        version: 0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
       '@mistralai/mistralai':
         specifier: ^0.5.0
         version: 0.5.0
@@ -25,7 +25,7 @@ importers:
         version: 2.2.2
       '@rich_harris/svelte-split-pane':
         specifier: ^1.1.3
-        version: 1.1.3(svelte@5.0.0-next.201)
+        version: 1.1.3(svelte@5.0.0-next.202)
       '@supabase/supabase-js':
         specifier: ^2.45.0
         version: 2.45.0
@@ -36,8 +36,8 @@ importers:
         specifier: ^6.4.15
         version: 6.4.15
       '@xyflow/svelte':
-        specifier: ^0.1.13
-        version: 0.1.13(postcss-load-config@6.0.1(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.201)(typescript@5.5.4)
+        specifier: ^0.1.14
+        version: 0.1.14(postcss-load-config@3.1.4(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.202)(typescript@5.5.4)
       ajv:
         specifier: ^8.17.1
         version: 8.17.1
@@ -59,13 +59,13 @@ importers:
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.2.2
-        version: 3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))
+        version: 3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))
       '@sveltejs/kit':
         specifier: ^2.5.18
-        version: 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))
+        version: 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.1
-        version: 3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))
+        version: 3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))
       '@types/eslint':
         specifier: ^9.6.0
         version: 9.6.0
@@ -89,7 +89,7 @@ importers:
         version: 9.1.0(eslint@9.8.0)
       eslint-plugin-svelte:
         specifier: ^2.43.0
-        version: 2.43.0(eslint@9.8.0)(svelte@5.0.0-next.201)
+        version: 2.43.0(eslint@9.8.0)(svelte@5.0.0-next.202)
       kanel:
         specifier: ^3.9.1
         version: 3.9.1
@@ -107,13 +107,13 @@ importers:
         version: 3.3.3
       prettier-plugin-svelte:
         specifier: ^3.2.6
-        version: 3.2.6(prettier@3.3.3)(svelte@5.0.0-next.201)
+        version: 3.2.6(prettier@3.3.3)(svelte@5.0.0-next.202)
       svelte:
-        specifier: 5.0.0-next.201
-        version: 5.0.0-next.201
+        specifier: 5.0.0-next.202
+        version: 5.0.0-next.202
       svelte-check:
-        specifier: ^3.8.4
-        version: 3.8.4(postcss-load-config@6.0.1(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.201)
+        specifier: ^3.8.5
+        version: 3.8.5(postcss-load-config@3.1.4(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.202)
       tslib:
         specifier: ^2.6.3
         version: 2.6.3
@@ -343,8 +343,8 @@ packages:
   '@kristiandupont/recase@1.3.1':
     resolution: {integrity: sha512-Ef41VRKgj4TvxBu1MkOWD96QUpE3k3j+j+Vk3TAftJgrRNGypN7rnT9IH1kYthcY6WlbhuMVXplXF5dBFDGG2Q==}
 
-  '@langchain/community@0.2.21':
-    resolution: {integrity: sha512-I4ExMQKHVQmDA5mKfjONkoZVjKSKjaxWA8aOoWe7PZLXbYd/KXBH8Wsl1P36MrO5WHdzma93OvDjlCO4sCEGIg==}
+  '@langchain/community@0.2.22':
+    resolution: {integrity: sha512-KxT6Pj0ovJkSgiVHKorIeH0Bi7QDwMiuCD8apLNKkgHz9NC8ZxzKt5LqpVApNbnPWkCwm9EZ3oBfYGaz+D3jMg==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -453,7 +453,7 @@ packages:
       pickleparser: ^0.2.1
       playwright: ^1.32.1
       portkey-ai: ^0.1.11
-      puppeteer: ^22.0.0
+      puppeteer: '*'
       redis: '*'
       replicate: ^0.29.4
       sonix-speech-recognition: ^2.1.1
@@ -1036,8 +1036,8 @@ packages:
   '@vitest/utils@2.0.4':
     resolution: {integrity: sha512-Zc75QuuoJhOBnlo99ZVUkJIuq4Oj0zAkrQ2VzCqNCx6wAwViHEh5Fnp4fiJTE9rA+sAoXRf00Z9xGgfEzV6fzQ==}
 
-  '@xyflow/svelte@0.1.13':
-    resolution: {integrity: sha512-I7vXEo2PveQvIZBqnmsmvXyr9rkYxHdUFKTbV8H4AQ1d79AdKzyOz8IryYhUZrx4/yHie6Oh7VqlKo6Y/CSv2A==}
+  '@xyflow/svelte@0.1.14':
+    resolution: {integrity: sha512-DdlFz+JKW1sQt8Q8O1DoSsroTvFk1RzmpcEZcGARt1REbnLy4BYG/03piaiclaC4iHK6feaPDvxpF057CkMCTw==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0
 
@@ -1795,18 +1795,18 @@ packages:
     resolution: {integrity: sha512-dyNKv2KRvYOQPLCAOCjjQuCk4YFd33BvGdf/o5bC7FiW+BB6snA81Zt+2wT9QDFzKqxKa5rrOmvlK/anehCcgA==}
     engines: {node: '>=14.0.0'}
 
-  langchain@0.2.11:
-    resolution: {integrity: sha512-6FQWKNAXuTmwuhHHMOmurLo8pydSRu5C/FwCYvYbR4ulCLqcsj+jre/kfXvA5BdHOZHNo6oQn0/5kxDNnhxMUA==}
+  langchain@0.2.12:
+    resolution: {integrity: sha512-ZHtJrHUpridZ7IQu7N/wAQ6iMAAO7VLzkupHqKP79S6p+alrPbn1BjRnh+PeGm92YiY5DafTCuvchmujxx7bCQ==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@aws-sdk/client-s3': ^3.310.0
-      '@aws-sdk/client-sagemaker-runtime': ^3.310.0
-      '@aws-sdk/client-sfn': ^3.310.0
-      '@aws-sdk/credential-provider-node': ^3.388.0
-      '@azure/storage-blob': ^12.15.0
+      '@aws-sdk/client-s3': '*'
+      '@aws-sdk/client-sagemaker-runtime': '*'
+      '@aws-sdk/client-sfn': '*'
+      '@aws-sdk/credential-provider-node': '*'
+      '@azure/storage-blob': '*'
       '@browserbasehq/sdk': '*'
-      '@gomomento/sdk': ^1.51.1
-      '@gomomento/sdk-core': ^1.51.1
+      '@gomomento/sdk': '*'
+      '@gomomento/sdk-core': '*'
       '@gomomento/sdk-web': ^1.51.1
       '@langchain/anthropic': '*'
       '@langchain/aws': '*'
@@ -1814,51 +1814,50 @@ packages:
       '@langchain/community': '*'
       '@langchain/google-genai': '*'
       '@langchain/google-vertexai': '*'
-      '@langchain/google-vertexai-web': '*'
       '@langchain/groq': '*'
       '@langchain/mistralai': '*'
       '@langchain/ollama': '*'
-      '@mendable/firecrawl-js': ^0.0.13
-      '@notionhq/client': ^2.2.10
+      '@mendable/firecrawl-js': '*'
+      '@notionhq/client': '*'
       '@pinecone-database/pinecone': '*'
-      '@supabase/supabase-js': ^2.10.0
-      '@vercel/kv': ^0.2.3
-      '@xata.io/client': ^0.28.0
-      apify-client: ^2.7.1
-      assemblyai: ^4.6.0
+      '@supabase/supabase-js': '*'
+      '@vercel/kv': '*'
+      '@xata.io/client': '*'
+      apify-client: '*'
+      assemblyai: '*'
       axios: '*'
-      cheerio: ^1.0.0-rc.12
+      cheerio: '*'
       chromadb: '*'
-      convex: ^1.3.1
-      couchbase: ^4.3.0
-      d3-dsv: ^2.0.0
-      epub2: ^3.0.1
+      convex: '*'
+      couchbase: '*'
+      d3-dsv: '*'
+      epub2: '*'
       faiss-node: '*'
       fast-xml-parser: '*'
       handlebars: ^4.7.8
-      html-to-text: ^9.0.5
-      ignore: ^5.2.0
-      ioredis: ^5.3.2
+      html-to-text: '*'
+      ignore: '*'
+      ioredis: '*'
       jsdom: '*'
-      mammoth: ^1.6.0
-      mongodb: '>=5.2.0'
+      mammoth: '*'
+      mongodb: '*'
       node-llama-cpp: '*'
-      notion-to-md: ^3.1.0
-      officeparser: ^4.0.4
-      pdf-parse: 1.1.1
+      notion-to-md: '*'
+      officeparser: '*'
+      pdf-parse: '*'
       peggy: ^3.0.2
-      playwright: ^1.32.1
-      puppeteer: ^19.7.2
+      playwright: '*'
+      puppeteer: '*'
       pyodide: ^0.24.1
-      redis: ^4.6.4
-      sonix-speech-recognition: ^2.1.1
-      srt-parser-2: ^1.2.3
-      typeorm: ^0.3.20
+      redis: '*'
+      sonix-speech-recognition: '*'
+      srt-parser-2: '*'
+      typeorm: '*'
       weaviate-ts-client: '*'
-      web-auth-library: ^1.0.3
-      ws: ^8.14.2
-      youtube-transcript: ^1.0.6
-      youtubei.js: ^9.1.0
+      web-auth-library: '*'
+      ws: '*'
+      youtube-transcript: '*'
+      youtubei.js: '*'
     peerDependenciesMeta:
       '@aws-sdk/client-s3':
         optional: true
@@ -1889,8 +1888,6 @@ packages:
       '@langchain/google-genai':
         optional: true
       '@langchain/google-vertexai':
-        optional: true
-      '@langchain/google-vertexai-web':
         optional: true
       '@langchain/groq':
         optional: true
@@ -1998,6 +1995,20 @@ packages:
       openai:
         optional: true
 
+  langsmith@0.1.40:
+    resolution: {integrity: sha512-11E2WLbh/+41+Qc0w8fJJTC/iz91BA+zXRMX/Wz0KSstnfzIPBoiWa++Kp2X8yCIDNywWWLJhy/B8gYzm7VKig==}
+    peerDependencies:
+      '@langchain/core': '*'
+      langchain: '*'
+      openai: '*'
+    peerDependenciesMeta:
+      '@langchain/core':
+        optional: true
+      langchain:
+        optional: true
+      openai:
+        optional: true
+
   levn@0.3.0:
     resolution: {integrity: sha512-0OO4y2iOHix2W6ujICbKIaEQXvFQHue65vUG3pb5EUomzPI90z9hsA1VsO/dbIIpC53J8gxM9Q4Oho0jrCM/yA==}
     engines: {node: '>= 0.8.0'}
@@ -2009,10 +2020,6 @@ packages:
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
-
-  lilconfig@3.1.2:
-    resolution: {integrity: sha512-eop+wDAvpItUys0FWkHIKeC9ybYrTGbU41U5K7+bttZZeohvnY7M9dZ5kB21GNWiFT2q1OoPTvncPCgSOVO5ow==}
-    engines: {node: '>=14'}
 
   locate-character@3.0.0:
     resolution: {integrity: sha512-SW13ws7BjaeJ6p7Q6CO2nchbYEc3X3J6WrmTTDto7yMPqVSZTUyY5Tjbid+Ab8gLnATtygYtiDIJGQRRn2ZOiA==}
@@ -2036,6 +2043,9 @@ packages:
 
   magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
+
+  magic-string@0.30.11:
+    resolution: {integrity: sha512-+Wri9p0QHMy+545hKww7YAu5NyzF8iomPL/RQazugQ9+Ez4Ic3mERMd8ZTX5rfK944j+560ZJi8iAwgak1Ac7A==}
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -2322,24 +2332,6 @@ packages:
       ts-node:
         optional: true
 
-  postcss-load-config@6.0.1:
-    resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
-    engines: {node: '>= 18'}
-    peerDependencies:
-      jiti: '>=1.21.0'
-      postcss: '>=8.0.9'
-      tsx: ^4.8.1
-      yaml: ^2.4.2
-    peerDependenciesMeta:
-      jiti:
-        optional: true
-      postcss:
-        optional: true
-      tsx:
-        optional: true
-      yaml:
-        optional: true
-
   postcss-safe-parser@6.0.0:
     resolution: {integrity: sha512-FARHN8pwH+WiS2OPCxJI8FuRJpTVnn6ZNFiqAM2aeW2LwTHWWmWgIyKC6cUo0L8aeKiF/14MNvnpls6R2PBeMQ==}
     engines: {node: '>=12.0'}
@@ -2602,8 +2594,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  svelte-check@3.8.4:
-    resolution: {integrity: sha512-61aHMkdinWyH8BkkTX9jPLYxYzaAAz/FK/VQqdr2FiCQQ/q04WCwDlpGbHff1GdrMYTmW8chlTFvRWL9k0A8vg==}
+  svelte-check@3.8.5:
+    resolution: {integrity: sha512-3OGGgr9+bJ/+1nbPgsvulkLC48xBsqsgtc8Wam281H4G9F5v3mYGa2bHRsPuwHC5brKl4AxJH95QF73kmfihGQ==}
     hasBin: true
     peerDependencies:
       svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
@@ -2660,8 +2652,8 @@ packages:
       typescript:
         optional: true
 
-  svelte@5.0.0-next.201:
-    resolution: {integrity: sha512-gap0o+f0b5/TQYW5uOVUc3eVk75meSNdTrc9tTRALAg7YCzm8QaLqijBj5OkLaW9XKZFtarGrleRvC/fChk/Eg==}
+  svelte@5.0.0-next.202:
+    resolution: {integrity: sha512-mBx8jZG3ZgPHTWJGL9O5SKi0RB16gEvLtMGxINlC1HVYRfIaceN/DDT8I1cFHmUlpEq63XpmyCNWT+SsQfOqBw==}
     engines: {node: '>=18'}
 
   symbol-tree@3.2.4:
@@ -3098,16 +3090,16 @@ snapshots:
     dependencies:
       ramda: 0.30.1
 
-  '@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0)':
+  '@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0)':
     dependencies:
-      '@langchain/core': 0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
-      '@langchain/openai': 0.2.5(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))
+      '@langchain/core': 0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      '@langchain/openai': 0.2.5(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))
       binary-extensions: 2.3.0
       expr-eval: 2.0.2
       flat: 5.0.2
       js-yaml: 4.1.0
-      langchain: 0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0)
-      langsmith: 0.1.39(@langchain/core@0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      langchain: 0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0)
+      langsmith: 0.1.40(@langchain/core@0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
       uuid: 10.0.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.2(zod@3.23.8)
@@ -3126,7 +3118,6 @@ snapshots:
       - '@langchain/cohere'
       - '@langchain/google-genai'
       - '@langchain/google-vertexai'
-      - '@langchain/google-vertexai-web'
       - '@langchain/groq'
       - '@langchain/mistralai'
       - '@langchain/ollama'
@@ -3138,13 +3129,13 @@ snapshots:
       - peggy
       - pyodide
 
-  '@langchain/core@0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)':
+  '@langchain/core@0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.12
-      langsmith: 0.1.39(@langchain/core@0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      langsmith: 0.1.39(@langchain/core@0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
       ml-distance: 4.0.1
       mustache: 4.2.0
       p-queue: 6.6.2
@@ -3156,9 +3147,9 @@ snapshots:
       - langchain
       - openai
 
-  '@langchain/openai@0.2.5(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))':
+  '@langchain/openai@0.2.5(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))':
     dependencies:
-      '@langchain/core': 0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      '@langchain/core': 0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
       js-tiktoken: 1.0.12
       openai: 4.53.2
       zod: 3.23.8
@@ -3167,9 +3158,9 @@ snapshots:
       - encoding
       - langchain
 
-  '@langchain/textsplitters@0.0.3(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)':
+  '@langchain/textsplitters@0.0.3(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)':
     dependencies:
-      '@langchain/core': 0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      '@langchain/core': 0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
       js-tiktoken: 1.0.12
     transitivePeerDependencies:
       - langchain
@@ -3204,9 +3195,9 @@ snapshots:
 
   '@polka/url@1.0.0-next.25': {}
 
-  '@rich_harris/svelte-split-pane@1.1.3(svelte@5.0.0-next.201)':
+  '@rich_harris/svelte-split-pane@1.1.3(svelte@5.0.0-next.202)':
     dependencies:
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
 
   '@rollup/rollup-android-arm-eabi@4.19.0':
     optional: true
@@ -3298,18 +3289,18 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@svelte-put/shortcut@3.1.1(svelte@5.0.0-next.201)':
+  '@svelte-put/shortcut@3.1.1(svelte@5.0.0-next.202)':
     dependencies:
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
 
-  '@sveltejs/adapter-auto@3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))':
+  '@sveltejs/adapter-auto@3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))':
     dependencies:
-      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))
+      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))
       import-meta-resolve: 4.1.0
 
-  '@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))':
+  '@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))
+      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))
       '@types/cookie': 0.6.0
       cookie: 0.6.0
       devalue: 5.0.0
@@ -3321,28 +3312,28 @@ snapshots:
       sade: 1.8.1
       set-cookie-parser: 2.6.0
       sirv: 2.0.4
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
       tiny-glob: 0.2.9
       vite: 5.3.5(@types/node@22.0.0)
 
-  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))':
+  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))
+      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))
       debug: 4.3.5
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
       vite: 5.3.5(@types/node@22.0.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))':
+  '@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.201)(vite@5.3.5(@types/node@22.0.0))
+      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0)))(svelte@5.0.0-next.202)(vite@5.3.5(@types/node@22.0.0))
       debug: 4.3.5
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.10
-      svelte: 5.0.0-next.201
-      svelte-hmr: 0.16.0(svelte@5.0.0-next.201)
+      svelte: 5.0.0-next.202
+      svelte-hmr: 0.16.0(svelte@5.0.0-next.202)
       vite: 5.3.5(@types/node@22.0.0)
       vitefu: 0.2.5(vite@5.3.5(@types/node@22.0.0))
     transitivePeerDependencies:
@@ -3535,13 +3526,13 @@ snapshots:
       loupe: 3.1.1
       tinyrainbow: 1.2.0
 
-  '@xyflow/svelte@0.1.13(postcss-load-config@6.0.1(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.201)(typescript@5.5.4)':
+  '@xyflow/svelte@0.1.14(postcss-load-config@3.1.4(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.202)(typescript@5.5.4)':
     dependencies:
-      '@svelte-put/shortcut': 3.1.1(svelte@5.0.0-next.201)
+      '@svelte-put/shortcut': 3.1.1(svelte@5.0.0-next.202)
       '@xyflow/system': 0.0.37
       classcat: 5.0.5
-      svelte: 5.0.0-next.201
-      svelte-preprocess: 5.1.4(postcss-load-config@6.0.1(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.201)(typescript@5.5.4)
+      svelte: 5.0.0-next.202
+      svelte-preprocess: 5.1.4(postcss-load-config@3.1.4(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.202)(typescript@5.5.4)
     transitivePeerDependencies:
       - '@babel/core'
       - coffeescript
@@ -3862,7 +3853,7 @@ snapshots:
     dependencies:
       eslint: 9.8.0
 
-  eslint-plugin-svelte@2.43.0(eslint@9.8.0)(svelte@5.0.0-next.201):
+  eslint-plugin-svelte@2.43.0(eslint@9.8.0)(svelte@5.0.0-next.202):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@9.8.0)
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -3875,9 +3866,9 @@ snapshots:
       postcss-safe-parser: 6.0.0(postcss@8.4.39)
       postcss-selector-parser: 6.1.1
       semver: 7.6.3
-      svelte-eslint-parser: 0.41.0(svelte@5.0.0-next.201)
+      svelte-eslint-parser: 0.41.0(svelte@5.0.0-next.202)
     optionalDependencies:
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
     transitivePeerDependencies:
       - ts-node
 
@@ -4333,17 +4324,17 @@ snapshots:
 
   kysely@0.27.4: {}
 
-  langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0):
+  langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0):
     dependencies:
-      '@langchain/core': 0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
-      '@langchain/openai': 0.2.5(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))
-      '@langchain/textsplitters': 0.0.3(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      '@langchain/core': 0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      '@langchain/openai': 0.2.5(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))
+      '@langchain/textsplitters': 0.0.3(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
       binary-extensions: 2.3.0
       js-tiktoken: 1.0.12
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.11
-      langsmith: 0.1.39(@langchain/core@0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      langsmith: 0.1.40(@langchain/core@0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
@@ -4352,7 +4343,7 @@ snapshots:
       zod: 3.23.8
       zod-to-json-schema: 3.23.2(zod@3.23.8)
     optionalDependencies:
-      '@langchain/community': 0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0)
+      '@langchain/community': 0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0)
       '@supabase/supabase-js': 2.45.0
       ignore: 5.3.1
       jsdom: 24.1.1
@@ -4363,7 +4354,7 @@ snapshots:
 
   langchainhub@0.0.11: {}
 
-  langsmith@0.1.39(@langchain/core@0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2):
+  langsmith@0.1.39(@langchain/core@0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2):
     dependencies:
       '@types/uuid': 9.0.8
       commander: 10.0.1
@@ -4371,8 +4362,21 @@ snapshots:
       p-retry: 4.6.2
       uuid: 9.0.1
     optionalDependencies:
-      '@langchain/core': 0.2.18(langchain@0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
-      langchain: 0.2.11(@langchain/community@0.2.21(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0)
+      '@langchain/core': 0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      langchain: 0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0)
+      openai: 4.53.2
+
+  langsmith@0.1.40(@langchain/core@0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2))(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2):
+    dependencies:
+      '@types/uuid': 9.0.8
+      commander: 10.0.1
+      p-queue: 6.6.2
+      p-retry: 4.6.2
+      semver: 7.6.3
+      uuid: 9.0.1
+    optionalDependencies:
+      '@langchain/core': 0.2.18(langchain@0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0))(openai@4.53.2)
+      langchain: 0.2.12(@langchain/community@0.2.22(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(lodash@4.17.21)(openai@4.53.2)(pg@8.12.0)(ws@8.18.0))(@supabase/supabase-js@2.45.0)(ignore@5.3.1)(jsdom@24.1.1)(openai@4.53.2)(ws@8.18.0)
       openai: 4.53.2
 
   levn@0.3.0:
@@ -4386,9 +4390,6 @@ snapshots:
       type-check: 0.4.0
 
   lilconfig@2.1.0: {}
-
-  lilconfig@3.1.2:
-    optional: true
 
   locate-character@3.0.0: {}
 
@@ -4409,6 +4410,10 @@ snapshots:
   magic-string@0.30.10:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  magic-string@0.30.11:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.0
 
   merge-stream@2.0.0: {}
 
@@ -4663,13 +4668,6 @@ snapshots:
     optionalDependencies:
       postcss: 8.4.39
 
-  postcss-load-config@6.0.1(postcss@8.4.39):
-    dependencies:
-      lilconfig: 3.1.2
-    optionalDependencies:
-      postcss: 8.4.39
-    optional: true
-
   postcss-safe-parser@6.0.0(postcss@8.4.39):
     dependencies:
       postcss: 8.4.39
@@ -4721,10 +4719,10 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-svelte@3.2.6(prettier@3.3.3)(svelte@5.0.0-next.201):
+  prettier-plugin-svelte@3.2.6(prettier@3.3.3)(svelte@5.0.0-next.202):
     dependencies:
       prettier: 3.3.3
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
 
   prettier@3.3.3: {}
 
@@ -4846,7 +4844,7 @@ snapshots:
 
   sorcery@0.11.1:
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
       buffer-crc32: 1.0.0
       minimist: 1.2.8
       sander: 0.5.1
@@ -4900,14 +4898,14 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@3.8.4(postcss-load-config@6.0.1(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.201):
+  svelte-check@3.8.5(postcss-load-config@3.1.4(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.202):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 3.6.0
       picocolors: 1.0.1
       sade: 1.8.1
-      svelte: 5.0.0-next.201
-      svelte-preprocess: 5.1.4(postcss-load-config@6.0.1(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.201)(typescript@5.5.4)
+      svelte: 5.0.0-next.202
+      svelte-preprocess: 5.1.4(postcss-load-config@3.1.4(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.202)(typescript@5.5.4)
       typescript: 5.5.4
     transitivePeerDependencies:
       - '@babel/core'
@@ -4920,7 +4918,7 @@ snapshots:
       - stylus
       - sugarss
 
-  svelte-eslint-parser@0.41.0(svelte@5.0.0-next.201):
+  svelte-eslint-parser@0.41.0(svelte@5.0.0-next.202):
     dependencies:
       eslint-scope: 7.2.2
       eslint-visitor-keys: 3.4.3
@@ -4928,26 +4926,26 @@ snapshots:
       postcss: 8.4.39
       postcss-scss: 4.0.9(postcss@8.4.39)
     optionalDependencies:
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
 
-  svelte-hmr@0.16.0(svelte@5.0.0-next.201):
+  svelte-hmr@0.16.0(svelte@5.0.0-next.202):
     dependencies:
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
 
-  svelte-preprocess@5.1.4(postcss-load-config@6.0.1(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.201)(typescript@5.5.4):
+  svelte-preprocess@5.1.4(postcss-load-config@3.1.4(postcss@8.4.39))(postcss@8.4.39)(svelte@5.0.0-next.202)(typescript@5.5.4):
     dependencies:
       '@types/pug': 2.0.10
       detect-indent: 6.1.0
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       sorcery: 0.11.1
       strip-indent: 3.0.0
-      svelte: 5.0.0-next.201
+      svelte: 5.0.0-next.202
     optionalDependencies:
       postcss: 8.4.39
-      postcss-load-config: 6.0.1(postcss@8.4.39)
+      postcss-load-config: 3.1.4(postcss@8.4.39)
       typescript: 5.5.4
 
-  svelte@5.0.0-next.201:
+  svelte@5.0.0-next.202:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -4960,7 +4958,7 @@ snapshots:
       esrap: 1.2.2
       is-reference: 3.0.2
       locate-character: 3.0.0
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       zimmerframe: 1.1.2
 
   symbol-tree@3.2.4: {}
