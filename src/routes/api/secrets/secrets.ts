@@ -3,7 +3,13 @@ export interface Secret {
     value: string;
 }
 
-export const postSecret = async ({key, value}: Secret) => {
+export const getSecrets = async () => {
+    const response = await fetch(`/api/secrets`, {method: 'GET'});
+
+    return (await response.json()) as Secret[];
+};
+
+export const putSecret = async ({key, value}: Secret) => {
     const response = await fetch(`/api/secrets`, {
         method: 'PUT',
         body: JSON.stringify({key, value}),

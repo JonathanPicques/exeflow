@@ -6,6 +6,7 @@
 
     import Flow from '$lib/flow/Flow.svelte';
     import Logs from './Logs.svelte';
+    import Secrets from './Secrets.svelte';
     import Inspector from './Inspector.svelte';
 
     import {valid} from '$lib/schema/validate';
@@ -14,7 +15,8 @@
     import {graphSchema, setGraphContext} from '$lib/core/core';
 
     let flow: Flow;
-    let dialog: HTMLDialogElement;
+    let dialogLogs: HTMLDialogElement;
+    let dialogSecrets: HTMLDialogElement;
 
     let {data} = $props();
 
@@ -46,8 +48,11 @@
     const layout = () => flow.layout();
     const fitToView = () => flow.fitToView();
 
-    const showLogs = () => dialog.showModal();
-    const closeLogs = () => dialog.close();
+    const showLogs = () => dialogLogs.showModal();
+    const closeLogs = () => dialogLogs.close();
+
+    const showSecrets = () => dialogSecrets.showModal();
+    const closeSecrets = () => dialogSecrets.close();
 
     const exportToClipboard = () => {
         const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
@@ -86,6 +91,9 @@
             <button onclick={showLogs}>Logs</button>
         {/if}
         {#if true}
+            <button onclick={showSecrets}>Secrets</button>
+        {/if}
+        {#if true}
             <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
             <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
         {/if}
@@ -102,12 +110,20 @@
         </SplitPane>
     </main>
 
-    <dialog bind:this={dialog}>
+    <dialog bind:this={dialogLogs}>
         <div class="title">
             <h1>Executions logs</h1>
             <button onclick={closeLogs} style:align-self="end">Close</button>
         </div>
         <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
+    </dialog>
+
+    <dialog bind:this={dialogSecrets}>
+        <div class="title">
+            <h1>Secrets</h1>
+            <button onclick={closeSecrets} style:align-self="end">Close</button>
+        </div>
+        <Secrets />
     </dialog>
 </SvelteFlowProvider>
 
