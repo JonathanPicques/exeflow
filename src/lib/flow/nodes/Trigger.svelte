@@ -12,21 +12,22 @@
     const edges = useEdges();
     const {triggers} = getGraphContext();
 
-    const {icon, color} = triggers[data.id]!;
+    const {icon, name, color} = triggers[data.id]!;
     const {valid, title, outputs} = $derived(data.data);
 
-    const nodeName = $derived(humanPluginName(extractPluginNamespace(data.id)));
-    const nodeTitle = $derived(title ?? humanPluginName(extractPluginName(data.id)));
+    const nodeName = $derived(name ?? humanPluginName(extractPluginName(data.id)));
+    const nodeTitle = $derived(title);
+    const nodeNamespace = $derived(humanPluginName(extractPluginNamespace(data.id)));
 
     const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
 </script>
 
 <div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
     <div class="content">
-        <img src={icon} alt="" width="32px" height="32px" />
+        <img src={icon} alt="" title={nodeNamespace} width="32px" height="32px" />
         <div>
             <span class:valid class="name">{nodeName}</span>
-            {#if nodeName !== nodeTitle}
+            {#if nodeTitle && nodeName !== nodeTitle}
                 <span class:valid class="title">{nodeTitle}</span>
             {/if}
         </div>

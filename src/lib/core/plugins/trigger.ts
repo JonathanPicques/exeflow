@@ -6,6 +6,7 @@ export interface Trigger<Config extends JsonSchema> {
     type: 'trigger';
     //
     icon: string;
+    name?: string;
     color: string;
     description: string;
     //

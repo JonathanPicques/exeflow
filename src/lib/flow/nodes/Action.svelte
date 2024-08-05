@@ -13,11 +13,12 @@
     const edges = useEdges();
     const {actions} = getGraphContext();
 
-    const {icon, color} = actions[data.id]!;
+    const {icon, name, color} = actions[data.id]!;
     const {valid, title, inputs, outputs} = $derived(data.data);
 
-    const nodeName = $derived(humanPluginName(extractPluginNamespace(data.id)));
-    const nodeTitle = $derived(title ?? humanPluginName(extractPluginName(data.id)));
+    const nodeName = $derived(name ?? humanPluginName(extractPluginName(data.id)));
+    const nodeTitle = $derived(title);
+    const nodeNamespace = $derived(humanPluginName(extractPluginNamespace(data.id)));
 
     const connectedInputs = $derived([...new Set($edges.filter(e => e.target === id).map(e => e.targetHandle))] as string[]);
     const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
@@ -34,10 +35,10 @@
         {/each}
     </div>
     <div class="content">
-        <img src={icon} alt="" width="32px" height="32px" />
+        <img src={icon} alt="" title={nodeNamespace} width="32px" height="32px" />
         <div>
             <span class:valid class="name">{nodeName}</span>
-            {#if nodeName !== nodeTitle}
+            {#if nodeTitle && nodeName !== nodeTitle}
                 <span class:valid class="title">{nodeTitle}</span>
             {/if}
         </div>

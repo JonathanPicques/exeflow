@@ -6,6 +6,7 @@ export interface Action<Config extends JsonSchema> {
     type: 'action';
     //
     icon: string;
+    name?: string;
     color: string;
     description: string;
     //
