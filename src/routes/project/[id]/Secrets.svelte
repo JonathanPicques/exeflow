@@ -28,7 +28,7 @@
         <div>
             <input type="text" value={secret.key} />
             <input type="text" value={secret.value} />
-            <button onclick={() => remove(secret.key)}>Remove</button>
+            <button onclick={() => remove(secret.key)}>🗑</button>
         </div>
     {/each}
 {/await}

@@ -12,6 +12,7 @@ export default serverAction(action, {
             model,
             messages: [{role: 'user', content: prompt}],
         });
+
         return {out: 'out', results: {message: response.choices?.[0]?.message?.content}};
     },
 });

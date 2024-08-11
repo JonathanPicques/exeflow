@@ -1,5 +1,6 @@
 <script lang="ts">
     import AnyPicker from '$lib/schema/editor/pickers/AnyPicker.svelte';
+    import ArrayPicker from './pickers/ArrayPicker.svelte';
     import StringPicker from '$lib/schema/editor/pickers/StringPicker.svelte';
     import NumberPicker from '$lib/schema/editor/pickers/NumberPicker.svelte';
     import ObjectPicker from '$lib/schema/editor/pickers/ObjectPicker.svelte';
@@ -12,9 +13,12 @@
         schema: JsonSchema;
         onchange?: () => void;
     }
+
     let {id, value = $bindable(), schema, onchange}: Props = $props();
     const picker = $derived.by(() => {
         switch (schema.type) {
+            case 'array':
+                return ArrayPicker;
             case 'string':
                 return StringPicker;
             case 'number':

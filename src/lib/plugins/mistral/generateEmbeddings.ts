@@ -4,13 +4,13 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
-    required: ['url', 'apiKey', 'model', 'input'],
+    required: ['url', 'apiKey', 'model', 'inputs'],
     properties: {
         url: {type: 'string'},
         apiKey: {type: 'string'},
         //
         model: {type: 'string'},
-        input: {type: 'string'},
+        inputs: {type: 'array', items: {type: 'string'}},
     },
 } satisfies JsonSchema;
 
@@ -32,7 +32,7 @@ export default action<typeof configSchema>({
                 apiKey: {type: 'string', default: config.apiKey, suggestions: apiKeys},
                 //
                 model: {type: 'string', default: config.model, suggestions: models},
-                input: {type: 'string', format: 'text', default: config.input},
+                inputs: {type: 'array', items: {type: 'string'}, default: config.inputs},
             },
         };
     },
@@ -45,7 +45,7 @@ export default action<typeof configSchema>({
                     apiKey: form?.apiKey ?? config?.apiKey ?? '',
                     //
                     model: form?.model ?? config?.model ?? models[0],
-                    input: form?.input ?? config?.input ?? '',
+                    inputs: form?.inputs ?? config?.inputs ?? [],
                 },
                 schema: configSchema,
             },

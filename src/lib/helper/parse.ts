@@ -19,6 +19,11 @@ interface Variables {
  */
 export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema: T, variables: Variables): InferJsonSchema<T> => {
     switch (schema.type) {
+        case 'array': {
+            if (schema.items) {
+                return (value as unknown[]).map(item => resolve(item, schema.items!, variables)) as InferJsonSchema<T>;
+            }
+        }
         case 'string':
             return evaluate(value, variables) as InferJsonSchema<T>;
         case 'number':
