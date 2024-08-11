@@ -20,6 +20,7 @@
 
     const edgeTypes = {edge: CutEdge};
     const nodeTypes = {action: ActionNode, trigger: TriggerNode};
+    const deleteKey = ['Delete', 'Backspace'];
     const defaultEdgeOptions = {type: 'edge'};
 
     export {getViewport, setViewport};
@@ -108,7 +109,7 @@
     };
 </script>
 
-<SvelteFlow {nodes} {nodeTypes} {edges} {edgeTypes} {defaultEdgeOptions} {minZoom} {maxZoom} {onconnect} {isValidConnection} {ondrop} {ondragover}>
+<SvelteFlow {nodes} {nodeTypes} {edges} {edgeTypes} {deleteKey} {defaultEdgeOptions} {minZoom} {maxZoom} {onconnect} {isValidConnection} {ondrop} {ondragover}>
     <Background />
 </SvelteFlow>
 
