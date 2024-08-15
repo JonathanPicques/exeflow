@@ -15,7 +15,8 @@
     }
 
     let {id, value = $bindable(), schema, onchange}: Props = $props();
-    const picker = $derived.by(() => {
+
+    const Picker = $derived.by(() => {
         switch (schema.type) {
             case 'array':
                 return ArrayPicker;
@@ -33,4 +34,4 @@
     }) as typeof AnyPicker;
 </script>
 
-<svelte:component this={picker} bind:value {id} {schema} {onchange} />
+<Picker bind:value {id} {schema} {onchange} />

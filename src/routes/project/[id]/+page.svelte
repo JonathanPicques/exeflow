@@ -113,7 +113,7 @@
     <dialog bind:this={dialogLogs}>
         <div class="title">
             <h1>Executions logs</h1>
-            <button onclick={closeLogs} style:align-self="end">Close</button>
+            <button onclick={closeLogs} style:align-self="end">✖</button>
         </div>
         <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
     </dialog>
@@ -121,7 +121,7 @@
     <dialog bind:this={dialogSecrets}>
         <div class="title">
             <h1>Secrets</h1>
-            <button onclick={closeSecrets} style:align-self="end">Close</button>
+            <button onclick={closeSecrets} style:align-self="end">✖</button>
         </div>
         <Secrets />
     </dialog>
