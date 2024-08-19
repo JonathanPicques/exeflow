@@ -155,7 +155,7 @@
                 color: var(--color-fg);
                 font-weight: bold;
             }
-            .description {
+            & .description {
                 color: var(--color-fg-1);
                 font-weight: 200;
             }
