@@ -24,7 +24,7 @@
         "@supabase/supabase-js": "^2.45.1",
         "@types/mousetrap": "^1.6.15",
         "@types/nodemailer": "^6.4.15",
-        "@xyflow/svelte": "^0.1.15",
+        "@xyflow/svelte": "^0.1.16",
         "ajv": "^8.17.1",
         "cronstrue": "^2.50.0",
         "html-to-image": "^1.11.11",
@@ -34,12 +34,12 @@
     },
     "devDependencies": {
         "@sveltejs/adapter-auto": "^3.2.4",
-        "@sveltejs/kit": "^2.5.22",
+        "@sveltejs/kit": "^2.5.24",
         "@sveltejs/vite-plugin-svelte": "^3.1.1",
         "@types/eslint": "^9.6.0",
         "@types/pg": "^8.11.6",
-        "@typescript-eslint/eslint-plugin": "^8.1.0",
-        "@typescript-eslint/parser": "^8.1.0",
+        "@typescript-eslint/eslint-plugin": "^8.2.0",
+        "@typescript-eslint/parser": "^8.2.0",
         "dotenv": "^16.4.5",
         "eslint": "^9.9.0",
         "eslint-config-prettier": "^9.1.0",
@@ -50,11 +50,11 @@
         "pg": "^8.12.0",
         "prettier": "^3.3.3",
         "prettier-plugin-svelte": "^3.2.6",
-        "svelte": "5.0.0-next.223",
+        "svelte": "5.0.0-next.230",
         "svelte-check": "^3.8.5",
         "tslib": "^2.6.3",
         "typescript": "^5.5.4",
-        "vite": "^5.4.1",
+        "vite": "^5.4.2",
         "vitest": "^2.0.5"
     }
 }
