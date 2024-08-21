@@ -27,10 +27,10 @@ export default trigger<typeof configSchema>({
             required: ['tls', 'host', 'port', 'user', 'password', 'inbox'],
             properties: {
                 tls: {type: 'boolean', default: config.tls},
-                host: {type: 'string', default: config.host, suggestions: ['${env:IMAP_HOST}']},
-                port: {type: 'number', default: config.port, suggestions: ['${env:IMAP_PORT}', '993', '143']},
-                user: {type: 'string', default: config.user, suggestions: ['${env:IMAP_USER}']},
-                password: {type: 'string', default: config.password, suggestions: ['${env:IMAP_PASSWORD}']},
+                host: {type: 'string', default: config.host},
+                port: {type: 'number', default: config.port, suggestions: ['993', '143']},
+                user: {type: 'string', default: config.user},
+                password: {type: 'string', default: config.password},
                 //
                 inbox: {type: 'string', default: config.inbox, suggestions: ['INBOX']},
             },

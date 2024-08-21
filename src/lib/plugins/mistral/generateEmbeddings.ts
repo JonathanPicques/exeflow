@@ -16,7 +16,6 @@ const configSchema = {
 
 const urls = ['https://api.mistral.ai'];
 const models = ['mistral-embed'];
-const apiKeys = ['${env:MISTRAL_API_KEY}'];
 
 export default action<typeof configSchema>({
     icon,
@@ -29,7 +28,7 @@ export default action<typeof configSchema>({
             required: ['url', 'apiKey', 'model', 'input'],
             properties: {
                 url: {type: 'string', default: config.url, suggestions: urls},
-                apiKey: {type: 'string', default: config.apiKey, suggestions: apiKeys},
+                apiKey: {type: 'string', default: config.apiKey, title: 'api key'},
                 //
                 model: {type: 'string', default: config.model, suggestions: models},
                 inputs: {type: 'array', items: {type: 'string'}, default: config.inputs},

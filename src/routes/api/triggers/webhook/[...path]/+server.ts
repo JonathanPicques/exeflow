@@ -23,7 +23,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
     if (triggerRows.length === 0) throw error(404);
 
     const triggerProjectIds = triggerRows.map(t => t.project_id);
-    const projects = await db.selectFrom('projects').select(['id', 'content']).where('id', 'in', triggerProjectIds).execute();
+    const projects = await db.selectFrom('projects').select(['id', 'content', 'owner_id']).where('id', 'in', triggerProjectIds).execute();
     if (projects.length === 0) throw error(404);
 
     const execId = randomUUID();
@@ -34,7 +34,7 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
     const responseStream = new ReadableStream({
         async start(stream) {
             try {
-                for (const {id: projectId, content} of projects) {
+                for (const {id: projectId, content, owner_id} of projects) {
                     let index = 0;
 
                     const {nodes, edges} = content as Graph;
@@ -42,13 +42,20 @@ const execute = async (db: Db, request: Request, path: string, method: string) =
 
                     if (webhooks) {
                         const context = new GraphContext({nodes: writable(nodes), edges: writable(edges), actions, triggers});
+                        const secrets = (await db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', owner_id).execute()).reduce(
+                            (acc, {key, value}) => ({
+                                ...acc,
+                                [key]: value,
+                            }),
+                            {},
+                        );
 
                         for (const webhook of webhooks) {
                             const webhookPath = webhook.data.data.config.value.path as string;
                             const webhookMethod = webhook.data.data.config.value.method as string;
 
                             if ((path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod) {
-                                for await (const step of executeTrigger({node: webhook, signal: controller.signal, context, request, serverActions, serverTriggers})) {
+                                for await (const step of executeTrigger({node: webhook, signal: controller.signal, context, secrets, request, serverActions, serverTriggers})) {
                                     if (controller.signal.aborted) return;
                                     if (step.pluginId === 'webhook:response' && valid(step.config, {type: 'object', required: ['body'], properties: {body: {}}})) {
                                         stream.enqueue(step.config.body);

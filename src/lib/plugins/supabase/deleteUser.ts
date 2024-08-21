@@ -13,9 +13,6 @@ const configSchema = {
     },
 } satisfies JsonSchema;
 
-const urls = ['${env:SUPABASE_URL}'];
-const keys = ['${env:SUPABASE_SERVICE_ROLE_KEY}'];
-
 export default action<typeof configSchema>({
     icon,
     color: '#3ecf8e',
@@ -26,8 +23,8 @@ export default action<typeof configSchema>({
             type: 'object',
             required: ['url', 'apiKey', 'userId'],
             properties: {
-                url: {type: 'string', default: config.url, suggestions: urls},
-                key: {type: 'string', default: config.key, suggestions: keys},
+                url: {type: 'string', default: config.url},
+                key: {type: 'string', default: config.key},
                 //
                 userId: {type: 'string', default: config.userId},
             },
@@ -38,8 +35,8 @@ export default action<typeof configSchema>({
             valid: true,
             config: {
                 value: {
-                    url: form?.url ?? config?.url ?? urls[0],
-                    key: form?.key ?? config?.key ?? keys[0],
+                    url: form?.url ?? config?.url ?? '',
+                    key: form?.key ?? config?.key ?? '',
                     //
                     userId: form?.userId ?? config?.userId ?? '',
                 },

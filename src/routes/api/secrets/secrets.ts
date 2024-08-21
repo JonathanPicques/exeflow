@@ -20,7 +20,5 @@ export const putSecret = async ({key, value}: Secret) => {
 };
 
 export const deleteSecret = async ({key}: Pick<Secret, 'key'>) => {
-    const response = await fetch(`/api/secrets/${key}`, {method: 'DELETE'});
-
-    return (await response.json()) as Secret;
+    await fetch(`/api/secrets/${key}`, {method: 'DELETE'});
 };

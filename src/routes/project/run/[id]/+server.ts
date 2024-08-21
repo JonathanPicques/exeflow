@@ -18,13 +18,21 @@ export const POST = async ({locals, params, request}) => {
         const {serverActions, serverTriggers} = await importServerPlugins();
 
         const context = new GraphContext({nodes: writable(graph.nodes), edges: writable(graph.edges), actions, triggers});
+        const secrets = (await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', user.id).execute()).reduce(
+            (acc, {key, value}) => ({
+                ...acc,
+                [key]: value,
+            }),
+            {},
+        );
+
         const controller = new AbortController();
         const responseStream = new ReadableStream({
             async start(stream) {
                 try {
                     const node = context.findNode(id);
                     if (!isTriggerNode(node)) throw new Error(`cannot execute an action`);
-                    for await (const step of executeTrigger({node, signal: controller.signal, context, serverActions, serverTriggers})) {
+                    for await (const step of executeTrigger({node, signal: controller.signal, context, secrets, serverActions, serverTriggers})) {
                         if (controller.signal.aborted) return;
                         stream.enqueue(JSON.stringify(step));
                         stream.enqueue('\n');

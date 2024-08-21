@@ -25,21 +25,18 @@ export default trigger<typeof configSchema>({
                 token: {
                     type: 'string',
                     default: config.token,
-                    suggestions: ['${env:DISCORD_TOKEN}'],
                     //
                     description: 'guide to create a discord bot token: https://discord.com/developers/docs/quick-start/getting-started',
                 },
                 server: {
                     type: 'string',
                     default: config.server,
-                    suggestions: ['${env:DISCORD_SERVER}'],
                     //
                     description: 'will be sent on this server',
                 },
                 channel: {
                     type: 'string',
                     default: config.channel,
-                    suggestions: ['${env:DISCORD_CHANNEL}'],
                     //
                     description: 'will be sent on this channel',
                 },

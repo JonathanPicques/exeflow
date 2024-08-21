@@ -2,10 +2,12 @@ import type {InferJsonSchema, JsonSchema} from '$lib/schema/schema';
 
 const envRegex = /\${env:([a-zA-Z0-9_-]+)}/gm;
 const nodeRegex = /\${node:([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)}/gm;
+const secretsRegex = /\${secret:([a-zA-Z0-9_-]+)}/gm;
 
 interface Variables {
     env: Record<string, string>;
     node: Record<string, Record<string, unknown>>;
+    secrets: Record<string, string>;
 }
 
 /**
@@ -59,12 +61,13 @@ export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema:
  * constant('sk-123') => true
  * constant('sk-123-${env:SK_SUFFIX}') => false
  * constant('Hello ${node:1234:user.name}!') => false
+ * constant('api key: ${secret:MISTRAL_API_KEY}!') => false
  * ```
  */
 export const constant = (value: unknown): boolean => {
     switch (typeof value) {
         case 'string':
-            return !value.includes('${env:') && !value.includes('${node:');
+            return !value.includes('${env:') && !value.includes('${node:') && !value.includes('${secret:');
         case 'number':
         case 'boolean':
             return true;
@@ -74,6 +77,10 @@ export const constant = (value: unknown): boolean => {
 
 const evaluate = (str: string, variables: Variables): string => {
     return str
+        .replace(secretsRegex, match => {
+            const name = match.substring(9, match.length - 1); // extract NAME from ${secret:NAME}
+            return variables.secrets[name] ?? '';
+        })
         .replace(envRegex, match => {
             const name = match.substring(6, match.length - 1); // extract NAME from ${env:NAME}
             if (name.startsWith('EXEFLOW_')) {

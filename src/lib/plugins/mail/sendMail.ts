@@ -29,10 +29,10 @@ export default action<typeof configSchema>({
             type: 'object',
             properties: {
                 tls: {type: 'boolean', default: config.tls},
-                host: {type: 'string', default: config.host, suggestions: ['${env:SMTP_HOST}']},
-                port: {type: 'number', default: config.port, suggestions: ['${env:SMTP_PORT}', '587', '465', '2525']},
-                user: {type: 'string', default: config.user, suggestions: ['${env:SMTP_USER}']},
-                password: {type: 'string', default: config.password, suggestions: ['${env:SMTP_PASSWORD}']},
+                host: {type: 'string', default: config.host},
+                port: {type: 'number', default: config.port, suggestions: ['587', '465', '2525']},
+                user: {type: 'string', default: config.user},
+                password: {type: 'string', default: config.password},
                 //
                 to: {type: 'string', default: config.to},
                 from: {type: 'string', default: config.from},
