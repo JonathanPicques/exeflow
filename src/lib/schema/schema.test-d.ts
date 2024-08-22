@@ -1,5 +1,5 @@
 import {test, expectTypeOf} from 'vitest';
-import type {InferJsonSchema} from './schema';
+import type {InferJsonSchema} from './infer';
 
 test('InferJsonSchema', () => {
     expectTypeOf<InferJsonSchema<{type: 'number'}>>().toEqualTypeOf<number>();

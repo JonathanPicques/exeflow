@@ -1,4 +1,5 @@
-import type {InferJsonSchema, JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/schema/schema';
+import type {InferJsonSchema} from '$lib/schema/infer';
 
 const envRegex = /\${env:([a-zA-Z0-9_-]+)}/gm;
 const nodeRegex = /\${node:([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)}/gm;
