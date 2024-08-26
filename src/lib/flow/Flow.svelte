@@ -83,7 +83,7 @@
         edges.update(edges =>
             edges.filter(e => {
                 // Makes sure only one edge can exit from a source (right)
-                if (e.source === connection.source) {
+                if (e.source === connection.source && e.sourceHandle === connection.sourceHandle) {
                     // Only keep the last one and disconnect the other one
                     return (
                         e.source === connection.source &&
