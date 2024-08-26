@@ -22,7 +22,7 @@ const configSchema = {
 export default action<typeof configSchema>({
     icon,
     color: '#f3ce39',
-    description: 'send a mail',
+    description: 'send a mail using SMTP',
     //
     form({config}) {
         return {

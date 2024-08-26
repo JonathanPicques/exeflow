@@ -19,7 +19,7 @@ const configSchema = {
 export default trigger<typeof configSchema>({
     icon,
     color: '#f3ce39',
-    description: 'triggered when receiving a mail',
+    description: 'triggered when receiving a mail from an IMAP server',
     //
     form({config}) {
         return {

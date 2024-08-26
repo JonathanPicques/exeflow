@@ -35,7 +35,7 @@ export default action<typeof configSchema>({
 
         return {
             valid: !!url && depth > 0 && timeout >= 0,
-            title: url ? `crawl ${url}` : 'crawl',
+            title: url,
             config: {
                 value: {url, depth, timeout},
                 schema: configSchema,
