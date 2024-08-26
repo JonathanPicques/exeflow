@@ -49,16 +49,16 @@ export const PATCH = async ({locals, params, request}) => {
     const body = await request.json();
     if (!valid(body, patchSchema)) throw error(400);
 
-    const triggerNodes = body.content.nodes.filter(n => n.type === 'trigger') as TriggerNode[];
-    const triggerNodeIds = triggerNodes.map(n => n.id as TriggersNodeId);
-
     await locals.db.transaction().execute(async trx => {
-        const triggersDeleted = await trx
+        const triggerNodes = body.content.nodes.filter(n => n.type === 'trigger') as TriggerNode[];
+        const triggerNodeIds = triggerNodes.map(n => n.id as TriggersNodeId);
+
+        const deleteTriggers = trx
             .deleteFrom('triggers')
             .returning(['node_id', 'plugin_id', 'project_id'])
-            .where('node_id', 'not in', triggerNodeIds)
-            .where('project_id', '=', params.id as ProjectsId)
-            .execute();
+            .where('project_id', '=', params.id as ProjectsId);
+        if (triggerNodeIds.length > 0) deleteTriggers.where('node_id', 'not in', triggerNodeIds);
+        const triggersDeleted = await deleteTriggers.execute();
 
         await Promise.all(
             triggersDeleted
@@ -99,19 +99,19 @@ export const PATCH = async ({locals, params, request}) => {
                 }
             }),
         );
-    });
 
-    const {numUpdatedRows} = await locals.db
-        .updateTable('projects')
-        .where('id', '=', params.id as ProjectsId)
-        .where('owner_id', '=', user.id)
-        .set({
-            image: body.image,
-            content: JSON.stringify(body.content),
-            updated_at: new Date(),
-        })
-        .executeTakeFirst();
-    if (numUpdatedRows < 1) throw error(500);
+        const {numUpdatedRows} = await trx
+            .updateTable('projects')
+            .where('id', '=', params.id as ProjectsId)
+            .where('owner_id', '=', user.id)
+            .set({
+                image: body.image,
+                content: JSON.stringify(body.content),
+                updated_at: new Date(),
+            })
+            .executeTakeFirst();
+        if (numUpdatedRows < 1) throw error(500);
+    });
 
     return json({id: params.id});
 };
