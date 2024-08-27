@@ -22,6 +22,25 @@ const ollama = {
     },
 } satisfies JsonSchema;
 
+const openai = {
+    type: 'object',
+    required: ['type', 'settings'],
+    properties: {
+        type: {
+            type: 'string' as const,
+            const: 'openai' as const,
+        },
+        settings: {
+            type: 'object',
+            required: ['model', 'apiKey'],
+            properties: {
+                model: {type: 'string', suggestions: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo']},
+                apiKey: {type: 'string', title: 'api key', suggestions: ['${secret:OPENAI_API_KEY}']},
+            },
+        },
+    },
+} satisfies JsonSchema;
+
 const mistral = {
     type: 'object',
     required: ['type', 'settings'],
@@ -36,36 +55,36 @@ const mistral = {
             properties: {
                 url: {type: 'string', suggestions: ['https://api.mistral.ai']},
                 model: {type: 'string', suggestions: ['mistral-small', 'mistral-medium', 'mistral-large']},
-                apiKey: {type: 'string', title: 'api key'},
+                apiKey: {type: 'string', title: 'api key', suggestions: ['${secret:MISTRAL_API_KEY}']},
             },
         },
     },
 } satisfies JsonSchema;
 
-const providers = {ollama, mistral};
+const providers = {ollama, openai, mistral};
 
 const configSchema = {
     type: 'object',
     required: ['inputs'],
     properties: {
-        inputs: {type: 'array', items: {type: 'string'}},
-        provider: {anyOf: [ollama, mistral]},
+        input: {type: 'string'},
+        provider: {anyOf: [ollama, openai, mistral]},
     },
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({
     icon,
     color: '#f3ce39',
-    description: 'chat completion',
+    description: 'chat completion using Ollama, MistralAI or OpenAI',
     //
     form({config}) {
         const provider = providers[config.provider.type];
 
         return {
             type: 'object',
-            required: ['inputs'],
+            required: ['input', 'provider'],
             properties: {
-                inputs: fill(configSchema.properties.inputs, config.inputs),
+                input: fill(configSchema.properties.input, config.input),
                 provider: {
                     ...provider,
                     properties: {
@@ -82,7 +101,7 @@ export default action<typeof configSchema>({
     },
     data({form, config}) {
         const type = form?.provider?.type ?? config?.provider.type ?? 'ollama';
-        const inputs = form?.inputs ?? config?.inputs ?? [];
+        const input = form?.input ?? config?.input ?? '';
         const provider =
             form?.provider?.type && form.provider.type !== config?.provider.type
                 ? zero(providers[form.provider.type]) // reset to default values if we switch the provider type
@@ -91,12 +110,14 @@ export default action<typeof configSchema>({
         return {
             valid: true,
             config: {
-                value: {inputs, provider},
+                value: {input, provider},
                 schema: configSchema,
             },
             inputs: ['in'],
             outputs: ['out'],
-            results: {},
+            results: {
+                result: {type: 'string'},
+            },
         };
     },
 });

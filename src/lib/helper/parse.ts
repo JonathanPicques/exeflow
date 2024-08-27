@@ -1,5 +1,6 @@
-import type {JsonSchema} from '$lib/schema/schema';
+import {valid} from '$lib/schema/validate';
 import type {InferJsonSchema} from '$lib/schema/infer';
+import type {JsonSchema, JsonSchemaAnyOf} from '$lib/schema/schema';
 
 const envRegex = /\${env:([a-zA-Z0-9_-]+)}/gm;
 const nodeRegex = /\${node:([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)}/gm;
@@ -22,6 +23,16 @@ interface Variables {
  */
 export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema: T, variables: Variables): InferJsonSchema<T> => {
     switch (schema.type) {
+        case undefined: {
+            if ((schema as JsonSchemaAnyOf).anyOf !== undefined) {
+                for (const subschema of (schema as JsonSchemaAnyOf).anyOf) {
+                    if (valid(value, subschema)) {
+                        return resolve(value, subschema, variables);
+                    }
+                }
+            }
+            break;
+        }
         case 'array': {
             if (schema.items) {
                 return (value as unknown[]).map(item => resolve(item, schema.items!, variables)) as InferJsonSchema<T>;
