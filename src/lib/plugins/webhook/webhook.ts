@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {trigger} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -19,13 +20,7 @@ export default trigger<typeof configSchema>({
     description: 'triggered when called via HTTP(s)',
     //
     form({config}) {
-        return {
-            type: 'object',
-            properties: {
-                path: {type: 'string', default: config.path},
-                method: {type: 'string', enum: methods, default: config.method},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config, constant}) {
         const path = form?.path ?? config?.path ?? '/';

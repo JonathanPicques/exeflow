@@ -1,14 +1,15 @@
 import icon from './icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
+import {fill} from '$lib/schema/data';
 
 const configSchema = {
     type: 'object',
     required: ['token', 'server', 'channel'] as const,
     properties: {
-        token: {type: 'string'},
-        server: {type: 'string'},
-        channel: {type: 'string'},
+        token: {type: 'string', description: 'guide to create a discord bot token: https://discord.com/developers/docs/quick-start/getting-started'},
+        server: {type: 'string', description: 'will be sent on this server'},
+        channel: {type: 'string', description: 'will be sent on this channel'},
     },
 } satisfies JsonSchema;
 
@@ -18,30 +19,7 @@ export default trigger<typeof configSchema>({
     description: 'triggered when receiving a message in a channel',
     //
     form({config}) {
-        return {
-            type: 'object',
-            required: ['token', 'server', 'channel'],
-            properties: {
-                token: {
-                    type: 'string',
-                    default: config.token,
-                    //
-                    description: 'guide to create a discord bot token: https://discord.com/developers/docs/quick-start/getting-started',
-                },
-                server: {
-                    type: 'string',
-                    default: config.server,
-                    //
-                    description: 'will be sent on this server',
-                },
-                channel: {
-                    type: 'string',
-                    default: config.channel,
-                    //
-                    description: 'will be sent on this channel',
-                },
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         return {

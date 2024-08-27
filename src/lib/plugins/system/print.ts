@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -6,7 +7,7 @@ const configSchema = {
     type: 'object',
     required: ['text'] as const,
     properties: {
-        text: {type: 'string'},
+        text: {type: 'string', format: 'text'},
     },
 } satisfies JsonSchema;
 
@@ -16,12 +17,7 @@ export default action<typeof configSchema>({
     description: 'prints a text to the console',
     //
     form({config}) {
-        return {
-            type: 'object',
-            properties: {
-                text: {type: 'string', format: 'text', default: config.text},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         return {

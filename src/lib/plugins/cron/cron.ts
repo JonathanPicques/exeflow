@@ -1,6 +1,7 @@
 import cronstrue from 'cronstrue';
 
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {trigger} from '$lib/core/plugins/trigger';
 import {tryFunction} from '$lib/helper/error';
 import type {JsonSchema} from '$lib/schema/schema';
@@ -19,13 +20,7 @@ export default trigger<typeof configSchema>({
     description: 'triggered at the scheduled interval',
     //
     form({config}) {
-        return {
-            type: 'object',
-            required: ['interval'],
-            properties: {
-                interval: {type: 'string', default: config.interval},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config, constant}) {
         const interval = form?.interval ?? config?.interval ?? '*/5 * * * *';

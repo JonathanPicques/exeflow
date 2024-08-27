@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -6,8 +7,8 @@ const configSchema = {
     type: 'object',
     required: ['body', 'statusCode'] as const,
     properties: {
-        body: {type: 'string'},
-        statusCode: {type: 'number'},
+        body: {type: 'string', format: 'text'},
+        statusCode: {type: 'number', title: 'status code'},
     },
 } satisfies JsonSchema;
 
@@ -17,13 +18,7 @@ export default action<typeof configSchema>({
     description: 'send a response back to the webhook',
     //
     form({config}) {
-        return {
-            type: 'object',
-            properties: {
-                body: {type: 'string', format: 'text', default: config.body},
-                statusCode: {type: 'number', title: 'status code', default: config.statusCode},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config, constant}) {
         const statusCode = form?.statusCode ?? config?.statusCode ?? 200;

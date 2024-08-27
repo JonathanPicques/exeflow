@@ -1,21 +1,22 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
+
+const urls = ['https://api.mistral.ai'];
+const models = ['mistral-embed'];
 
 const configSchema = {
     type: 'object',
     required: ['url', 'apiKey', 'model', 'inputs'],
     properties: {
-        url: {type: 'string'},
-        apiKey: {type: 'string'},
+        url: {type: 'string', suggestions: urls},
+        apiKey: {type: 'string', title: 'api key'},
         //
-        model: {type: 'string'},
+        model: {type: 'string', suggestions: models},
         inputs: {type: 'array', items: {type: 'string'}},
     },
 } satisfies JsonSchema;
-
-const urls = ['https://api.mistral.ai'];
-const models = ['mistral-embed'];
 
 export default action<typeof configSchema>({
     icon,
@@ -23,17 +24,7 @@ export default action<typeof configSchema>({
     description: `generate embeddings using Mistral's embedding models`,
     //
     form({config}) {
-        return {
-            type: 'object',
-            required: ['url', 'apiKey', 'model', 'input'],
-            properties: {
-                url: {type: 'string', default: config.url, suggestions: urls},
-                apiKey: {type: 'string', default: config.apiKey, title: 'api key'},
-                //
-                model: {type: 'string', default: config.model, suggestions: models},
-                inputs: {type: 'array', items: {type: 'string'}, default: config.inputs},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         return {

@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {trigger} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -8,11 +9,11 @@ const configSchema = {
     properties: {
         tls: {type: 'boolean'},
         host: {type: 'string'},
-        port: {type: 'number'},
+        port: {type: 'number', suggestions: ['993', '143']},
         user: {type: 'string'},
         password: {type: 'string'},
         //
-        inbox: {type: 'string'},
+        inbox: {type: 'string', suggestions: ['INBOX']},
     },
 } satisfies JsonSchema;
 
@@ -22,19 +23,7 @@ export default trigger<typeof configSchema>({
     description: 'triggered when receiving a mail from an IMAP server',
     //
     form({config}) {
-        return {
-            type: 'object',
-            required: ['tls', 'host', 'port', 'user', 'password', 'inbox'],
-            properties: {
-                tls: {type: 'boolean', default: config.tls},
-                host: {type: 'string', default: config.host},
-                port: {type: 'number', default: config.port, suggestions: ['993', '143']},
-                user: {type: 'string', default: config.user},
-                password: {type: 'string', default: config.password},
-                //
-                inbox: {type: 'string', default: config.inbox, suggestions: ['INBOX']},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         return {

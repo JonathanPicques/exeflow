@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -7,15 +8,15 @@ const configSchema = {
     properties: {
         tls: {type: 'boolean'},
         host: {type: 'string'},
-        port: {type: 'number'},
+        port: {type: 'number', suggestions: ['587', '465', '2525']},
         user: {type: 'string'},
         password: {type: 'string'},
         //
         to: {type: 'string'},
         from: {type: 'string'},
         subject: {type: 'string'},
-        bodyHtml: {type: 'string'},
-        bodyText: {type: 'string'},
+        bodyHtml: {type: 'string', title: 'mail in html', format: 'text'},
+        bodyText: {type: 'string', title: 'mail in plain text', format: 'text'},
     },
 } satisfies JsonSchema;
 
@@ -25,22 +26,7 @@ export default action<typeof configSchema>({
     description: 'send a mail using SMTP',
     //
     form({config}) {
-        return {
-            type: 'object',
-            properties: {
-                tls: {type: 'boolean', default: config.tls},
-                host: {type: 'string', default: config.host},
-                port: {type: 'number', default: config.port, suggestions: ['587', '465', '2525']},
-                user: {type: 'string', default: config.user},
-                password: {type: 'string', default: config.password},
-                //
-                to: {type: 'string', default: config.to},
-                from: {type: 'string', default: config.from},
-                subject: {type: 'string', default: config.subject},
-                bodyHtml: {type: 'string', title: 'mail in html', format: 'text', default: config.bodyHtml},
-                bodyText: {type: 'string', title: 'mail in plain text', format: 'text', default: config.bodyText},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         return {

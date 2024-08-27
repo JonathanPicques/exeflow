@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -20,17 +21,7 @@ export default action<typeof configSchema>({
     description: 'create an user with email/password',
     //
     form({config}) {
-        return {
-            type: 'object',
-            required: ['url', 'apiKey', 'email', 'password'],
-            properties: {
-                url: {type: 'string', default: config.url},
-                key: {type: 'string', default: config.key},
-                //
-                email: {type: 'string', default: config.email},
-                password: {type: 'string', format: 'text', default: config.password},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         return {

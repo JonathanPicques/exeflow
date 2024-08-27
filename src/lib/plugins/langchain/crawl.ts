@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -18,15 +19,7 @@ export default action<typeof configSchema>({
     description: 'crawl website',
     //
     form({config}) {
-        return {
-            type: 'object',
-            required: ['url', 'depth', 'timeout'],
-            properties: {
-                url: {type: 'string', default: config.url},
-                depth: {type: 'number', default: config.depth},
-                timeout: {type: 'number', default: config.timeout},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         const url = form?.url ?? config?.url ?? '';

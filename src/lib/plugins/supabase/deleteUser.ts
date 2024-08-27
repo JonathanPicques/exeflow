@@ -1,4 +1,5 @@
 import icon from './icon.svg';
+import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -19,16 +20,7 @@ export default action<typeof configSchema>({
     description: 'delete an user by id',
     //
     form({config}) {
-        return {
-            type: 'object',
-            required: ['url', 'apiKey', 'userId'],
-            properties: {
-                url: {type: 'string', default: config.url},
-                key: {type: 'string', default: config.key},
-                //
-                userId: {type: 'string', default: config.userId},
-            },
-        };
+        return fill(configSchema, config);
     },
     data({form, config}) {
         return {
