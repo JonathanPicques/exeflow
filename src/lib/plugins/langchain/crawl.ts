@@ -4,7 +4,7 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
-    required: ['url'],
+    required: ['url', 'depth', 'timeout'],
     properties: {
         url: {type: 'string'},
         depth: {type: 'number'},
@@ -20,7 +20,7 @@ export default action<typeof configSchema>({
     form({config}) {
         return {
             type: 'object',
-            required: ['url'],
+            required: ['url', 'depth', 'timeout'],
             properties: {
                 url: {type: 'string', default: config.url},
                 depth: {type: 'number', default: config.depth},

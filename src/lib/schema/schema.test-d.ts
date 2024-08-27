@@ -1,4 +1,5 @@
 import {test, expectTypeOf} from 'vitest';
+
 import type {InferJsonSchema} from './infer';
 
 test('InferJsonSchema', () => {

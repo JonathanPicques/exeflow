@@ -3,7 +3,7 @@ import {init} from '@paralleldrive/cuid2';
 import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 
-import {zero} from '$lib/schema/validate';
+import {zero} from '$lib/schema/data';
 import {constant} from '$lib/helper/parse';
 import {nodeSchema} from '$lib/core/graph/nodes';
 import {edgeSchema} from '$lib/core/graph/edges';

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {zero} from '$lib/schema/validate';
+    import {zero} from '$lib/schema/data';
     import type {JsonSchema} from '$lib/schema/schema';
 
     interface Props {
