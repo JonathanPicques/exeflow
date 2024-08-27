@@ -16,7 +16,7 @@ const ollama = {
             required: ['url', 'model'],
             properties: {
                 url: {type: 'string', suggestions: ['http://localhost:11434']},
-                model: {type: 'string', suggestions: ['llama3.1']},
+                model: {type: 'string', suggestions: ['all-minilm', 'nomic-embed-text', 'mxbai-embed-large', 'snowflake-arctic-embed']},
             },
         },
     },
@@ -34,7 +34,7 @@ const openai = {
             type: 'object',
             required: ['model', 'apiKey'],
             properties: {
-                model: {type: 'string', suggestions: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo']},
+                model: {type: 'string', suggestions: ['text-embedding-ada-002', 'text-embedding-3-small', 'text-embedding-3-large']},
                 apiKey: {type: 'string', title: 'api key', suggestions: ['${secret:OPENAI_API_KEY}']},
             },
         },
@@ -54,7 +54,7 @@ const mistral = {
             required: ['url', 'model', 'apiKey'],
             properties: {
                 url: {type: 'string', suggestions: ['https://api.mistral.ai']},
-                model: {type: 'string', suggestions: ['mistral-small', 'mistral-medium', 'mistral-large']},
+                model: {type: 'string', suggestions: ['mistral-embed']},
                 apiKey: {type: 'string', title: 'api key', suggestions: ['${secret:MISTRAL_API_KEY}']},
             },
         },
@@ -65,7 +65,7 @@ const providers = {ollama, openai, mistral};
 
 const configSchema = {
     type: 'object',
-    required: ['input'],
+    required: ['input', 'provider'],
     properties: {
         input: {type: 'string'},
         provider: {anyOf: [ollama, openai, mistral]},
@@ -75,7 +75,7 @@ const configSchema = {
 export default action<typeof configSchema>({
     icon,
     color: '#f3ce39',
-    description: 'chat completion using Ollama, MistralAI or OpenAI',
+    description: 'embeddings using Ollama, MistralAI or OpenAI',
     //
     form({config}) {
         const provider = providers[config.provider.type];
@@ -116,7 +116,7 @@ export default action<typeof configSchema>({
             inputs: ['in'],
             outputs: ['out'],
             results: {
-                result: {type: 'string'},
+                result: {type: 'array', items: {type: 'number'}},
             },
         };
     },
