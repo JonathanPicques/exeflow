@@ -12,10 +12,10 @@
     let {id, value = $bindable(), schema, onchange}: Props = $props();
 </script>
 
-{#each Object.entries(schema.properties ?? {}) as [key, subSchema] (key)}
+{#each Object.entries(schema.properties ?? {}) as [key, subschema] (key)}
     <fieldset>
-        <legend title={subSchema.description}>{subSchema.title ?? key}</legend>
-        <JsonSchemaEditor bind:value={value[key]} id={joinId(id, key)} schema={subSchema} {onchange} />
+        <legend title={subschema.description}>{subschema.title ?? key}</legend>
+        <JsonSchemaEditor bind:value={value[key]} id={joinId(id, key)} schema={subschema} {onchange} />
     </fieldset>
 {/each}
 
