@@ -26,9 +26,6 @@ importers:
       '@langchain/openai':
         specifier: ^0.2.8
         version: 0.2.8(langchain@0.2.17(@langchain/community@0.2.31(@langchain/mistralai@0.0.29)(@langchain/ollama@0.0.4)(@supabase/supabase-js@2.45.2)(ignore@5.3.2)(jsdom@25.0.0)(lodash@4.17.21)(openai@4.56.1(zod@3.23.8))(pg@8.12.0)(ws@8.18.0))(@langchain/mistralai@0.0.29(langchain@0.2.17)(openai@4.56.1(zod@3.23.8)))(@langchain/ollama@0.0.4(langchain@0.2.17)(openai@4.56.1(zod@3.23.8)))(@supabase/supabase-js@2.45.2)(ignore@5.3.2)(jsdom@25.0.0)(openai@4.56.1(zod@3.23.8))(ws@8.18.0))
-      '@mistralai/mistralai':
-        specifier: ^1.0.4
-        version: 1.0.4(zod@3.23.8)
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
@@ -740,11 +737,6 @@ packages:
 
   '@mistralai/mistralai@0.4.0':
     resolution: {integrity: sha512-KmFzNro1RKxIFh19J3osmUQhucefBBauMXN5fa9doG6dT9OHR/moBvvn+riVlR7c0AVfuxO8Dfa03AyLYYzbyg==}
-
-  '@mistralai/mistralai@1.0.4':
-    resolution: {integrity: sha512-fLFBD8r4KvITCkKlKcq2ievnNyLd7Oob4xMY7MkY04BqR4nffkTS49DqapnVkemuldtrmHidwPzwD7UT+yFC4A==}
-    peerDependencies:
-      zod: '>= 3'
 
   '@noble/hashes@1.4.0':
     resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
@@ -3162,10 +3154,6 @@ snapshots:
       node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
-
-  '@mistralai/mistralai@1.0.4(zod@3.23.8)':
-    dependencies:
-      zod: 3.23.8
 
   '@noble/hashes@1.4.0': {}
 
