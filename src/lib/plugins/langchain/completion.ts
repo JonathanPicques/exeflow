@@ -65,7 +65,7 @@ const providers = {ollama, openai, mistral};
 
 const configSchema = {
     type: 'object',
-    required: ['input'],
+    required: ['input', 'provider'],
     properties: {
         input: {type: 'string'},
         provider: {anyOf: [ollama, openai, mistral]},
@@ -81,8 +81,7 @@ export default action<typeof configSchema>({
         const provider = providers[config.provider.type];
 
         return {
-            type: 'object',
-            required: ['input', 'provider'],
+            ...configSchema,
             properties: {
                 input: fill(configSchema.properties.input, config.input),
                 provider: {

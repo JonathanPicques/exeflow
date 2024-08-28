@@ -67,7 +67,7 @@ const configSchema = {
     type: 'object',
     required: ['input', 'provider'],
     properties: {
-        input: {type: 'string'},
+        input: {type: 'string', format: 'text'},
         provider: {anyOf: [ollama, openai, mistral]},
     },
 } satisfies JsonSchema;

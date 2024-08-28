@@ -10,7 +10,7 @@ export default serverAction(action, {
                 const {OllamaEmbeddings} = await import('@langchain/ollama');
                 const {url, model} = config.provider.settings;
                 const embeddings = new OllamaEmbeddings({baseUrl: url, model});
-                const vectors = await embeddings.embedDocuments([input]);
+                const vectors = await embeddings.embedQuery(input);
 
                 return {out: 'out', results: {result: vectors}};
             }
@@ -18,7 +18,7 @@ export default serverAction(action, {
                 const {OpenAIEmbeddings} = await import('@langchain/openai');
                 const {model, apiKey} = config.provider.settings;
                 const embeddings = new OpenAIEmbeddings({model, apiKey});
-                const vectors = await embeddings.embedDocuments([input]);
+                const vectors = await embeddings.embedQuery(input);
 
                 return {out: 'out', results: {result: vectors}};
             }
@@ -26,7 +26,7 @@ export default serverAction(action, {
                 const {MistralAIEmbeddings} = await import('@langchain/mistralai');
                 const {url, model, apiKey} = config.provider.settings;
                 const embeddings = new MistralAIEmbeddings({endpoint: url, model, apiKey});
-                const vectors = await embeddings.embedDocuments([input]);
+                const vectors = await embeddings.embedQuery(input);
 
                 return {out: 'out', results: {result: vectors}};
             }
