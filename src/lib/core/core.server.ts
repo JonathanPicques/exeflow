@@ -50,6 +50,8 @@ export const executeAction = async function* ({node, signal, context, secrets, s
 
     while (true) {
         const {done, value} = await generator.next();
+        if (!value) break;
+
         yield {
             nodeId: node.id,
             pluginId: node.data.id,
@@ -88,6 +90,8 @@ export const executeTrigger = async function* ({
 
     while (true) {
         const {done, value} = await generator.next();
+        if (!value) break;
+
         yield {
             nodeId: node.id,
             pluginId: node.data.id,

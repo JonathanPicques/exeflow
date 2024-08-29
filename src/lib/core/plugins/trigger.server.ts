@@ -5,7 +5,7 @@ import type {InferJsonSchema} from '$lib/schema/infer';
 export interface ServerTrigger<Config extends JsonSchema> {
     type: 'serverTrigger';
     //
-    exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep> | AsyncGenerator<ExecStep, ExecStep>;
+    exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep | void> | AsyncGenerator<ExecStep, ExecStep | void>;
 }
 
 interface ExecArgs<Config extends JsonSchema> {
