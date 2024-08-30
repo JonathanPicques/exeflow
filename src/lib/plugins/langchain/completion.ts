@@ -68,6 +68,7 @@ const configSchema = {
     required: ['input', 'provider'],
     properties: {
         input: {type: 'string', format: 'text'},
+        stream: {type: 'boolean'},
         provider: {anyOf: [ollama, openai, mistral]},
     },
 } satisfies JsonSchema;
@@ -84,6 +85,7 @@ export default action<typeof configSchema>({
             ...configSchema,
             properties: {
                 input: fill(configSchema.properties.input, config.input),
+                stream: fill(configSchema.properties.stream, config.stream),
                 provider: {
                     ...provider,
                     properties: {
@@ -101,6 +103,7 @@ export default action<typeof configSchema>({
     data({form, config}) {
         const type = form?.provider?.type ?? config?.provider.type ?? 'ollama';
         const input = form?.input ?? config?.input ?? '';
+        const stream = form?.stream ?? config?.stream ?? false;
         const provider =
             form?.provider?.type && form.provider.type !== config?.provider.type
                 ? zero(providers[form.provider.type]) // reset to default values if we switch the provider type
@@ -108,8 +111,9 @@ export default action<typeof configSchema>({
 
         return {
             valid: true,
+            title: form?.provider?.settings.model ?? config?.provider.settings.model,
             config: {
-                value: {input, provider},
+                value: {input, stream, provider},
                 schema: configSchema,
             },
             inputs: ['in'],
