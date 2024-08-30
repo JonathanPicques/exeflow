@@ -1,21 +1,32 @@
 import type {Trigger} from '$lib/core/plugins/trigger';
+import type {PluginId} from '$lib/core/core';
 import type {JsonSchema} from '$lib/schema/schema';
+import type {PluginNode} from '$lib/core/graph/nodes';
 import type {InferJsonSchema} from '$lib/schema/infer';
 
 export interface ServerTrigger<Config extends JsonSchema> {
     type: 'serverTrigger';
     //
-    exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep | void> | AsyncGenerator<ExecStep, ExecStep | void>;
+    exec: (args: ExecArgs<Config>) => AsyncGenerator<ExecStep>;
 }
 
 interface ExecArgs<Config extends JsonSchema> {
+    next: (args: ExecNext) => AsyncGenerator<ExecStep>;
     config: InferJsonSchema<Config>;
     signal: AbortSignal;
     request?: Request;
 }
 
+interface ExecNext {
+    output: string;
+    results: Record<string, unknown>;
+}
+
 interface ExecStep {
-    out: string | undefined;
+    nodeId: PluginNode['id'];
+    pluginId: PluginId;
+    //
+    config: unknown;
     results: Record<string, unknown>;
 }
 

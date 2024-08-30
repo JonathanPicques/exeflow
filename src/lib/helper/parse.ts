@@ -31,7 +31,7 @@ export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema:
                     }
                 }
             }
-            break;
+            return value as InferJsonSchema<T>;
         }
         case 'array': {
             if (schema.items) {

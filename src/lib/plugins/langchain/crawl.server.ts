@@ -4,13 +4,13 @@ import action from './crawl';
 import {serverAction} from '$lib/core/plugins/action.server';
 
 export default serverAction(action, {
-    exec: async function* ({config}) {
+    exec: async function* ({next, config}) {
         const loader = new RecursiveUrlLoader(config.url, {
             timeout: config.timeout,
             maxDepth: config.depth,
         });
         const pages = await loader.load();
 
-        return {out: 'out', results: {pages}};
+        yield* next({output: 'out', results: {pages}});
     },
 });

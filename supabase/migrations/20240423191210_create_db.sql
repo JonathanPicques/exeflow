@@ -32,7 +32,6 @@ create table public.logs (
     --
     created_at timestamp with time zone not null default now(),
     --
-    constraint public_logs_pkey primary key (exec_id, node_id, plugin_id, project_id),
     constraint public_logs_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
 ) tablespace pg_default;
 

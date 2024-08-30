@@ -48,10 +48,14 @@ export class GraphContext {
     };
     public findNextActionNode = (id: PluginNode['id'], out: string) => {
         const edge = get(this.edges).find(e => e.source === id && e.sourceHandle === out);
-        if (!edge) {
+        if (!edge || !edge.sourceHandle || !edge.targetHandle) {
             return undefined;
         }
-        return this.findNode(edge.target) as ActionNode;
+        return {
+            node: this.findNode(edge.target) as ActionNode,
+            input: edge.targetHandle!,
+            output: edge.sourceHandle!,
+        };
     };
 
     public findPlugin = (node: PluginNode) => {

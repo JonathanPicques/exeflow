@@ -1,20 +1,32 @@
 import type {Action} from '$lib/core/plugins/action';
+import type {PluginId} from '$lib/core/core';
 import type {JsonSchema} from '$lib/schema/schema';
+import type {PluginNode} from '$lib/core/graph/nodes';
 import type {InferJsonSchema} from '$lib/schema/infer';
 
 export interface ServerAction<Config extends JsonSchema> {
     type: 'serverAction';
     //
-    exec: (args: ExecArgs<Config>) => Generator<ExecStep, ExecStep | void> | AsyncGenerator<ExecStep, ExecStep | void>;
+    exec: (args: ExecArgs<Config>) => AsyncGenerator<ExecStep>;
 }
 
 interface ExecArgs<Config extends JsonSchema> {
+    next: (args: ExecNext) => AsyncGenerator<ExecStep>;
+    input: string;
     config: InferJsonSchema<Config>;
     signal: AbortSignal;
 }
 
+interface ExecNext {
+    output: string;
+    results: Record<string, unknown>;
+}
+
 interface ExecStep {
-    out: string | undefined;
+    nodeId: PluginNode['id'];
+    pluginId: PluginId;
+    //
+    config: unknown;
     results: Record<string, unknown>;
 }
 

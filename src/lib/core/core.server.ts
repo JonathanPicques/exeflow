@@ -6,7 +6,7 @@ import type {TriggerId} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
 import type {ServerAction} from '$lib/core/plugins/action.server';
 import type {ServerTrigger} from '$lib/core/plugins/trigger.server';
-import type {Plugin, PluginId, GraphContext} from '$lib/core/core';
+import type {PluginId, GraphContext} from '$lib/core/core';
 import type {PluginNode, ActionNode, TriggerNode} from '$lib/core/graph/nodes';
 
 interface ExecuteData {
@@ -16,15 +16,13 @@ interface ExecuteData {
 interface ExecuteStep {
     nodeId: PluginNode['id'];
     pluginId: PluginId;
-    pluginType: Plugin['type'];
-    //
-    out?: string;
     config: unknown;
     results: Record<string, unknown>;
 }
 
 interface ActionExecuteArgs<T extends PluginNode> {
     node: T;
+    input: string;
     signal: AbortSignal;
     context: GraphContext;
     secrets: Record<string, string>;
@@ -41,35 +39,30 @@ interface TriggerExecuteArgs<T extends PluginNode> {
     serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>>;
 }
 
-export const executeAction = async function* ({node, signal, context, secrets, serverActions}: ActionExecuteArgs<ActionNode>, data: ExecuteData = {}): AsyncGenerator<ExecuteStep> {
+export const executeAction = async function* (
+    {node, input, signal, context, secrets, serverActions}: ActionExecuteArgs<ActionNode>,
+    data: ExecuteData = {},
+): AsyncGenerator<ExecuteStep> {
     const serverAction = serverActions[node.data.id];
     if (!serverAction) throw new Error(`server action ${node.data.id} not found`);
 
-    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, secrets, node: data});
-    const generator = serverAction.exec({config, signal});
+    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data, secrets});
 
-    while (true) {
-        const {done, value} = await generator.next();
-        if (!value) break;
+    yield* serverAction.exec({
+        next: async function* ({output: out, results}) {
+            data[node.id] = results;
+            yield {nodeId: node.id, pluginId: node.data.id, config, results};
 
-        yield {
-            nodeId: node.id,
-            pluginId: node.data.id,
-            pluginType: node.type,
-            //
-            out: value.out,
-            config,
-            results: value.results,
-        };
-        data[node.id] = value.results;
-        if (value.out && !signal.aborted) {
-            const next = context.findNextActionNode(node.id, value.out);
-            if (next) {
-                yield* executeAction({node: next, signal, context, secrets, serverActions}, data);
+            const nextNode = context.findNextActionNode(node.id, out);
+            if (nextNode) {
+                yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
             }
-        }
-        if (done) break;
-    }
+        },
+        input,
+        //
+        config,
+        signal,
+    });
 };
 
 export const executeTrigger = async function* ({
@@ -86,30 +79,22 @@ export const executeTrigger = async function* ({
 
     const data: ExecuteData = {};
     const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data, secrets});
-    const generator = serverTrigger.exec({config, signal, request});
 
-    while (true) {
-        const {done, value} = await generator.next();
-        if (!value) break;
+    yield* serverTrigger.exec({
+        next: async function* ({output: out, results}) {
+            data[node.id] = results;
+            yield {nodeId: node.id, pluginId: node.data.id, config, results};
 
-        yield {
-            nodeId: node.id,
-            pluginId: node.data.id,
-            pluginType: node.type,
-            //
-            out: value.out,
-            config,
-            results: value.results,
-        };
-        data[node.id] = value.results;
-        if (value.out && !signal.aborted) {
-            const next = context.findNextActionNode(node.id, value.out);
-            if (next) {
-                yield* executeAction({node: next, signal, context, secrets, serverActions}, data);
+            const nextNode = context.findNextActionNode(node.id, out);
+            if (nextNode) {
+                yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
             }
-        }
-        if (done) break;
-    }
+        },
+        //
+        config,
+        signal,
+        request,
+    });
 };
 
 export const importServerPlugins = async () => {

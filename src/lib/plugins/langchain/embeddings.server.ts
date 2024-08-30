@@ -2,7 +2,7 @@ import action from './embeddings';
 import {serverAction} from '$lib/core/plugins/action.server';
 
 export default serverAction(action, {
-    exec: async function* ({config}) {
+    exec: async function* ({next, config}) {
         const {input} = config;
 
         switch (config.provider.type) {
@@ -12,7 +12,8 @@ export default serverAction(action, {
                 const embeddings = new OllamaEmbeddings({baseUrl: url, model});
                 const vectors = await embeddings.embedQuery(input);
 
-                return {out: 'out', results: {result: vectors}};
+                yield* next({output: 'out', results: {result: vectors}});
+                break;
             }
             case 'openai': {
                 const {OpenAIEmbeddings} = await import('@langchain/openai');
@@ -20,7 +21,8 @@ export default serverAction(action, {
                 const embeddings = new OpenAIEmbeddings({model, apiKey});
                 const vectors = await embeddings.embedQuery(input);
 
-                return {out: 'out', results: {result: vectors}};
+                yield* next({output: 'out', results: {result: vectors}});
+                break;
             }
             case 'mistral': {
                 const {MistralAIEmbeddings} = await import('@langchain/mistralai');
@@ -28,7 +30,8 @@ export default serverAction(action, {
                 const embeddings = new MistralAIEmbeddings({endpoint: url, model, apiKey});
                 const vectors = await embeddings.embedQuery(input);
 
-                return {out: 'out', results: {result: vectors}};
+                yield* next({output: 'out', results: {result: vectors}});
+                break;
             }
         }
     },
