@@ -8,7 +8,7 @@ const configSchema = {
     properties: {
         tls: {type: 'boolean'},
         host: {type: 'string'},
-        port: {type: 'number', suggestions: ['587', '465', '2525']},
+        port: {type: 'number', editor: {suggestions: ['587', '465', '2525']}},
         user: {type: 'string'},
         password: {type: 'string'},
         //

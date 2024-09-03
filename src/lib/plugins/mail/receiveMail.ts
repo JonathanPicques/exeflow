@@ -9,11 +9,11 @@ const configSchema = {
     properties: {
         tls: {type: 'boolean'},
         host: {type: 'string'},
-        port: {type: 'number', suggestions: ['993', '143']},
+        port: {type: 'number', editor: {suggestions: ['993', '143']}},
         user: {type: 'string'},
         password: {type: 'string'},
         //
-        inbox: {type: 'string', suggestions: ['INBOX']},
+        inbox: {type: 'string', editor: {suggestions: ['INBOX']}},
     },
 } satisfies JsonSchema;
 

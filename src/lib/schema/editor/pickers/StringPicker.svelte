@@ -23,7 +23,7 @@
     <textarea bind:value rows={3} placeholder={schema.placeholder} onblur={onchange}></textarea>
 {:else}
     {@const listId = joinId(id, 'suggestions')}
-    {@const suggestions = schema.suggestions || []}
+    {@const suggestions = schema.editor?.suggestions || []}
 
     <input type="text" bind:value list={listId} placeholder={schema.placeholder} onblur={onchange} />
     <datalist id={listId}>

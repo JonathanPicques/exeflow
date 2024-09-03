@@ -9,7 +9,8 @@ import type {InferJsonSchema} from './infer';
  * zero({type: 'string'}) => ''
  * zero({type: 'string', const: 'hello!'}) => 'hello!'
  * zero({type: 'string', default: 'welcome!'}) => 'welcome!'
- * zero({type: 'string', const: 'hello!', default: 'welcome!'}) => 'hello!'
+ * zero({type: 'string', editor: {suggestions: ['what is up?']}}) => 'what is up?'
+ * zero({type: 'string', const: 'hello!', default: 'welcome!', editor: {suggestions: ['what is up?']}}) => 'hello!'
  * zero({type: 'object') => ({})
  * zero({type: 'object', properties: {name: {type: 'string', default: 'Joel'}}) => ({name: 'Joel'})
  * ```
@@ -24,7 +25,7 @@ export const zero = <T extends JsonSchema>(schema: T): InferJsonSchema<T> => {
         case 'number':
             return 0 as InferJsonSchema<T>;
         case 'string':
-            return (schema.suggestions?.[0] ?? '') as InferJsonSchema<T>;
+            return (schema.editor?.suggestions?.[0] ?? '') as InferJsonSchema<T>;
         case 'boolean':
             return false as InferJsonSchema<T>;
         //

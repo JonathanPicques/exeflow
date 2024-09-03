@@ -5,7 +5,9 @@ export interface JsonSchemaAll<T> {
     title?: string;
     description?: string;
     //
-    suggestions?: string[];
+    editor?: {
+        suggestions?: string[];
+    };
 }
 
 export interface JsonSchemaAny extends JsonSchemaAll<any> {
