@@ -67,7 +67,7 @@ const configSchema = {
     type: 'object',
     required: ['input', 'provider'],
     properties: {
-        input: {type: 'string', format: 'text'},
+        input: {type: 'string', editor: {textarea: true}},
         stream: {type: 'boolean'},
         provider: {anyOf: [ollama, openai, mistral]},
     },

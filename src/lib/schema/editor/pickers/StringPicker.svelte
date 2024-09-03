@@ -19,7 +19,7 @@
             </option>
         {/each}
     </select>
-{:else if schema.format === 'text'}
+{:else if schema.editor?.textarea === true}
     <textarea bind:value rows={3} placeholder={schema.placeholder} onblur={onchange}></textarea>
 {:else}
     {@const listId = joinId(id, 'suggestions')}

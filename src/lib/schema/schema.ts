@@ -6,6 +6,7 @@ export interface JsonSchemaAll<T> {
     description?: string;
     //
     editor?: {
+        textarea?: boolean;
         suggestions?: string[];
     };
 }
@@ -37,7 +38,7 @@ export interface JsonSchemaNumber extends JsonSchemaAll<number> {
 
 export interface JsonSchemaString extends JsonSchemaAll<string> {
     type: 'string';
-    format?: 'text';
+    format?: string;
     placeholder?: string;
     //
     enum?: string[];

@@ -43,10 +43,11 @@ export default action<typeof configSchema>({
                 },
                 message: {
                     type: 'string',
-                    format: 'text',
                     default: config.message,
                     //
                     description: 'message to send',
+                    //
+                    editor: {textarea: true},
                 },
             },
         };
