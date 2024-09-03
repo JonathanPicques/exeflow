@@ -10,6 +10,7 @@
             // Zen mode
             ".npmrc": true,
             ".eslint*": true,
+            "clean.js": true,
             "setup.js": true,
             "LICENCE.md": true,
             "pnpm-lock*": true,
