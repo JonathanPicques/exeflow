@@ -23,13 +23,16 @@
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
 
-    const {exportGraph, exportSelection, importSelection} = setGraphContext({
+    const {checksum, exportGraph, exportSelection, importSelection} = setGraphContext({
         nodes,
         edges,
         //
         actions: data.actions,
         triggers: data.triggers,
     });
+
+    let saveChecksum = $state(checksum());
+    let currentChecksum = $derived.by(() => checksum($nodes, $edges));
 
     const save = async () => {
         const {nodes, edges} = exportGraph();
@@ -42,6 +45,8 @@
                 edges,
                 viewport: flow.getViewport(),
             },
+        }).then(() => {
+            saveChecksum = checksum(nodes, edges);
         });
     };
 
@@ -84,7 +89,10 @@
 
 <SvelteFlowProvider>
     <nav>
-        <button onclick={save} use:shortcut={'ctrl+s'}>Save</button>
+        <button onclick={save} use:shortcut={'ctrl+s'}>
+            {#if saveChecksum === currentChecksum}Save{/if}
+            {#if saveChecksum !== currentChecksum}Save *{/if}
+        </button>
         <button onclick={layout} use:shortcut={'ctrl+alt+l'}>Layout</button>
         <button onclick={fitToView} use:shortcut={'ctrl+alt+c'}>Fit to view</button>
         {#if true}

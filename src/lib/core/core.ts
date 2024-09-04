@@ -7,6 +7,7 @@ import {zero} from '$lib/schema/data';
 import {constant} from '$lib/helper/parse';
 import {nodeSchema} from '$lib/core/graph/nodes';
 import {edgeSchema} from '$lib/core/graph/edges';
+import {stableChecksum} from '$lib/helper/check';
 
 import type {PluginEdge} from '$lib/core/graph/edges';
 import type {JsonSchema} from '$lib/schema/schema';
@@ -122,6 +123,24 @@ export class GraphContext {
         );
     };
 
+    public checksum = (nodes = get(this.nodes), edges = get(this.edges)) => {
+        return stableChecksum({
+            nodes: nodes
+                .map(n => ({
+                    id: n.id,
+                    data: n.data,
+                }))
+                .toSorted((a, b) => a.id.localeCompare(b.id)),
+            edges: edges
+                .map(e => ({
+                    source: e.source,
+                    sourceHandle: e.sourceHandle,
+                    target: e.target,
+                    targetHandle: e.targetHandle,
+                }))
+                .toSorted((a, b) => `${a.source}${a.sourceHandle}${a.target}${a.targetHandle}`.localeCompare(`${b.source}${b.sourceHandle}${b.target}${b.targetHandle}`)),
+        });
+    };
     public exportGraph = () => {
         return this.exportSelection(get(this.nodes).map(n => n.id));
     };
