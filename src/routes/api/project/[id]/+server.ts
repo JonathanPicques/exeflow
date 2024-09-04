@@ -20,8 +20,9 @@ const patchSchema = {
     },
 } satisfies JsonSchema;
 
-const jobname = ({node_id, plugin_id, project_id}: {node_id: string; plugin_id: string; project_id: string}) => `${project_id}:${plugin_id}:${node_id}`;
-
+const jobname = ({node_id, plugin_id, project_id}: {node_id: string; plugin_id: string; project_id: string}) => {
+    return `${project_id}:${plugin_id}:${node_id}`;
+};
 const schedule = async ({trx, cron, node_id, plugin_id, project_id}: {trx: Db; cron: string; node_id: string; plugin_id: string; project_id: string}) => {
     const triggerUrl = `${triggerRootUrl}/api/triggers/run/${project_id}/${node_id}`;
 
@@ -45,6 +46,15 @@ const unschedule = async ({trx, node_id, plugin_id, project_id}: {trx: Db; node_
 export const PATCH = async ({locals, params, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
+
+    const project = await locals.db
+        .selectFrom('projects')
+        .select('id')
+        .where('id', '=', params.id as ProjectsId)
+        .where('owner_id', '=', user.id)
+        .limit(1)
+        .executeTakeFirst();
+    if (!project) throw error(404);
 
     const body = await request.json();
     if (!valid(body, patchSchema)) throw error(400);
@@ -119,6 +129,15 @@ export const PATCH = async ({locals, params, request}) => {
 export const DELETE = async ({locals, params}) => {
     const user = await locals.user();
     if (!user) throw error(401);
+
+    const project = await locals.db
+        .selectFrom('projects')
+        .select('id')
+        .where('id', '=', params.id as ProjectsId)
+        .where('owner_id', '=', user.id)
+        .limit(1)
+        .executeTakeFirst();
+    if (!project) throw error(404);
 
     await locals.db.transaction().execute(async trx => {
         const triggersDeleted = await trx
