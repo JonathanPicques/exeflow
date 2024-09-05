@@ -4,8 +4,12 @@ import {serverTrigger} from '$lib/core/plugins/trigger.server';
 
 export default serverTrigger(trigger, {
     exec: async function* ({next, request}) {
-        const body = await tryFunction(async () => await request?.text());
-
-        yield* next({output: 'out', results: {body}});
+        yield* next({
+            output: 'out',
+            results: {
+                body: await tryFunction(async () => await request?.text()),
+                headers: request?.headers ? Object.fromEntries(request.headers.entries()) : {},
+            },
+        });
     },
 });
