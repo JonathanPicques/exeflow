@@ -10,7 +10,6 @@ export const POST = async ({locals, params, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const id = params.id;
     const graph = await request.json();
 
     if (valid(graph, graphSchema)) {
@@ -30,7 +29,7 @@ export const POST = async ({locals, params, request}) => {
         const responseStream = new ReadableStream({
             async start(stream) {
                 try {
-                    const node = context.findNode(id);
+                    const node = context.findNode(params.nodeId);
                     if (!isTriggerNode(node)) throw new Error(`cannot execute an action`);
                     for await (const step of executeTrigger({node, signal: controller.signal, context, secrets, serverActions, serverTriggers})) {
                         if (controller.signal.aborted) return;

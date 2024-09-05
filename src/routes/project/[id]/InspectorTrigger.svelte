@@ -6,8 +6,17 @@
     let {node}: {node: TriggerNode} = $props();
     const {nodes, edges} = getGraphContext();
 
-    const run = async () => {
-        const response = await fetch(`run/${node.id}`, {method: 'POST', body: JSON.stringify({nodes: $nodes, edges: $edges})});
+    const copy = () => {
+        const {port, hostname, protocol} = new URL(location.href);
+
+        window.navigator.clipboard.writeText(`${protocol}//${hostname}:${port}/api/project/${$page.params.id}/triggers/test/${node.id}`);
+    };
+    const open = () => {
+        window.open(`/api/project/${$page.params.id}/triggers/webhook${node.data.data.config.value.path}`);
+    };
+    const test = async () => {
+        const response = await fetch(`/api/project/${$page.params.id}/triggers/test/${node.id}`, {method: 'POST', body: JSON.stringify({nodes: $nodes, edges: $edges})});
+
         if (!response.ok) throw new Error();
         if (!response.body) throw new Error();
         const bodyReader = response.body.pipeThrough(new TextDecoderStream()).getReader();
@@ -23,24 +32,10 @@
             );
         }
     };
-
-    const open = () => {
-        const path = node.data.data.config.value.path;
-
-        window.open(`/api/triggers/webhook${path}`);
-    };
-
-    const copy = () => {
-        const url = new URL(location.href);
-        const nodeId = node.id;
-        const projectId = $page.params.id;
-
-        window.navigator.clipboard.writeText(`${url.protocol}//${url.hostname}:${url.port}/api/triggers/run/${projectId}/${nodeId}`);
-    };
 </script>
 
 <div>
-    <button onclick={run}>Run</button>
+    <button onclick={test}>Test</button>
     {#if node.data.id === 'webhook:webhook' && node.data.data.config.value.method === 'GET'}
         <button onclick={open}>Open in new tab</button>
     {/if}

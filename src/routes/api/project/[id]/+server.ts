@@ -24,7 +24,7 @@ const jobname = ({node_id, plugin_id, project_id}: {node_id: string; plugin_id: 
     return `${project_id}:${plugin_id}:${node_id}`;
 };
 const schedule = async ({trx, cron, node_id, plugin_id, project_id}: {trx: Db; cron: string; node_id: string; plugin_id: string; project_id: string}) => {
-    const triggerUrl = `${triggerRootUrl}/api/triggers/run/${project_id}/${node_id}`;
+    const triggerUrl = `${triggerRootUrl}/api/project/${project_id}/triggers/run/${node_id}`;
 
     await sql`select
       cron.schedule(

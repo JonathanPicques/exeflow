@@ -2,7 +2,7 @@ import {writable} from 'svelte/store';
 import {randomUUID} from 'crypto';
 import {json, error} from '@sveltejs/kit';
 
-import {insertLog} from '../../../log';
+import {insertLog} from '../../log';
 import {GraphContext, importPlugins} from '$lib/core/core';
 import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
 import type {Graph} from '$lib/core/core';
@@ -15,14 +15,14 @@ export const POST = async ({locals, params}) => {
     const trigger = await locals.db
         .selectFrom('triggers')
         .where('node_id', '=', params.nodeId as TriggersNodeId)
-        .where('project_id', '=', params.projectId as ProjectsId)
+        .where('project_id', '=', params.id as ProjectsId)
         .executeTakeFirst();
     if (!trigger) throw error(404);
 
     const project = await locals.db
         .selectFrom('projects')
         .select(['id', 'content', 'owner_id'])
-        .where('id', '=', params.projectId as ProjectsId)
+        .where('id', '=', params.id as ProjectsId)
         .executeTakeFirst();
     if (!project) throw error(404);
 
@@ -57,7 +57,7 @@ export const POST = async ({locals, params}) => {
             execId,
             nodeId: step.nodeId,
             pluginId: step.pluginId,
-            projectId: params.projectId,
+            projectId: params.id,
             //
             index: index++,
             config: step.config,
