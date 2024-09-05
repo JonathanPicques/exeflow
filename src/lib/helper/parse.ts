@@ -3,7 +3,7 @@ import type {InferJsonSchema} from '$lib/schema/infer';
 import type {JsonSchema, JsonSchemaAnyOf} from '$lib/schema/schema';
 
 const envRegex = /\${env:([a-zA-Z0-9_-]+)}/gm;
-const nodeRegex = /\${node:([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)}/gm;
+const nodeRegex = /\${node:([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)(:(\S*))?}/gm;
 const secretsRegex = /\${secret:([a-zA-Z0-9_-]+)}/gm;
 
 interface Variables {
@@ -11,6 +11,23 @@ interface Variables {
     node: Record<string, Record<string, unknown>>;
     secrets: Record<string, string>;
 }
+
+/**
+ * Returns a property by path
+ * @examples
+ * ```ts
+ * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, 'hero') => {name: 'Zorro'}
+ * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, 'hero.name') => 'Zorro'
+ * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, 'hero.friends.1') => 'Garcia'
+ * ```
+ */
+export const access = (obj: any, path: string): unknown => {
+    for (const p of path.split('.')) {
+        if (!obj || !obj.hasOwnProperty(p)) return undefined;
+        obj = obj[p];
+    }
+    return obj;
+};
 
 /**
  * Returns the given value by replacing all its interpolations
@@ -102,7 +119,10 @@ const evaluate = (str: string, variables: Variables): string => {
             return variables.env[name] ?? '';
         })
         .replaceAll(nodeRegex, match => {
-            const [nodeId, result] = match.substring(7, match.length - 1).split(':'); // extract NODE_ID:RESULT from ${node:NODE_ID:RESULT}
+            const [nodeId, result, path] = match.substring(7, match.length - 1).split(':'); // extract NODE_ID:RESULT:PATH from ${node:NODE_ID:RESULT:PATH}
+            if (path) {
+                return (access(variables.node[nodeId]?.[result], path) as string) ?? '';
+            }
             return (variables.node[nodeId]?.[result] as string) ?? '';
         });
 };
