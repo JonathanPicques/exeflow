@@ -33,6 +33,7 @@ export default trigger<typeof configSchema>({
             outputs: ['out'],
             results: {
                 body: {type: 'string'},
+                query: {type: 'object', additionalProperties: {type: 'string'}},
                 headers: {type: 'object', additionalProperties: {type: 'string'}},
             },
         };

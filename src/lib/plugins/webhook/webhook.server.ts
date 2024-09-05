@@ -8,6 +8,7 @@ export default serverTrigger(trigger, {
             output: 'out',
             results: {
                 body: await tryFunction(async () => await request?.text()),
+                query: request?.url ? Object.fromEntries(new URL(request?.url).searchParams.entries()) : {},
                 headers: request?.headers ? Object.fromEntries(request.headers.entries()) : {},
             },
         });
