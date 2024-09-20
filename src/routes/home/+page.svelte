@@ -37,7 +37,7 @@
     <div class="projects">
         {#each projects as project}
             <div class="project">
-                <a href="/project/{project.id}">
+                <a href="/project/{project.id}" aria-label="Project {project.name}">
                     <img src={project.image === 'data:null' ? empty : project.image} alt="" width="320px" height="180px" />
                 </a>
                 <div style:display="flex">

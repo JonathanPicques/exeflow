@@ -14,7 +14,7 @@
 <BaseEdge {path} {style} {markerEnd} />
 <EdgeLabelRenderer>
     <div class="nopan nodrag" style:transform="translate(-50%, -50%) translate({labelX}px,{labelY}px)">
-        <button class="custom" onclick={onEdgeClick}>
+        <button class="custom" onclick={onEdgeClick} aria-label="cut connection">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="8.53553" y="0.0502526" width="2" height="12" transform="rotate(45 8.53553 0.0502526)" fill="currentColor" />
                 <rect x="0.0502527" y="1.46447" width="2" height="12" transform="rotate(-45 0.0502527 1.46447)" fill="currentColor" />
