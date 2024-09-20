@@ -2,7 +2,7 @@
     import '@xyflow/svelte/dist/style.css';
 
     import {toPng} from 'html-to-image';
-    import {Background, SvelteFlow, getNodesBounds, getViewportForBounds, useSvelteFlow} from '@xyflow/svelte';
+    import {Background, SvelteFlow, getViewportForBounds, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
     import {valid} from '$lib/schema/validate';
@@ -13,7 +13,7 @@
     import {getGraphContext} from '$lib/core/core';
 
     const {nodes, edges, createNode} = getGraphContext();
-    const {fitView, getViewport, setViewport, screenToFlowPosition} = useSvelteFlow();
+    const {fitView, getViewport, setViewport, getNodesBounds, screenToFlowPosition} = useSvelteFlow();
 
     const minZoom = 1;
     const maxZoom = 4;
