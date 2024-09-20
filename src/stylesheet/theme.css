@@ -14,6 +14,8 @@
     /* General */
     --color-error: #e15757;
     --color-success: #55dd99;
+    --color-mention-bg: #00b2ff33;
+    --color-mention-fg: #00b2ff;
     /* Flow theme */
     --flow-color-edge: #ddd;
     --flow-color-node: #222a;
@@ -32,6 +34,8 @@
     /* General */
     --color-error: #d13434;
     --color-success: #55dd99;
+    --color-mention-bg: #00b2ff33;
+    --color-mention-fg: #00b2ff;
     /* Flow theme */
     --flow-color-edge: #111;
     --flow-color-node: #fffc;
@@ -56,6 +60,8 @@ dialog {
     }
 }
 
+div[contenteditable='true'],
+span[contenteditable='true'],
 select,
 textarea,
 input[type='text'],
@@ -64,6 +70,7 @@ input[type='number'],
 input[type='search'],
 input[type='password'] {
     border: 0.15rem solid transparent;
+    outline: none;
     padding: 0.8rem 1rem;
     border-radius: 0.5rem;
 

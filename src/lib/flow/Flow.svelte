@@ -5,10 +5,11 @@
     import {Background, SvelteFlow, getViewportForBounds, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
-    import {valid} from '$lib/schema/validate';
     import CutEdge from '$lib/flow/edges/CutEdge.svelte';
     import ActionNode from '$lib/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/flow/nodes/Trigger.svelte';
+
+    import {valid} from '$lib/schema/validate';
     import {layoutGraph} from '$lib/flow/dagre/dagre';
     import {getGraphContext} from '$lib/core/core';
 

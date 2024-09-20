@@ -1,6 +1,7 @@
 <script lang="ts">
-    import {joinId} from '$lib/helper/html';
     import JsonSchemaEditor from '$lib/schema/editor/JsonSchemaEditor.svelte';
+
+    import {joinId} from '$lib/helper/html';
     import type {JsonSchemaObject} from '$lib/schema/schema';
 
     interface Props {
