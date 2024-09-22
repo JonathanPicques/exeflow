@@ -2,24 +2,78 @@ import {valid} from '$lib/schema/validate';
 import type {InferJsonSchema} from '$lib/schema/infer';
 import type {JsonSchema, JsonSchemaAnyOf} from '$lib/schema/schema';
 
-const nodeRegex = /\${node:([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)(:(\S*))?}/gm;
-const secretsRegex = /\${secret:([a-zA-Z0-9_-]+)}/gm;
+type Text = {type: 'text'; text: string};
+type Node = {type: 'node'; id: string; path?: string; property: string};
+type Secret = {type: 'secret'; name: string};
+type Interpolation = Text | Node | Secret;
 
 interface Variables {
-    node: Record<string, Record<string, unknown>>;
+    nodes: Record<string, Record<string, unknown>>;
     secrets: Record<string, string>;
 }
+
+const regex = /\${(node|secret):([a-zA-Z0-9_-]+)(:([\.a-zA-Z0-9_-]+))?(:([\.a-zA-Z0-9_-]+))?}/gm;
+
+/**
+ * Parses a string and returns an array of interpolations
+ * @examples
+ * ```ts
+ * parse('Hello world') => [{type: 'text', text: 'Hello world'}]
+ * parse('Hello ${secret:USER}!') => [{type: 'text', text: 'Hello '}, {type: 'secret', name: 'USER'}, {type: 'text', text: '!'}]
+ * ```
+ */
+export const parse = (str: string) => {
+    let last = 0;
+    const result: Interpolation[] = [];
+    const matches = str.matchAll(regex);
+
+    for (const match of matches) {
+        const [, type] = match;
+
+        switch (type) {
+            case 'node': {
+                const [, , id, , property, , path] = match;
+
+                if (id && property) {
+                    result.push({type: 'text', text: str.substring(last, match.index)});
+                    result.push({type, id, path, property});
+                    last = match.index + match[0].length;
+                }
+                break;
+            }
+            case 'secret': {
+                const [, , name] = match;
+
+                if (name) {
+                    result.push({type: 'text', text: str.substring(last, match.index)});
+                    result.push({type, name});
+                    last = match.index + match[0].length;
+                }
+                break;
+            }
+        }
+    }
+
+    const lastText = str.substring(last);
+    if (lastText !== '') {
+        result.push({type: 'text', text: lastText});
+    }
+
+    return result;
+};
 
 /**
  * Returns a property by path
  * @examples
  * ```ts
- * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, 'hero') => {name: 'Zorro'}
+ * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, '') => {hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}
+ * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, 'hero') => {name: 'Zorro', friends: ['Bernardo', 'Garcia']}
  * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, 'hero.name') => 'Zorro'
  * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, 'hero.friends.1') => 'Garcia'
  * ```
  */
 export const access = (obj: any, path: string): unknown => {
+    if (path === '') return obj;
     for (const p of path.split('.')) {
         if (!obj || !obj.hasOwnProperty(p)) return undefined;
         obj = obj[p];
@@ -31,12 +85,12 @@ export const access = (obj: any, path: string): unknown => {
  * Returns the given value by replacing all its interpolations
  * @examples
  * ```ts
- * resolve('Hello ${secret:USER}', {type: 'string'}, {secret: {USER: 'jonathan'}}) => 'Hello jonathan'
- * resolve('Hello ${node:nodeid:user}', {type: 'string'}, {node: {nodeid: {user: 'jonathan'}}}) => 'Hello jonathan'
- * resolve({greeting: 'Hello ${secret:USER}'}, {type: 'object', properties: {greeting: {type: 'string'}}}, {secret: {USER: 'jonathan'}}) => ({greeting: 'Hello jonathan'})
+ * resolve('Hello ${secret:USER}', {type: 'string'}, {secrets: {USER: 'jonathan'}}) => 'Hello jonathan'
+ * resolve('Hello ${node:createUser:user}', {type: 'string'}, {nodes: {createUser: {user: 'jonathan'}}}) => 'Hello jonathan'
+ * resolve({greeting: 'Hello ${secret:USER}'}, {type: 'object', properties: {greeting: {type: 'string'}}}, {secrets: {USER: 'jonathan'}}) => ({greeting: 'Hello jonathan'})
  * ```
  */
-export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema: T, variables: Variables): InferJsonSchema<T> => {
+export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema: T, variables: Partial<Variables>): InferJsonSchema<T> => {
     switch (schema.type) {
         case undefined: {
             if ((schema as JsonSchemaAnyOf).anyOf !== undefined) {
@@ -77,42 +131,53 @@ export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema:
                 return {...obj, [key]: resolve(value[key], schema.properties![key], variables)};
             }, {} as InferJsonSchema<T>);
         }
+        default: {
+            throw new Error(`resolve not yet implemented for ${value} of type ${typeof value} with schema ${JSON.stringify(schema)}`);
+        }
     }
-    throw new Error(`resolve not yet implemented for ${value} of type ${typeof value} with schema ${JSON.stringify(schema)}`);
 };
 
 /**
- * Returns whether the given value is constant (no interpolation)
+ * Returns whether the given value is constant (contains no dynamic interpolation)
  * @examples
  * ```ts
- * constant('sk-123') => true
- * constant('sk-123-${env:SK_SUFFIX}') => false
- * constant('Hello ${node:1234:user.name}!') => false
- * constant('api key: ${secret:MISTRAL_API_KEY}!') => false
+ * constant('Welcome!') => true
+ * constant('Hello ${node:createUser:user:name}!') => false
+ * constant('You API key: ${secret:MISTRAL_API_KEY}!') => false
+ * constant('You API key: ${secret:MISTRAL_API_KEY### !') => true
  * ```
  */
 export const constant = (value: unknown): boolean => {
     switch (typeof value) {
         case 'string':
-            return !value.includes('${env:') && !value.includes('${node:') && !value.includes('${secret:');
+            return parse(value).every(item => item.type === 'text');
         case 'number':
         case 'boolean':
             return true;
+        default:
+            throw new Error(`constant not yet implemented for ${value} of type ${typeof value}`);
     }
-    throw new Error(`constant not yet implemented for ${value} of type ${typeof value}`);
 };
 
-const evaluate = (str: string, variables: Variables): string => {
-    return str
-        .replace(secretsRegex, match => {
-            const name = match.substring(9, match.length - 1); // extract NAME from ${secret:NAME}
-            return variables.secrets[name] ?? '';
-        })
-        .replaceAll(nodeRegex, match => {
-            const [nodeId, result, path] = match.substring(7, match.length - 1).split(':'); // extract NODE_ID:RESULT:PATH from ${node:NODE_ID:RESULT:PATH}
-            if (path) {
-                return (access(variables.node[nodeId]?.[result], path) as string) ?? '';
+/**
+ * Returns the string with all dynamic interpolations replaced by the given variables
+ * @examples
+ * ```ts
+ * evaluate('Hello ${secret:USER}', {secrets: {USER: 'jonathan'}}) => 'Hello jonathan'
+ * evaluate('Hello ${node:createUser:user:name}', {nodes: {createUser: {user: {name: 'jonathan'}}}}) => 'Hello jonathan'
+ * ```
+ */
+export const evaluate = (str: string, variables: Partial<Variables>): string => {
+    return parse(str)
+        .map(item => {
+            switch (item.type) {
+                case 'text':
+                    return item.text;
+                case 'node':
+                    return access(variables.nodes?.[item.id]?.[item.property], item.path ?? '');
+                case 'secret':
+                    return variables.secrets?.[item.name] ?? '';
             }
-            return (variables.node[nodeId]?.[result] as string) ?? '';
-        });
+        })
+        .join('');
 };
