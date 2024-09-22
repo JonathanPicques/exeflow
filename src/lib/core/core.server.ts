@@ -1,5 +1,3 @@
-import * as env from '$env/static/private';
-
 import {resolve} from '$lib/helper/parse';
 import type {ActionId} from '$lib/core/plugins/action';
 import type {TriggerId} from '$lib/core/plugins/trigger';
@@ -46,7 +44,7 @@ export const executeAction = async function* (
     const serverAction = serverActions[node.data.id];
     if (!serverAction) throw new Error(`server action ${node.data.id} not found`);
 
-    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data, secrets});
+    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {node: data, secrets});
 
     yield* serverAction.exec({
         next: async function* ({output: out, results}) {
@@ -78,7 +76,7 @@ export const executeTrigger = async function* ({
     if (!serverTrigger) throw new Error(`server trigger ${node.data.id} not found`);
 
     const data: ExecuteData = {};
-    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {env, node: data, secrets});
+    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {node: data, secrets});
 
     yield* serverTrigger.exec({
         next: async function* ({output: out, results}) {

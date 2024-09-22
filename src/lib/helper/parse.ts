@@ -2,12 +2,10 @@ import {valid} from '$lib/schema/validate';
 import type {InferJsonSchema} from '$lib/schema/infer';
 import type {JsonSchema, JsonSchemaAnyOf} from '$lib/schema/schema';
 
-const envRegex = /\${env:([a-zA-Z0-9_-]+)}/gm;
 const nodeRegex = /\${node:([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)(:(\S*))?}/gm;
 const secretsRegex = /\${secret:([a-zA-Z0-9_-]+)}/gm;
 
 interface Variables {
-    env: Record<string, string>;
     node: Record<string, Record<string, unknown>>;
     secrets: Record<string, string>;
 }
@@ -33,9 +31,9 @@ export const access = (obj: any, path: string): unknown => {
  * Returns the given value by replacing all its interpolations
  * @examples
  * ```ts
- * resolve('Hello ${env:USER}', {type: 'string'}, {env: {USER: 'jonathan'}}) => 'Hello jonathan'
+ * resolve('Hello ${secret:USER}', {type: 'string'}, {secret: {USER: 'jonathan'}}) => 'Hello jonathan'
  * resolve('Hello ${node:nodeid:user}', {type: 'string'}, {node: {nodeid: {user: 'jonathan'}}}) => 'Hello jonathan'
- * resolve({greeting: 'Hello ${env:USER}'}, {type: 'object', properties: {greeting: {type: 'string'}}}, {env: {USER: 'jonathan'}}) => ({greeting: 'Hello jonathan'})
+ * resolve({greeting: 'Hello ${secret:USER}'}, {type: 'object', properties: {greeting: {type: 'string'}}}, {secret: {USER: 'jonathan'}}) => ({greeting: 'Hello jonathan'})
  * ```
  */
 export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema: T, variables: Variables): InferJsonSchema<T> => {
@@ -109,14 +107,6 @@ const evaluate = (str: string, variables: Variables): string => {
         .replace(secretsRegex, match => {
             const name = match.substring(9, match.length - 1); // extract NAME from ${secret:NAME}
             return variables.secrets[name] ?? '';
-        })
-        .replace(envRegex, match => {
-            const name = match.substring(6, match.length - 1); // extract NAME from ${env:NAME}
-            if (name.startsWith('EXEFLOW_')) {
-                console.error(`${match} is a reserved env variable`);
-                return '';
-            }
-            return variables.env[name] ?? '';
         })
         .replaceAll(nodeRegex, match => {
             const [nodeId, result, path] = match.substring(7, match.length - 1).split(':'); // extract NODE_ID:RESULT:PATH from ${node:NODE_ID:RESULT:PATH}
