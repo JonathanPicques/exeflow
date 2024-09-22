@@ -20,6 +20,7 @@ const regex = /\${(node|secret):([a-zA-Z0-9_-]+)(:([\.a-zA-Z0-9_-]+))?(:([\.a-zA
  * ```ts
  * parse('Hello world') => [{type: 'text', text: 'Hello world'}]
  * parse('Hello ${secret:USER}!') => [{type: 'text', text: 'Hello '}, {type: 'secret', name: 'USER'}, {type: 'text', text: '!'}]
+ * parse('${secret:USER} welcome!') => [{type: 'secret', name: 'USER'}, {type: 'text', text: ' welcome!'}]
  * ```
  */
 export const parse = (str: string) => {
@@ -35,7 +36,8 @@ export const parse = (str: string) => {
                 const [, , id, , property, , path] = match;
 
                 if (id && property) {
-                    result.push({type: 'text', text: str.substring(last, match.index)});
+                    const text = str.substring(last, match.index);
+                    if (text) result.push({type: 'text', text});
                     result.push({type, id, path, property});
                     last = match.index + match[0].length;
                 }
@@ -45,7 +47,8 @@ export const parse = (str: string) => {
                 const [, , name] = match;
 
                 if (name) {
-                    result.push({type: 'text', text: str.substring(last, match.index)});
+                    const text = str.substring(last, match.index);
+                    if (text) result.push({type: 'text', text});
                     result.push({type, name});
                     last = match.index + match[0].length;
                 }

@@ -9,6 +9,10 @@ test('parse', () => {
         {type: 'secret', name: 'USER'},
         {type: 'text', text: '!'},
     ]);
+    expect(parse('${secret:USER} welcome!')).toStrictEqual([
+        {type: 'secret', name: 'USER'},
+        {type: 'text', text: ' welcome!'},
+    ]);
     expect(parse('Hello ${secret:USER}, how are you? I love ${secret:LOVER}')).toStrictEqual([
         {type: 'text', text: 'Hello '},
         {type: 'secret', name: 'USER'},

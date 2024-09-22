@@ -43,7 +43,6 @@
         "gitlens.codeLens.enabled": false,
         // Deno (supabase)
         "deno.lint": true,
-        "deno.unstable": true,
         "deno.enablePaths": [
             "supabase/functions"
         ],
