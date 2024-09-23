@@ -107,4 +107,25 @@
         flex-direction: column;
         justify-content: center;
     }
+
+    :global(.highlight) {
+        animation: glow infinite 2s;
+
+        @media screen and (prefers-reduced-motion: reduce) {
+            animation: none;
+            box-shadow: 0 0 1.5rem var(--x-color-plugin);
+        }
+    }
+
+    @keyframes glow {
+        0% {
+            box-shadow: 0 0 1rem var(--x-color-plugin);
+        }
+        50% {
+            box-shadow: 0 0 1.5rem var(--x-color-plugin);
+        }
+        100% {
+            box-shadow: 0 0 1rem var(--x-color-plugin);
+        }
+    }
 </style>

@@ -24,6 +24,7 @@
 
     import {parse} from '$lib/helper/parse';
     import {getGraphContext} from '$lib/core/core';
+    import {projectContextKey, getProjectContext} from '$lib/core/core.client';
     import type {PluginNode} from '$lib/core/graph/nodes';
     import type {JsonSchemaString} from '$lib/schema/schema';
 
@@ -41,6 +42,7 @@
     let focused = $state(false);
 
     const {nodes} = getGraphContext();
+    const projectContext = getProjectContext();
 
     const serialize = (editorNode: EditorNode) => {
         let text = '';
@@ -118,7 +120,9 @@
                             let instance: Instance;
                             let component: MentionList;
                             const props = $state({mentions: []}) as ComponentProps<MentionList>;
+                            const context = new Map();
 
+                            context.set(projectContextKey, projectContext);
                             return {
                                 onExit() {
                                     unmount(component);
@@ -136,7 +140,7 @@
                                         appendTo: () => document.body,
                                         getReferenceClientRect: params.clientRect as () => DOMRect,
                                     });
-                                    component = mount(MentionList, {props, target}) as MentionList;
+                                    component = mount(MentionList, {props, target, context}) as MentionList;
 
                                     props.select = params.command;
                                     props.mentions = params.items as EditorMention[];
@@ -155,10 +159,12 @@
                                 onKeyDown(params) {
                                     if (params.event.key === 'Escape') {
                                         instance.hide();
+                                        component.hide();
                                         return true;
                                     }
                                     if (params.event.key === ' ' && params.event.ctrlKey) {
                                         instance.show();
+                                        component.show();
                                         return true;
                                     }
                                     return component.key(params.event);

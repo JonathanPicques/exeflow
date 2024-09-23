@@ -1,7 +1,8 @@
 <script lang="ts">
+    import {extractPluginName} from '$lib/helper/plugin';
+    import {getProjectContext} from '$lib/core/core.client';
     import type {JsonSchema} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
-    import {extractPluginName} from '$lib/helper/plugin';
 
     type EditorMention = NodeEditorMention;
     type NodeEditorMention = {type: 'node'; node: PluginNode; name: string; schema: JsonSchema};
@@ -14,14 +15,27 @@
 
     let {select, mentions}: Props = $props();
 
+    let hidden = $state(false);
     let selectedIndex = $state(0);
     let clampedSelectedIndex = $derived(selectedIndex % mentions.length);
 
     const handleSelect = (mention: EditorMention) => {
         select?.({id: `\${node:${mention.node.id}:${mention.name}}`});
     };
+    const {highlightNode} = getProjectContext();
+
+    $effect(() => {
+        if (hidden) return;
+
+        const mention = mentions[clampedSelectedIndex];
+
+        if (mention) {
+            return highlightNode(mention.node.id);
+        }
+    });
 
     export const key = (e: KeyboardEvent) => {
+        if (hidden) return false;
         if (e.key === 'Enter') {
             const mention = mentions[clampedSelectedIndex];
 
@@ -39,6 +53,14 @@
             return true;
         }
         return false;
+    };
+    export const hide = () => {
+        hidden = true;
+        reset();
+    };
+    export const show = () => {
+        hidden = false;
+        reset();
     };
     export const reset = () => {
         selectedIndex = 0;

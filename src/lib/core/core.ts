@@ -19,7 +19,7 @@ export type Graph = {nodes: PluginNode[]; edges: PluginEdge[]};
 export type Plugin = Action<JsonSchema> | Trigger<JsonSchema>;
 export type PluginId = ActionId | TriggerId;
 
-interface Options {
+interface Params {
     nodes: Writable<PluginNode[]>;
     edges: Writable<PluginEdge[]>;
     actions: Record<ActionId, Action<JsonSchema>>;
@@ -33,7 +33,7 @@ export class GraphContext {
     public readonly triggers: Record<TriggerId, Trigger<JsonSchema>>;
     private readonly createId = init({length: 5});
 
-    public constructor({nodes, edges, actions, triggers}: Options) {
+    public constructor({nodes, edges, actions, triggers}: Params) {
         this.nodes = nodes;
         this.edges = edges;
         this.actions = actions;
@@ -203,9 +203,9 @@ export const importPlugins = async () => {
     return {actions, triggers};
 };
 
-const key = Symbol('graph');
-export const getGraphContext = () => getContext<GraphContext>(key);
-export const setGraphContext = (options: Options) => setContext(key, new GraphContext(options));
+export const graphContextKey = Symbol('graph');
+export const getGraphContext = () => getContext<GraphContext>(graphContextKey);
+export const setGraphContext = (params: Params) => setContext(graphContextKey, new GraphContext(params));
 
 export const graphSchema = {
     type: 'object',
