@@ -179,13 +179,33 @@
                         switch (result.type) {
                             case 'node': {
                                 span.innerText = result.property + (result.path ? '.' + result.path : '');
-                                span.classList.add('mention');
+                                span.classList.add('node', 'mention');
                                 span.setAttribute('data-type', 'mention');
+                                span.addEventListener('click', () => {
+                                    const path = prompt('Property to access (e.g., address.zipcode)', result.path ?? '');
+
+                                    if (path !== null) {
+                                        const nodeUri = `\${node:${result.id}:${result.property}}`;
+                                        const nodeUriWithPath = `\${node:${result.id}:${result.property}:${path}}`;
+
+                                        editor!.state.doc.descendants((otherNode, position) => {
+                                            if (node === otherNode) {
+                                                const tr = editor!.state.tr;
+
+                                                tr.setNodeMarkup(position, node.type, {
+                                                    ...node.attrs,
+                                                    id: path !== '' ? nodeUriWithPath : nodeUri,
+                                                });
+                                                editor!.view.dispatch(tr);
+                                            }
+                                        });
+                                    }
+                                });
                                 break;
                             }
                             case 'secret': {
                                 span.innerText = result.name;
-                                span.classList.add('mention');
+                                span.classList.add('secret', 'mention');
                                 span.setAttribute('data-type', 'mention');
                                 break;
                             }
@@ -244,6 +264,7 @@
         box-decoration-break: clone;
 
         color: var(--color-mention-fg);
+        cursor: pointer;
         border-radius: 0.5rem;
         background-color: var(--color-mention-bg);
     }
