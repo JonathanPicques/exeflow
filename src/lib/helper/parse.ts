@@ -3,8 +3,8 @@ import type {InferJsonSchema} from '$lib/schema/infer';
 import type {JsonSchema, JsonSchemaAnyOf} from '$lib/schema/schema';
 
 type Text = {type: 'text'; text: string};
-type Node = {type: 'node'; id: string; path?: string; property: string};
-type Secret = {type: 'secret'; name: string};
+type Node = {type: 'node'; id: string; key: string; path?: string};
+type Secret = {type: 'secret'; key: string};
 type Interpolation = Text | Node | Secret;
 
 interface Variables {
@@ -33,23 +33,23 @@ export const parse = (str: string) => {
 
         switch (type) {
             case 'node': {
-                const [, , id, , property, , path] = match;
+                const [, , id, , key, , path] = match;
 
-                if (id && property) {
+                if (id && key) {
                     const text = str.substring(last, match.index);
                     if (text) result.push({type: 'text', text});
-                    result.push({type, id, path, property});
+                    result.push({type, id, key, path});
                     last = match.index + match[0].length;
                 }
                 break;
             }
             case 'secret': {
-                const [, , name] = match;
+                const [, , key] = match;
 
-                if (name) {
+                if (key) {
                     const text = str.substring(last, match.index);
                     if (text) result.push({type: 'text', text});
-                    result.push({type, name});
+                    result.push({type, key});
                     last = match.index + match[0].length;
                 }
                 break;
@@ -177,10 +177,33 @@ export const evaluate = (str: string, variables: Partial<Variables>): string => 
                 case 'text':
                     return item.text;
                 case 'node':
-                    return access(variables.nodes?.[item.id]?.[item.property], item.path ?? '');
+                    return access(variables.nodes?.[item.id]?.[item.key], item.path ?? '');
                 case 'secret':
-                    return variables.secrets?.[item.name] ?? '';
+                    return variables.secrets?.[item.key] ?? '';
             }
         })
         .join('');
+};
+
+/**
+ * Returns the string interpolation for reading a node's result by key (with an optional path to access sub-properties)
+ *  @examples
+ * ```ts
+ * nodeInterpolation('createUser', 'user', 'name') -> '${node:createUser:user:name}'
+ * ```
+ */
+export const nodeInterpolation = (id: string, key: string, path?: string) => {
+    if (path) return `\${node:${id}:${key}:${path}}`;
+    return `\${node:${id}:${key}}`;
+};
+
+/**
+ * Returns the string interpolation for reading a secret
+ *  @examples
+ * ```ts
+ * secretInterpolation('MISTRAL_API_KEY') -> '${secret:MISTRAL_API_KEY}'
+ * ```
+ */
+export const secretInterpolation = (key: string) => {
+    return `\${secret:${key}}`;
 };

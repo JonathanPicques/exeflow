@@ -4,6 +4,7 @@
 
     import {isTriggerNode} from '$lib/core/graph/nodes';
     import {getGraphContext} from '$lib/core/core';
+    import {nodeInterpolation} from '$lib/helper/parse';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
     import type {PluginNode} from '$lib/core/graph/nodes';
     import type {Plugin, PluginId} from '$lib/core/core';
@@ -62,7 +63,7 @@
                 onclick={() => {
                     navigator.clipboard.writeText(
                         Object.keys(node!.data.data.results)
-                            .map(result => `\${node:${node!.id}:${result}}`)
+                            .map(key => nodeInterpolation(node!.id, key))
                             .join(' '),
                     );
                 }}

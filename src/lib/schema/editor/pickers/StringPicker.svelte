@@ -22,9 +22,9 @@
 
     import MentionList from './mentions/MentionList.svelte';
 
-    import {parse} from '$lib/helper/parse';
     import {getGraphContext} from '$lib/core/core';
     import {projectContextKey, getProjectContext} from '$lib/core/core.client.svelte';
+    import {parse, nodeInterpolation, secretInterpolation} from '$lib/helper/parse';
     import type {PluginNode} from '$lib/core/graph/nodes';
     import type {JsonSchemaString} from '$lib/schema/schema';
 
@@ -84,9 +84,9 @@
                             case 'text':
                                 return {type: 'text', text: item.text};
                             case 'node':
-                                return {type: 'mention', attrs: {id: item.path ? `\${node:${item.id}:${item.property}:${item.path}}` : `\${node:${item.id}:${item.property}}`}};
+                                return {type: 'mention', attrs: {id: nodeInterpolation(item.id, item.key, item.path)}};
                             case 'secret':
-                                return {type: 'mention', attrs: {id: `\${secret:${item.name}}`}};
+                                return {type: 'mention', attrs: {id: secretInterpolation(item.key)}};
                             default:
                                 throw new Error(`unreachable`);
                         }
@@ -178,23 +178,20 @@
 
                         switch (result.type) {
                             case 'node': {
-                                span.innerText = result.property + (result.path ? '.' + result.path : '');
+                                span.innerText = result.key + (result.path ? '.' + result.path : '');
                                 span.classList.add('node', 'mention');
                                 span.setAttribute('data-type', 'mention');
                                 span.addEventListener('click', () => {
-                                    const path = prompt('Property to access (e.g., address.zipcode)', result.path ?? '');
+                                    const path = prompt('Sub-property to access e.g., address.zipcode, or empty to access the whole value instead', result.path ?? '');
 
                                     if (path !== null) {
-                                        const nodeUri = `\${node:${result.id}:${result.property}}`;
-                                        const nodeUriWithPath = `\${node:${result.id}:${result.property}:${path}}`;
-
                                         editor!.state.doc.descendants((otherNode, position) => {
                                             if (node === otherNode) {
                                                 const tr = editor!.state.tr;
 
                                                 tr.setNodeMarkup(position, node.type, {
                                                     ...node.attrs,
-                                                    id: path !== '' ? nodeUriWithPath : nodeUri,
+                                                    id: nodeInterpolation(result.id, result.key, path),
                                                 });
                                                 editor!.view.dispatch(tr);
                                             }
@@ -204,7 +201,7 @@
                                 break;
                             }
                             case 'secret': {
-                                span.innerText = result.name;
+                                span.innerText = result.key;
                                 span.classList.add('secret', 'mention');
                                 span.setAttribute('data-type', 'mention');
                                 break;

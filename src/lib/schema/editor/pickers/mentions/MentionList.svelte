@@ -1,5 +1,6 @@
 <script lang="ts">
     import {extractPluginName} from '$lib/helper/plugin';
+    import {nodeInterpolation} from '$lib/helper/parse';
     import {getProjectContext} from '$lib/core/core.client.svelte';
     import type {JsonSchema} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
@@ -20,7 +21,7 @@
     let clampedSelectedIndex = $derived(selectedIndex % mentions.length);
 
     const handleSelect = (mention: EditorMention) => {
-        select?.({id: `\${node:${mention.node.id}:${mention.name}}`});
+        select?.({id: nodeInterpolation(mention.node.id, mention.name)});
     };
     const {highlightNode} = getProjectContext();
 
@@ -40,7 +41,7 @@
             const mention = mentions[clampedSelectedIndex];
 
             if (mention) {
-                select?.({id: `\${node:${mention.node.id}:${mention.name}}`});
+                handleSelect(mention);
                 return true;
             }
         }
