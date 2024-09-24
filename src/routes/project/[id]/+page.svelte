@@ -12,7 +12,7 @@
     import {valid} from '$lib/schema/validate';
     import {shortcut} from '$lib/helper/shortcut';
     import {patchProject} from '../../api/project/project';
-    import {setProjectContext} from '$lib/core/core.client';
+    import {setProjectContext} from '$lib/core/core.client.svelte';
     import {graphSchema, setGraphContext} from '$lib/core/core';
 
     let flow: Flow;
@@ -24,7 +24,7 @@
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
 
-    setProjectContext({});
+    setProjectContext({secrets: data.secrets});
     const {checksum, exportGraph, exportSelection, importSelection} = setGraphContext({
         nodes,
         edges,

@@ -7,7 +7,12 @@ export const GET = async ({locals}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const secrets = await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', user.id).execute();
+    const secrets = await locals.db
+        //
+        .selectFrom('secrets')
+        .select(['key', 'value'])
+        .where('owner_id', '=', user.id)
+        .execute();
     return json(secrets);
 };
 

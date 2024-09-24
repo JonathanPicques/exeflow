@@ -16,5 +16,12 @@ export const load = async ({locals, params, parent}) => {
         .executeTakeFirst()) as Project | undefined;
     if (!project) throw error(404);
 
-    return {project};
+    const secrets = await locals.db
+        //
+        .selectFrom('secrets')
+        .select(['key', 'value'])
+        .where('owner_id', '=', user.id)
+        .execute();
+
+    return {project, secrets};
 };

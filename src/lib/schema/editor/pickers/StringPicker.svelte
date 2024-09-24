@@ -24,7 +24,7 @@
 
     import {parse} from '$lib/helper/parse';
     import {getGraphContext} from '$lib/core/core';
-    import {projectContextKey, getProjectContext} from '$lib/core/core.client';
+    import {projectContextKey, getProjectContext} from '$lib/core/core.client.svelte';
     import type {PluginNode} from '$lib/core/graph/nodes';
     import type {JsonSchemaString} from '$lib/schema/schema';
 
