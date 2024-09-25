@@ -1,8 +1,9 @@
 <script lang="ts" module>
     import type {JsonSchema} from '$lib/schema/schema';
 
-    type EditorMention = NodeEditorMention;
-    type NodeEditorMention = {type: 'node'; node: PluginNode; name: string; schema: JsonSchema};
+    type EditorMention = NodeEditorMention | SecretEditorMention;
+    type NodeEditorMention = {type: 'node'; node: PluginNode; key: string; schema: JsonSchema};
+    type SecretEditorMention = {type: 'secret'; key: string};
 
     type EditorNode = DocEditorNode | TextEditorNode | MentionEditorNode | ParagraphEditorNode;
     type DocEditorNode = {type: 'doc'; content: (TextEditorNode | MentionEditorNode | ParagraphEditorNode)[]};
@@ -12,6 +13,7 @@
 </script>
 
 <script lang="ts">
+    import Fuse from 'fuse.js';
     import tippy from 'tippy.js';
     import Mention from '@tiptap/extension-mention';
     import StarterKit from '@tiptap/starter-kit';
@@ -106,14 +108,25 @@
                 Mention.configure({
                     suggestion: {
                         items({query}) {
-                            return $nodes
-                                .flatMap(node =>
+                            const mentions = [
+                                ...$nodes.flatMap(node =>
                                     Object.entries(node.data.data.results).map(([key, schema]) => {
-                                        return {type: 'node', node, name: key, schema} satisfies EditorMention;
+                                        return {type: 'node', node, key, schema} satisfies EditorMention;
                                     }),
-                                )
-                                .filter(item => item.name.toLowerCase().startsWith(query.toLowerCase()))
-                                .slice(0, 5);
+                                ),
+                                ...projectContext.secrets.map(({key}) => {
+                                    return {type: 'secret', key} satisfies EditorMention;
+                                }),
+                            ].toSorted((a, b) => {
+                                return a.type.localeCompare(b.type);
+                            });
+
+                            if (query) {
+                                const fuse = new Fuse(mentions, {keys: ['key', 'node.data.id']});
+                                const found = fuse.search(query, {limit: 5});
+                                return found.map(f => f.item);
+                            }
+                            return mentions.slice(0, 5);
                         },
                         render() {
                             let target: HTMLDivElement;

@@ -34,6 +34,7 @@
         "@xyflow/svelte": "^0.1.19",
         "ajv": "^8.17.1",
         "cronstrue": "^2.50.0",
+        "fuse.js": "^7.0.0",
         "html-to-image": "^1.11.11",
         "jsdom": "^25.0.0",
         "mousetrap": "^1.6.5",

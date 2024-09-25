@@ -1,12 +1,13 @@
 <script lang="ts">
     import {extractPluginName} from '$lib/helper/plugin';
-    import {nodeInterpolation} from '$lib/helper/parse';
     import {getProjectContext} from '$lib/core/core.client.svelte';
+    import {nodeInterpolation, secretInterpolation} from '$lib/helper/parse';
     import type {JsonSchema} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
 
-    type EditorMention = NodeEditorMention;
-    type NodeEditorMention = {type: 'node'; node: PluginNode; name: string; schema: JsonSchema};
+    type EditorMention = NodeEditorMention | SecretEditorMention;
+    type NodeEditorMention = {type: 'node'; node: PluginNode; key: string; schema: JsonSchema};
+    type SecretEditorMention = {type: 'secret'; key: string};
 
     interface Props {
         mentions: EditorMention[];
@@ -21,7 +22,16 @@
     let clampedSelectedIndex = $derived(selectedIndex % mentions.length);
 
     const handleSelect = (mention: EditorMention) => {
-        select?.({id: nodeInterpolation(mention.node.id, mention.name)});
+        switch (mention.type) {
+            case 'node':
+                select?.({id: nodeInterpolation(mention.node.id, mention.key)});
+                break;
+            case 'secret':
+                select?.({id: secretInterpolation(mention.key)});
+                break;
+            default:
+                throw new Error('unreachable');
+        }
     };
     const {highlightNode} = getProjectContext();
 
@@ -30,7 +40,7 @@
 
         const mention = mentions[clampedSelectedIndex];
 
-        if (mention) {
+        if (mention?.type === 'node') {
             return highlightNode(mention.node.id);
         }
     });
@@ -69,14 +79,20 @@
 </script>
 
 <div class="mentions">
-    {#each mentions as mention, i}
-        <button class:selected={i === clampedSelectedIndex} onclick={() => handleSelect(mention)}>
-            {mention.name} in {extractPluginName(mention.node.data.id)}
-        </button>
-    {/each}
     {#if mentions.length === 0}
         No results found
     {/if}
+    {#each mentions as mention, i}
+        {#if mention.type === 'node'}
+            <button class:selected={i === clampedSelectedIndex} onclick={() => handleSelect(mention)}>
+                {mention.key} in {extractPluginName(mention.node.data.id)}
+            </button>
+        {:else}
+            <button class:selected={i === clampedSelectedIndex} onclick={() => handleSelect(mention)}>
+                🔒 {mention.key}
+            </button>
+        {/if}
+    {/each}
 </div>
 
 <style>
