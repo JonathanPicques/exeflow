@@ -78,7 +78,7 @@
         </div>
     {:else}
         <h1>Nodes</h1>
-        <input type="search" bind:value={filter} placeholder="Filter nodes..." />
+        <input type="search" placeholder="Filter nodes..." bind:value={filter} />
 
         <div class="list">
             {#each [...Object.entries(triggers), ...Object.entries(actions)].filter(filterPlugins).toSorted(sort) as [id, plugin]}

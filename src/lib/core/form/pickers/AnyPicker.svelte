@@ -11,7 +11,7 @@
     let {value = $bindable(), onchange}: Props = $props();
 </script>
 
-<input type="text" bind:value onblur={onchange} />
+<input type="text" onblur={onchange} bind:value />
 
 <style>
     input {

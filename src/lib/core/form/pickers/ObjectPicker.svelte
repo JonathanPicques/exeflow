@@ -16,7 +16,7 @@
 {#each Object.entries(schema.properties ?? {}) as [key, subschema] (key)}
     <fieldset>
         <legend title={subschema.description}>{subschema.title ?? key}</legend>
-        <FormEditor bind:value={value[key]} {id} schema={subschema} {onchange} />
+        <FormEditor {id} schema={subschema} {onchange} bind:value={value[key]} />
     </fieldset>
 {/each}
 

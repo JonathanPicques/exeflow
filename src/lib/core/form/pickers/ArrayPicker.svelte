@@ -33,7 +33,7 @@
 <div class="main">
     {#each value as _, i (i)}
         <div class="item">
-            <input type="text" bind:value={value[i]} onblur={onchange} />
+            <input type="text" onblur={onchange} bind:value={value[i]} />
             <div class="toolbox">
                 <button onclick={() => up(i)}>↑</button>
                 <button onclick={() => down(i)}>↓</button>

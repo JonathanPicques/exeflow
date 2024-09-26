@@ -35,4 +35,4 @@
     }) as typeof AnyPicker;
 </script>
 
-<Picker bind:value {id} {schema} {onchange} />
+<Picker {id} {schema} {onchange} bind:value />

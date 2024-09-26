@@ -252,7 +252,7 @@
 </script>
 
 {#if schema.enum}
-    <select bind:value {onchange}>
+    <select {onchange} bind:value>
         {#each schema.enum as enumValue, i}
             <option value={enumValue}>
                 {schema.enumLabels?.[i] ?? enumValue}
