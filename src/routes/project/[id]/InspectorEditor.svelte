@@ -1,5 +1,5 @@
 <script lang="ts">
-    import JsonSchemaEditor from '$lib/schema/editor/JsonSchemaEditor.svelte';
+    import FormEditor from '$lib/core/form/FormEditor.svelte';
 
     import {getGraphContext} from '$lib/core/core';
     import type {JsonSchema} from '$lib/schema/schema';
@@ -17,7 +17,7 @@
 </script>
 
 {#if form}
-    <JsonSchemaEditor
+    <FormEditor
         bind:value={form.value}
         id={node.id}
         schema={form.schema}

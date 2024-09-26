@@ -1,8 +1,8 @@
 <script lang="ts">
-    import JsonSchemaEditor from '$lib/schema/editor/JsonSchemaEditor.svelte';
+    import FormEditor from '$lib/core/form/FormEditor.svelte';
 
-    import type {JsonSchemaObject} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {JsonSchemaObject} from '$lib/schema/schema';
 
     interface Props {
         id: PluginNode['id'];
@@ -16,7 +16,7 @@
 {#each Object.entries(schema.properties ?? {}) as [key, subschema] (key)}
     <fieldset>
         <legend title={subschema.description}>{subschema.title ?? key}</legend>
-        <JsonSchemaEditor bind:value={value[key]} {id} schema={subschema} {onchange} />
+        <FormEditor bind:value={value[key]} {id} schema={subschema} {onchange} />
     </fieldset>
 {/each}
 

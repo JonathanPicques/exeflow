@@ -1,10 +1,10 @@
 <script lang="ts">
-    import AnyPicker from '$lib/schema/editor/pickers/AnyPicker.svelte';
+    import AnyPicker from '$lib/core/form/pickers/AnyPicker.svelte';
     import ArrayPicker from './pickers/ArrayPicker.svelte';
-    import StringPicker from '$lib/schema/editor/pickers/StringPicker.svelte';
-    import NumberPicker from '$lib/schema/editor/pickers/NumberPicker.svelte';
-    import ObjectPicker from '$lib/schema/editor/pickers/ObjectPicker.svelte';
-    import BooleanPicker from '$lib/schema/editor/pickers/BooleanPicker.svelte';
+    import StringPicker from '$lib/core/form/pickers/StringPicker.svelte';
+    import NumberPicker from '$lib/core/form/pickers/NumberPicker.svelte';
+    import ObjectPicker from '$lib/core/form/pickers/ObjectPicker.svelte';
+    import BooleanPicker from '$lib/core/form/pickers/BooleanPicker.svelte';
     import type {JsonSchema} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
 
