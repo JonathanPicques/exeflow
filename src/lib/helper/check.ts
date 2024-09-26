@@ -17,10 +17,24 @@ const cyrb53 = (str: string, seed = 0) => {
     return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };
 
+/**
+ * @returns a stable checksum for the given value (will fail for a value containing cyclic references)
+ * @example
+ * ```ts
+ * stableChecksum({lastName: 'Kent', firstName: 'Clark'}) === stableChecksum({firstName: 'Clark', lastName: 'Kent'})
+ * ```
+ */
 export const stableChecksum = (value: any) => {
     return cyrb53(stableStringify(value));
 };
 
+/**
+ * @returns a stable string for the given value (will fail for a value containing cyclic references)
+ * @example
+ * ```ts
+ * stableStringify({lastName: 'Kent', firstName: 'Clark'}) === stableStringify({firstName: 'Clark', lastName: 'Kent'})
+ * ```
+ */
 export const stableStringify = (value: any): string => {
     let stringified = '';
 
