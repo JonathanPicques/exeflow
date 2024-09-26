@@ -1,9 +1,9 @@
-import {valid} from './validate';
-import type {JsonSchema} from './schema';
-import type {InferJsonSchema} from './infer';
+import {valid} from '$lib/schema/validate';
+import type {JsonSchema} from '$lib/schema/schema';
+import type {InferJsonSchema} from '$lib/schema/infer';
 
 /**
- * @returns a new value from the given schema.
+ * @returns a new value from the given schema
  * @example
  * ```ts
  * zero({type: 'string'}) => ''
@@ -40,7 +40,7 @@ export const zero = <T extends JsonSchema>(schema: T): InferJsonSchema<T> => {
 };
 
 /**
- * @returns a new schema with the default filled recursively.
+ * @returns a new schema with the defaults filled recursively
  * @example
  * ```ts
  * fill({type: 'string'}, 'welcome') => ({type: 'string', default: 'welcome'})

@@ -24,40 +24,7 @@
     const deleteKey = ['Delete', 'Backspace'];
     const defaultEdgeOptions = {type: 'edge'};
 
-    export {getViewport, setViewport};
-
-    export const layout = () => {
-        const layout = layoutGraph({nodes: $nodes, edges: $edges});
-
-        $nodes = layout.nodes;
-        $edges = layout.edges;
-        fitToView({smooth: false});
-    };
-    export const fitToView = ({smooth} = {smooth: true}) => {
-        const duration = smooth && window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
-        fitView({duration});
-    };
-    export const screenshot = async ({width = 320, height = 180} = {}) => {
-        const viewport = getViewportForBounds(getNodesBounds($nodes), width, height, 0.1, 10, 0.2);
-        const viewportElement = document.querySelector<HTMLElement>('.svelte-flow__viewport');
-
-        if (viewport && viewportElement) {
-            return await toPng(viewportElement, {
-                width,
-                height,
-                //
-                style: {
-                    width: `${width}px`,
-                    height: `${height}px`,
-                    transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
-                    backgroundColor: 'transparent',
-                },
-            });
-        }
-        return 'data:null';
-    };
-
-    const ondrop = async (e: DragEvent) => {
+    const ondrop = (e: DragEvent) => {
         e.preventDefault();
 
         if (!e.dataTransfer) {
@@ -69,7 +36,7 @@
         const position = screenToFlowPosition({x: e.clientX, y: e.clientY});
 
         if (valid(id, {type: 'string'}) && valid(type, {type: 'string', enum: ['action', 'trigger'] as const})) {
-            await createNode(id, type, position);
+            createNode(id, type, position);
         }
     };
     const ondragover = (e: DragEvent) => {
@@ -108,6 +75,38 @@
         }
         return true;
     };
+
+    export const layout = () => {
+        const layout = layoutGraph({nodes: $nodes, edges: $edges});
+
+        $nodes = layout.nodes;
+        $edges = layout.edges;
+        fitToView({smooth: false});
+    };
+    export const fitToView = ({smooth} = {smooth: true}) => {
+        const duration = smooth && window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
+        fitView({duration});
+    };
+    export const screenshot = async ({width = 320, height = 180} = {}) => {
+        const viewport = getViewportForBounds(getNodesBounds($nodes), width, height, 0.1, 10, 0.2);
+        const viewportElement = document.querySelector<HTMLElement>('.svelte-flow__viewport');
+
+        if (viewport && viewportElement) {
+            return await toPng(viewportElement, {
+                width,
+                height,
+                //
+                style: {
+                    width: `${width}px`,
+                    height: `${height}px`,
+                    transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                    backgroundColor: 'transparent',
+                },
+            });
+        }
+        return 'data:null';
+    };
+    export {getViewport, setViewport};
 </script>
 
 <SvelteFlow {nodes} {nodeTypes} {edges} {edgeTypes} {deleteKey} {defaultEdgeOptions} {minZoom} {maxZoom} {onconnect} {isValidConnection} {ondrop} {ondragover}>
