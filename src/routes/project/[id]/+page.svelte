@@ -4,7 +4,7 @@
     import {SplitPane} from '@rich_harris/svelte-split-pane';
     import {SvelteFlowProvider} from '@xyflow/svelte';
 
-    import Flow from '$lib/flow/Flow.svelte';
+    import Flow from '$lib/core/flow/Flow.svelte';
     import Logs from './Logs.svelte';
     import Secrets from './Secrets.svelte';
     import Inspector from './Inspector.svelte';
