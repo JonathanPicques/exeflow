@@ -188,14 +188,16 @@
                         },
                     },
                     renderHTML({node}) {
+                        let sub: Function;
                         const span = document.createElement('span');
                         const [result] = parse(node.attrs.id);
 
                         switch (result.type) {
                             case 'node': {
-                                span.innerText = result.key + (result.path ? '.' + result.path : '');
+                                const {icon} = graphContext.findPlugin(graphContext.findNode(result.id));
+
+                                span.innerHTML = `<img src=${icon} alt="" /><span>${result.key}${result.path ? '.' + result.path : ''}</span>`;
                                 span.classList.add('node', 'mention');
-                                span.setAttribute('data-type', 'mention');
                                 span.addEventListener('click', () => {
                                     const path = prompt('Sub-property to access e.g., address.zipcode, or empty to access the whole value instead', result.path ?? '');
 
@@ -213,12 +215,17 @@
                                         });
                                     }
                                 });
+                                span.addEventListener('mouseenter', () => {
+                                    sub = projectContext.highlightNode(result.id);
+                                });
+                                span.addEventListener('mouseleave', () => {
+                                    sub?.();
+                                });
                                 break;
                             }
                             case 'secret': {
-                                span.innerText = result.key;
+                                span.innerHTML = `<span>🔒</span><span>${result.key}</span>`;
                                 span.classList.add('secret', 'mention');
-                                span.setAttribute('data-type', 'mention');
                                 break;
                             }
                         }
@@ -273,11 +280,15 @@
 
     :global(.mention) {
         padding: 0.1rem 0.3rem;
-        box-decoration-break: clone;
 
         color: var(--color-mention-fg);
         cursor: pointer;
         border-radius: 0.5rem;
         background-color: var(--color-mention-bg);
+
+        :global(img, span) {
+            padding: 0.1rem;
+            vertical-align: middle;
+        }
     }
 </style>
