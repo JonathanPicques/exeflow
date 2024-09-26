@@ -19,8 +19,8 @@
     const minZoom = 1;
     const maxZoom = 4;
 
-    const edgeTypes = {edge: CutEdge};
-    const nodeTypes = {action: ActionNode, trigger: TriggerNode};
+    const edgeTypes = {edge: CutEdge} as any; // TODO: remove as any when typings are fixed
+    const nodeTypes = {action: ActionNode, trigger: TriggerNode} as any; // TODO: remove as any when typings are fixed
     const deleteKey = ['Delete', 'Backspace'];
     const defaultEdgeOptions = {type: 'edge'};
 
