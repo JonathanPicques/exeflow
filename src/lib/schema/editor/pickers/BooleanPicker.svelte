@@ -1,13 +1,14 @@
 <script lang="ts">
     import type {JsonSchemaBoolean} from '$lib/schema/schema';
+    import type {PluginNode} from '$lib/core/graph/nodes';
 
     interface Props {
-        id: string;
+        id: PluginNode['id'];
         value: boolean;
         schema: JsonSchemaBoolean;
         onchange?: () => void;
     }
-    let {id, value = $bindable(), onchange}: Props = $props();
+    let {value = $bindable(), onchange}: Props = $props();
 </script>
 
 <input type="checkbox" bind:checked={value} onblur={onchange} />

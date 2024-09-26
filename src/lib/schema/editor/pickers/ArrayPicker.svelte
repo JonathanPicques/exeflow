@@ -1,9 +1,10 @@
 <script lang="ts">
     import {zero} from '$lib/schema/data';
     import type {JsonSchema} from '$lib/schema/schema';
+    import type {PluginNode} from '$lib/core/graph/nodes';
 
     interface Props {
-        id: string;
+        id: PluginNode['id'];
         value: unknown[];
         schema: JsonSchema;
         onchange?: () => void;

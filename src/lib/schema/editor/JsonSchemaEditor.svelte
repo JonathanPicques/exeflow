@@ -6,9 +6,10 @@
     import ObjectPicker from '$lib/schema/editor/pickers/ObjectPicker.svelte';
     import BooleanPicker from '$lib/schema/editor/pickers/BooleanPicker.svelte';
     import type {JsonSchema} from '$lib/schema/schema';
+    import type {PluginNode} from '$lib/core/graph/nodes';
 
     interface Props {
-        id: string;
+        id: PluginNode['id'];
         value: unknown;
         schema: JsonSchema;
         onchange?: () => void;

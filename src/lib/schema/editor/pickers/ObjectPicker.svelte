@@ -1,11 +1,11 @@
 <script lang="ts">
     import JsonSchemaEditor from '$lib/schema/editor/JsonSchemaEditor.svelte';
 
-    import {joinId} from '$lib/helper/html';
     import type {JsonSchemaObject} from '$lib/schema/schema';
+    import type {PluginNode} from '$lib/core/graph/nodes';
 
     interface Props {
-        id: string;
+        id: PluginNode['id'];
         value: Record<string, unknown>;
         schema: JsonSchemaObject;
         onchange?: () => void;
@@ -16,7 +16,7 @@
 {#each Object.entries(schema.properties ?? {}) as [key, subschema] (key)}
     <fieldset>
         <legend title={subschema.description}>{subschema.title ?? key}</legend>
-        <JsonSchemaEditor bind:value={value[key]} id={joinId(id, key)} schema={subschema} {onchange} />
+        <JsonSchemaEditor bind:value={value[key]} {id} schema={subschema} {onchange} />
     </fieldset>
 {/each}
 

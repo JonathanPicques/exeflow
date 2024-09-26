@@ -31,7 +31,7 @@
     import type {JsonSchemaString} from '$lib/schema/schema';
 
     interface Props {
-        id: string;
+        id: PluginNode['id'];
         value: string;
         schema: JsonSchemaString;
         onchange?: () => void;

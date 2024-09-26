@@ -1,9 +1,9 @@
 <script lang="ts">
-    import {joinId} from '$lib/helper/html';
     import type {JsonSchemaNumber} from '$lib/schema/schema';
+    import type {PluginNode} from '$lib/core/graph/nodes';
 
     interface Props {
-        id: string;
+        id: PluginNode['id'];
         value: number;
         schema: JsonSchemaNumber;
         onchange?: () => void;
