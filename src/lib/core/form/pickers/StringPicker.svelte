@@ -194,9 +194,11 @@
 
                         switch (result.type) {
                             case 'node': {
-                                const {icon} = graphContext.findPlugin(graphContext.findNode(result.id));
+                                const _node = graphContext.findNode(result.id);
+                                const {icon} = graphContext.findPlugin(_node);
 
                                 span.innerHTML = `<img src=${icon} alt="" /><span>${result.key}${result.path ? '.' + result.path : ''}</span>`;
+                                span.setAttribute('title', _node.data.id);
                                 span.classList.add('node', 'mention');
                                 span.addEventListener('click', () => {
                                     const path = prompt('Sub-property to access e.g., address.zipcode, or empty to access the whole value instead', result.path ?? '');
@@ -226,6 +228,23 @@
                             case 'secret': {
                                 span.innerHTML = `<span>🔒</span><span>${result.key}</span>`;
                                 span.classList.add('secret', 'mention');
+                                span.addEventListener('click', () => {
+                                    const key = prompt('Secret key', result.key ?? '');
+
+                                    if (key !== null) {
+                                        editor!.state.doc.descendants((otherNode, position) => {
+                                            if (node === otherNode) {
+                                                const tr = editor!.state.tr;
+
+                                                tr.setNodeMarkup(position, node.type, {
+                                                    ...node.attrs,
+                                                    id: secretInterpolation(key),
+                                                });
+                                                editor!.view.dispatch(tr);
+                                            }
+                                        });
+                                    }
+                                });
                                 break;
                             }
                         }
