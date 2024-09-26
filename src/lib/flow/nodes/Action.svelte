@@ -6,7 +6,7 @@
     import OutputHandle from '../edges/OutputHandle.svelte';
 
     import {getGraphContext} from '$lib/core/core';
-    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
     import type {ActionNode} from '$lib/core/graph/nodes';
 
     let {id, data, selected = undefined}: NodeProps<ActionNode> = $props();

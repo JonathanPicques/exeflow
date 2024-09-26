@@ -1,4 +1,5 @@
 import {valid} from '$lib/schema/validate';
+import type {PluginId} from '$lib/core/core';
 import type {InferJsonSchema} from '$lib/schema/infer';
 import type {JsonSchema, JsonSchemaAnyOf} from '$lib/schema/schema';
 
@@ -15,12 +16,12 @@ interface Variables {
 const regex = /\${(node|secret):([a-zA-Z0-9_-]+)(:([\.a-zA-Z0-9_-]+))?(:([\.a-zA-Z0-9_-]+))?}/gm;
 
 /**
- * Parses a string and returns an array of interpolations
+ * @returns an array of interpolations from the given string
  * @examples
  * ```ts
  * parse('Hello world') => [{type: 'text', text: 'Hello world'}]
- * parse('Hello ${secret:USER}!') => [{type: 'text', text: 'Hello '}, {type: 'secret', name: 'USER'}, {type: 'text', text: '!'}]
- * parse('${secret:USER} welcome!') => [{type: 'secret', name: 'USER'}, {type: 'text', text: ' welcome!'}]
+ * parse('Hello ${secret:USER}!') => [{type: 'text', text: 'Hello '}, {type: 'secret', key: 'USER'}, {type: 'text', text: '!'}]
+ * parse('${secret:USER} welcome!') => [{type: 'secret', key: 'USER'}, {type: 'text', text: ' welcome!'}]
  * ```
  */
 export const parse = (str: string) => {
@@ -66,7 +67,7 @@ export const parse = (str: string) => {
 };
 
 /**
- * Returns a property by path
+ * @returns a property by path
  * @examples
  * ```ts
  * access({hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}, '') => {hero: {name: 'Zorro', friends: ['Bernardo', 'Garcia']}}
@@ -85,7 +86,7 @@ export const access = (obj: any, path: string): unknown => {
 };
 
 /**
- * Returns the given value by replacing all its interpolations
+ * @returns the given value by replacing all its interpolations
  * @examples
  * ```ts
  * resolve('Hello ${secret:USER}', {type: 'string'}, {secrets: {USER: 'jonathan'}}) => 'Hello jonathan'
@@ -141,7 +142,7 @@ export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema:
 };
 
 /**
- * Returns whether the given value is constant (contains no dynamic interpolation)
+ * @returns whether the given value is constant (contains no dynamic interpolation)
  * @examples
  * ```ts
  * constant('Welcome!') => true
@@ -163,7 +164,7 @@ export const constant = (value: unknown): boolean => {
 };
 
 /**
- * Returns the string with all dynamic interpolations replaced by the given variables
+ * @returns the string with all dynamic interpolations replaced by the given variables
  * @examples
  * ```ts
  * evaluate('Hello ${secret:USER}', {secrets: {USER: 'jonathan'}}) => 'Hello jonathan'
@@ -186,10 +187,11 @@ export const evaluate = (str: string, variables: Partial<Variables>): string => 
 };
 
 /**
- * Returns the string interpolation for reading a node's result by key (with an optional path to access sub-properties)
+ * @returns the string interpolation for reading a node's result by key (with an optional path to access a sub-property)
  *  @examples
  * ```ts
  * nodeInterpolation('createUser', 'user', 'name') -> '${node:createUser:user:name}'
+ * nodeInterpolation('retrieveUser', 'user', 'address.country') -> '${node:retrieveUser:user:address.country}'
  * ```
  */
 export const nodeInterpolation = (id: string, key: string, path?: string) => {
@@ -198,7 +200,7 @@ export const nodeInterpolation = (id: string, key: string, path?: string) => {
 };
 
 /**
- * Returns the string interpolation for reading a secret
+ * @returns the string interpolation for reading a secret
  *  @examples
  * ```ts
  * secretInterpolation('MISTRAL_API_KEY') -> '${secret:MISTRAL_API_KEY}'
@@ -206,4 +208,37 @@ export const nodeInterpolation = (id: string, key: string, path?: string) => {
  */
 export const secretInterpolation = (key: string) => {
     return `\${secret:${key}}`;
+};
+
+/**
+ * @returns an eye pleasing human readable string from the given plugin name
+ * @example
+ * ```ts
+ * humanPluginName('sendMessage') => 'send message'
+ * ```
+ */
+export const humanPluginName = (name: string) => {
+    return name.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
+};
+
+/**
+ * @returns the plugin name from the given plugin id
+ * @example
+ * ```ts
+ * extractPluginName('discord:sendMessage') => 'sendMessage'
+ * ```
+ */
+export const extractPluginName = (id: PluginId) => {
+    return id.split(':').slice(1).join('');
+};
+
+/**
+ * @returns the plugin namespace from the given plugin id
+ * @example
+ * ```ts
+ * extractPluginNamespace('discord:sendMessage') => 'discord'
+ * ```
+ */
+export const extractPluginNamespace = (id: PluginId) => {
+    return id.split(':')[0];
 };

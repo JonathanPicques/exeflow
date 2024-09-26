@@ -1,5 +1,5 @@
 import trigger from './webhook';
-import {tryFunction} from '$lib/helper/error';
+import {tryFunction} from '$lib/helper/function';
 import {serverTrigger} from '$lib/core/plugins/trigger.server';
 
 export default serverTrigger(trigger, {

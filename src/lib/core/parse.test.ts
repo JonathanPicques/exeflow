@@ -1,23 +1,23 @@
 import {test, expect} from 'vitest';
 
-import {parse, access, resolve, constant, evaluate} from './parse';
+import {parse, access, resolve, constant, evaluate, nodeInterpolation, secretInterpolation} from './parse';
 
 test('parse', () => {
     expect(parse('Hello world')).toStrictEqual([{type: 'text', text: 'Hello world'}]);
     expect(parse('Hello ${secret:USER}!')).toStrictEqual([
         {type: 'text', text: 'Hello '},
-        {type: 'secret', name: 'USER'},
+        {type: 'secret', key: 'USER'},
         {type: 'text', text: '!'},
     ]);
     expect(parse('${secret:USER} welcome!')).toStrictEqual([
-        {type: 'secret', name: 'USER'},
+        {type: 'secret', key: 'USER'},
         {type: 'text', text: ' welcome!'},
     ]);
     expect(parse('Hello ${secret:USER}, how are you? I love ${secret:LOVER}')).toStrictEqual([
         {type: 'text', text: 'Hello '},
-        {type: 'secret', name: 'USER'},
+        {type: 'secret', key: 'USER'},
         {type: 'text', text: ', how are you? I love '},
-        {type: 'secret', name: 'LOVER'},
+        {type: 'secret', key: 'LOVER'},
     ]);
 });
 
@@ -46,4 +46,13 @@ test('constant', () => {
 test('evaluate', () => {
     expect(evaluate('Hello ${secret:USER}', {secrets: {USER: 'jonathan'}})).toBe('Hello jonathan');
     expect(evaluate('Hello ${node:createUser:user:name}', {nodes: {createUser: {user: {name: 'jonathan'}}}})).toBe('Hello jonathan');
+});
+
+test('nodeInterpolation', () => {
+    expect(nodeInterpolation('createUser', 'user', 'name')).toBe('${node:createUser:user:name}');
+    expect(nodeInterpolation('retrieveUser', 'user', 'address.country')).toBe('${node:retrieveUser:user:address.country}');
+});
+
+test('secretInterpolation', () => {
+    expect(secretInterpolation('MISTRAL_API_KEY')).toBe('${secret:MISTRAL_API_KEY}');
 });

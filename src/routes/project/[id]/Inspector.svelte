@@ -4,8 +4,7 @@
 
     import {isTriggerNode} from '$lib/core/graph/nodes';
     import {getGraphContext} from '$lib/core/core';
-    import {nodeInterpolation} from '$lib/helper/parse';
-    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/helper/plugin';
+    import {nodeInterpolation, humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
     import type {PluginNode} from '$lib/core/graph/nodes';
     import type {Plugin, PluginId} from '$lib/core/core';
 

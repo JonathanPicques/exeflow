@@ -1,4 +1,4 @@
-import {resolve} from '$lib/helper/parse';
+import {resolve} from '$lib/core/parse';
 import type {ActionId} from '$lib/core/plugins/action';
 import type {TriggerId} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';

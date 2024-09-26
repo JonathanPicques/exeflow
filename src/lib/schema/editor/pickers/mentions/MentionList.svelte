@@ -1,7 +1,6 @@
 <script lang="ts">
-    import {extractPluginName} from '$lib/helper/plugin';
     import {getProjectContext} from '$lib/core/core.client.svelte';
-    import {nodeInterpolation, secretInterpolation} from '$lib/helper/parse';
+    import {extractPluginName, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
     import type {JsonSchema} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
 

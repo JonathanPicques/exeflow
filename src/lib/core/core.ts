@@ -4,7 +4,7 @@ import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 
 import {zero} from '$lib/schema/data';
-import {constant} from '$lib/helper/parse';
+import {constant} from '$lib/core/parse';
 import {nodeSchema} from '$lib/core/graph/nodes';
 import {edgeSchema} from '$lib/core/graph/edges';
 import {stableChecksum} from '$lib/helper/check';
