@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {getGraphContext} from '$lib/core/core';
     import {getProjectContext} from '$lib/core/core.client.svelte';
     import {extractPluginName, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
     import type {JsonSchema} from '$lib/schema/schema';
@@ -18,7 +19,6 @@
 
     let hidden = $state(false);
     let selectedIndex = $state(0);
-    let clampedSelectedIndex = $derived(selectedIndex % mentions.length);
 
     const handleSelect = (mention: EditorMention) => {
         switch (mention.type) {
@@ -32,12 +32,18 @@
                 throw new Error('unreachable');
         }
     };
+    const {findPlugin} = getGraphContext();
     const {highlightNode} = getProjectContext();
 
     $effect(() => {
+        if (selectedIndex < 0 || selectedIndex > mentions.length) {
+            selectedIndex = Math.max(0, Math.min(selectedIndex, mentions.length - 1));
+        }
+    });
+    $effect(() => {
         if (hidden) return;
 
-        const mention = mentions[clampedSelectedIndex];
+        const mention = mentions[selectedIndex];
 
         if (mention?.type === 'node') {
             return highlightNode(mention.node.id);
@@ -47,7 +53,7 @@
     export const key = (e: KeyboardEvent) => {
         if (hidden) return false;
         if (e.key === 'Enter') {
-            const mention = mentions[clampedSelectedIndex];
+            const mention = mentions[selectedIndex];
 
             if (mention) {
                 handleSelect(mention);
@@ -55,11 +61,13 @@
             }
         }
         if (e.key === 'ArrowUp') {
-            selectedIndex -= 1;
+            if (selectedIndex === 0) selectedIndex = Math.max(0, mentions.length - 1);
+            else selectedIndex -= 1;
             return true;
         }
         if (e.key === 'ArrowDown') {
-            selectedIndex += 1;
+            if (selectedIndex === mentions.length - 1) selectedIndex = 0;
+            else selectedIndex += 1;
             return true;
         }
         return false;
@@ -83,12 +91,15 @@
     {/if}
     {#each mentions as mention, i}
         {#if mention.type === 'node'}
-            <button class:selected={i === clampedSelectedIndex} onclick={() => handleSelect(mention)}>
-                {mention.key} in {extractPluginName(mention.node.data.id)}
+            {@const {icon} = findPlugin(mention.node)}
+            <button class:selected={i === selectedIndex} onclick={() => handleSelect(mention)}>
+                <img src={icon} alt="" />
+                <span>{mention.key} in {extractPluginName(mention.node.data.id)}</span>
             </button>
         {:else}
-            <button class:selected={i === clampedSelectedIndex} onclick={() => handleSelect(mention)}>
-                🔒 {mention.key}
+            <button class:selected={i === selectedIndex} onclick={() => handleSelect(mention)}>
+                <span>🔒</span>
+                <span>{mention.key}</span>
             </button>
         {/if}
     {/each}
@@ -104,6 +115,11 @@
         border: 0.15rem solid var(--color-fg);
         border-radius: 0.5rem;
         background-color: var(--color-bg);
+    }
+
+    button {
+        gap: 1rem;
+        display: flex;
     }
 
     .selected {

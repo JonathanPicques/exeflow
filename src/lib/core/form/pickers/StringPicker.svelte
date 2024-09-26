@@ -20,11 +20,11 @@
     import {Editor} from '@tiptap/core';
     import {mount, unmount, onMount, onDestroy} from 'svelte';
     import type {Instance} from 'tippy.js';
-    import type {Component, ComponentProps, ComponentType} from 'svelte';
+    import type {Component, ComponentProps} from 'svelte';
 
     import MentionList from './mentions/MentionList.svelte';
 
-    import {getGraphContext} from '$lib/core/core';
+    import {graphContextKey, getGraphContext} from '$lib/core/core';
     import {projectContextKey, getProjectContext} from '$lib/core/core.client.svelte';
     import {parse, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
     import type {PluginNode} from '$lib/core/graph/nodes';
@@ -43,9 +43,10 @@
     let element: HTMLDivElement | undefined = $state();
     let focused = $state(false);
 
-    const {nodes} = getGraphContext();
+    const graphContext = getGraphContext();
     const projectContext = getProjectContext();
 
+    const {nodes} = graphContext;
     const serialize = (editorNode: EditorNode) => {
         let text = '';
         const traverse = (editorNode: EditorNode, index = 0) => {
@@ -135,6 +136,7 @@
                             const props = $state({mentions: []}) as ComponentProps<typeof MentionList>;
                             const context = new Map();
 
+                            context.set(graphContextKey, graphContext);
                             context.set(projectContextKey, projectContext);
                             return {
                                 onExit() {
