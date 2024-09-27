@@ -52,6 +52,7 @@
         const traverse = (editorNode: EditorNode, index = 0) => {
             switch (editorNode.type) {
                 case 'doc':
+                    if (!editorNode.content) break;
                     for (let i = 0; i < editorNode.content.length; i++) {
                         traverse(editorNode.content[i], i);
                     }
@@ -64,6 +65,7 @@
                     break;
                 case 'paragraph':
                     if (index > 0) text += `\n`;
+                    if (!editorNode.content) break;
                     for (const item of editorNode.content || []) {
                         traverse(item);
                     }
