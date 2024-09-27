@@ -37,7 +37,7 @@
         onchange?: () => void;
     }
 
-    let {value = $bindable(), schema, onchange}: Props = $props();
+    let {id, value = $bindable(), schema, onchange}: Props = $props();
 
     let editor: Editor | undefined = $state();
     let element: HTMLDivElement | undefined = $state();
@@ -46,7 +46,6 @@
     const graphContext = getGraphContext();
     const projectContext = getProjectContext();
 
-    const {nodes} = graphContext;
     const serialize = (editorNode: EditorNode) => {
         let text = '';
         const traverse = (editorNode: EditorNode, index = 0) => {
@@ -112,7 +111,7 @@
                     suggestion: {
                         items({query}) {
                             const mentions = [
-                                ...$nodes.flatMap(node =>
+                                ...graphContext.findNodesBefore(id).flatMap(node =>
                                     Object.entries(node.data.data.results).map(([key, schema]) => {
                                         return {type: 'node', node, key, schema} satisfies EditorMention;
                                     }),
