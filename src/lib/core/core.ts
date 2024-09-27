@@ -47,6 +47,45 @@ export class GraphContext {
         }
         return node;
     };
+    public findNodesAfter = (id: PluginNode['id']) => {
+        const edges = get(this.edges);
+        const after: PluginNode['id'][] = [];
+        const visit: PluginNode['id'][] = [id];
+        const visited: PluginNode['id'][] = [];
+
+        while (visit.length > 0) {
+            const nodeId = visit.pop()!;
+            visited.push(nodeId);
+
+            for (const {target} of edges.filter(e => e.source === nodeId)) {
+                if (!visited.includes(target)) {
+                    visit.push(target);
+                    after.push(target);
+                }
+            }
+        }
+        return after.map(id => this.findNode(id));
+    };
+    public findNodesBefore = (id: PluginNode['id']) => {
+        const edges = get(this.edges);
+        const visit: PluginNode['id'][] = [id];
+        const before: PluginNode['id'][] = [];
+        const visited: PluginNode['id'][] = [];
+
+        while (visit.length > 0) {
+            const node = visit.pop()!;
+            visited.push(node);
+
+            for (const {source} of edges.filter(e => e.target === node)) {
+                if (!visited.includes(source)) {
+                    visit.push(source);
+                    before.push(source);
+                }
+            }
+        }
+        return before.map(id => this.findNode(id));
+    };
+
     public findNextActionNode = (id: PluginNode['id'], out: string) => {
         const edge = get(this.edges).find(e => e.source === id && e.sourceHandle === out);
         if (!edge || !edge.sourceHandle || !edge.targetHandle) {
@@ -93,7 +132,7 @@ export class GraphContext {
         this.nodes.update(nodes => [...nodes, newNode]);
         return newNode;
     };
-    public getNodeForm = async (id: PluginNode['id']) => {
+    public renderNodeForm = async (id: PluginNode['id']) => {
         const node = this.findNode(id);
         const plugin = this.findPlugin(node);
         const schema = await plugin.form({

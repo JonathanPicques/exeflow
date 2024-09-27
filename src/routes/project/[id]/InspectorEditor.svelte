@@ -7,12 +7,12 @@
 
     let form = $state<{value: unknown; schema: JsonSchema}>();
     let {node = $bindable()}: {node: PluginNode} = $props();
-    const {getNodeForm, updateNodeData} = getGraphContext();
+    const {renderNodeForm, updateNodeData} = getGraphContext();
 
     $effect(() => {
-        (async () => {
-            form = await getNodeForm(node.id);
-        })();
+        renderNodeForm(node.id).then(f => {
+            form = f;
+        });
     });
 </script>
 
