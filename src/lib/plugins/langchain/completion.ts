@@ -111,7 +111,7 @@ export default action<typeof configSchema>({
 
         return {
             valid: true,
-            title: form?.provider?.settings.model ?? config?.provider.settings.model,
+            title: provider.settings.model,
             config: {
                 value: {input, stream, provider},
                 schema: configSchema,
