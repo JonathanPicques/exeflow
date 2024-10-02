@@ -32,7 +32,7 @@
     <h1>Automations <em>for devs</em><br />made simple</h1>
     <h2>Exeflow is a free and open source project that aims to provide a clean and simple way to connect multiple apps together.</h2>
 
-    <a href="/home">Get started now!</a>
+    <a href="/home" class="button">Get started now!</a>
 </main>
 
 <style>

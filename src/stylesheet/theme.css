@@ -100,7 +100,8 @@ select {
     background-position: calc(100% - 0.8rem) center;
 }
 
-button:not(.custom) {
+button:not(.custom),
+.button {
     padding: 0.8rem 1rem;
 
     color: var(--color-fg);
@@ -124,4 +125,9 @@ button:not(.custom) {
     &:active {
         background-color: var(--color-bg-3);
     }
+}
+
+a.button {
+    text-align: center;
+    text-decoration: none;
 }
