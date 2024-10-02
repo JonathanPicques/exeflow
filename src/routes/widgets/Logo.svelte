@@ -3,18 +3,17 @@
 
     interface Props {
         to?: string;
-        size?: string;
         flow?: 'vertical' | 'horizontal';
     }
 
-    let {to = '/', size, flow = 'vertical'}: Props = $props();
+    let {to = '/', flow = 'vertical'}: Props = $props();
 </script>
 
 <div class:horizontal={flow === 'horizontal'}>
     <a href={to}>
         <img src={logo} alt="Exeflow logo" />
     </a>
-    <span style:--size={size}>exeflow</span>
+    <span>exeflow</span>
 </div>
 
 <style>
@@ -30,6 +29,6 @@
     }
 
     span {
-        font-size: var(--size, 1.5rem);
+        font-size: 2rem;
     }
 </style>
