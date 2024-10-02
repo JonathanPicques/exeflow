@@ -1,41 +1,34 @@
 <script lang="ts">
-    import {getMe} from './api/me/me';
-</script>
+    import {onMount} from 'svelte';
 
-<nav>
-    {#await getMe()}
-        <div style:visibility="hidden">
-            <span>Loading</span>
-        </div>
-    {:then me}
-        {#if me}
-            <div style:flex-grow="1">
-                <a href="/home">Home</a>
-            </div>
-            <div>
-                <span><a href="/auth/profile">{me.email}</a></span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
-            </div>
-        {:else}
-            <div style:flex-grow="1">
-                <span>Exeflow</span>
-            </div>
-            <div>
-                <a href="/auth/login">Login</a>
-                <a href="/auth/register">Register</a>
-            </div>
-        {/if}
-    {/await}
-</nav>
+    let showDevUrls = $state(false);
+
+    onMount(() => {
+        showDevUrls = location.hostname === 'localhost';
+    });
+</script>
 
 <svelte:head>
     <title>Exeflow</title>
 </svelte:head>
 
-<main>
-    <h1>Landing page</h1>
+<nav>
+    <div>Exeflow</div>
+    <div style:flex-grow="1"></div>
+    <div>
+        <a href="https://github.com/JonathanPicques/exeflow">Github</a>
+        {#if showDevUrls}
+            <a href="http://127.0.0.1:54323" target="_blank">Supabase Studio</a>
+            <a href="http://127.0.0.1:54324" target="_blank">Supabase Inbucket</a>
+        {/if}
+    </div>
+</nav>
 
-    <a href="http://127.0.0.1:54323" target="_blank">Supabase Studio</a>
-    <a href="http://127.0.0.1:54324" target="_blank">Supabase Inbucket</a>
+<main>
+    <h1>Automations for devs made simple</h1>
+    <h2>Exeflow is a free and open source project that aims to provide a clean and simple way to connect multiple apps together.</h2>
+
+    <a href="/home">Get started now!</a>
 </main>
 
 <style>

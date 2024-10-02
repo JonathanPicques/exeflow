@@ -1,10 +1,21 @@
 <script lang="ts">
+    import Fuse from 'fuse.js';
+
     import empty from './empty.svg';
     import {postProject, deleteProject} from '../api/project/project';
     import type {Project} from '../api/project/project';
 
     let {data} = $props();
+    let filter = $state('');
     let projects: Project[] = $state(data.projects);
+
+    const filteredProjects = $derived.by(() => {
+        if (filter === '') return projects;
+
+        const fuse = new Fuse(projects, {keys: ['name']});
+        const found = fuse.search(filter);
+        return found.map(f => f.item);
+    });
 
     const createProject = async () => {
         projects = [await postProject({name: `Untitled project ${projects.length}`}), ...projects];
@@ -21,27 +32,32 @@
 </svelte:head>
 
 <nav>
-    <div style:flex-grow="1">
-        <a href="/">Landing page</a>
+    <div>
+        <a href="/">Exeflow</a>
+    </div>
+    <div class="filter">
+        <input type="search" placeholder="Filter projects..." bind:value={filter} />
     </div>
     <div>
-        <span><a href="/auth/profile">{data.user.email}</a></span> - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+        <button onclick={createProject}>New project</button>
+        <a href="/auth/profile">{data.user.email}</a>
+        <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+        <a href="https://github.com/JonathanPicques/exeflow">Github</a>
     </div>
 </nav>
 
 <main>
-    <div>
-        <button onclick={createProject}>Create new project</button>
-    </div>
-
     <div class="projects">
-        {#each projects as project}
+        {#each filteredProjects as project}
             <div class="project">
-                <a href="/project/{project.id}" aria-label="Project {project.name}">
+                <a href="/project/{project.id}">
                     <img src={project.image === 'data:null' ? empty : project.image} alt="" width="320px" height="180px" />
                 </a>
                 <div style:display="flex">
-                    <a href="/project/{project.id}" style:flex-grow="1">{project.name}</a>
+                    <div style:display="flex" style:flex-grow="1" style:flex-direction="column">
+                        <span>{project.name}</span>
+                        <span>By author</span>
+                    </div>
                     <button class="custom" onclick={() => removeProject(project.id)}>❌</button>
                 </div>
             </div>
@@ -55,6 +71,21 @@
         display: flex;
         padding: 1rem;
         border-bottom: 1px solid var(--color-bg-1);
+
+        & > div {
+            gap: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        & > div.filter {
+            flex-grow: 1;
+
+            & > input {
+                width: 30rem;
+            }
+        }
     }
 
     main {

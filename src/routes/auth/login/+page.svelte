@@ -6,6 +6,10 @@
     <title>Exeflow - Login</title>
 </svelte:head>
 
+<nav>
+    <a href="https://github.com/JonathanPicques/exeflow">Github</a>
+</nav>
+
 <main>
     <form method="POST">
         <h1>
@@ -21,6 +25,12 @@
 </main>
 
 <style>
+    nav {
+        top: 1rem;
+        right: 1rem;
+        position: absolute;
+    }
+
     main {
         display: flex;
         flex-grow: 1;
