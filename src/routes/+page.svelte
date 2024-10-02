@@ -15,7 +15,7 @@
     <title>Exeflow</title>
 </svelte:head>
 
-<Navbar>
+<Navbar fixed={true}>
     {#snippet left()}
         <Logo />
     {/snippet}
@@ -30,29 +30,43 @@
 
 <main>
     <h1>Automations <em>for devs</em><br />made simple</h1>
-    <h2>Exeflow is a free and open source project that aims to provide a clean and simple way to connect multiple apps together.</h2>
+    <h2>Exeflow is a free and open source project that aims to<wbr /> provide a clean and simple way to connect multiple<wbr /> apps together.</h2>
 
     <a href="/home" class="button">Get started now!</a>
 </main>
 
 <style>
     main {
-        gap: 1rem;
+        gap: 2rem;
         display: flex;
         padding: 1rem;
         flex-grow: 1;
+        max-width: 60rem;
         align-items: center;
+        margin-inline: auto;
         flex-direction: column;
         justify-content: center;
 
         & {
-            h1,
-            h2 {
+            h1 {
+                font-size: clamp(3rem, 8vw, 4rem);
                 text-align: center;
+                font-weight: normal;
+                line-height: 110%;
+                letter-spacing: -2px;
             }
-
+            h2 {
+                color: var(--color-fg-1);
+                font-size: clamp(1.4rem, 2vw, 1.6rem);
+                text-wrap: balance;
+                text-align: center;
+                font-weight: normal;
+                line-height: 140%;
+                margin-bottom: 1rem;
+            }
             em {
-                font-family: var(--flow-font);
+                color: var(--color-primary);
+                font-family: var(--font-mono);
             }
         }
     }

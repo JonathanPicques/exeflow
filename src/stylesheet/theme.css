@@ -1,13 +1,14 @@
 :root {
     --font: 'Space Grotesk', 'Roboto', 'Arial';
-    --flow-font: 'Space Mono', 'Fira Mono', Monospace;
+    --font-mono: 'Space Mono', 'Fira Mono', Monospace;
+    --color-primary: #31ff9c;
 }
 
 :root[color-scheme='dark'] {
     /* Main */
     --color-fg: #ddd;
     --color-fg-1: #aaaaaa;
-    --color-bg: #111;
+    --color-bg: #181818;
     --color-bg-1: #1e1e1e;
     --color-bg-2: #404040;
     --color-bg-3: #606060;

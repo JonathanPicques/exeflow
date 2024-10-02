@@ -115,7 +115,7 @@
 
 <style>
     :global(.svelte-flow) {
-        font-family: var(--flow-font);
+        font-family: var(--font-mono);
         background-color: var(--color-bg) !important;
         --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
     }

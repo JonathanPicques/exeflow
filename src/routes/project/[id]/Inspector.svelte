@@ -138,7 +138,7 @@
         border: 0.15rem solid transparent;
         cursor: grab;
         font-weight: bold;
-        font-family: var(--flow-font);
+        font-family: var(--font-mono);
         border-radius: var(--flow-border-radius-node);
         background-color: var(--flow-color-node);
 

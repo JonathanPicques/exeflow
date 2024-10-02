@@ -17,6 +17,10 @@
 </div>
 
 <style>
+    a {
+        display: flex;
+    }
+
     div {
         gap: 0.5rem;
         display: flex;
