@@ -77,7 +77,6 @@
             <InspectorEditor bind:node />
         </div>
     {:else}
-        <h1>Nodes</h1>
         <input type="search" placeholder="Filter nodes..." bind:value={filter} />
 
         <div class="list">
