@@ -1,4 +1,4 @@
-import icon from './icon.svg';
+import icon from './+icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
 
 export default trigger({

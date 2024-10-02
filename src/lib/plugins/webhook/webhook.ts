@@ -1,4 +1,4 @@
-import icon from './icon.svg';
+import icon from './+icon.svg';
 import {fill} from '$lib/schema/data';
 import {trigger} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';

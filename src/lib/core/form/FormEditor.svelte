@@ -5,6 +5,7 @@
     import NumberPicker from '$lib/core/form/pickers/NumberPicker.svelte';
     import ObjectPicker from '$lib/core/form/pickers/ObjectPicker.svelte';
     import BooleanPicker from '$lib/core/form/pickers/BooleanPicker.svelte';
+
     import type {JsonSchema} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
 
