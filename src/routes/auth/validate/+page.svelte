@@ -1,4 +1,7 @@
 <script lang="ts">
+    import Logo from '../../widgets/Logo.svelte';
+    import Navbar from '../../widgets/Navbar.svelte';
+
     let {data} = $props();
 </script>
 
@@ -6,9 +9,14 @@
     <title>Exeflow - Validate email</title>
 </svelte:head>
 
-<nav>
-    <a href="https://github.com/JonathanPicques/exeflow">Github</a>
-</nav>
+<Navbar fixed={true}>
+    {#snippet left()}
+        <Logo />
+    {/snippet}
+    {#snippet right()}
+        <a href="https://github.com/JonathanPicques/exeflow">Github</a>
+    {/snippet}
+</Navbar>
 
 <main>
     {#if data.success}
@@ -22,12 +30,6 @@
 </main>
 
 <style>
-    nav {
-        top: 1rem;
-        right: 1rem;
-        position: absolute;
-    }
-
     main {
         gap: 1rem;
         display: flex;

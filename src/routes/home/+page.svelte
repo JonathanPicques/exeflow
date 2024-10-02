@@ -1,7 +1,11 @@
 <script lang="ts">
     import Fuse from 'fuse.js';
 
-    import empty from './empty.svg';
+    import empty from './+empty.svg';
+
+    import Logo from '../widgets/Logo.svelte';
+    import Navbar from '../widgets/Navbar.svelte';
+
     import {postProject, deleteProject} from '../api/project/project';
     import type {Project} from '../api/project/project';
 
@@ -31,26 +35,26 @@
     <title>Exeflow - Home</title>
 </svelte:head>
 
-<nav>
-    <div>
-        <a href="/">Exeflow</a>
-    </div>
-    <div class="filter">
+<Navbar>
+    {#snippet left()}
+        <Logo />
+    {/snippet}
+    {#snippet center()}
         <input type="search" placeholder="Filter projects..." bind:value={filter} />
-    </div>
-    <div>
-        <button onclick={createProject}>New project</button>
+    {/snippet}
+    {#snippet right()}
+        <button onclick={createProject}>+ New project</button>
         <a href="/auth/profile">{data.user.email}</a>
         <a href="/auth/logout" data-sveltekit-reload>Logout</a>
         <a href="https://github.com/JonathanPicques/exeflow">Github</a>
-    </div>
-</nav>
+    {/snippet}
+</Navbar>
 
 <main>
     <div class="projects">
         {#each filteredProjects as project}
             <div class="project">
-                <a href="/project/{project.id}">
+                <a href="/project/{project.id}" aria-label="Open project {project.name}">
                     <img src={project.image === 'data:null' ? empty : project.image} alt="" width="320px" height="180px" />
                 </a>
                 <div style:display="flex">
@@ -66,34 +70,16 @@
 </main>
 
 <style>
-    nav {
-        gap: 1rem;
-        display: flex;
-        padding: 1rem;
-        border-bottom: 1px solid var(--color-bg-1);
-
-        & > div {
-            gap: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        & > div.filter {
-            flex-grow: 1;
-
-            & > input {
-                width: 30rem;
-            }
-        }
-    }
-
     main {
         gap: 1rem;
         display: flex;
         padding: 1rem;
         flex-grow: 1;
         flex-direction: column;
+    }
+
+    input {
+        width: 30rem;
     }
 
     .project {

@@ -1,4 +1,7 @@
 <script lang="ts">
+    import Logo from '../../widgets/Logo.svelte';
+    import Navbar from '../../widgets/Navbar.svelte';
+
     let {form} = $props();
 </script>
 
@@ -6,15 +9,15 @@
     <title>Exeflow - Login</title>
 </svelte:head>
 
-<nav>
-    <a href="https://github.com/JonathanPicques/exeflow">Github</a>
-</nav>
+<Navbar fixed={true}>
+    {#snippet right()}
+        <a href="https://github.com/JonathanPicques/exeflow">Github</a>
+    {/snippet}
+</Navbar>
 
 <main>
     <form method="POST">
-        <h1>
-            <a href="/">Exeflow</a>
-        </h1>
+        <Logo flow="horizontal" size="2rem" />
         <input name="email" type="email" value={form?.email ?? ''} placeholder="Email" required />
         <input name="password" type="password" placeholder="Password" required />
         <button type="submit">Login</button>
@@ -25,12 +28,6 @@
 </main>
 
 <style>
-    nav {
-        top: 1rem;
-        right: 1rem;
-        position: absolute;
-    }
-
     main {
         display: flex;
         flex-grow: 1;

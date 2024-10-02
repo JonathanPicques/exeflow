@@ -1,6 +1,9 @@
 <script lang="ts">
     import {onMount} from 'svelte';
 
+    import Logo from './widgets/Logo.svelte';
+    import Navbar from './widgets/Navbar.svelte';
+
     let showDevUrls = $state(false);
 
     onMount(() => {
@@ -12,37 +15,45 @@
     <title>Exeflow</title>
 </svelte:head>
 
-<nav>
-    <div>Exeflow</div>
-    <div style:flex-grow="1"></div>
-    <div>
+<Navbar>
+    {#snippet left()}
+        <Logo />
+    {/snippet}
+    {#snippet right()}
         <a href="https://github.com/JonathanPicques/exeflow">Github</a>
         {#if showDevUrls}
             <a href="http://127.0.0.1:54323" target="_blank">Supabase Studio</a>
             <a href="http://127.0.0.1:54324" target="_blank">Supabase Inbucket</a>
         {/if}
-    </div>
-</nav>
+    {/snippet}
+</Navbar>
 
 <main>
-    <h1>Automations for devs made simple</h1>
+    <h1>Automations <em>for devs</em><br />made simple</h1>
     <h2>Exeflow is a free and open source project that aims to provide a clean and simple way to connect multiple apps together.</h2>
 
     <a href="/home">Get started now!</a>
 </main>
 
 <style>
-    nav {
-        gap: 1rem;
-        display: flex;
-        padding: 1rem;
-        border-bottom: 1px solid var(--color-bg-1);
-    }
-
     main {
         gap: 1rem;
         display: flex;
         padding: 1rem;
+        flex-grow: 1;
+        align-items: center;
         flex-direction: column;
+        justify-content: center;
+
+        & {
+            h1,
+            h2 {
+                text-align: center;
+            }
+
+            em {
+                font-family: var(--flow-font);
+            }
+        }
     }
 </style>
