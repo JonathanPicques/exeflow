@@ -1,6 +1,6 @@
 :root {
-    --font: 'Arial';
-    --flow-font: 'Fira Mono', Monospace;
+    --font: 'Space Grotesk', 'Roboto', 'Arial';
+    --flow-font: 'Space Mono', 'Fira Mono', Monospace;
 }
 
 :root[color-scheme='dark'] {
