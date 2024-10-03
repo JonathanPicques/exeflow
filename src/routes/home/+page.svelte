@@ -3,6 +3,7 @@
 
     import empty from './+empty.svg';
 
+    import Bg from '../widgets/Bg.svelte';
     import Logo from '../widgets/Logo.svelte';
     import Navbar from '../widgets/Navbar.svelte';
 
@@ -68,6 +69,8 @@
         {/each}
     </div>
 </main>
+
+<Bg />
 
 <style>
     main {

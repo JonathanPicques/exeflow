@@ -33,6 +33,7 @@
         height: 5rem;
         display: flex;
         padding: 1rem;
+        background-image: linear-gradient(var(--color-bg), transparent);
 
         & > div {
             gap: 0.5rem;

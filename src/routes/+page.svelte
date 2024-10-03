@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Bg from './widgets/Bg.svelte';
     import Logo from './widgets/Logo.svelte';
     import Navbar from './widgets/Navbar.svelte';
 </script>
@@ -25,6 +26,8 @@
     <!-- <a href="http://127.0.0.1:54323" target="_blank">Supabase Studio</a> -->
     <!-- <a href="http://127.0.0.1:54324" target="_blank">Supabase Inbucket</a> -->
 </main>
+
+<Bg />
 
 <style>
     main {
