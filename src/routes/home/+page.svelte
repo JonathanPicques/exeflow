@@ -86,7 +86,7 @@
     .project {
         & img {
             width: 100%;
-            border: 0.1rem solid var(--color-bg-2);
+            border: 0.15rem solid var(--color-bg-2);
             border-radius: 0.5rem;
             background-color: var(--color-bg-1);
         }

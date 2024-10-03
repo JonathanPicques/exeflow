@@ -9,6 +9,9 @@
     import Secrets from './Secrets.svelte';
     import Inspector from './Inspector.svelte';
 
+    import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
+    import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
+
     import {valid} from '$lib/schema/validate';
     import {shortcut} from '$lib/helper/shortcut';
     import {patchProject} from '../../api/project/project';
@@ -95,8 +98,6 @@
             {#if saveChecksum === currentChecksum}Save{/if}
             {#if saveChecksum !== currentChecksum}Save *{/if}
         </button>
-        <button onclick={layout} use:shortcut={'ctrl+alt+l'}>Layout</button>
-        <button onclick={fitToView} use:shortcut={'ctrl+alt+c'}>Fit to view</button>
         {#if true}
             <button onclick={showLogs}>Logs</button>
         {/if}
@@ -113,6 +114,14 @@
         <SplitPane type="horizontal" min="200px" max="-100px" pos="75%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
             <section slot="a" class="flow">
                 <Flow bind:this={flow} />
+                <div class="sidebar">
+                    <button class="icon" title="Prettify" onclick={layout} use:shortcut={'ctrl+alt+l'}>
+                        <Prettify />
+                    </button>
+                    <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'ctrl+alt+c'}>
+                        <FitToView />
+                    </button>
+                </div>
             </section>
             <section slot="b" class="inspector">
                 <Inspector />
@@ -170,6 +179,25 @@
                 flex-grow: 1;
             }
         }
+    }
+
+    .sidebar {
+        gap: 0.5rem;
+        top: 50%;
+        left: 0;
+        display: flex;
+        padding: 0.5rem;
+        position: absolute;
+        align-items: center;
+        border-radius: 0 1rem 1em 0;
+        flex-direction: column;
+        justify-content: center;
+
+        transform: translate(0, -50%);
+
+        border: 0.15rem solid var(--flow-color-grid-dots);
+        border-left: none;
+        background-color: var(--color-bg);
     }
 
     .inspector {

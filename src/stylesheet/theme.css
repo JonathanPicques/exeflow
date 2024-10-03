@@ -154,6 +154,7 @@ button:not(.custom),
 
     @media screen and (prefers-reduced-motion: no-preference) {
         transition:
+            color 0.15s ease,
             transform 0.15s ease,
             background-color 0.15s ease;
     }
@@ -166,6 +167,25 @@ button:not(.custom),
     }
     &:active {
         background-color: var(--color-bg-3);
+    }
+
+    &.icon {
+        color: var(--color-fg-1);
+        display: flex;
+        padding: 0.25rem;
+        transform: scale(1);
+        background-color: unset;
+
+        &:hover {
+            color: var(--color-fg-2);
+            transform: scale(1.1);
+            background-color: unset;
+        }
+        &:active {
+            color: var(--color-fg-2);
+            transform: scale(0.95);
+            background-color: unset;
+        }
     }
 }
 

@@ -15,7 +15,7 @@
 
 <style>
     svg {
-        fill: var(--fill, #aaaaaa);
+        fill: var(--fill, currentColor);
         width: var(--size, 24px);
         height: var(--size, 24px);
     }
