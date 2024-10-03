@@ -1,6 +1,5 @@
 <script lang="ts">
     import {Handle, Position} from '@xyflow/svelte';
-    import type {Snippet} from 'svelte';
 
     interface Props {
         id: string;
@@ -10,7 +9,10 @@
 </script>
 
 <div title={id} class="handle" class:connected>
-    <Handle {id} type="target" position={Position.Left} />
+    <Handle {id} type="target" position={Position.Left}>
+        <!-- Keeps Lighthouse happy -->
+        <div title={id}></div>
+    </Handle>
 </div>
 
 <style>
