@@ -16,21 +16,29 @@ export const supabase = (url: string, key: string, cookies: Cookies) => {
                     return cookies.get(key) ?? null;
                 },
                 setItem(key, value) {
-                    cookies.set(key, value, {
-                        path: '/',
-                        maxAge: 365 * 60 * 60 * 24 * 1000,
-                        secure: process.env.NODE_ENV === 'production',
-                        httpOnly: true,
-                        sameSite: 'lax', // TODO: can only be strict if supabase and exeflow share the same domain
-                    });
+                    try {
+                        cookies.set(key, value, {
+                            path: '/',
+                            maxAge: 365 * 60 * 60 * 24 * 1000,
+                            secure: process.env.NODE_ENV === 'production',
+                            httpOnly: true,
+                            sameSite: 'lax', // TODO: can only be strict if supabase and exeflow share the same domain
+                        });
+                    } catch (error) {
+                        console.error('setItem failed', {key, value, error});
+                    }
                 },
                 removeItem(key) {
-                    cookies.delete(key, {
-                        path: '/',
-                        secure: process.env.NODE_ENV === 'production',
-                        httpOnly: true,
-                        sameSite: 'lax', // TODO: can only be strict if supabase and exeflow share the same domain
-                    });
+                    try {
+                        cookies.delete(key, {
+                            path: '/',
+                            secure: process.env.NODE_ENV === 'production',
+                            httpOnly: true,
+                            sameSite: 'lax', // TODO: can only be strict if supabase and exeflow share the same domain
+                        });
+                    } catch (error) {
+                        console.error('removeItem failed', {key, error});
+                    }
                 },
             },
         },
