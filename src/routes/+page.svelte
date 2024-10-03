@@ -10,7 +10,7 @@
 
 <Bg />
 
-<Navbar fixed={true}>
+<Navbar>
     {#snippet left()}
         <Logo />
     {/snippet}

@@ -9,7 +9,7 @@
     <title>Exeflow - Validate email</title>
 </svelte:head>
 
-<Navbar fixed={true}>
+<Navbar>
     {#snippet left()}
         <Logo />
     {/snippet}

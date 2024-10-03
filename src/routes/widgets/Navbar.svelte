@@ -5,13 +5,12 @@
         left?: Snippet;
         center?: Snippet;
         right?: Snippet;
-        fixed?: boolean;
     }
 
-    let {left, center, right, fixed = false}: Props = $props();
+    let {left, center, right}: Props = $props();
 </script>
 
-<nav class:fixed>
+<nav>
     {#if left}
         <div>
             {@render left()}
@@ -29,6 +28,11 @@
 
 <style>
     nav {
+        top: 0;
+        left: 0;
+        right: 0;
+        position: fixed;
+
         gap: 1rem;
         height: 5rem;
         display: flex;
@@ -46,12 +50,5 @@
         & > div.center {
             flex-grow: 1;
         }
-    }
-
-    nav.fixed {
-        top: 0;
-        left: 0;
-        right: 0;
-        position: fixed;
     }
 </style>

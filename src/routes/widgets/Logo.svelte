@@ -6,7 +6,7 @@
         textSize?: string;
     }
 
-    let {to = '/', flow = 'vertical', imgSize = '2rem', textSize = '1.5rem'}: Props = $props();
+    let {to = '/', flow = 'vertical', imgSize, textSize}: Props = $props();
 </script>
 
 <div class:horizontal={flow === 'horizontal'} style:--img-size={imgSize} style:--text-size={textSize}>
@@ -47,9 +47,10 @@
 
     svg {
         width: var(--img-size, 2rem);
+        height: var(--img-size, 2rem);
     }
 
     span {
-        font-size: var(--text-size, 1.5rem);
+        font-size: var(--text-size, 2rem);
     }
 </style>

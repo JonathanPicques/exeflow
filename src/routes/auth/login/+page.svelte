@@ -9,7 +9,7 @@
     <title>Exeflow - Login</title>
 </svelte:head>
 
-<Navbar fixed={true}>
+<Navbar>
     {#snippet right()}
         <a href="https://github.com/JonathanPicques/exeflow">Github</a>
     {/snippet}
@@ -17,7 +17,7 @@
 
 <main>
     <form method="POST">
-        <Logo flow="horizontal" imgSize="3.5rem" textSize="2.5rem" />
+        <Logo flow="horizontal" imgSize="4rem" textSize="3rem" />
         <input name="email" type="email" value={form?.email ?? ''} placeholder="Email" required />
         <input name="password" type="password" placeholder="Password" required />
         <button type="submit">Login</button>

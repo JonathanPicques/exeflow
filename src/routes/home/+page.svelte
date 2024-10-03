@@ -72,9 +72,9 @@
 <style>
     main {
         display: flex;
-        padding: 1rem 4rem;
         overflow: auto;
         flex-grow: 1;
+        padding-inline: 3rem;
         flex-direction: column;
     }
 
@@ -120,6 +120,7 @@
     }
 
     .projects {
+        margin-top: 6rem;
         display: grid;
         grid-gap: 2rem;
         flex-grow: 1;
