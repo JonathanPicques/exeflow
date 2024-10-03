@@ -23,32 +23,27 @@
 </script>
 
 <div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
-    <div class="content">
-        <img src={icon} alt="" title={nodeNamespace} width="32px" height="32px" />
-        <div>
-            <span class:valid class="name">{nodeName}</span>
-            {#if nodeTitle && nodeName !== nodeTitle}
-                <span class:valid class="title">{nodeTitle}</span>
-            {/if}
-        </div>
-    </div>
+    <div></div>
+    <img src={icon} alt="" title={nodeNamespace} width="32px" height="32px" />
     <div class="outputs">
         {#each outputs as output}
-            <OutputHandle id={output} connected={connectedOutputs.includes(output)}>
-                {#if outputs.length > 1}
-                    {output}
-                {/if}
-            </OutputHandle>
+            <OutputHandle id={output} connected={connectedOutputs.includes(output)} />
         {/each}
     </div>
+</div>
+
+<div class="content">
+    <span title={nodeName} class="name" class:valid>{nodeName}</span>
+    <span title={nodeTitle} class="title" class:valid>{nodeTitle}</span>
 </div>
 
 <style>
     .node {
         gap: 1rem;
+        width: fit-content;
         display: flex;
-        padding: 0.5rem;
-        min-width: 10rem;
+        padding: 0.5rem 0.2rem;
+        margin-inline: auto;
 
         border: 0.15rem solid var(--x-color-border, transparent);
         border-radius: var(--flow-border-radius-node);
@@ -56,32 +51,36 @@
     }
 
     .content {
-        gap: 1rem;
+        height: 2rem;
         display: flex;
-        flex-grow: 1;
-        align-items: center;
+        text-align: center;
+        flex-direction: column;
 
-        & div {
-            gap: 0.2rem;
-            display: flex;
-            flex-direction: column;
+        & .name {
+            color: var(--color-fg);
+            font-weight: bold;
 
-            & .name {
-                color: var(--color-fg);
-                font-weight: bold;
+            overflow: hidden;
+            max-width: 10rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
 
-                &:not(.valid) {
-                    color: var(--color-error);
-                }
+            &:not(.valid) {
+                color: var(--color-error);
             }
-            & .title {
-                color: var(--color-fg-1);
-                font-size: 0.6rem;
-                font-weight: 200;
+        }
+        & .title {
+            color: var(--color-fg-1);
+            font-size: 0.6rem;
+            font-weight: 200;
 
-                &:not(.valid) {
-                    color: var(--color-error);
-                }
+            overflow: hidden;
+            max-width: 10rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            &:not(.valid) {
+                color: var(--color-error);
             }
         }
     }

@@ -5,15 +5,12 @@
     interface Props {
         id: string;
         connected: boolean;
-        //
-        children?: Snippet;
     }
-    let {id, children, connected}: Props = $props();
+    let {id, connected}: Props = $props();
 </script>
 
-<div class="handle" class:connected>
+<div title={id} class="handle" class:connected>
     <Handle {id} type="target" position={Position.Left} />
-    {@render children?.()}
 </div>
 
 <style>
