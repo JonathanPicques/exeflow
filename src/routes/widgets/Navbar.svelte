@@ -33,6 +33,7 @@
         height: 5rem;
         display: flex;
         padding: 1rem;
+        overflow: auto;
         background-image: linear-gradient(var(--color-bg), transparent);
 
         & > div {

@@ -3,7 +3,6 @@
 
     import empty from './+empty.svg';
 
-    import Bg from '../widgets/Bg.svelte';
     import Logo from '../widgets/Logo.svelte';
     import Navbar from '../widgets/Navbar.svelte';
 
@@ -45,7 +44,7 @@
     {/snippet}
     {#snippet right()}
         <button onclick={createProject}>+ New project</button>
-        <a href="/auth/profile">{data.user.email}</a>
+        <!-- <a href="/auth/profile">{data.user.email}</a> -->
         <a href="/auth/logout" data-sveltekit-reload>Logout</a>
         <a href="https://github.com/JonathanPicques/exeflow">Github</a>
     {/snippet}
@@ -56,12 +55,12 @@
         {#each filteredProjects as project}
             <div class="project">
                 <a href="/project/{project.id}" aria-label="Open project {project.name}">
-                    <img src={project.image === 'data:null' ? empty : project.image} alt="" width="320px" height="180px" />
+                    <img src={project.image === 'data:null' ? empty : project.image} alt="" />
                 </a>
-                <div style:display="flex">
-                    <div style:display="flex" style:flex-grow="1" style:flex-direction="column">
-                        <span>{project.name}</span>
-                        <span>By author</span>
+                <div>
+                    <div>
+                        <span class="title">{project.name}</span>
+                        <span class="update">Updated 2 minutes ago</span>
                     </div>
                     <button class="custom" onclick={() => removeProject(project.id)}>❌</button>
                 </div>
@@ -70,39 +69,61 @@
     </div>
 </main>
 
-<Bg />
-
 <style>
     main {
-        gap: 1rem;
         display: flex;
-        padding: 1rem;
+        padding: 1rem 4rem;
+        overflow: auto;
         flex-grow: 1;
         flex-direction: column;
     }
 
     input {
-        width: 30rem;
+        width: clamp(10rem, 30%, 40rem);
     }
 
     .project {
         & img {
+            width: 100%;
+            border: 0.1rem solid var(--color-bg-2);
             border-radius: 0.5rem;
             background-color: var(--color-bg-1);
         }
 
-        & button {
-            margin: 0;
-            padding: 0;
-            background-color: transparent;
+        & > div {
+            display: flex;
+            padding: 0.5rem;
+
+            & > div {
+                gap: 0.5rem;
+                display: flex;
+
+                flex-grow: 1;
+                flex-direction: column;
+
+                & > .title {
+                    font-weight: bold;
+                }
+                & > .update {
+                    color: var(--color-fg-1);
+                    font-size: 0.9rem;
+                    font-weight: lighter;
+                }
+            }
+
+            & > button {
+                margin: 0;
+                padding: 0;
+                background-color: transparent;
+            }
         }
     }
 
     .projects {
         display: grid;
-        grid-gap: 1rem 1rem;
+        grid-gap: 2rem;
         flex-grow: 1;
         align-content: start;
-        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
     }
 </style>
