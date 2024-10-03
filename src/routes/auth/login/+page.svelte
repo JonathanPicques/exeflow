@@ -17,7 +17,7 @@
 
 <main>
     <form method="POST">
-        <Logo flow="horizontal" size="2rem" />
+        <Logo flow="horizontal" imgSize="3.5rem" textSize="2.5rem" />
         <input name="email" type="email" value={form?.email ?? ''} placeholder="Email" required />
         <input name="password" type="password" placeholder="Password" required />
         <button type="submit">Login</button>
