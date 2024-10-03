@@ -44,7 +44,7 @@
     {/snippet}
     {#snippet right()}
         <button onclick={createProject}>+ New project</button>
-        <!-- <a href="/auth/profile">{data.user.email}</a> -->
+        <a href="/auth/profile">Profile</a>
         <a href="/auth/logout" data-sveltekit-reload>Logout</a>
         <a href="https://github.com/JonathanPicques/exeflow">Github</a>
     {/snippet}
@@ -124,6 +124,6 @@
         grid-gap: 2rem;
         flex-grow: 1;
         align-content: start;
-        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(clamp(15rem, 25vw, 25rem), 1fr));
     }
 </style>

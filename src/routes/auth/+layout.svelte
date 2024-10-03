@@ -4,5 +4,5 @@
     let {children} = $props();
 </script>
 
-{@render children()}
 <Bg />
+{@render children()}

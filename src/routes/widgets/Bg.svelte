@@ -1,4 +1,4 @@
-<svg>
+<svg width="100%" height="100%">
     <pattern patternUnits="userSpaceOnUse" id="exeflow-background-pattern" x="0" y="0" width="20" height="20" patternTransform="translate(-0.5,-0.5)">
         <circle cx="0.5" cy="0.5" r="0.5"></circle>
     </pattern>
@@ -7,11 +7,8 @@
 
 <style>
     svg {
-        width: 100%;
-        height: 100%;
         z-index: -1;
-        overflow: hidden;
-        position: absolute;
+        position: fixed;
         pointer-events: none;
     }
 

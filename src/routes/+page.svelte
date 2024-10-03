@@ -8,6 +8,8 @@
     <title>Exeflow</title>
 </svelte:head>
 
+<Bg />
+
 <Navbar fixed={true}>
     {#snippet left()}
         <Logo />
@@ -26,8 +28,6 @@
     <!-- <a href="http://127.0.0.1:54323" target="_blank">Supabase Studio</a> -->
     <!-- <a href="http://127.0.0.1:54324" target="_blank">Supabase Inbucket</a> -->
 </main>
-
-<Bg />
 
 <style>
     main {
