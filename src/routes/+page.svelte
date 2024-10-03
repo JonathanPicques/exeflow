@@ -2,6 +2,7 @@
     import Bg from './widgets/Bg.svelte';
     import Logo from './widgets/Logo.svelte';
     import Navbar from './widgets/Navbar.svelte';
+    import GithubLink from './widgets/GithubLink.svelte';
 </script>
 
 <svelte:head>
@@ -15,7 +16,7 @@
         <Logo />
     {/snippet}
     {#snippet right()}
-        <a href="https://github.com/JonathanPicques/exeflow">Github</a>
+        <GithubLink />
     {/snippet}
 </Navbar>
 
@@ -41,28 +42,28 @@
         margin-inline: auto;
         flex-direction: column;
         justify-content: center;
+    }
 
-        & {
-            h1 {
-                font-size: clamp(3rem, 8vw, 4rem);
-                text-align: center;
-                font-weight: normal;
-                line-height: 110%;
-                letter-spacing: -2px;
-            }
-            h2 {
-                color: var(--color-fg-1);
-                font-size: clamp(1.4rem, 2vw, 1.6rem);
-                text-wrap: balance;
-                text-align: center;
-                font-weight: normal;
-                line-height: 140%;
-                margin-bottom: 1rem;
-            }
-            em {
-                color: var(--color-primary);
-                font-family: var(--font-mono);
-            }
-        }
+    h1 {
+        font-size: clamp(3rem, 8vw, 4rem);
+        text-align: center;
+        font-weight: normal;
+        line-height: 110%;
+        letter-spacing: -2px;
+    }
+
+    h2 {
+        color: var(--color-fg-1);
+        font-size: clamp(1.4rem, 2vw, 1.6rem);
+        text-wrap: balance;
+        text-align: center;
+        font-weight: normal;
+        line-height: 140%;
+        margin-bottom: 1rem;
+    }
+
+    em {
+        color: var(--color-primary);
+        font-family: var(--font-mono);
     }
 </style>

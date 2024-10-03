@@ -1,6 +1,7 @@
 <script lang="ts">
     import Logo from '../../widgets/Logo.svelte';
     import Navbar from '../../widgets/Navbar.svelte';
+    import GithubLink from '../../widgets/GithubLink.svelte';
 
     let {data} = $props();
 </script>
@@ -14,14 +15,14 @@
         <Logo to="/home" />
     {/snippet}
     {#snippet right()}
-        <span>{data.user.email}</span>
-        <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+        <GithubLink />
     {/snippet}
 </Navbar>
 
 <main>
     <div>{data.user.id}</div>
     <div>{data.user.email}</div>
+    <div><a href="/auth/logout" data-sveltekit-reload>Logout</a></div>
 </main>
 
 <style>
@@ -30,6 +31,7 @@
         display: flex;
         padding: 1rem;
         flex-grow: 1;
+        margin-top: 6rem;
         flex-direction: column;
     }
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import Logo from '../../widgets/Logo.svelte';
     import Navbar from '../../widgets/Navbar.svelte';
+    import GithubLink from '../../widgets/GithubLink.svelte';
 
     let {data} = $props();
 </script>
@@ -14,7 +15,7 @@
         <Logo />
     {/snippet}
     {#snippet right()}
-        <a href="https://github.com/JonathanPicques/exeflow">Github</a>
+        <GithubLink />
     {/snippet}
 </Navbar>
 

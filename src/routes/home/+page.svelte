@@ -5,6 +5,7 @@
 
     import Logo from '../widgets/Logo.svelte';
     import Navbar from '../widgets/Navbar.svelte';
+    import GithubLink from '../widgets/GithubLink.svelte';
 
     import {postProject, deleteProject} from '../api/project/project';
     import type {Project} from '../api/project/project';
@@ -44,9 +45,9 @@
     {/snippet}
     {#snippet right()}
         <button onclick={createProject}>+ New project</button>
-        <a href="/auth/profile">Profile</a>
-        <a href="/auth/logout" data-sveltekit-reload>Logout</a>
-        <a href="https://github.com/JonathanPicques/exeflow">Github</a>
+        <!-- <a href="/auth/profile">Profile</a> -->
+        <!-- <a href="/auth/logout" data-sveltekit-reload>Logout</a> -->
+        <GithubLink />
     {/snippet}
 </Navbar>
 
