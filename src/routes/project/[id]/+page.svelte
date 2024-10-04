@@ -9,6 +9,7 @@
     import Secrets from './Secrets.svelte';
     import Inspector from './Inspector.svelte';
 
+    import Save from '$lib/core/widgets/icons/Save.svelte';
     import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
 
@@ -94,20 +95,10 @@
 
 <SvelteFlowProvider>
     <nav>
-        <button onclick={save} use:shortcut={'ctrl+s'}>
-            {#if saveChecksum === currentChecksum}Save{/if}
-            {#if saveChecksum !== currentChecksum}Save *{/if}
-        </button>
-        {#if true}
-            <button onclick={showLogs}>Logs</button>
-        {/if}
-        {#if true}
-            <button onclick={showSecrets}>Secrets</button>
-        {/if}
-        {#if true}
-            <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
-            <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
-        {/if}
+        <button onclick={showLogs}>Logs</button>
+        <button onclick={showSecrets}>Secrets</button>
+        <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
+        <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
     </nav>
 
     <main>
@@ -115,6 +106,12 @@
             <section slot="a" class="flow">
                 <Flow bind:this={flow} />
                 <div class="sidebar">
+                    <button class="icon" title="Save" onclick={save} use:shortcut={'ctrl+alt+l'}>
+                        <Save />
+                        {#if saveChecksum !== currentChecksum}
+                            <span class="save-indicator"></span>
+                        {/if}
+                    </button>
                     <button class="icon" title="Prettify" onclick={layout} use:shortcut={'ctrl+alt+l'}>
                         <Prettify />
                     </button>
@@ -202,5 +199,34 @@
 
     .inspector {
         padding: 1rem;
+    }
+
+    .save-indicator {
+        top: -1px;
+        right: -1px;
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        border-radius: 10rem;
+
+        background-color: var(--color-primary);
+
+        animation: appear 0.3s;
+        animation-timing-function: ease-in-out;
+        @media screen and (prefers-reduced-motion: reduce) {
+            animation: none;
+        }
+    }
+
+    @keyframes appear {
+        0% {
+            scale: 0;
+        }
+        70% {
+            scale: 1.4;
+        }
+        100% {
+            scale: 1;
+        }
     }
 </style>
