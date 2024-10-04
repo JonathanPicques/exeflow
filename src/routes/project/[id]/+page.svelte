@@ -21,16 +21,11 @@
     import {setProjectContext} from '$lib/core/core.client.svelte';
     import {graphSchema, setGraphContext} from '$lib/core/core';
 
-    let flow: Flow;
-    let dialogLogs: HTMLDialogElement;
-    let dialogSecrets: HTMLDialogElement;
-
     let {data} = $props();
-
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
 
-    setProjectContext({secrets: data.secrets});
+    const projectContext = setProjectContext({secrets: data.secrets});
     const {checksum, exportGraph, exportSelection, importSelection} = setGraphContext({
         nodes,
         edges,
@@ -39,6 +34,7 @@
         triggers: data.triggers,
     });
 
+    let flow: Flow;
     let saveChecksum = $state(checksum());
     let currentChecksum = $derived.by(() => checksum($nodes, $edges));
 
@@ -61,11 +57,9 @@
     const layout = () => flow.layout();
     const fitToView = () => flow.fitToView();
 
-    const showLogs = () => dialogLogs.showModal();
-    const closeLogs = () => dialogLogs.close();
-
-    const showSecrets = () => dialogSecrets.showModal();
-    const closeSecrets = () => dialogSecrets.close();
+    const showLogs = () => projectContext.setPane({type: 'logs'});
+    const showNodes = () => projectContext.setPane({type: 'nodes'});
+    const showSecrets = () => projectContext.setPane({type: 'secrets'});
 
     const exportToClipboard = () => {
         const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
@@ -98,6 +92,7 @@
 <SvelteFlowProvider>
     <nav>
         <button onclick={showLogs}>Logs</button>
+        <button onclick={showNodes}>Nodes</button>
         <button onclick={showSecrets}>Secrets</button>
     </nav>
 
@@ -112,12 +107,8 @@
                             <span class="save-indicator"></span>
                         {/if}
                     </button>
-                    <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={'ctrl+c'}>
-                        <Copy />
-                    </button>
-                    <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={'ctrl+v'}>
-                        <Paste />
-                    </button>
+                    <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={'ctrl+c'} style:display="none">Copy</button>
+                    <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={'ctrl+v'} style:display="none">Paste</button>
                     <button class="icon" title="Prettify" onclick={layout} use:shortcut={'ctrl+alt+l'}>
                         <Prettify />
                     </button>
@@ -127,27 +118,18 @@
                 </div>
             </section>
             <section slot="b" class="inspector">
-                <Inspector />
+                {#if projectContext.pane.type === 'logs'}
+                    <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
+                {/if}
+                {#if projectContext.pane.type === 'nodes'}
+                    <Inspector />
+                {/if}
+                {#if projectContext.pane.type === 'secrets'}
+                    <Secrets />
+                {/if}
             </section>
         </SplitPane>
     </main>
-
-    <dialog bind:this={dialogLogs}>
-        <div class="title">
-            <h1>Executions logs</h1>
-            <button onclick={closeLogs} style:align-self="end">✖</button>
-        </div>
-        <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
-    </dialog>
-    Copy
-
-    <dialog bind:this={dialogSecrets}>
-        <div class="title">
-            <h1>Secrets</h1>
-            <button onclick={closeSecrets} style:align-self="end">✖</button>
-        </div>
-        <Secrets />
-    </dialog>
 </SvelteFlowProvider>
 
 <style>
@@ -163,26 +145,6 @@
         overflow: hidden;
         flex-grow: 1;
         flex-direction: column;
-    }
-
-    dialog {
-        padding: 1rem;
-
-        &:modal {
-            gap: 1rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        & .title {
-            gap: 1rem;
-            display: flex;
-            align-items: center;
-
-            & h1 {
-                flex-grow: 1;
-            }
-        }
     }
 
     .sidebar {
