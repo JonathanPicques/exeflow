@@ -16,8 +16,8 @@
     const {nodes, edges, createNode} = getGraphContext();
     const {fitView, getViewport, setViewport, getNodesBounds, screenToFlowPosition} = useSvelteFlow();
 
-    const minZoom = 1;
-    const maxZoom = 4;
+    const minZoom = 0.75;
+    const maxZoom = 2;
 
     const edgeTypes = {edge: CutEdge} as any; // TODO: remove as any when typings are fixed
     const nodeTypes = {action: ActionNode, trigger: TriggerNode} as any; // TODO: remove as any when typings are fixed
