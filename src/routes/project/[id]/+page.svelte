@@ -9,7 +9,9 @@
     import Secrets from './Secrets.svelte';
     import Inspector from './Inspector.svelte';
 
+    import Copy from '$lib/core/widgets/icons/Copy.svelte';
     import Save from '$lib/core/widgets/icons/Save.svelte';
+    import Paste from '$lib/core/widgets/icons/Paste.svelte';
     import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
 
@@ -97,8 +99,6 @@
     <nav>
         <button onclick={showLogs}>Logs</button>
         <button onclick={showSecrets}>Secrets</button>
-        <button onclick={exportToClipboard} use:shortcut={'ctrl+c'}>Copy</button>
-        <button onclick={importFromClipboard} use:shortcut={'ctrl+v'}>Paste</button>
     </nav>
 
     <main>
@@ -111,6 +111,12 @@
                         {#if saveChecksum !== currentChecksum}
                             <span class="save-indicator"></span>
                         {/if}
+                    </button>
+                    <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={'ctrl+c'}>
+                        <Copy />
+                    </button>
+                    <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={'ctrl+v'}>
+                        <Paste />
                     </button>
                     <button class="icon" title="Prettify" onclick={layout} use:shortcut={'ctrl+alt+l'}>
                         <Prettify />
@@ -133,6 +139,7 @@
         </div>
         <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
     </dialog>
+    Copy
 
     <dialog bind:this={dialogSecrets}>
         <div class="title">
