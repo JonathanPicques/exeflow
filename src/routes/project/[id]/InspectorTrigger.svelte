@@ -41,3 +41,10 @@
     {/if}
     <button onclick={copy}>Copy trigger URL</button>
 </div>
+
+<style>
+    div {
+        gap: 0.5rem;
+        display: flex;
+    }
+</style>

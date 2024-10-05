@@ -8,10 +8,10 @@
     import Logs from './Logs.svelte';
     import Secrets from './Secrets.svelte';
     import Inspector from './Inspector.svelte';
+    import GithubLink from '../../widgets/GithubLink.svelte';
 
-    import Copy from '$lib/core/widgets/icons/Copy.svelte';
     import Save from '$lib/core/widgets/icons/Save.svelte';
-    import Paste from '$lib/core/widgets/icons/Paste.svelte';
+    import Close from '$lib/core/widgets/icons/Close.svelte';
     import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
 
@@ -91,9 +91,16 @@
 
 <SvelteFlowProvider>
     <nav>
+        <a href="/home" class="icon button">
+            <Close size="2rem" />
+        </a>
         <button onclick={showLogs}>Logs</button>
         <button onclick={showNodes}>Nodes</button>
         <button onclick={showSecrets}>Secrets</button>
+        <div style:flex-grow="1"></div>
+        <span>{data.project.name}</span>
+        <div style:flex-grow="1"></div>
+        <GithubLink />
     </nav>
 
     <main>
@@ -135,8 +142,11 @@
 <style>
     nav {
         gap: 1rem;
+        height: 5rem;
         display: flex;
         padding: 1rem;
+        flex-shrink: 0;
+        align-items: center;
         border-bottom: 1px solid var(--color-bg-1);
     }
 
