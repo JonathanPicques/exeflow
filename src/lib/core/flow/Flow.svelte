@@ -25,8 +25,8 @@
     const minZoom = 0.75;
     const maxZoom = 2;
 
-    const edgeTypes = {edge: CutEdge} as any; // TODO: remove as any when typings are fixed
-    const nodeTypes = {action: ActionNode, trigger: TriggerNode} as any; // TODO: remove as any when typings are fixed
+    const edgeTypes = {edge: CutEdge} as any; // TODO: remove as any when typings are fixed (likely when svelte flow updates to svelte 5)
+    const nodeTypes = {action: ActionNode, trigger: TriggerNode} as any; // TODO: remove as any when typings are fixed (likely when svelte flow updates to svelte 5)
     const deleteKey = ['Delete', 'Backspace'];
     const defaultEdgeOptions = {type: 'edge'};
 

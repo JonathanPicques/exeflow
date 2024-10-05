@@ -20,7 +20,7 @@
     import {Editor} from '@tiptap/core';
     import {mount, unmount, onMount, onDestroy} from 'svelte';
     import type {Instance} from 'tippy.js';
-    import type {Component, ComponentProps} from 'svelte';
+    import type {ComponentProps, MountedComponent} from 'svelte';
 
     import MentionList from './mentions/MentionList.svelte';
 
@@ -133,9 +133,9 @@
                         render() {
                             let target: HTMLDivElement;
                             let instance: Instance;
-                            let component: typeof MentionList extends Component<infer _, infer Exports> ? Exports : Record<string, any>;
-                            const props = $state({mentions: []}) as ComponentProps<typeof MentionList>;
-                            const context = new Map();
+                            let component: MountedComponent<typeof MentionList>;
+                            const props: ComponentProps<typeof MentionList> = $state({mentions: []});
+                            const context: Map<string | symbol, unknown> = new Map();
 
                             context.set(graphContextKey, graphContext);
                             context.set(projectContextKey, projectContext);

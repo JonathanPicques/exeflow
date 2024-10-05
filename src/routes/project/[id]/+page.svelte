@@ -3,6 +3,7 @@
     import {writable} from 'svelte/store';
     import {SplitPane} from '@rich_harris/svelte-split-pane';
     import {SvelteFlowProvider} from '@xyflow/svelte';
+    import type {MountedComponent} from 'svelte';
 
     import Flow from '$lib/core/flow/Flow.svelte';
     import Logs from './Logs.svelte';
@@ -37,7 +38,7 @@
         triggers: data.triggers,
     });
 
-    let flow: Flow;
+    let flow: MountedComponent<typeof Flow>;
     let projectName = $state(data.project.name);
     let saveChecksum = $state(checksum());
     let currentChecksum = $derived.by(() => checksum($nodes, $edges));
