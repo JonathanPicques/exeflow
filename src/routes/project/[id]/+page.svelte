@@ -117,7 +117,7 @@
                     </button>
                 </div>
             </section>
-            <section slot="b" class="inspector">
+            <section slot="b">
                 {#if projectContext.pane.type === 'logs'}
                     <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
                 {/if}
@@ -164,10 +164,6 @@
         border: 0.15rem solid var(--flow-color-grid-dots);
         border-left: none;
         background-color: var(--color-bg);
-    }
-
-    .inspector {
-        padding: 1rem;
     }
 
     .save-indicator {

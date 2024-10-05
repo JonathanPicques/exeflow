@@ -16,53 +16,52 @@
 <div class="main">
     {#await getLogsGroups(projectId) then logsGroups}
         {#if logsGroups.length === 0}
-            <div class="empty">
-                <span>No executions yet</span>
+            <div>
+                <span>No logs available yet</span>
             </div>
         {:else}
-            {#each logsGroups as logGroup}
-                <div class="group">
-                    <div class="plugins">
-                        {#each logGroup.plugins as plugin, i}
-                            {@const last = i === logGroup.plugins.length - 1}
-                            {@const image = actions[plugin]?.icon ?? triggers[plugin]?.icon ?? 'data:null'}
+            <div class="list">
+                {#each logsGroups as logGroup}
+                    <div class="group">
+                        <div class="plugins">
+                            {#each logGroup.plugins as plugin, i}
+                                {@const last = i === logGroup.plugins.length - 1}
+                                {@const image = actions[plugin]?.icon ?? triggers[plugin]?.icon ?? 'data:null'}
 
-                            <img src={image} alt="" title={plugin} width="32px" height="32px" />
-                            {#if !last}
-                                <span>➡</span>
-                            {/if}
-                        {/each}
+                                <img src={image} alt="" title={plugin} width="32px" height="32px" />
+                                {#if !last}
+                                    <span>➡</span>
+                                {/if}
+                            {/each}
+                        </div>
+                        <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>
                     </div>
-                    <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>
-                </div>
-            {/each}
+                {/each}
+            </div>
         {/if}
     {/await}
 </div>
 
 <style>
     .main {
-        gap: 1rem;
-        display: flex;
-        flex-direction: column;
+        height: 100%;
+        padding: 1rem;
+        overflow: hidden;
     }
 
-    .empty {
+    .list {
+        gap: 0.5rem;
+        height: 100%;
         display: flex;
-        padding: 5rem;
-        align-items: center;
-        justify-content: center;
-
-        border-radius: 0.5rem;
-        background-color: var(--color-bg-1);
+        overflow: auto;
+        padding-right: 0.5rem;
+        flex-direction: column;
     }
 
     .group {
         gap: 0.5rem;
         display: flex;
         padding: 1rem;
-        overflow: hidden;
-        max-width: 40rem;
         flex-direction: column;
 
         border-radius: 0.5rem;

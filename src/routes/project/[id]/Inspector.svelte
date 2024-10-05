@@ -30,7 +30,6 @@
         e.dataTransfer.setData('application/exeflow+plugin:type', plugin.type);
         e.dataTransfer.effectAllowed = 'move';
     };
-
     const filterPlugins = ([id, plugin]: [PluginId, Plugin]) => {
         if (filter.includes('type:action') && plugin.type !== 'action') return false;
         if (filter.includes('type:trigger') && plugin.type !== 'trigger') return false;
@@ -115,6 +114,7 @@
         gap: 1rem;
         height: 100%;
         display: grid;
+        padding: 1rem;
         overflow: hidden;
         align-content: start;
     }
