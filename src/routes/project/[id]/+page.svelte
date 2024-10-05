@@ -120,7 +120,7 @@
     <main>
         <SplitPane type="horizontal" min="200px" max="-100px" pos="75%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
             <section slot="a" class="flow">
-                <Flow bind:this={flow} />
+                <Flow onNodeClick={showNodes} bind:this={flow} />
                 <div class="sidebar">
                     <button class="icon" title="Save" onclick={save} use:shortcut={'ctrl+s'}>
                         <Save />

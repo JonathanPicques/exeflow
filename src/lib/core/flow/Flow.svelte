@@ -13,6 +13,12 @@
     import {layoutGraph} from '$lib/core/flow/dagre/dagre';
     import {getGraphContext} from '$lib/core/core';
 
+    interface Props {
+        onNodeClick: () => void;
+    }
+
+    let {onNodeClick}: Props = $props();
+
     const {nodes, edges, createNode} = getGraphContext();
     const {fitView, getViewport, setViewport, getNodesBounds, screenToFlowPosition} = useSvelteFlow();
 
@@ -109,7 +115,22 @@
     export {getViewport, setViewport};
 </script>
 
-<SvelteFlow {nodes} {nodeTypes} {edges} {edgeTypes} {deleteKey} {defaultEdgeOptions} {minZoom} {maxZoom} {onconnect} {isValidConnection} {ondrop} {ondragover}>
+<SvelteFlow
+    {nodes}
+    {nodeTypes}
+    {edges}
+    {edgeTypes}
+    {deleteKey}
+    {defaultEdgeOptions}
+    {minZoom}
+    {maxZoom}
+    {onconnect}
+    {isValidConnection}
+    {ondrop}
+    {ondragover}
+    on:nodedrag={onNodeClick}
+    on:nodeclick={onNodeClick}
+>
     <Background />
 </SvelteFlow>
 
