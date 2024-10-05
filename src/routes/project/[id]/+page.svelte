@@ -10,8 +10,11 @@
     import Inspector from './Inspector.svelte';
     import GithubLink from '../../widgets/GithubLink.svelte';
 
+    import Add from '$lib/core/widgets/icons/Add.svelte';
+    import Key from '$lib/core/widgets/icons/Key.svelte';
     import Save from '$lib/core/widgets/icons/Save.svelte';
     import Close from '$lib/core/widgets/icons/Close.svelte';
+    import Console from '$lib/core/widgets/icons/Console.svelte';
     import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
 
@@ -35,6 +38,7 @@
     });
 
     let flow: Flow;
+    let projectName = $state(data.project.name);
     let saveChecksum = $state(checksum());
     let currentChecksum = $derived.by(() => checksum($nodes, $edges));
 
@@ -43,6 +47,7 @@
 
         patchProject({
             id: data.project.id,
+            name: projectName,
             image: await flow.screenshot(),
             content: {
                 nodes,
@@ -94,11 +99,20 @@
         <a href="/home" class="icon button">
             <Close size="2rem" />
         </a>
-        <button onclick={showLogs}>Logs</button>
-        <button onclick={showNodes}>Nodes</button>
-        <button onclick={showSecrets}>Secrets</button>
+        <button class="icon" class:active={projectContext.pane.type === 'nodes'} onclick={showNodes}>
+            <Add />
+            <span>Nodes</span>
+        </button>
+        <button class="icon" class:active={projectContext.pane.type === 'logs'} onclick={showLogs}>
+            <Console />
+            <span>Logs</span>
+        </button>
+        <button class="icon" class:active={projectContext.pane.type === 'secrets'} onclick={showSecrets}>
+            <Key />
+            <span>Secrets</span>
+        </button>
         <div style:flex-grow="1"></div>
-        <span>{data.project.name}</span>
+        <input type="text" bind:value={projectName} />
         <div style:flex-grow="1"></div>
         <GithubLink />
     </nav>
@@ -108,9 +122,9 @@
             <section slot="a" class="flow">
                 <Flow bind:this={flow} />
                 <div class="sidebar">
-                    <button class="icon" title="Save" onclick={save} use:shortcut={'ctrl+alt+l'}>
+                    <button class="icon" title="Save" onclick={save} use:shortcut={'ctrl+s'}>
                         <Save />
-                        {#if saveChecksum !== currentChecksum}
+                        {#if saveChecksum !== currentChecksum || projectName !== data.project.name}
                             <span class="save-indicator"></span>
                         {/if}
                     </button>
@@ -148,6 +162,18 @@
         flex-shrink: 0;
         align-items: center;
         border-bottom: 1px solid var(--color-bg-1);
+
+        & input:not(:focus, :hover, :active) {
+            background-color: transparent;
+        }
+
+        & button {
+            gap: 0.5rem;
+
+            &.active {
+                color: var(--color-fg);
+            }
+        }
     }
 
     main {

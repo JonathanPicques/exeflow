@@ -13,8 +13,9 @@ import type {TriggersNodeId, TriggersPluginId} from '$lib/supabase/gen/public/Tr
 
 const patchSchema = {
     type: 'object',
-    required: ['image', 'content'] as const,
+    required: ['name', 'image', 'content'] as const,
     properties: {
+        name: {type: 'string'},
         image: {type: 'string'},
         content: graphSchema,
     },
@@ -115,6 +116,7 @@ export const PATCH = async ({locals, params, request}) => {
             .where('id', '=', params.id as ProjectsId)
             .where('owner_id', '=', user.id)
             .set({
+                name: body.name,
                 image: body.image,
                 content: JSON.stringify(body.content),
                 updated_at: new Date(),

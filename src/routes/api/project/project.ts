@@ -19,10 +19,10 @@ export const postProject = async ({name}: Pick<Project, 'name'>) => {
     return (await response.json()) as Project;
 };
 
-export const patchProject = async ({id, image, content}: Pick<Project, 'id' | 'image' | 'content'>) => {
+export const patchProject = async ({id, name, image, content}: Pick<Project, 'id' | 'name' | 'image' | 'content'>) => {
     const response = await fetch(`/api/project/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify({image, content}),
+        body: JSON.stringify({name, image, content}),
     });
 
     return (await response.json()) as {id: string};
