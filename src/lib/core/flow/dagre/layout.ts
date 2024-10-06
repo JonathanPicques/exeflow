@@ -4,7 +4,7 @@ import type {Graph} from '$lib/core/core';
 const nodeWidth = 150;
 const nodeHeight = 100;
 
-export const layoutGraph = ({nodes, edges}: Graph): Graph => {
+export const layout = ({nodes, edges}: Graph): Graph => {
     const graph = new dagre.graphlib.Graph();
 
     graph.setGraph({rankdir: 'LR'});

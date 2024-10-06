@@ -10,7 +10,7 @@
     import TriggerNode from '$lib/core/flow/nodes/Trigger.svelte';
 
     import {valid} from '$lib/schema/validate';
-    import {layoutGraph} from '$lib/core/flow/dagre/dagre';
+    import {layout} from '$lib/core/flow/dagre/layout';
     import {getGraphContext} from '$lib/core/core';
 
     interface Props {
@@ -29,6 +29,18 @@
     const nodeTypes = {action: ActionNode, trigger: TriggerNode} as any; // TODO: remove as any when typings are fixed (likely when svelte flow updates to svelte 5)
     const deleteKey = ['Delete', 'Backspace'];
     const defaultEdgeOptions = {type: 'edge'};
+
+    let animate = $state(false);
+    $effect(() => {
+        if (!animate) return;
+        const timeout = setTimeout(() => {
+            animate = false;
+        }, 300);
+        return () => {
+            animate = false;
+            clearTimeout(timeout);
+        };
+    });
 
     const ondrop = (e: DragEvent) => {
         e.preventDefault();
@@ -82,12 +94,13 @@
         return true;
     };
 
-    export const layout = () => {
-        const layout = layoutGraph({nodes: $nodes, edges: $edges});
+    export const prettify = ({smooth} = {smooth: true}) => {
+        const result = layout({nodes: $nodes, edges: $edges});
 
-        $nodes = layout.nodes;
-        $edges = layout.edges;
-        fitToView({smooth: false});
+        $nodes = result.nodes;
+        $edges = result.edges;
+        animate = smooth;
+        fitToView({smooth});
     };
     export const fitToView = ({smooth} = {smooth: true}) => {
         const duration = smooth && window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
@@ -116,6 +129,7 @@
 </script>
 
 <SvelteFlow
+    class={animate ? 'animate' : undefined}
     {nodes}
     {nodeTypes}
     {edges}
@@ -139,6 +153,16 @@
         font-family: var(--font-mono);
         background-color: var(--color-bg) !important;
         --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
+
+        &.animate :global(.svelte-flow__node),
+        &.animate :global(.svelte-flow__edges svg path),
+        &.animate :global(.svelte-flow__edgelabel-renderer .nopan) {
+            transition: all 0.3s ease;
+
+            @media screen and (prefers-reduced-motion: reduce) {
+                transition: none;
+            }
+        }
     }
 
     :global(.svelte-flow__edge) :global(path),

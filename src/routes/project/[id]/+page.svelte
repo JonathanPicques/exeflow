@@ -71,7 +71,7 @@
             });
     };
 
-    const layout = () => flow.layout();
+    const prettify = () => flow.prettify();
     const fitToView = () => flow.fitToView();
 
     const showLogs = () => projectContext.setPane({type: 'logs'});
@@ -145,7 +145,7 @@
                     </button>
                     <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={'ctrl+c'} style:display="none">Copy</button>
                     <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={'ctrl+v'} style:display="none">Paste</button>
-                    <button class="icon" title="Prettify" onclick={layout} use:shortcut={'ctrl+alt+l'}>
+                    <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'ctrl+alt+l'}>
                         <Prettify />
                     </button>
                     <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'ctrl+alt+c'}>
