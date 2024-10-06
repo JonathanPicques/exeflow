@@ -39,6 +39,7 @@
     });
 
     let flow: MountedComponent<typeof Flow>;
+    let saving = $state(false);
     let projectName = $state(data.project.name);
     let saveChecksum = $state(checksum());
     let currentChecksum = $derived.by(() => checksum($nodes, $edges));
@@ -46,18 +47,27 @@
     const save = async () => {
         const {nodes, edges} = exportGraph();
 
-        patchProject({
-            id: data.project.id,
-            name: projectName,
-            image: await flow.screenshot(),
-            content: {
-                nodes,
-                edges,
-                viewport: flow.getViewport(),
-            },
-        }).then(() => {
-            saveChecksum = checksum(nodes, edges);
-        });
+        saving = true;
+        Promise.all([
+            patchProject({
+                id: data.project.id,
+                name: projectName,
+                image: await flow.screenshot(),
+                content: {
+                    nodes,
+                    edges,
+                    viewport: flow.getViewport(),
+                },
+            }),
+            new Promise(resolve => setTimeout(resolve, 500)),
+        ])
+            .then(() => {
+                saving = false;
+                saveChecksum = checksum(nodes, edges);
+            })
+            .catch(() => {
+                saving = false;
+            });
     };
 
     const layout = () => flow.layout();
@@ -123,9 +133,9 @@
             <section slot="a" class="flow">
                 <Flow onNodeClick={showNodes} bind:this={flow} />
                 <div class="sidebar">
-                    <button class="icon" title="Save" onclick={save} use:shortcut={'ctrl+s'}>
+                    <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={'ctrl+s'}>
                         <Save />
-                        {#if saveChecksum !== currentChecksum || projectName !== data.project.name}
+                        {#if !saving && saveChecksum !== currentChecksum}
                             <span class="save-indicator"></span>
                         {/if}
                     </button>

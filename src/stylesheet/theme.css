@@ -170,6 +170,12 @@ button:not(.custom),
     &:active {
         background-color: var(--color-bg-3);
     }
+    &:disabled {
+        color: var(--color-bg-2);
+        cursor: not-allowed;
+        transform: none;
+        background-color: var(--color-bg-1);
+    }
 
     &.icon {
         color: var(--color-fg-1);
@@ -186,6 +192,11 @@ button:not(.custom),
             color: var(--color-fg-2);
             transform: scale(0.95);
             background-color: unset;
+        }
+        &:disabled {
+            color: var(--color-bg-2);
+            cursor: not-allowed;
+            transform: none;
         }
     }
 }
