@@ -5,6 +5,7 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const ollama = {
     type: 'object',
+    editor: {label: 'hide'},
     required: ['type', 'settings'],
     properties: {
         type: {
@@ -13,6 +14,7 @@ const ollama = {
         },
         settings: {
             type: 'object',
+            editor: {label: 'hide'},
             required: ['url', 'model'],
             properties: {
                 url: {type: 'string', editor: {suggestions: ['http://localhost:11434']}},
@@ -24,6 +26,7 @@ const ollama = {
 
 const openai = {
     type: 'object',
+    editor: {label: 'hide'},
     required: ['type', 'settings'],
     properties: {
         type: {
@@ -32,6 +35,7 @@ const openai = {
         },
         settings: {
             type: 'object',
+            editor: {label: 'hide'},
             required: ['model', 'apiKey'],
             properties: {
                 model: {type: 'string', editor: {suggestions: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo']}},
@@ -43,6 +47,7 @@ const openai = {
 
 const mistral = {
     type: 'object',
+    editor: {label: 'hide'},
     required: ['type', 'settings'],
     properties: {
         type: {
@@ -51,6 +56,7 @@ const mistral = {
         },
         settings: {
             type: 'object',
+            editor: {label: 'hide'},
             required: ['url', 'model', 'apiKey'],
             properties: {
                 url: {type: 'string', editor: {suggestions: ['https://api.mistral.ai']}},

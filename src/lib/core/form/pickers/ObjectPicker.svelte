@@ -14,16 +14,20 @@
 </script>
 
 {#each Object.entries(schema.properties ?? {}) as [key, subschema] (key)}
-    <fieldset>
-        <legend title={subschema.description}>{subschema.title ?? key}</legend>
+    {#if subschema.editor?.label === 'hide'}
         <FormEditor {id} schema={subschema} {onchange} bind:value={value[key]} />
-    </fieldset>
+    {:else}
+        <fieldset>
+            <legend title={subschema.description}>{subschema.title ?? key}</legend>
+            <FormEditor {id} schema={subschema} {onchange} bind:value={value[key]} />
+        </fieldset>
+    {/if}
 {/each}
 
 <style>
     fieldset {
         border: none;
-        padding: 0.5rem 0;
+        padding-top: 0.5rem;
     }
 
     fieldset legend {
