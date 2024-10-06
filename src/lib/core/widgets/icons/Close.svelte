@@ -9,10 +9,10 @@
 
 <svg viewBox="0 0 22 22" style:--fill={fill} style:--size={size}>
     <g>
-        <rect x="4" y="15.728" width="18" height="2" rx="1" transform="rotate(-45 4 15.728)" />
+        <rect x="4" y="15.6" width="17.8191" height="1.9799" rx="0.989948" transform="translate(0 1) rotate(-45 4 15.6)" />
     </g>
     <g>
-        <rect x="16.7279" y="17.1422" width="18" height="2" rx="1" transform="rotate(-135 16.7279 17.1422)" />
+        <rect x="16.6" y="17" width="17.8191" height="1.9799" rx="0.989948" transform="translate(0 1) rotate(-135 16.6 17)" />
     </g>
 </svg>
 
