@@ -1,11 +1,13 @@
 <script lang="ts">
     import Fuse from 'fuse.js';
+    import moment from 'moment';
 
     import empty from './+empty.svg';
 
     import Logo from '../widgets/Logo.svelte';
     import Navbar from '../widgets/Navbar.svelte';
     import GithubLink from '../widgets/GithubLink.svelte';
+    import ProfileLink from '../widgets/ProfileLink.svelte';
 
     import {postProject, deleteProject} from '../api/project/project';
     import type {Project} from '../api/project/project';
@@ -47,6 +49,7 @@
         <button onclick={createProject}>+ New project</button>
         <!-- <a href="/auth/profile">Profile</a> -->
         <!-- <a href="/auth/logout" data-sveltekit-reload>Logout</a> -->
+        <ProfileLink />
         <GithubLink />
     {/snippet}
 </Navbar>
@@ -61,7 +64,7 @@
                 <div>
                     <div>
                         <span class="title">{project.name}</span>
-                        <span class="update">Updated 2 minutes ago</span>
+                        <span class="update">Updated {moment(project.updated_at).fromNow()}</span>
                     </div>
                     <button class="custom" onclick={() => removeProject(project.id)}>❌</button>
                 </div>

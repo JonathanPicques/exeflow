@@ -7,6 +7,8 @@ export interface Project {
     name: string;
     image: string;
     content: Graph & {viewport?: Viewport};
+    created_at: Date;
+    updated_at: Date;
 }
 
 export const postProject = async ({name}: Pick<Project, 'name'>) => {

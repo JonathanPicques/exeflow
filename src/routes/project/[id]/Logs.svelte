@@ -1,4 +1,6 @@
 <script lang="ts">
+    import moment from 'moment';
+
     import {getLogsGroups} from '../../api/project/logs';
     import type {Action} from '$lib/core/plugins/action';
     import type {Trigger} from '$lib/core/plugins/trigger';
@@ -22,6 +24,9 @@
         {:else}
             <div class="list">
                 {#each logsGroups as logGroup}
+                    {@const startedAgoFromNow = moment(logGroup.startedAt).fromNow()}
+                    {@const finishedAtFromNow = moment(logGroup.finishedAt).fromNow()}
+
                     <div class="group">
                         <div class="plugins">
                             {#each logGroup.plugins as plugin, i}
@@ -34,7 +39,11 @@
                                 {/if}
                             {/each}
                         </div>
-                        <span>{logGroup.startedAt} - {logGroup.finishedAt}</span>
+                        {#if startedAgoFromNow === finishedAtFromNow}
+                            <span>Started and finished {startedAgoFromNow}</span>
+                        {:else}
+                            <span>Started {startedAgoFromNow} and finished {finishedAtFromNow}</span>
+                        {/if}
                     </div>
                 {/each}
             </div>

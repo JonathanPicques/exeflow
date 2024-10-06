@@ -9,7 +9,7 @@ export const load = async ({locals, params, parent}) => {
 
     const project = (await locals.db
         .selectFrom('projects')
-        .select(['id', 'name', 'image', 'content'])
+        .select(['id', 'name', 'image', 'content', 'created_at', 'updated_at'])
         .where('id', '=', params.id as ProjectsId)
         .where('owner_id', '=', user.id)
         .limit(1)

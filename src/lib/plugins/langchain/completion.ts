@@ -16,7 +16,7 @@ const ollama = {
             required: ['url', 'model'],
             properties: {
                 url: {type: 'string', editor: {suggestions: ['http://localhost:11434']}},
-                model: {type: 'string', editor: {suggestions: ['llama3.1', 'qwen2:0.5b']}},
+                model: {type: 'string', editor: {suggestions: ['llama3.2', 'llama3.1', 'qwen2:0.5b']}},
             },
         },
     },

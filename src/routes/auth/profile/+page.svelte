@@ -20,18 +20,16 @@
 </Navbar>
 
 <main>
-    <div>{data.user.id}</div>
-    <div>{data.user.email}</div>
-    <div><a href="/auth/logout" data-sveltekit-reload>Logout</a></div>
+    <div>
+        {data.user.email} - <a href="/auth/logout" data-sveltekit-reload>Logout</a>
+    </div>
 </main>
 
 <style>
     main {
-        gap: 1rem;
         display: flex;
-        padding: 1rem;
         flex-grow: 1;
-        margin-top: 6rem;
-        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 </style>

@@ -10,6 +10,7 @@
     import Secrets from './Secrets.svelte';
     import Inspector from './Inspector.svelte';
     import GithubLink from '../../widgets/GithubLink.svelte';
+    import ProfileLink from '../../widgets/ProfileLink.svelte';
 
     import Add from '$lib/core/widgets/icons/Add.svelte';
     import Key from '$lib/core/widgets/icons/Key.svelte';
@@ -125,7 +126,10 @@
         <div style:flex-grow="1"></div>
         <input type="text" bind:value={projectName} />
         <div style:flex-grow="1"></div>
-        <GithubLink />
+        <div>
+            <ProfileLink />
+            <GithubLink />
+        </div>
     </nav>
 
     <main>
@@ -173,6 +177,13 @@
         flex-shrink: 0;
         align-items: center;
         border-bottom: 1px solid var(--color-bg-1);
+
+        & div {
+            gap: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         & input:not(:focus, :hover, :active) {
             background-color: transparent;
