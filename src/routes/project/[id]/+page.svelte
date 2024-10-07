@@ -111,49 +111,47 @@
         <a href="/home" class="icon button">
             <Close size="2rem" />
         </a>
-        <button class="icon" class:active={projectContext.pane.type === 'nodes'} onclick={showNodes}>
-            <Add />
-            <span>Nodes</span>
-        </button>
-        <button class="icon" class:active={projectContext.pane.type === 'logs'} onclick={showLogs}>
-            <Console />
-            <span>Logs</span>
-        </button>
-        <button class="icon" class:active={projectContext.pane.type === 'secrets'} onclick={showSecrets}>
-            <Key />
-            <span>Secrets</span>
-        </button>
-        <div style:flex-grow="1"></div>
         <input type="text" bind:value={projectName} />
         <div style:flex-grow="1"></div>
-        <div>
-            <ProfileLink />
-            <GithubLink />
-        </div>
+        <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
+            <Save />
+            {#if !saving && saveChecksum !== currentChecksum}
+                <span class="save-indicator"></span>
+            {/if}
+        </button>
+        <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
+        <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
+        <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+alt+1'}>
+            <Prettify />
+        </button>
+        <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
+            <FitToView />
+        </button>
+        <ProfileLink />
+        <GithubLink />
     </nav>
 
     <main>
         <SplitPane type="horizontal" min="200px" max="-100px" pos="75%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
             <section slot="a" class="flow">
                 <Flow onNodeClick={showNodes} bind:this={flow} />
-                <div class="sidebar">
-                    <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
-                        <Save />
-                        {#if !saving && saveChecksum !== currentChecksum}
-                            <span class="save-indicator"></span>
-                        {/if}
-                    </button>
-                    <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
-                    <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
-                    <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+alt+1'}>
-                        <Prettify />
-                    </button>
-                    <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
-                        <FitToView />
-                    </button>
-                </div>
             </section>
             <section slot="b">
+                <div class="tabs">
+                    <button class:active={projectContext.pane.type === 'nodes'} onclick={showNodes}>
+                        <Add />
+                        <span>Nodes</span>
+                    </button>
+                    <button class:active={projectContext.pane.type === 'logs'} onclick={showLogs}>
+                        <Console />
+                        <span>Logs</span>
+                    </button>
+                    <button class:active={projectContext.pane.type === 'secrets'} onclick={showSecrets}>
+                        <Key />
+                        <span>Secrets</span>
+                    </button>
+                </div>
+
                 {#if projectContext.pane.type === 'logs'}
                     <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
                 {/if}
@@ -178,23 +176,8 @@
         align-items: center;
         border-bottom: 1px solid var(--color-bg-1);
 
-        & div {
-            gap: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         & input:not(:focus, :hover, :active) {
             background-color: transparent;
-        }
-
-        & button {
-            gap: 0.5rem;
-
-            &.active {
-                color: var(--color-fg);
-            }
         }
     }
 
@@ -205,23 +188,18 @@
         flex-direction: column;
     }
 
-    .sidebar {
-        gap: 0.5rem;
-        top: 50%;
-        left: 0;
+    .tabs {
+        gap: 1rem;
+        padding: 1rem;
         display: flex;
-        padding: 0.5rem;
-        position: absolute;
-        align-items: center;
-        border-radius: 0 1rem 1em 0;
-        flex-direction: column;
+        padding-bottom: unset;
+        flex-direction: row;
         justify-content: center;
 
-        transform: translate(0, -50%);
-
-        border: 0.15rem solid var(--flow-color-grid-dots);
-        border-left: none;
-        background-color: var(--color-bg);
+        & button.active {
+            color: var(--color-bg);
+            background-color: var(--color-fg);
+        }
     }
 
     .save-indicator {

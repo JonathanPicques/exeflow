@@ -144,8 +144,9 @@ select {
 
 button:not(.custom),
 .button {
+    gap: 0.5em;
     display: flex;
-    padding: 0.6rem 1rem;
+    padding: 0.4em 0.8em;
     align-items: center;
 
     color: var(--color-fg);
@@ -179,7 +180,7 @@ button:not(.custom),
 
     &.icon {
         color: var(--color-fg-1);
-        padding: 0.25rem;
+        padding: 0.25em;
         transform: scale(1);
         background-color: unset;
 
