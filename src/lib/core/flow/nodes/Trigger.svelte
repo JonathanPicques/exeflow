@@ -64,6 +64,7 @@
             max-width: 10rem;
             white-space: nowrap;
             text-overflow: ellipsis;
+            font-size: 0.8rem;
 
             &:not(.valid) {
                 color: var(--color-error);
