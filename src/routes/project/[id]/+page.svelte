@@ -121,7 +121,7 @@
         </button>
         <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
         <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
-        <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+alt+1'}>
+        <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+2'}>
             <Prettify />
         </button>
         <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>

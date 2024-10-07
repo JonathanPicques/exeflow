@@ -5,6 +5,7 @@
     import {Background, SvelteFlow, getViewportForBounds, useSvelteFlow} from '@xyflow/svelte';
     import type {Edge, Connection} from '@xyflow/svelte';
 
+    import Connect from '$lib/core/flow/edges/Connect.svelte';
     import CutEdge from '$lib/core/flow/edges/CutEdge.svelte';
     import ActionNode from '$lib/core/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/core/flow/nodes/Trigger.svelte';
@@ -35,7 +36,7 @@
         if (!animate) return;
         const timeout = setTimeout(() => {
             animate = false;
-        }, 300);
+        }, /* keep me in sync with .animate/transition in style */ 300);
         return () => {
             animate = false;
             clearTimeout(timeout);
@@ -145,6 +146,7 @@
     on:nodedrag={onNodeClick}
     on:nodeclick={onNodeClick}
 >
+    <Connect slot="connectionLine" />
     <Background />
 </SvelteFlow>
 
@@ -154,10 +156,8 @@
         background-color: var(--color-bg) !important;
         --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
 
-        &.animate :global(.svelte-flow__node),
-        &.animate :global(.svelte-flow__edges svg path),
-        &.animate :global(.svelte-flow__edgelabel-renderer .nopan) {
-            transition: all 0.3s ease;
+        &.animate :global(.svelte-flow__node) {
+            transition: all 0.3s ease; /* keep in sync with setTimeout */
 
             @media screen and (prefers-reduced-motion: reduce) {
                 transition: none;
