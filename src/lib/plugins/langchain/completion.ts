@@ -81,7 +81,7 @@ const configSchema = {
 
 export default action<typeof configSchema>({
     icon,
-    color: '#f3ce39',
+    color: '#CFC8FE',
     description: 'chat completion using Ollama, MistralAI or OpenAI',
     //
     form({config}) {
