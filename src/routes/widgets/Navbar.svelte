@@ -34,7 +34,7 @@
         position: fixed;
 
         gap: 1rem;
-        height: 5rem;
+        height: 4rem;
         display: flex;
         padding: 1rem;
         overflow: auto;

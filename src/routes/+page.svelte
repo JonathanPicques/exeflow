@@ -24,7 +24,7 @@
     <h1>Automations <span>for devs</span><br />made simple</h1>
     <h2>Exeflow is a free and open source project that aims to<wbr /> provide a clean and simple way to connect multiple<wbr /> apps together.</h2>
 
-    <a href="/home" class="button">Get started now!</a>
+    <a href="/home" role="button" class="button">Get started now!</a>
 
     <!-- <a href="http://127.0.0.1:54323" target="_blank">Supabase Studio</a> -->
     <!-- <a href="http://127.0.0.1:54324" target="_blank">Supabase Inbucket</a> -->
@@ -64,5 +64,17 @@
 
     span {
         color: var(--color-primary);
+    }
+
+    .button {
+        color: #333333;
+        background-image: linear-gradient(to bottom, #0bdac1, #31ff9c);
+        box-shadow: 0 0 1.5rem hsl(151, 100%, 60%, 0.2);
+        transition: 0.5s box-shadow;
+        font-size: 1.8rem;
+        border-radius: 2rem;
+    }
+    .button:hover {
+        box-shadow: 0 0 2rem hsl(151, 100%, 60%, 0.4);
     }
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import PluginNodeCard from './PluginNodeCard.svelte';
     import InspectorEditor from './InspectorEditor.svelte';
     import InspectorTrigger from './InspectorTrigger.svelte';
 
@@ -7,7 +8,6 @@
     import {nodeInterpolation, humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
     import type {PluginNode} from '$lib/core/graph/nodes';
     import type {Plugin, PluginId} from '$lib/core/core';
-    import PluginNodeCard from './PluginNodeCard.svelte';
 
     const {nodes, actions, triggers, findPlugin} = getGraphContext();
 
@@ -92,7 +92,7 @@
 
     .main {
         gap: 1rem;
-        height: 100%;
+        flex-grow: 1;
         display: grid;
         padding: 1rem;
         overflow: hidden;
@@ -100,9 +100,10 @@
     }
 
     .list {
-        gap: 0.5rem;
+        gap: 1rem;
         height: 100%;
-        display: grid;
+        display: flex;
+        flex-direction: column;
         overflow: auto;
         padding-right: 0.5rem;
     }
