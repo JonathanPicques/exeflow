@@ -1,12 +1,12 @@
 <script lang="ts">
-    import {BaseEdge, getBezierPath, EdgeLabelRenderer} from '@xyflow/svelte';
+    import {BaseEdge, getSmoothStepPath, EdgeLabelRenderer} from '@xyflow/svelte';
     import type {EdgeProps} from '@xyflow/svelte';
 
     import {getGraphContext} from '$lib/core/core';
 
     let {id, style, markerEnd, sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition}: EdgeProps = $props();
     const {edges} = getGraphContext();
-    const [path, labelX, labelY] = $derived(getBezierPath({sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition}));
+    const [path, labelX, labelY] = $derived(getSmoothStepPath({sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition, borderRadius: 10}));
 
     const onEdgeClick = () => edges.update(eds => eds.filter(edge => edge.id !== id));
 </script>
