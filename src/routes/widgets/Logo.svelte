@@ -35,7 +35,7 @@
     }
 
     div {
-        gap: 0.5rem;
+        gap: 0.75rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -51,6 +51,7 @@
     }
 
     span {
-        font-size: var(--text-size, 2rem);
+        font-size: var(--text-size, 1.5rem);
+        font-weight: normal;
     }
 </style>

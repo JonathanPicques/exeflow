@@ -169,7 +169,7 @@
 <style>
     nav {
         gap: 1rem;
-        height: 5rem;
+        height: 4rem;
         display: flex;
         padding: 1rem;
         flex-shrink: 0;
@@ -194,7 +194,9 @@
         display: flex;
         padding-bottom: unset;
         flex-direction: row;
-        justify-content: center;
+        justify-content: start;
+        overflow-x: auto;
+        flex-shrink: 0;
 
         & button {
             font-size: 0.9rem;
@@ -207,6 +209,8 @@
     }
 
     .sidebar {
+        display: flex;
+        flex-direction: column;
         border-left: 0.15rem var(--color-bg-1) solid;
     }
 

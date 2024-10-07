@@ -90,8 +90,12 @@
         & img {
             width: 100%;
             border: 0.15rem solid var(--color-bg-2);
-            border-radius: 0.5rem;
+            border-radius: 1rem;
             background-color: var(--color-bg-1);
+            transition: 0.3s;
+        }
+        &:hover img {
+            border: 0.15rem solid var(--color-fg);
         }
 
         & > div {
@@ -107,11 +111,11 @@
 
                 & > .title {
                     font-weight: bold;
+                    font-size: 1.1rem;
                 }
                 & > .update {
                     color: var(--color-fg-1);
-                    font-size: 0.9rem;
-                    font-weight: lighter;
+                    font-size: 0.8rem;
                 }
             }
 

@@ -31,7 +31,19 @@
 </div>
 
 <style>
+    .plugin::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.1;
+        border-radius: calc(var(--flow-border-radius-node) - 0.15rem);
+        background-image: linear-gradient(to bottom, transparent, var(--x-color-border));
+    }
     .plugin {
+        position: relative;
         gap: 0.5rem;
         display: flex;
         padding: 1rem;
@@ -41,7 +53,9 @@
         border: 0.15rem solid transparent;
         cursor: grab;
         border-radius: var(--flow-border-radius-node);
+
         background-color: var(--color-bg-1);
+        transition: 0.3s;
 
         & img {
             pointer-events: none;
