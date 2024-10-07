@@ -7,9 +7,9 @@
 :root[color-scheme='dark'] {
     /* Main */
     --color-fg: #ddd;
-    --color-fg-1: #aaaaaa;
+    --color-fg-1: #aaa;
     --color-bg: #181818;
-    --color-bg-1: #1e1e1e;
+    --color-bg-1: #262626;
     --color-bg-2: #404040;
     --color-bg-3: #606060;
     /* General */

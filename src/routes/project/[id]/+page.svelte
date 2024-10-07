@@ -136,7 +136,7 @@
             <section slot="a" class="flow">
                 <Flow onNodeClick={showNodes} bind:this={flow} />
             </section>
-            <section slot="b">
+            <section slot="b" class="sidebar">
                 <div class="tabs">
                     <button class:active={projectContext.pane.type === 'nodes'} onclick={showNodes}>
                         <Add />
@@ -174,7 +174,7 @@
         padding: 1rem;
         flex-shrink: 0;
         align-items: center;
-        border-bottom: 1px solid var(--color-bg-1);
+        border-bottom: 0.15rem solid var(--color-bg-1);
 
         & input:not(:focus, :hover, :active) {
             background-color: transparent;
@@ -196,10 +196,18 @@
         flex-direction: row;
         justify-content: center;
 
+        & button {
+            font-size: 0.9rem;
+        }
+
         & button.active {
             color: var(--color-bg);
             background-color: var(--color-fg);
         }
+    }
+
+    .sidebar {
+        border-left: 0.15rem var(--color-bg-1) solid;
     }
 
     .save-indicator {

@@ -34,28 +34,27 @@
     .plugin {
         gap: 0.5rem;
         display: flex;
-        flex-direction: column;
         padding: 1rem;
+        flex-direction: column;
 
         color: var(--color-fg);
         border: 0.15rem solid transparent;
         cursor: grab;
-        font-weight: bold;
-        font-family: var(--font-mono);
         border-radius: var(--flow-border-radius-node);
-        background-color: var(--flow-color-node);
+        background-color: var(--color-bg-1);
 
         & img {
             pointer-events: none;
         }
 
         & div {
+            gap: 0.6rem;
             display: flex;
             flex-direction: row;
-            gap: 0.6rem;
 
             & .name {
                 color: var(--color-fg);
+                font-size: 1.1rem;
                 font-weight: bold;
             }
         }
@@ -63,13 +62,9 @@
         &:hover {
             border: 0.15rem solid var(--x-color-border);
         }
-        & .name {
-            font-weight: 700;
-        }
         & .description {
             color: var(--color-fg-1);
-            font-weight: 200;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
         }
     }
 </style>
