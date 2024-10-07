@@ -137,18 +137,18 @@
             <section slot="a" class="flow">
                 <Flow onNodeClick={showNodes} bind:this={flow} />
                 <div class="sidebar">
-                    <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={'ctrl+s'}>
+                    <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
                         <Save />
                         {#if !saving && saveChecksum !== currentChecksum}
                             <span class="save-indicator"></span>
                         {/if}
                     </button>
-                    <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={'ctrl+c'} style:display="none">Copy</button>
-                    <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={'ctrl+v'} style:display="none">Paste</button>
-                    <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'ctrl+alt+l'}>
+                    <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
+                    <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
+                    <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+alt+1'}>
                         <Prettify />
                     </button>
-                    <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'ctrl+alt+c'}>
+                    <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
                         <FitToView />
                     </button>
                 </div>
