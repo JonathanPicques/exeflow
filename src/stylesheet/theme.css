@@ -114,7 +114,7 @@ input[type='search'],
 input[type='password'] {
     border: 0.15rem solid transparent;
     outline: none;
-    padding: 0.6rem 1rem;
+    padding: 0.5em;
     border-radius: 0.5rem;
 
     color: var(--color-fg);
@@ -135,19 +135,19 @@ input[type='password'] {
 }
 
 select {
-    padding: 0.6rem 1rem;
+    padding: 0.5rem 1rem;
     appearance: none;
     background-size: 1.5rem;
     background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI2U4ZWFlZCI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==);
     background-repeat: no-repeat;
-    background-position: calc(100% - 0.6rem) center;
+    background-position: calc(100% - 0.5rem) center;
 }
 
 button:not(.custom),
 .button {
     gap: 0.5em;
     display: flex;
-    padding: 0.4em 0.8em;
+    padding: 0.5em 0.8em;
     align-items: center;
 
     color: var(--color-fg);

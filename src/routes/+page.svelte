@@ -21,7 +21,7 @@
 </Navbar>
 
 <main>
-    <h1>Automations <em>for devs</em><br />made simple</h1>
+    <h1>Automations <span>for devs</span><br />made simple</h1>
     <h2>Exeflow is a free and open source project that aims to<wbr /> provide a clean and simple way to connect multiple<wbr /> apps together.</h2>
 
     <a href="/home" class="button">Get started now!</a>
@@ -62,8 +62,7 @@
         margin-bottom: 1rem;
     }
 
-    em {
+    span {
         color: var(--color-primary);
-        font-family: var(--font-mono);
     }
 </style>
