@@ -19,32 +19,32 @@
         --toggle-thumb-gap: 0.2rem;
         --toggle-thumb-size: 0.6rem;
 
-        display: inline-flex;
-
         cursor: pointer;
+        margin: 0;
+        display: inline-flex;
         outline: none;
         font-size: 0;
         appearance: none;
         user-select: none;
-
-        margin: 0;
+        border-radius: 1rem;
         padding-inline: 0 var(--toggle-width);
-        transition: 0.3s all;
-        border-radius: 1rem;
-
         background-color: var(--bg, var(--color-bg-2));
-    }
-    [role='switch']:checked {
-        padding-inline: var(--toggle-width) 0;
-        background-color: var(--toggle-active-color, var(--color-primary-1));
-    }
-    [role='switch']::before {
-        content: '';
-        margin: var(--toggle-thumb-gap);
-        padding: var(--toggle-thumb-size);
-        transition: inherit;
-        background-color: white;
-        box-sizing: border-box;
-        border-radius: 1rem;
+
+        transition: 0.3s;
+
+        &:checked {
+            padding-inline: var(--toggle-width) 0;
+            background-color: var(--toggle-active-color, var(--color-primary-1));
+        }
+
+        &::before {
+            margin: var(--toggle-thumb-gap);
+            content: '';
+            padding: var(--toggle-thumb-size);
+            box-sizing: border-box;
+            transition: inherit;
+            border-radius: 1rem;
+            background-color: white;
+        }
     }
 </style>

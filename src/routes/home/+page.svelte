@@ -91,7 +91,9 @@
             width: 100%;
             border: 0.15rem solid var(--color-bg-2);
             border-radius: 1rem;
+
             background-color: var(--color-bg-1);
+
             transition: 0.3s;
         }
         &:hover img {

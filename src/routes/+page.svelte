@@ -67,14 +67,17 @@
     }
 
     .button {
-        color: #333333;
-        background-image: linear-gradient(to bottom, #0bdac1, #31ff9c);
-        box-shadow: 0 0 1.5rem hsl(151, 100%, 60%, 0.2);
-        transition: 0.5s box-shadow;
         font-size: 1.8rem;
         border-radius: 2rem;
-    }
-    .button:hover {
-        box-shadow: 0 0 2rem hsl(151, 100%, 60%, 0.4);
+
+        color: #333333;
+        box-shadow: 0 0 1.5rem hsl(151, 100%, 60%, 0.2);
+        background-image: linear-gradient(to bottom, #0bdac1, #31ff9c);
+
+        transition: 0.5s box-shadow;
+
+        &:hover {
+            box-shadow: 0 0 2rem hsl(151, 100%, 60%, 0.4);
+        }
     }
 </style>

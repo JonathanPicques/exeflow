@@ -157,10 +157,8 @@
         --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
 
         &.animate :global(.svelte-flow__node) {
-            transition: all 0.3s ease; /* keep in sync with setTimeout */
-
-            @media screen and (prefers-reduced-motion: reduce) {
-                transition: none;
+            @media screen and (prefers-reduced-motion: no-preference) {
+                transition: all 0.3s ease; /* keep in sync with setTimeout */
             }
         }
     }

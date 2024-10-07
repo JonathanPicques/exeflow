@@ -55,6 +55,7 @@
         border-radius: var(--flow-border-radius-node);
 
         background-color: var(--color-bg-1);
+
         transition: 0.3s;
 
         & img {
