@@ -2,6 +2,7 @@
     --font: 'Space Grotesk', 'Roboto', 'Arial';
     --font-mono: 'Space Mono', 'Fira Mono', Monospace;
     --color-primary: #31ff9c;
+    --color-primary-1: #14ba6a;
 }
 
 :root[color-scheme='dark'] {
