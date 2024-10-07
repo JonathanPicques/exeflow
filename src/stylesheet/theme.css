@@ -145,6 +145,7 @@ button:not(.custom),
     display: flex;
     padding: 0.5em 0.8em;
     align-items: center;
+    justify-content: center;
 
     color: var(--color-fg);
     border: 0.15rem solid transparent;

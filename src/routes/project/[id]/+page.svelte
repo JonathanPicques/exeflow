@@ -132,7 +132,7 @@
     </nav>
 
     <main>
-        <SplitPane type="horizontal" min="200px" max="-100px" pos="75%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
+        <SplitPane type="horizontal" min="200px" max="-100px" pos="70%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
             <section slot="a" class="flow">
                 <Flow onNodeClick={showNodes} bind:this={flow} />
             </section>
