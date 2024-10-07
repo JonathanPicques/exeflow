@@ -31,6 +31,6 @@
     }
 
     fieldset legend {
-        font-weight: bold;
+        color: var(--color-fg-1);
     }
 </style>
