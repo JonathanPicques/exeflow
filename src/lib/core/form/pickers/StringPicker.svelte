@@ -15,8 +15,10 @@
 <script lang="ts">
     import Fuse from 'fuse.js';
     import tippy from 'tippy.js';
+    import Text from '@tiptap/extension-text';
     import Mention from '@tiptap/extension-mention';
-    import StarterKit from '@tiptap/starter-kit';
+    import Document from '@tiptap/extension-document';
+    import Paragraph from '@tiptap/extension-paragraph';
     import {Editor} from '@tiptap/core';
     import {mount, unmount, onMount, onDestroy} from 'svelte';
     import type {Instance} from 'tippy.js';
@@ -100,7 +102,9 @@
             content: deserialize(value),
             element,
             extensions: [
-                StarterKit,
+                Text,
+                Document,
+                Paragraph,
                 Mention.configure({
                     suggestion: {
                         items({query}) {
