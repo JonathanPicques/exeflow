@@ -31,7 +31,6 @@ export default action<typeof configSchema>({
     data({form, config}) {
         return {
             valid: true,
-            title: 'send mail',
             config: {
                 value: {
                     tls: form?.tls ?? config?.tls ?? true,

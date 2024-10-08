@@ -28,7 +28,6 @@ export default trigger<typeof configSchema>({
     data({form, config}) {
         return {
             valid: true,
-            title: 'receive mail',
             config: {
                 value: {
                     tls: form?.tls ?? config?.tls ?? true,

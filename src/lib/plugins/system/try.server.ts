@@ -1,4 +1,4 @@
-import action from './repeat';
+import action from './try';
 import {serverAction} from '$lib/core/plugins/action.server';
 
 export default serverAction(action, {
