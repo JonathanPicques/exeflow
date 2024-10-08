@@ -17,7 +17,7 @@ export default action<typeof configSchema>({
         return {
             valid: true,
             config: {
-                value: {},
+                value: undefined,
                 schema: configSchema,
             },
             inputs: ['in'],

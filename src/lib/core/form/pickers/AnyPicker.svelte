@@ -4,10 +4,12 @@
     let {label, value = $bindable(), onchange}: PickerProps = $props();
 </script>
 
-<label>
-    <span>{label}</span>
-    <input type="text" onblur={onchange} bind:value />
-</label>
+{#if typeof value === 'string'}
+    <label>
+        <span>{label}</span>
+        <input type="text" onblur={onchange} bind:value />
+    </label>
+{/if}
 
 <style>
     label {
