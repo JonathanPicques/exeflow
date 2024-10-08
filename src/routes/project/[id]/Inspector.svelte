@@ -71,7 +71,7 @@
     {:else}
         <input type="search" placeholder="Filter nodes..." bind:value={filter} />
 
-        <div class="list" role="listbox">
+        <div class="list" role="list">
             {#each [...Object.entries(triggers), ...Object.entries(actions)].filter(filterPlugins).toSorted(sort) as [id, plugin]}
                 <PluginNodeCard {id} {plugin} />
             {/each}

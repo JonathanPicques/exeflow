@@ -108,10 +108,10 @@
 
 <SvelteFlowProvider>
     <nav>
-        <a href="/home" class="icon button">
+        <a href="/home" role="button" class="icon button" aria-label="Close project">
             <Close size="2rem" />
         </a>
-        <input type="text" bind:value={projectName} />
+        <input type="text" aria-label="Project name" bind:value={projectName} />
         <div style:flex-grow="1"></div>
         <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
             <Save />
