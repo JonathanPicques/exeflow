@@ -40,14 +40,49 @@ export class GraphContext {
         this.triggers = triggers;
     }
 
-    public findNode = (id: PluginNode['id']) => {
-        const node = get(this.nodes).find(n => n.id === id);
-        if (!node) {
-            throw new Error(`node ${id} not found`);
+    public getPlugin = (node: PluginNode) => {
+        switch (node.type) {
+            case 'action':
+                return this.getAction(node.data.id);
+            case 'trigger':
+                return this.getTrigger(node.data.id);
+            default:
+                throw new Error('unreachable');
         }
+    };
+    public getAction = (id: ActionId) => {
+        if (!this.actions[id]) {
+            throw new Error(`action ${id} not found`);
+        }
+        return this.actions[id];
+    };
+    public getTrigger = (id: TriggerId) => {
+        if (!this.triggers[id]) {
+            throw new Error(`trigger ${id} not found`);
+        }
+        return this.triggers[id];
+    };
+
+    public getNode = (id: PluginNode['id']) => {
+        const node = get(this.nodes).find(n => n.id === id);
+        if (!node) throw new Error(`node ${id} not found`);
+
         return node;
     };
-    public findNodesAfter = (id: PluginNode['id']) => {
+    public findNode = (id: PluginNode['id']) => {
+        return get(this.nodes).find(n => n.id === id);
+    };
+    public getNextNode = (id: PluginNode['id'], sourceHandle: string) => {
+        const edge = get(this.edges).find(e => e.source === id && e.sourceHandle === sourceHandle);
+        if (!edge || !edge.sourceHandle || !edge.targetHandle) return undefined;
+
+        return {
+            node: this.getNode(edge.target) as ActionNode,
+            input: edge.targetHandle!,
+            output: edge.sourceHandle!,
+        };
+    };
+    public getNodesAfter = (id: PluginNode['id']) => {
         const edges = get(this.edges);
         const after: PluginNode['id'][] = [];
         const visit: PluginNode['id'][] = [id];
@@ -64,9 +99,9 @@ export class GraphContext {
                 }
             }
         }
-        return after.map(id => this.findNode(id));
+        return after.map(id => this.getNode(id));
     };
-    public findNodesBefore = (id: PluginNode['id']) => {
+    public getNodesBefore = (id: PluginNode['id']) => {
         const edges = get(this.edges);
         const visit: PluginNode['id'][] = [id];
         const before: PluginNode['id'][] = [];
@@ -83,46 +118,11 @@ export class GraphContext {
                 }
             }
         }
-        return before.map(id => this.findNode(id));
-    };
-
-    public findNextActionNode = (id: PluginNode['id'], out: string) => {
-        const edge = get(this.edges).find(e => e.source === id && e.sourceHandle === out);
-        if (!edge || !edge.sourceHandle || !edge.targetHandle) {
-            return undefined;
-        }
-        return {
-            node: this.findNode(edge.target) as ActionNode,
-            input: edge.targetHandle!,
-            output: edge.sourceHandle!,
-        };
-    };
-
-    public findPlugin = (node: PluginNode) => {
-        switch (node.type) {
-            case 'action':
-                return this.findAction(node.data.id);
-            case 'trigger':
-                return this.findTrigger(node.data.id);
-            default:
-                throw new Error('unreachable');
-        }
-    };
-    public findAction = (id: ActionId) => {
-        if (!this.actions[id]) {
-            throw new Error(`action ${id} not found`);
-        }
-        return this.actions[id];
-    };
-    public findTrigger = (id: TriggerId) => {
-        if (!this.triggers[id]) {
-            throw new Error(`trigger ${id} not found`);
-        }
-        return this.triggers[id];
+        return before.map(id => this.getNode(id));
     };
 
     public createNode = async (id: PluginId, type: Plugin['type'], position: {x: number; y: number}) => {
-        const {data} = type === 'action' ? this.findAction(id) : this.findTrigger(id);
+        const {data} = type === 'action' ? this.getAction(id) : this.getTrigger(id);
         const newNode = {
             id: this.createId(),
             type,
@@ -133,8 +133,8 @@ export class GraphContext {
         return newNode;
     };
     public renderNodeForm = async (id: PluginNode['id']) => {
-        const node = this.findNode(id);
-        const plugin = this.findPlugin(node);
+        const node = this.getNode(id);
+        const plugin = this.getPlugin(node);
         const schema = await plugin.form({
             config: node.data.data.config.value,
             //
@@ -143,8 +143,8 @@ export class GraphContext {
         return {value: zero(schema), schema};
     };
     public updateNodeData = async (id: PluginNode['id'], form: unknown) => {
-        const node = this.findNode(id);
-        const plugin = this.findPlugin(node);
+        const node = this.getNode(id);
+        const plugin = this.getPlugin(node);
         const newData = await plugin.data({
             form: form as Partial<any>,
             config: node.data.data.config.value,

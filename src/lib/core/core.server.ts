@@ -51,7 +51,7 @@ export const executeAction = async function* (
             data[node.id] = results;
             yield {nodeId: node.id, pluginId: node.data.id, config, results};
 
-            const nextNode = context.findNextActionNode(node.id, out);
+            const nextNode = context.getNextNode(node.id, out);
             if (nextNode) {
                 yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
             }
@@ -83,7 +83,7 @@ export const executeTrigger = async function* ({
             data[node.id] = results;
             yield {nodeId: node.id, pluginId: node.data.id, config, results};
 
-            const nextNode = context.findNextActionNode(node.id, out);
+            const nextNode = context.getNextNode(node.id, out);
             if (nextNode) {
                 yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
             }

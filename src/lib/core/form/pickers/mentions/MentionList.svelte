@@ -32,7 +32,7 @@
                 throw new Error('unreachable');
         }
     };
-    const {findPlugin} = getGraphContext();
+    const {getPlugin} = getGraphContext();
     const {highlightNode} = getProjectContext();
 
     $effect(() => {
@@ -91,7 +91,7 @@
     {/if}
     {#each mentions as mention, i}
         {#if mention.type === 'node'}
-            {@const {icon} = findPlugin(mention.node)}
+            {@const {icon} = getPlugin(mention.node)}
             <button class:selected={i === selectedIndex} onclick={() => handleSelect(mention)}>
                 <img src={icon} alt="" />
                 <span>{mention.key} in {extractPluginName(mention.node.data.id)}</span>

@@ -5,14 +5,14 @@
 
     import {isTriggerNode} from '$lib/core/graph/nodes';
     import {getGraphContext} from '$lib/core/core';
-    import {nodeInterpolation, humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
     import type {PluginNode} from '$lib/core/graph/nodes';
     import type {Plugin, PluginId} from '$lib/core/core';
 
-    const {nodes, actions, triggers, findPlugin} = getGraphContext();
+    const {nodes, actions, triggers, getPlugin} = getGraphContext();
 
     let node = $state<PluginNode>();
-    let plugin = $derived(node && findPlugin(node));
+    let plugin = $derived(node && getPlugin(node));
     let filter = $state('');
 
     nodes.subscribe(nodes => {
@@ -46,19 +46,7 @@
         <h1>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-            <img
-                src={plugin.icon}
-                alt=""
-                width="32px"
-                height="32px"
-                onclick={() => {
-                    navigator.clipboard.writeText(
-                        Object.keys(node!.data.data.results)
-                            .map(key => nodeInterpolation(node!.id, key))
-                            .join(' '),
-                    );
-                }}
-            />
+            <img src={plugin.icon} alt="" width="32px" height="32px" />
             <span>{humanPluginName(extractPluginName(node.data.id))}</span>
         </h1>
 

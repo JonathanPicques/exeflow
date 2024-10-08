@@ -109,7 +109,7 @@
                     suggestion: {
                         items({query}) {
                             const mentions = [
-                                ...graphContext.findNodesBefore(id).flatMap(node =>
+                                ...graphContext.getNodesBefore(id).flatMap(node =>
                                     Object.entries(node.data.data.results).map(([key, schema]) => {
                                         return {type: 'node', node, key, schema} satisfies EditorMention;
                                     }),
@@ -186,42 +186,49 @@
                             };
                         },
                     },
-                    renderHTML({node}) {
+                    renderHTML({node: mentionNode}) {
                         let sub: Function;
                         const span = document.createElement('span');
-                        const [result] = parse(node.attrs.id);
+                        const [result] = parse(mentionNode.attrs.id);
 
                         switch (result.type) {
                             case 'node': {
-                                const _node = graphContext.findNode(result.id);
-                                const {icon} = graphContext.findPlugin(_node);
+                                const node = graphContext.findNode(result.id);
 
-                                span.innerHTML = `<img src=${icon} alt="" /><span>${result.key}${result.path ? '.' + result.path : ''}</span>`;
-                                span.setAttribute('title', _node.data.id);
-                                span.classList.add('node', 'mention');
-                                span.addEventListener('click', () => {
-                                    const path = prompt('Sub-property to access e.g., address.zipcode, or empty to access the whole value instead', result.path ?? '');
+                                if (node) {
+                                    const {icon} = graphContext.getPlugin(node);
 
-                                    if (path !== null) {
-                                        editor!.state.doc.descendants((otherNode, position) => {
-                                            if (node === otherNode) {
-                                                const tr = editor!.state.tr;
+                                    span.innerHTML = `<img src=${icon} alt="" /><span>${result.key}${result.path ? '.' + result.path : ''}</span>`;
+                                    span.setAttribute('title', node.data.id);
+                                    span.classList.add('node', 'mention');
+                                    span.addEventListener('click', () => {
+                                        const path = prompt('Sub-property to access e.g., address.zipcode, or empty to access the whole value instead', result.path ?? '');
 
-                                                tr.setNodeMarkup(position, node.type, {
-                                                    ...node.attrs,
-                                                    id: nodeInterpolation(result.id, result.key, path),
-                                                });
-                                                editor!.view.dispatch(tr);
-                                            }
-                                        });
-                                    }
-                                });
-                                span.addEventListener('mouseenter', () => {
-                                    sub = projectContext.highlightNode(result.id);
-                                });
-                                span.addEventListener('mouseleave', () => {
-                                    sub?.();
-                                });
+                                        if (path !== null) {
+                                            editor!.state.doc.descendants((otherNode, position) => {
+                                                if (otherNode === mentionNode) {
+                                                    const tr = editor!.state.tr;
+
+                                                    tr.setNodeMarkup(position, mentionNode.type, {
+                                                        ...mentionNode.attrs,
+                                                        id: nodeInterpolation(result.id, result.key, path),
+                                                    });
+                                                    editor!.view.dispatch(tr);
+                                                }
+                                            });
+                                        }
+                                    });
+                                    span.addEventListener('mouseenter', () => {
+                                        sub = projectContext.highlightNode(result.id);
+                                    });
+                                    span.addEventListener('mouseleave', () => {
+                                        sub?.();
+                                    });
+                                } else {
+                                    span.innerHTML = `Not found`;
+                                    span.setAttribute('title', `This result came from a node that was removed and should be replaced`);
+                                    span.classList.add('node', 'mention', 'not-found');
+                                }
                                 break;
                             }
                             case 'secret': {
@@ -232,11 +239,11 @@
 
                                     if (key !== null) {
                                         editor!.state.doc.descendants((otherNode, position) => {
-                                            if (node === otherNode) {
+                                            if (otherNode === mentionNode) {
                                                 const tr = editor!.state.tr;
 
-                                                tr.setNodeMarkup(position, node.type, {
-                                                    ...node.attrs,
+                                                tr.setNodeMarkup(position, mentionNode.type, {
+                                                    ...mentionNode.attrs,
                                                     id: secretInterpolation(key),
                                                 });
                                                 editor!.view.dispatch(tr);
@@ -323,6 +330,11 @@
         :global(img, span) {
             padding: 0.1rem;
             vertical-align: middle;
+        }
+
+        :global(&.not-found) {
+            color: var(--color-fg);
+            background-color: var(--color-error);
         }
     }
 </style>

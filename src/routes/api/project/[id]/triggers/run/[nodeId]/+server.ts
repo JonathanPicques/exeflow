@@ -45,7 +45,7 @@ export const POST = async ({locals, params}) => {
     );
 
     for await (const step of executeTrigger({
-        node: context.findNode(params.nodeId) as TriggerNode,
+        node: context.getNode(params.nodeId) as TriggerNode,
         signal: controller.signal,
         context,
         secrets,
