@@ -103,7 +103,7 @@
         animate = smooth;
     };
     export const fitToView = ({smooth} = {smooth: true}) => {
-        const duration = smooth && window.matchMedia(`(prefers-reduced-motion: no-preference)`).matches ? 300 : undefined;
+        const duration = smooth && window.matchMedia(`(prefers-reduced-motion)`).matches ? undefined : 300;
         fitView({duration, padding: 0.2});
     };
     export const screenshot = async ({width = 320, height = 180} = {}) => {

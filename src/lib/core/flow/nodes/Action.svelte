@@ -114,7 +114,7 @@
     :global(.highlight) {
         animation: glow infinite 2s;
 
-        @media screen and (prefers-reduced-motion: reduce) {
+        @media (prefers-reduced-motion) {
             animation: none;
             box-shadow: 0 0 1.5rem var(--x-color-plugin);
         }

@@ -1,6 +1,8 @@
 <script lang="ts">
-    import '../app.css';
     import {navigating} from '$app/stores';
+    import {onNavigate} from '$app/navigation';
+
+    import '../app.css';
 
     let loader = $state(false);
     let {children} = $props();
@@ -17,6 +19,17 @@
         } else {
             loader = false;
         }
+    });
+
+    onNavigate(navigation => {
+        if (!document.startViewTransition) return;
+
+        return new Promise(resolve => {
+            document.startViewTransition(async () => {
+                resolve();
+                await navigation.complete;
+            });
+        });
     });
 </script>
 

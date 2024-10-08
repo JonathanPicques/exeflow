@@ -226,7 +226,7 @@
 
         animation: appear 0.3s;
         animation-timing-function: ease-in-out;
-        @media screen and (prefers-reduced-motion: reduce) {
+        @media (prefers-reduced-motion: reduce) {
             animation: none;
         }
     }
