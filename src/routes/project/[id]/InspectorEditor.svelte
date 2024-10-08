@@ -5,8 +5,9 @@
     import type {JsonSchema} from '$lib/schema/schema';
     import type {PluginNode} from '$lib/core/graph/nodes';
 
+    let {node}: {node: PluginNode} = $props();
+
     let form = $state<{value: unknown; schema: JsonSchema}>();
-    let {node = $bindable()}: {node: PluginNode} = $props();
     const {renderNodeForm, updateNodeData} = getGraphContext();
 
     $effect(() => {

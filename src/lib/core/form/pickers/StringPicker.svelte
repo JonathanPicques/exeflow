@@ -285,7 +285,7 @@
             {/each}
         </select>
     {:else}
-        <div bind:this={element}></div>
+        <div class="input" bind:this={element}></div>
     {/if}
 </label>
 
@@ -302,6 +302,10 @@
     select {
         width: 100%;
         resize: vertical;
+    }
+
+    div.input {
+        cursor: text;
     }
 
     :global(.mention) {

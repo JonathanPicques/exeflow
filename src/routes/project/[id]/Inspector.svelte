@@ -66,7 +66,7 @@
             {#if isTriggerNode(node)}
                 <InspectorTrigger {node} />
             {/if}
-            <InspectorEditor bind:node />
+            <InspectorEditor {node} />
         </div>
     {:else}
         <input type="search" placeholder="Filter nodes..." bind:value={filter} />
