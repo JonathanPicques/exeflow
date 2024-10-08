@@ -1,19 +1,24 @@
 <script lang="ts">
-    import type {JsonSchema} from '$lib/schema/schema';
-    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
 
-    interface Props {
-        id: PluginNode['id'];
-        value: unknown;
-        schema: JsonSchema;
-        onchange?: () => void;
-    }
-    let {value = $bindable(), onchange}: Props = $props();
+    let {label, value = $bindable(), onchange}: PickerProps = $props();
 </script>
 
-<input type="text" onblur={onchange} bind:value />
+<label>
+    <span>{label}</span>
+    <input type="text" onblur={onchange} bind:value />
+</label>
 
 <style>
+    label {
+        span {
+            display: block;
+            padding-bottom: 0.5rem;
+
+            color: var(--color-fg-1);
+        }
+    }
+
     input {
         width: 100%;
     }

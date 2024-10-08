@@ -1,15 +1,9 @@
 <script lang="ts">
     import {zero} from '$lib/schema/data';
-    import type {JsonSchema} from '$lib/schema/schema';
-    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
+    import type {JsonSchemaArray} from '$lib/schema/schema';
 
-    interface Props {
-        id: PluginNode['id'];
-        value: unknown[];
-        schema: JsonSchema;
-        onchange?: () => void;
-    }
-    let {value = $bindable(), schema, onchange}: Props = $props();
+    let {value = $bindable(), schema, onchange}: PickerProps<JsonSchemaArray> = $props();
 
     const add = () => {
         if (schema.type === 'array' && schema.items) value.push(zero(schema.items));

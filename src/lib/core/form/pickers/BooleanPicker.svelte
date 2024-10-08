@@ -1,19 +1,25 @@
 <script lang="ts">
+    import type {PickerProps} from '../FormEditor.svelte';
     import type {JsonSchemaBoolean} from '$lib/schema/schema';
-    import type {PluginNode} from '$lib/core/graph/nodes';
 
-    interface Props {
-        id: PluginNode['id'];
-        value: boolean;
-        schema: JsonSchemaBoolean;
-        onchange?: () => void;
-    }
-    let {value = $bindable(), onchange}: Props = $props();
+    let {label, value = $bindable(), onchange}: PickerProps<JsonSchemaBoolean> = $props();
 </script>
 
-<input role="switch" type="checkbox" onblur={onchange} bind:checked={value} />
+<label>
+    <span>{label}</span>
+    <input role="switch" type="checkbox" onblur={onchange} bind:checked={value} />
+</label>
 
 <style>
+    label {
+        span {
+            display: block;
+            padding-bottom: 0.5rem;
+
+            color: var(--color-fg-1);
+        }
+    }
+
     [role='switch'] {
         --toggle-width: 1.4rem;
         --toggle-thumb-gap: 0.2rem;

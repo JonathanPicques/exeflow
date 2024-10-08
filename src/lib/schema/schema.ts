@@ -6,7 +6,6 @@ export interface JsonSchemaAll<T> {
     description?: string;
     //
     editor?: {
-        label?: 'hide';
         textarea?: boolean;
         suggestions?: string[];
     };

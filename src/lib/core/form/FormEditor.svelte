@@ -1,3 +1,17 @@
+<script lang="ts" module>
+    import type {JsonSchema} from '$lib/schema/schema';
+    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {InferJsonSchema} from '$lib/schema/infer';
+
+    export type PickerProps<T extends JsonSchema = JsonSchema, V = InferJsonSchema<T>> = {
+        id: PluginNode['id'];
+        value: V;
+        label?: string;
+        schema: T;
+        onchange?: () => void;
+    };
+</script>
+
 <script lang="ts">
     import AnyPicker from '$lib/core/form/pickers/AnyPicker.svelte';
     import ArrayPicker from './pickers/ArrayPicker.svelte';
@@ -6,17 +20,7 @@
     import ObjectPicker from '$lib/core/form/pickers/ObjectPicker.svelte';
     import BooleanPicker from '$lib/core/form/pickers/BooleanPicker.svelte';
 
-    import type {JsonSchema} from '$lib/schema/schema';
-    import type {PluginNode} from '$lib/core/graph/nodes';
-
-    interface Props {
-        id: PluginNode['id'];
-        value: unknown;
-        schema: JsonSchema;
-        onchange?: () => void;
-    }
-
-    let {id, value = $bindable(), schema, onchange}: Props = $props();
+    let {id, label, value = $bindable(), schema, onchange}: PickerProps = $props();
 
     const Picker = $derived.by(() => {
         switch (schema.type) {
@@ -36,4 +40,4 @@
     }) as typeof AnyPicker;
 </script>
 
-<Picker {id} {schema} {onchange} bind:value />
+<Picker {id} {label} {schema} {onchange} bind:value />

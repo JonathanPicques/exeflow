@@ -28,16 +28,10 @@
     import {projectContextKey, getProjectContext} from '$lib/core/core.client.svelte';
     import {parse, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
     import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
     import type {JsonSchemaString} from '$lib/schema/schema';
 
-    interface Props {
-        id: PluginNode['id'];
-        value: string;
-        schema: JsonSchemaString;
-        onchange?: () => void;
-    }
-
-    let {id, value = $bindable(), schema, onchange}: Props = $props();
+    let {id, label, value = $bindable(), schema, onchange}: PickerProps<JsonSchemaString> = $props();
 
     let editor: Editor | undefined = $state();
     let element: HTMLDivElement | undefined = $state();
@@ -280,19 +274,31 @@
     });
 </script>
 
-{#if schema.enum}
-    <select {onchange} bind:value>
-        {#each schema.enum as enumValue, i}
-            <option value={enumValue}>
-                {schema.enumLabels?.[i] ?? enumValue}
-            </option>
-        {/each}
-    </select>
-{:else}
-    <div bind:this={element}></div>
-{/if}
+<label>
+    <span>{label}</span>
+    {#if schema.enum}
+        <select {onchange} bind:value>
+            {#each schema.enum as enumValue, i}
+                <option value={enumValue}>
+                    {schema.enumLabels?.[i] ?? enumValue}
+                </option>
+            {/each}
+        </select>
+    {:else}
+        <div bind:this={element}></div>
+    {/if}
+</label>
 
 <style>
+    label {
+        span {
+            display: block;
+            padding-bottom: 0.5rem;
+
+            color: var(--color-fg-1);
+        }
+    }
+
     select {
         width: 100%;
         resize: vertical;
