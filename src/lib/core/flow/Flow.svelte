@@ -24,7 +24,7 @@
     const {fitView, getViewport, setViewport, getNodesBounds, screenToFlowPosition} = useSvelteFlow();
 
     const minZoom = 0.75;
-    const maxZoom = 2;
+    const maxZoom = 3;
 
     const edgeTypes = {edge: CutEdge} as any; // TODO: remove as any when typings are fixed (likely when svelte flow updates to svelte 5)
     const nodeTypes = {action: ActionNode, trigger: TriggerNode} as any; // TODO: remove as any when typings are fixed (likely when svelte flow updates to svelte 5)
@@ -36,7 +36,7 @@
         if (!animate) return;
         const timeout = setTimeout(() => {
             animate = false;
-        }, /* keep me in sync with .animate/transition in style */ 300);
+        }, /* keep me in sync with css transition */ 300);
         return () => {
             animate = false;
             clearTimeout(timeout);
