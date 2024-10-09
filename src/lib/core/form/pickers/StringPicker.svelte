@@ -25,7 +25,9 @@
     import type {ComponentProps, MountedComponent} from 'svelte';
 
     import MentionList from './mentions/MentionList.svelte';
+    import MentionSpan from './mentions/MentionSpan.svelte';
 
+    import {valid} from '$lib/schema/validate';
     import {graphContextKey, getGraphContext} from '$lib/core/core';
     import {projectContextKey, getProjectContext} from '$lib/core/core.client.svelte';
     import {parse, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
@@ -39,6 +41,7 @@
     let element: HTMLDivElement | undefined = $state();
     let focused = $state(false);
 
+    const components = new Map();
     const graphContext = getGraphContext();
     const projectContext = getProjectContext();
 
@@ -98,6 +101,11 @@
     };
 
     onMount(() => {
+        const context: Map<string | symbol, unknown> = new Map();
+
+        context.set(graphContextKey, graphContext);
+        context.set(projectContextKey, projectContext);
+
         editor = new Editor({
             content: deserialize(value),
             element,
@@ -133,14 +141,18 @@
                             let instance: Instance;
                             let component: MountedComponent<typeof MentionList>;
                             const props: ComponentProps<typeof MentionList> = $state({mentions: []});
-                            const context: Map<string | symbol, unknown> = new Map();
 
-                            context.set(graphContextKey, graphContext);
-                            context.set(projectContextKey, projectContext);
                             return {
                                 onExit() {
-                                    unmount(component);
-                                    instance.destroy();
+                                    if (instance && component) {
+                                        unmount(component);
+                                        instance.destroy();
+
+                                        // @ts-ignore - to make sure we do not double destroy
+                                        instance = undefined;
+                                        // @ts-ignore - to make sure we do not double unmount
+                                        component = undefined;
+                                    }
                                 },
                                 onStart(params) {
                                     target = document.createElement('div');
@@ -193,74 +205,19 @@
                         },
                     },
                     renderHTML({node: mentionNode}) {
-                        let sub: Function;
-                        const span = document.createElement('span');
-                        const [result] = parse(mentionNode.attrs.id);
+                        const target = document.createElement('span');
 
-                        switch (result.type) {
-                            case 'node': {
-                                const node = graphContext.findNode(result.id);
-
-                                if (node) {
-                                    const {icon} = graphContext.getPlugin(node);
-
-                                    span.innerHTML = `<img src=${icon} alt="" /><span>${result.key}${result.path ? '.' + result.path : ''}</span>`;
-                                    span.setAttribute('title', node.data.id);
-                                    span.classList.add('node', 'mention');
-                                    span.addEventListener('click', () => {
-                                        const path = prompt('Sub-property to access e.g., address.zipcode, or empty to access the whole value instead', result.path ?? '');
-
-                                        if (path !== null) {
-                                            editor!.state.doc.descendants((otherNode, position) => {
-                                                if (otherNode === mentionNode) {
-                                                    const tr = editor!.state.tr;
-
-                                                    tr.setNodeMarkup(position, mentionNode.type, {
-                                                        ...mentionNode.attrs,
-                                                        id: nodeInterpolation(result.id, result.key, path),
-                                                    });
-                                                    editor!.view.dispatch(tr);
-                                                }
-                                            });
-                                        }
-                                    });
-                                    span.addEventListener('mouseenter', () => {
-                                        sub = projectContext.highlightNode(result.id);
-                                    });
-                                    span.addEventListener('mouseleave', () => {
-                                        sub?.();
-                                    });
-                                } else {
-                                    span.innerHTML = `Not found`;
-                                    span.setAttribute('title', `This result came from a node that was removed and should be replaced`);
-                                    span.classList.add('node', 'mention', 'not-found');
-                                }
-                                break;
-                            }
-                            case 'secret': {
-                                span.innerHTML = `<span>🔒</span><span>${result.key}</span>`;
-                                span.classList.add('secret', 'mention');
-                                span.addEventListener('click', () => {
-                                    const key = prompt('Secret key', result.key ?? '');
-
-                                    if (key !== null) {
-                                        editor!.state.doc.descendants((otherNode, position) => {
-                                            if (otherNode === mentionNode) {
-                                                const tr = editor!.state.tr;
-
-                                                tr.setNodeMarkup(position, mentionNode.type, {
-                                                    ...mentionNode.attrs,
-                                                    id: secretInterpolation(key),
-                                                });
-                                                editor!.view.dispatch(tr);
-                                            }
-                                        });
-                                    }
-                                });
-                                break;
-                            }
-                        }
-                        return span;
+                        components.set(
+                            mentionNode,
+                            mount(MentionSpan, {
+                                props: {
+                                    interpolations: parse(mentionNode.attrs.id),
+                                },
+                                target,
+                                context,
+                            }),
+                        );
+                        return target;
                     },
                 }),
             ],
@@ -274,8 +231,29 @@
             onUpdate(props) {
                 value = serialize(props.editor.getJSON() as DocEditorNode);
             },
-            onTransaction: () => {
-                editor = editor; // force re-render so `editor.isActive` works as expected
+            onTransaction: props => {
+                props.transaction.steps.forEach((step, index) => {
+                    if (valid(step, {type: 'object', required: ['jsonID'], properties: {jsonID: {type: 'string'}}})) {
+                        if (step.jsonID === 'replace') {
+                            const map = props.transaction.mapping.maps[index];
+                            if (valid(map, {type: 'object', required: ['ranges'], properties: {ranges: {type: 'array', items: {type: 'number'}}}})) {
+                                const start = map.ranges[0];
+                                const finish = map.ranges[0] + map.ranges[1];
+
+                                props.transaction.before.nodesBetween(start, finish, node => {
+                                    if (node.type.name === 'mention') {
+                                        const component = components.get(node);
+
+                                        if (component) {
+                                            unmount(component);
+                                            components.delete(node);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
             },
         });
     });
@@ -287,6 +265,9 @@
     });
 
     onDestroy(() => {
+        for (const component of components.values()) {
+            unmount(component);
+        }
         editor?.destroy();
     });
 </script>
@@ -323,24 +304,5 @@
 
     div.input {
         cursor: text;
-    }
-
-    :global(.mention) {
-        padding: 0.1rem 0.3rem;
-
-        color: var(--color-mention-fg);
-        cursor: pointer;
-        border-radius: 0.5rem;
-        background-color: var(--color-mention-bg);
-
-        :global(img, span) {
-            padding: 0.1rem;
-            vertical-align: middle;
-        }
-
-        :global(&.not-found) {
-            color: var(--color-fg);
-            background-color: var(--color-error);
-        }
     }
 </style>

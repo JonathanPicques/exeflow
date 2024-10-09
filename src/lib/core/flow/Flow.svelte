@@ -101,6 +101,7 @@
         $nodes = result.nodes;
         $edges = result.edges;
         animate = smooth;
+        fitToView({smooth});
     };
     export const fitToView = ({smooth} = {smooth: true}) => {
         const duration = smooth && window.matchMedia(`(prefers-reduced-motion)`).matches ? undefined : 300;
