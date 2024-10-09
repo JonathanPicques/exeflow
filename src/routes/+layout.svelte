@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {fade} from 'svelte/transition';
     import {navigating} from '$app/stores';
     import {onNavigate} from '$app/navigation';
 
@@ -35,7 +36,7 @@
 
 {@render children()}
 {#if loader}
-    <div class="loader"></div>
+    <div class="loader" transition:fade={{duration: 300}}></div>
 {/if}
 
 <style>
@@ -46,7 +47,7 @@
         height: 0.5rem;
         position: fixed;
 
-        background: linear-gradient(90deg, #0001 33%, #0005 50%, #0001 66%) var(--color-bg-2);
+        background: linear-gradient(90deg, #0001 33%, #0005 50%, #0001 66%) var(--color-primary-1);
         background-size: 300% 100%;
 
         animation: loader 1s infinite linear;
