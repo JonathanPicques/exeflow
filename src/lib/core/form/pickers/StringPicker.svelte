@@ -150,9 +150,15 @@
                                         placement: 'bottom-start',
                                         interactive: true,
                                         showOnCreate: true,
-                                        //
                                         appendTo: () => document.body,
                                         getReferenceClientRect: params.clientRect as () => DOMRect,
+                                        //
+                                        onHide() {
+                                            component.hide();
+                                        },
+                                        onShown() {
+                                            component.show();
+                                        },
                                     });
                                     component = mount(MentionList, {props, target, context});
 
