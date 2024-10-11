@@ -30,7 +30,8 @@ interface ExecStep {
     results: Record<string, unknown>;
 }
 
-export const serverTrigger = <Config extends JsonSchema>(_: Trigger<Config>, serverTrigger: Omit<ServerTrigger<Config>, 'type'>): ServerTrigger<Config> => ({
+type GetConfig<T extends Trigger<JsonSchema>> = T extends Trigger<infer Config> ? Config : JsonSchema;
+export const serverTrigger = <T extends Trigger<JsonSchema>>(serverTrigger: Omit<ServerTrigger<GetConfig<T>>, 'type'>): ServerTrigger<GetConfig<T>> => ({
     type: 'serverTrigger',
     ...serverTrigger,
 });

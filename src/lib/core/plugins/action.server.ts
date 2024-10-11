@@ -30,7 +30,8 @@ interface ExecStep {
     results: Record<string, unknown>;
 }
 
-export const serverAction = <Config extends JsonSchema>(_: Action<Config>, serverAction: Omit<ServerAction<Config>, 'type'>): ServerAction<Config> => ({
+type GetConfig<T extends Action<JsonSchema>> = T extends Action<infer Config> ? Config : JsonSchema;
+export const serverAction = <T extends Action<JsonSchema>>(serverAction: Omit<ServerAction<GetConfig<T>>, 'type'>): ServerAction<GetConfig<T>> => ({
     type: 'serverAction',
     ...serverAction,
 });

@@ -1,7 +1,7 @@
-import action from './embeddings';
 import {serverAction} from '$lib/core/plugins/action.server';
+import type action from './embeddings';
 
-export default serverAction(action, {
+export default serverAction<typeof action>({
     exec: async function* ({next, config}) {
         const {input} = config;
 

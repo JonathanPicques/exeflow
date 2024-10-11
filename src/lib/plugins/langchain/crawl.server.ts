@@ -1,9 +1,9 @@
 import {RecursiveUrlLoader} from '@langchain/community/document_loaders/web/recursive_url';
 
-import action from './crawl';
 import {serverAction} from '$lib/core/plugins/action.server';
+import type action from './crawl';
 
-export default serverAction(action, {
+export default serverAction<typeof action>({
     exec: async function* ({next, config}) {
         const loader = new RecursiveUrlLoader(config.url, {
             timeout: config.timeout,

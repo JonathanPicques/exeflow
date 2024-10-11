@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer';
 
-import action from './sendMail';
 import {serverAction} from '$lib/core/plugins/action.server';
+import type action from './sendMail';
 
-export default serverAction(action, {
+export default serverAction<typeof action>({
     exec: async function* ({next, config}) {
         const transport = nodemailer.createTransport({
             host: config.host,

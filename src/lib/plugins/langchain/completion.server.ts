@@ -1,7 +1,7 @@
-import action from './completion';
 import {serverAction} from '$lib/core/plugins/action.server';
+import type action from './completion';
 
-export default serverAction(action, {
+export default serverAction<typeof action>({
     exec: async function* ({next, config, signal}) {
         const {input, stream} = config;
 

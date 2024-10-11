@@ -1,9 +1,9 @@
 import {createClient} from '@supabase/supabase-js';
 
-import action from './deleteUser';
 import {serverAction} from '$lib/core/plugins/action.server';
+import type action from './deleteUser';
 
-export default serverAction(action, {
+export default serverAction<typeof action>({
     exec: async function* ({next, config}) {
         const {url, key, userId} = config;
 

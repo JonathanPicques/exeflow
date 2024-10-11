@@ -1,7 +1,7 @@
-import action from './parse';
 import {serverAction} from '$lib/core/plugins/action.server';
+import type action from './parse';
 
-export default serverAction(action, {
+export default serverAction<typeof action>({
     exec: async function* ({next, config}) {
         yield* next({
             output: 'out',
