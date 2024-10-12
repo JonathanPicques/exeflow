@@ -211,6 +211,19 @@ export const secretInterpolation = (key: string) => {
 };
 
 /**
+ * @returns an unique plugin id from the given plugin path
+ * @example
+ * ```ts
+ * pluginId('/src/lib/plugins/http/http.ts') => 'http:http'
+ * pluginId('/src/lib/plugins/discord/sendMessage.ts') => 'discord:sendMessage'
+ * pluginId('/src/lib/plugins/discord/sendMessage.server.ts') => 'discord:sendMessage'
+ * ```
+ */
+export const pluginId = (path: string) => {
+    return path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.server.ts', '').replace('.ts', '');
+};
+
+/**
  * @returns an eye pleasing human readable string from the given plugin name
  * @example
  * ```ts

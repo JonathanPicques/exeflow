@@ -1,4 +1,4 @@
-import {resolve} from '$lib/core/parse';
+import {resolve, pluginId} from '$lib/core/parse';
 import type {ActionId} from '$lib/core/plugins/action';
 import type {TriggerId} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
@@ -98,10 +98,10 @@ export const executeTrigger = async function* ({
 export const importServerPlugins = async () => {
     const serverActions: Record<ActionId, ServerAction<JsonSchema>> = {};
     const serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>> = {};
-    const serverPluginModules = import.meta.glob('$lib/plugins/**/*.server.ts', {eager: true, import: 'default'});
+    const serverPluginModules = import.meta.glob('$lib/plugins/*/*.server.ts', {eager: true, import: 'default'});
 
     for (const [path, module] of Object.entries(serverPluginModules)) {
-        const id = path.replace('/src/lib/plugins/', '').replace('/', ':').replace('.server.ts', '');
+        const id = pluginId(path);
         const plugin = module as ServerAction<JsonSchema> | ServerTrigger<JsonSchema>;
 
         switch (plugin.type) {
