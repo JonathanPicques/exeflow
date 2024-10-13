@@ -211,6 +211,11 @@
                             mentionNode,
                             mount(MentionSpan, {
                                 props: {
+                                    id,
+                                    get editor() {
+                                        return editor;
+                                    },
+                                    mentionNode,
                                     interpolations: parse(mentionNode.attrs.id),
                                 },
                                 target,
