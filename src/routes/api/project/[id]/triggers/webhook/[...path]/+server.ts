@@ -51,6 +51,9 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
                         if ((path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod) {
                             for await (const step of executeTrigger({node: webhook, signal: controller.signal, context, secrets, request, serverActions, serverTriggers})) {
                                 if (controller.signal.aborted) return;
+                                if (step.pluginId === 'webhook:header' && valid(step.config, {type: 'object', required: ['headers'], properties: {headers: {}}})) {
+                                    console.log('merge headers', step.config.headers);
+                                }
                                 if (step.pluginId === 'webhook:response' && valid(step.config, {type: 'object', required: ['body'], properties: {body: {}}})) {
                                     stream.enqueue(step.config.body);
                                 }

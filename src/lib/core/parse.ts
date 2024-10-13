@@ -131,7 +131,15 @@ export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema:
             }
             return value;
         case 'object': {
-            return Object.keys(schema.properties ?? {}).reduce((obj, key) => {
+            if (schema.properties === undefined) {
+                if (typeof schema.additionalProperties === 'object') {
+                    return Object.keys(value).reduce((obj, key) => {
+                        return {...obj, [key]: resolve(value[key], schema.additionalProperties as JsonSchema, variables)};
+                    }, {} as InferJsonSchema<T>);
+                }
+                return value;
+            }
+            return Object.keys(schema.properties).reduce((obj, key) => {
                 return {...obj, [key]: resolve(value[key], schema.properties![key], variables)};
             }, {} as InferJsonSchema<T>);
         }
