@@ -19,10 +19,22 @@
         node = nodes.find(n => n.selected);
     });
 
-    const sort = ([idA]: [PluginId, Plugin], [idB]: [PluginId, Plugin]) => {
-        return extractPluginNamespace(idA).localeCompare(extractPluginNamespace(idB));
-    };
+    const sort = ([a]: [PluginId, Plugin], [b]: [PluginId, Plugin]) => {
+        const nameA = extractPluginName(a);
+        const nameB = extractPluginName(b);
+        const namespaceA = extractPluginNamespace(a);
+        const namespaceB = extractPluginNamespace(b);
 
+        const compare = namespaceA.localeCompare(namespaceB);
+        if (compare === 0) return nameA.length - nameB.length;
+        if (namespaceA === 'cron') return -1;
+        if (namespaceB === 'cron') return 1;
+        if (namespaceA === 'http') return -1;
+        if (namespaceB === 'http') return 1;
+        if (namespaceA === 'webhook') return -1;
+        if (namespaceB === 'webhook') return 1;
+        return compare;
+    };
     const filterPlugins = ([id, plugin]: [PluginId, Plugin]) => {
         if (filter.includes('type:action') && plugin.type !== 'action') return false;
         if (filter.includes('type:trigger') && plugin.type !== 'trigger') return false;
