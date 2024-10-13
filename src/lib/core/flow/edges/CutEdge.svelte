@@ -15,9 +15,10 @@
 <EdgeLabelRenderer>
     <div class="nopan nodrag" style:transform="translate(-50%, -50%) translate({labelX}px,{labelY}px)">
         <button class="custom" onclick={onEdgeClick} aria-label="cut connection">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="8.53553" y="0.0502526" width="2" height="12" transform="rotate(45 8.53553 0.0502526)" fill="currentColor" />
-                <rect x="0.0502527" y="1.46447" width="2" height="12" transform="rotate(-45 0.0502527 1.46447)" fill="currentColor" />
+            <svg width="18" height="18" viewBox="0 0 18 18">
+                <circle cx="9" cy="9" r="7" fill="#2d2d2d" stroke="#aaaaaa" stroke-width="2" />
+                <rect x="5.96942" y="7.18176" width="1.71429" height="6.85714" rx="0.857143" transform="rotate(-45 5.96942 7.18176)" fill="#aaaaaa" />
+                <rect x="7.1817" y="12.0304" width="1.71429" height="6.85714" rx="0.857143" transform="rotate(-135 7.1817 12.0304)" fill="#aaaaaa" />
             </svg>
         </button>
     </div>
@@ -32,26 +33,19 @@
 
     button {
         display: flex;
-        width: 1.25rem;
-        height: 1.25rem;
-        align-items: center;
         justify-content: center;
 
         color: var(--color-fg);
         cursor: pointer;
-        border: 0.1rem solid var(--flow-color-edge);
-        font-size: 0.8rem;
-        border-radius: 50%;
-        background-color: var(--color-bg);
+        background-color: transparent;
 
-        transition: box-shadow linear 0.1s;
+        transition: transform 0.15s ease;
 
         &:hover {
-            box-shadow: 0 0 0.2rem 0.1rem #ddd;
+            transform: scale(1.1);
         }
-
         &:active {
-            box-shadow: 0 0 0.3rem 0.1rem #ddd;
+            transform: scale(0.95);
         }
     }
 </style>
