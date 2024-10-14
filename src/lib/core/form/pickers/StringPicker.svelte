@@ -203,6 +203,8 @@
                                 },
                             };
                         },
+                        allowSpaces: true,
+                        allowedPrefixes: [' ', '"'],
                     },
                     renderHTML({node: mentionNode}) {
                         const target = document.createElement('span');
@@ -265,8 +267,13 @@
 
     $effect(() => {
         if (editor && value !== serialize(editor.getJSON() as DocEditorNode)) {
+            editor.commands.setContent({type: 'doc'}); // make sure to unmount everything
             editor.commands.setContent(deserialize(value)); // prevent losing the cursor position
         }
+    });
+
+    onMount(() => {
+        console.log('onMount');
     });
 
     onDestroy(() => {
@@ -274,6 +281,7 @@
             unmount(component);
         }
         editor?.destroy();
+        console.log('onDestroy');
     });
 </script>
 
