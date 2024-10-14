@@ -27,8 +27,8 @@ create table public.logs (
     --
     out text,
     index int4 not null,
-    config jsonb not null,
-    results jsonb not null,
+    config jsonb,
+    results jsonb,
     --
     created_at timestamp with time zone not null default now(),
     --
