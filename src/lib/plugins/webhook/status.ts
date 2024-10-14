@@ -6,18 +6,16 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
-    required: ['body', 'status', 'headers'] as const,
+    required: ['status'] as const,
     properties: {
-        body: {type: 'string', editor: {textarea: true}},
         status: {type: 'number'},
-        headers: {type: 'object', additionalProperties: {type: 'string'}},
     },
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({
     icon,
     color: '#c93762',
-    description: 'send a response back to the webhook',
+    description: 'sets the status code of the webhook response',
     //
     form({config}) {
         return fill(configSchema, config);
@@ -27,14 +25,10 @@ export default action<typeof configSchema>({
         const statusCodeMessage = statusCodeMessages[statusCode.toString()];
 
         return {
-            valid: statusCodeMessage !== undefined || constant(statusCode) === false,
+            valid: !constant(statusCode) || statusCodeMessage !== undefined,
             title: statusCodeMessage ? `${statusCode} ${statusCodeMessage}` : undefined,
             config: {
-                value: {
-                    body: form?.body ?? config?.body ?? '{"success": true}',
-                    status: statusCode,
-                    headers: form?.headers ?? config?.headers ?? {'Content-Type': 'application/json'},
-                },
+                value: {status: statusCode},
                 schema: configSchema,
             },
             inputs: ['in'],

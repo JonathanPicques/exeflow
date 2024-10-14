@@ -8,9 +8,46 @@ import {GraphContext, importPlugins} from '$lib/core/core';
 import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
 import type {Db} from '$lib/supabase/db.server';
 import type {Graph} from '$lib/core/core';
+import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
+import type {JsonSchema} from '$lib/schema/schema';
 import type {TriggerNode} from '$lib/core/graph/nodes';
 
-import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
+const chunkSchema = {
+    type: 'object',
+    required: ['body'],
+    properties: {
+        body: {},
+    },
+} satisfies JsonSchema;
+const statusSchema = {
+    type: 'object',
+    required: ['status'],
+    properties: {
+        status: {type: 'number'},
+    },
+} satisfies JsonSchema;
+const headerSchema = {
+    type: 'object',
+    required: ['headers'],
+    properties: {
+        headers: {
+            type: 'object',
+            additionalProperties: {type: 'string'},
+        },
+    },
+} satisfies JsonSchema;
+const responseSchema = {
+    type: 'object',
+    required: ['body', 'status', 'headers'],
+    properties: {
+        body: {},
+        status: {type: 'number'},
+        headers: {
+            type: 'object',
+            additionalProperties: {type: 'string'},
+        },
+    },
+} satisfies JsonSchema;
 
 const execute = async (db: Db, id: string, request: Request, path: string, method: string) => {
     const project = await db
@@ -21,73 +58,125 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
         .executeTakeFirst();
     if (!project) throw error(404);
 
+    let index = 0;
     const execId = randomUUID();
     const {actions, triggers} = await importPlugins();
     const {serverActions, serverTriggers} = await importServerPlugins();
 
+    let body;
+    let status = 200;
+    let headers: Record<string, string> = {};
     const controller = new AbortController();
-    const responseStream = new ReadableStream({
-        async start(stream) {
-            try {
-                let index = 0;
 
-                const {nodes, edges} = project.content as Graph;
-                const webhooks = nodes.filter(n => n.type === 'trigger' && n.data.id === 'webhook:webhook') as TriggerNode[];
+    const {nodes, edges} = project.content as Graph;
+    const webhooks = nodes.filter(n => n.type === 'trigger' && n.data.id === 'webhook:webhook') as TriggerNode[];
+    const suitableWebhook = webhooks.find(({data}) => {
+        const webhookPath = data.data.config.value.path as string;
+        const webhookMethod = data.data.config.value.method as string;
 
-                if (webhooks) {
-                    const context = new GraphContext({nodes: writable(nodes), edges: writable(edges), actions, triggers});
-                    const secrets = (await db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', project.owner_id).execute()).reduce(
-                        (acc, {key, value}) => ({
-                            ...acc,
-                            [key]: value,
-                        }),
-                        {},
-                    );
+        return (path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod;
+    });
+    if (!suitableWebhook) return error(404, `no handler found for ${path}`);
 
-                    for (const webhook of webhooks) {
-                        const webhookPath = webhook.data.data.config.value.path as string;
-                        const webhookMethod = webhook.data.data.config.value.method as string;
+    const context = new GraphContext({nodes: writable(nodes), edges: writable(edges), actions, triggers});
+    const secrets = (await db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', project.owner_id).execute()).reduce(
+        (acc, {key, value}) => ({
+            ...acc,
+            [key]: value,
+        }),
+        {},
+    );
+    const webhookGenerator = executeTrigger({node: suitableWebhook, signal: controller.signal, context, secrets, request, serverActions, serverTriggers});
 
-                        if ((path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod) {
-                            for await (const step of executeTrigger({node: webhook, signal: controller.signal, context, secrets, request, serverActions, serverTriggers})) {
-                                if (controller.signal.aborted) return;
-                                if (step.pluginId === 'webhook:header' && valid(step.config, {type: 'object', required: ['headers'], properties: {headers: {}}})) {
-                                    console.log('merge headers', step.config.headers);
-                                }
-                                if (step.pluginId === 'webhook:response' && valid(step.config, {type: 'object', required: ['body'], properties: {body: {}}})) {
-                                    stream.enqueue(step.config.body);
-                                }
-                                insertLog(db, {
-                                    execId,
-                                    nodeId: step.nodeId,
-                                    pluginId: step.pluginId,
-                                    projectId: id,
-                                    //
-                                    index: index++,
-                                    config: step.config,
-                                    results: step.results,
-                                });
+    let iterator = webhookGenerator.next();
+    while (!(await iterator).done) {
+        const step = (await iterator).value;
+        iterator = webhookGenerator.next();
+
+        insertLog(db, {
+            execId,
+            nodeId: step.nodeId,
+            pluginId: step.pluginId,
+            projectId: id,
+            //
+            index: index++,
+            config: step.config,
+            results: step.results,
+        });
+
+        if (step.pluginId === 'webhook:chunk') {
+            const responseStream = new ReadableStream({
+                async start(stream) {
+                    try {
+                        if (valid(step.config, chunkSchema)) {
+                            stream.enqueue(step.config.body);
+                        }
+
+                        while (!(await iterator).done) {
+                            const step = (await iterator).value;
+                            iterator = webhookGenerator.next();
+
+                            insertLog(db, {
+                                execId,
+                                nodeId: step.nodeId,
+                                pluginId: step.pluginId,
+                                projectId: id,
+                                //
+                                index: index++,
+                                config: step.config,
+                                results: step.results,
+                            });
+
+                            if (step.pluginId === 'webhook:chunk' && valid(step.config, chunkSchema)) {
+                                stream.enqueue(step.config.body);
+                            }
+                            if (step.pluginId === 'webhook:status' && valid(step.config, statusSchema)) {
+                                console.warn('status already sent');
+                            }
+                            if (step.pluginId === 'webhook:headers' && valid(step.config, headerSchema)) {
+                                console.warn('headers already sent');
+                            }
+                            if (step.pluginId === 'webhook:response' && valid(step.config, responseSchema)) {
+                                console.warn('use chunk instead of response');
+                                stream.enqueue(step.config.body);
+                                break;
                             }
                         }
+                    } catch (e) {
+                        stream.error(e);
+                        console.error(e);
+                    } finally {
+                        stream.close();
                     }
-                }
-            } catch (e) {
-                stream.error(e);
-                console.error(e);
-            } finally {
-                stream.close();
-            }
-        },
-        cancel() {
+                },
+                cancel() {
+                    controller.abort();
+                },
+            });
+            return new Response(responseStream, {
+                status,
+                headers: {
+                    ...headers,
+                    'content-type': 'text/event-stream',
+                },
+            });
+        }
+        if (step.pluginId === 'webhook:status' && valid(step.config, statusSchema)) {
+            status = step.config.status;
+        }
+        if (step.pluginId === 'webhook:headers' && valid(step.config, headerSchema)) {
+            headers = Object.assign({}, headers, step.config.headers);
+        }
+        if (step.pluginId === 'webhook:response' && valid(step.config, responseSchema)) {
+            body = step.config.body;
+            status = step.config.status;
+            headers = Object.assign({}, headers, step.config.headers);
             controller.abort();
-        },
-    });
+            return new Response(body, {status, headers});
+        }
+    }
 
-    return new Response(responseStream, {
-        headers: {
-            'content-type': 'text/event-stream',
-        },
-    });
+    return error(500);
 };
 
 export const GET = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'GET');

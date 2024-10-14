@@ -98,7 +98,7 @@ export const executeTrigger = async function* ({
 export const importServerPlugins = async () => {
     const serverActions: Record<ActionId, ServerAction<JsonSchema>> = {};
     const serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>> = {};
-    const serverPluginModules = import.meta.glob('$lib/plugins/*/*.server.ts', {eager: true, import: 'default'});
+    const serverPluginModules = import.meta.glob(['$lib/plugins/*/*.server.ts', '!$lib/plugins/*/+*.server.ts'], {eager: true, import: 'default'});
 
     for (const [path, module] of Object.entries(serverPluginModules)) {
         const id = pluginId(path);

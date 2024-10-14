@@ -5,30 +5,27 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
-    required: ['headers'] as const,
+    required: ['body'] as const,
     properties: {
-        headers: {type: 'object', additionalProperties: {type: 'string'}},
+        body: {type: 'string', editor: {textarea: true}},
     },
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({
     icon,
     color: '#c93762',
-    description: 'set headers for the next response',
+    description: 'send a chunk back to the webhook',
     //
     form({config}) {
         return fill(configSchema, config);
     },
-    data({form, config, constant}) {
-        const headers = form?.headers ?? config?.headers ?? {'Content-Type': 'application/json'};
-
+    data({form, config}) {
         return {
             valid: true,
-            title: Object.keys(headers)
-                .filter(header => constant(header))
-                .join(', '),
             config: {
-                value: {headers},
+                value: {
+                    body: form?.body ?? config?.body ?? '',
+                },
                 schema: configSchema,
             },
             inputs: ['in'],

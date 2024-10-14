@@ -222,7 +222,7 @@ export class GraphContext {
 export const importPlugins = async () => {
     const actions: Record<ActionId, Action<JsonSchema>> = {};
     const triggers: Record<TriggerId, Trigger<JsonSchema>> = {};
-    const pluginModules = import.meta.glob(['$lib/plugins/*/*.ts', '!$lib/plugins/*/*.server.ts'], {eager: true, import: 'default'});
+    const pluginModules = import.meta.glob(['$lib/plugins/*/*.ts', '!$lib/plugins/*/+*.ts', '!$lib/plugins/*/*.server.ts'], {eager: true, import: 'default'});
 
     for (const [path, module] of Object.entries(pluginModules)) {
         const id = pluginId(path);
