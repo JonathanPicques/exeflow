@@ -15,9 +15,10 @@
     import Add from '$lib/core/widgets/icons/Add.svelte';
     import Key from '$lib/core/widgets/icons/Key.svelte';
     import Save from '$lib/core/widgets/icons/Save.svelte';
-    import Close from '$lib/core/widgets/icons/Close.svelte';
+    import Home from '$lib/core/widgets/icons/Home.svelte';
     import Console from '$lib/core/widgets/icons/Console.svelte';
     import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
+    import Duplicate from '$lib/core/widgets/icons/Duplicate.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
 
     import {valid} from '$lib/schema/validate';
@@ -73,18 +74,19 @@
 
     const prettify = () => flow.prettify();
     const fitToView = () => flow.fitToView();
+    const duplicate = () => importSelection(exportSelection($nodes.filter(n => n.selected).map(n => n.id)));
 
     const showLogs = () => projectContext.setPane({type: 'logs'});
     const showNodes = () => projectContext.setPane({type: 'nodes'});
     const showSecrets = () => projectContext.setPane({type: 'secrets'});
 
-    const exportToClipboard = () => {
+    const exportToClipboard = async () => {
         const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
         if (valid(data, graphSchema)) {
             navigator.clipboard.writeText(JSON.stringify(data, null, 2));
         }
     };
-    const importFromClipboard = () => {
+    const importFromClipboard = async () => {
         navigator.clipboard.readText().then(text => {
             const data = JSON.parse(text);
             if (valid(data, graphSchema)) {
@@ -107,33 +109,44 @@
 </svelte:head>
 
 <SvelteFlowProvider>
-    <nav>
-        <a href="/home" role="button" class="icon button" aria-label="Close project">
-            <Close size="2rem" />
-        </a>
-        <input type="text" aria-label="Project name" bind:value={projectName} />
-        <div style:flex-grow="1"></div>
-        <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
-            <Save />
-            {#if !saving && saveChecksum !== currentChecksum}
-                <span class="save-indicator"></span>
-            {/if}
-        </button>
-        <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
-        <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
-        <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+2'}>
-            <Prettify />
-        </button>
-        <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
-            <FitToView />
-        </button>
-        <ProfileLink />
-        <GithubLink />
-    </nav>
-
     <main>
         <SplitPane type="horizontal" min="200px" max="-100px" pos="70%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
             <section slot="a" class="flow">
+                <nav>
+                    <div class="island">
+                        <a href="/home" role="button" class="icon button" aria-label="Back to home">
+                            <Home />
+                        </a>
+                    </div>
+                    <div class="island">
+                        <input type="text" aria-label="Project name" bind:value={projectName} />
+                    </div>
+                    <div class="island">
+                        <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
+                            <Save />
+                            {#if !saving && saveChecksum !== currentChecksum}
+                                <span class="save-indicator"></span>
+                            {/if}
+                        </button>
+                        <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
+                        <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
+                        <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+2'}>
+                            <Prettify />
+                        </button>
+                        <button class="icon" title="Duplicate" onclick={duplicate} disabled={!$nodes.some(n => n.selected)} use:shortcut={['ctrl+d', 'command+d']}>
+                            <Duplicate />
+                        </button>
+                        <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
+                            <FitToView />
+                        </button>
+                    </div>
+                    <div style:flex-grow="1"></div>
+                    <div class="island">
+                        <ProfileLink />
+                        <GithubLink />
+                    </div>
+                </nav>
+
                 <Flow onNodeClick={showNodes} bind:this={flow} />
             </section>
             <section slot="b" class="sidebar">
@@ -167,20 +180,6 @@
 </SvelteFlowProvider>
 
 <style>
-    nav {
-        gap: 1rem;
-        height: 4rem;
-        display: flex;
-        padding: 1rem;
-        flex-shrink: 0;
-        align-items: center;
-        border-bottom: 0.15rem solid var(--color-bg-1);
-
-        & input:not(:focus, :hover, :active) {
-            background-color: transparent;
-        }
-    }
-
     main {
         display: flex;
         overflow: hidden;
@@ -188,23 +187,36 @@
         flex-direction: column;
     }
 
-    .tabs {
-        gap: 1rem;
-        padding: 1rem;
-        display: flex;
-        padding-bottom: unset;
-        flex-direction: row;
-        justify-content: start;
-        overflow-x: auto;
-        flex-shrink: 0;
+    .flow {
+        position: relative;
 
-        & button {
-            font-size: 0.9rem;
-        }
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
 
-        & button.active {
-            color: var(--color-bg);
-            background-color: var(--color-fg);
+            gap: 0.5rem;
+            display: flex;
+            padding: 1rem;
+            overflow: auto;
+
+            & .island {
+                display: flex;
+
+                gap: 1rem;
+                border: 0.15rem solid var(--color-bg-1);
+                box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.25);
+                border-radius: 10rem;
+                padding-block: 0.5rem;
+                padding-inline: 1.25rem;
+                background-color: var(--color-bg);
+
+                input {
+                    all: unset;
+                }
+            }
         }
     }
 
@@ -212,11 +224,31 @@
         display: flex;
         flex-direction: column;
         border-left: 0.15rem var(--color-bg-1) solid;
+
+        .tabs {
+            gap: 1rem;
+            padding: 1rem;
+            display: flex;
+            padding-bottom: unset;
+            flex-direction: row;
+            justify-content: start;
+            overflow-x: auto;
+            flex-shrink: 0;
+
+            & button {
+                font-size: 0.9rem;
+            }
+
+            & button.active {
+                color: var(--color-bg);
+                background-color: var(--color-fg);
+            }
+        }
     }
 
     .save-indicator {
-        top: -1px;
-        right: -1px;
+        top: 0;
+        right: 0;
         width: 8px;
         height: 8px;
         position: absolute;

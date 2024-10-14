@@ -3,5 +3,5 @@
 </script>
 
 <a href="/auth/profile" class="icon button" title="Your profile">
-    <Avatar size="2rem" />
+    <Avatar />
 </a>

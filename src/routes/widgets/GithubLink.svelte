@@ -3,5 +3,5 @@
 </script>
 
 <a href="https://github.com/JonathanPicques/exeflow" class="icon button" title="Exeflow Github repo" target="_blank">
-    <Github size="2rem" />
+    <Github />
 </a>

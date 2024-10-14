@@ -176,6 +176,7 @@ button:not(.custom),
 
     &.icon {
         color: var(--color-fg-1);
+        border: unset;
         padding: 0.25em;
         transform: scale(1);
         background-color: unset;
