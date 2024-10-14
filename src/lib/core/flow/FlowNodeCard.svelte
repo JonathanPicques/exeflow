@@ -1,6 +1,6 @@
 <script lang="ts">
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
     import type {Plugin, PluginId} from '$lib/core/core';
-    import {extractPluginName, extractPluginNamespace, humanPluginName} from '$lib/core/parse';
 
     let props: {id: string; plugin: Plugin} = $props();
 
@@ -31,29 +31,17 @@
 </div>
 
 <style>
-    .plugin::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0.1;
-        border-radius: calc(var(--flow-border-radius-node) - 0.15rem);
-        background-image: linear-gradient(to bottom, transparent, var(--x-color-border));
-    }
     .plugin {
-        position: relative;
         gap: 0.5rem;
         display: flex;
         padding: 1rem;
+        position: relative;
         flex-direction: column;
 
         color: var(--color-fg);
         border: 0.15rem solid transparent;
         cursor: grab;
         border-radius: var(--flow-border-radius-node);
-
         background-color: var(--color-bg-1);
 
         transition: 0.3s;
@@ -80,6 +68,19 @@
         & .description {
             color: var(--color-fg-1);
             font-size: 0.9rem;
+        }
+
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            content: '';
+            opacity: 0.1;
+            border-radius: calc(var(--flow-border-radius-node) - 0.15rem);
+            background-image: linear-gradient(to bottom, transparent, var(--x-color-border));
         }
     }
 </style>

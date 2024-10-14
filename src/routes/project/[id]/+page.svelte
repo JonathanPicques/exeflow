@@ -6,11 +6,11 @@
     import type {MountedComponent} from 'svelte';
 
     import Flow from '$lib/core/flow/Flow.svelte';
-    import Logs from './Logs.svelte';
-    import Secrets from './Secrets.svelte';
-    import Inspector from './Inspector.svelte';
     import GithubLink from '../../widgets/GithubLink.svelte';
     import ProfileLink from '../../widgets/ProfileLink.svelte';
+    import InspectorLogs from './inspectors/Logs.svelte';
+    import InspectorNodes from './inspectors/Nodes.svelte';
+    import InspectorSecrets from './inspectors/Secrets.svelte';
 
     import Add from '$lib/core/widgets/icons/Add.svelte';
     import Key from '$lib/core/widgets/icons/Key.svelte';
@@ -153,13 +153,13 @@
                 </div>
 
                 {#if projectContext.pane.type === 'logs'}
-                    <Logs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
+                    <InspectorLogs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
                 {/if}
                 {#if projectContext.pane.type === 'nodes'}
-                    <Inspector />
+                    <InspectorNodes />
                 {/if}
                 {#if projectContext.pane.type === 'secrets'}
-                    <Secrets />
+                    <InspectorSecrets />
                 {/if}
             </section>
         </SplitPane>

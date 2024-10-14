@@ -1,7 +1,7 @@
 <script lang="ts">
-    import PluginNodeCard from './PluginNodeCard.svelte';
-    import InspectorEditor from './InspectorEditor.svelte';
-    import InspectorTrigger from './InspectorTrigger.svelte';
+    import NodesEditor from './NodesEditor.svelte';
+    import NodesTrigger from './NodesTrigger.svelte';
+    import FlowNodeCard from '$lib/core/flow/FlowNodeCard.svelte';
 
     import {isTriggerNode} from '$lib/core/graph/nodes';
     import {getGraphContext} from '$lib/core/core';
@@ -15,8 +15,8 @@
     let plugin = $derived(node && getPlugin(node));
     let filter = $state('');
 
-    nodes.subscribe(nodes => {
-        node = nodes.find(n => n.selected);
+    $effect(() => {
+        node = $nodes.find(n => n.selected);
     });
 
     const sort = ([a]: [PluginId, Plugin], [b]: [PluginId, Plugin]) => {
@@ -56,24 +56,22 @@
 <div class="main">
     {#if node && plugin}
         <h1>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
             <img src={plugin.icon} alt="" width="32px" height="32px" />
             <span>{humanPluginName(extractPluginName(node.data.id))}</span>
         </h1>
 
         <div class="list">
             {#if isTriggerNode(node)}
-                <InspectorTrigger {node} />
+                <NodesTrigger {node} />
             {/if}
-            <InspectorEditor {node} />
+            <NodesEditor {node} />
         </div>
     {:else}
         <input type="search" placeholder="Filter nodes..." bind:value={filter} />
 
         <div class="list" role="list">
             {#each [...Object.entries(triggers), ...Object.entries(actions)].filter(filterPlugins).toSorted(sort) as [id, plugin]}
-                <PluginNodeCard {id} {plugin} />
+                <FlowNodeCard {id} {plugin} />
             {/each}
         </div>
     {/if}

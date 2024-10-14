@@ -1,7 +1,7 @@
 <script lang="ts">
     import moment from 'moment';
 
-    import {getLogsGroups} from '../../api/project/logs';
+    import {getLogsGroups} from '../../../api/project/logs';
     import type {Action} from '$lib/core/plugins/action';
     import type {Trigger} from '$lib/core/plugins/trigger';
     import type {JsonSchema} from '$lib/schema/schema';
