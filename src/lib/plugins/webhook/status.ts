@@ -32,7 +32,7 @@ export default action<typeof configSchema>({
                 schema: configSchema,
             },
             inputs: ['in'],
-            outputs: [],
+            outputs: ['out'],
             results: {},
         };
     },
