@@ -18,6 +18,7 @@ create table public.projects (
     constraint public_projects_pkey primary key (id),
     constraint public_projects_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade
 ) tablespace pg_default;
+alter table public.projects enable row level security;
 
 create table public.logs (
     exec_id uuid not null,
@@ -34,6 +35,7 @@ create table public.logs (
     --
     constraint public_logs_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
 ) tablespace pg_default;
+alter table public.logs enable row level security;
 
 create table public.secrets (
     key text not null,
@@ -48,6 +50,7 @@ create table public.secrets (
     --
     constraint public_secrets_key_not_empty_check check (trim(key) <> '')
 ) tablespace pg_default;
+alter table public.secrets enable row level security;
 
 create table public.triggers (
     node_id text not null,
@@ -62,3 +65,4 @@ create table public.triggers (
     constraint public_triggers_pkey primary key (node_id, plugin_id, project_id),
     constraint public_triggers_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
 ) tablespace pg_default;
+alter table public.triggers enable row level security;
