@@ -1,15 +1,22 @@
 import icon from './+icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
-import {fill} from '$lib/schema/data';
 
 const configSchema = {
     type: 'object',
-    required: ['token', 'server', 'channel'] as const,
+    required: ['token', 'channel'] as const,
     properties: {
-        token: {type: 'string', description: 'guide to create a discord bot token: https://discord.com/developers/docs/quick-start/getting-started'},
-        server: {type: 'string', description: 'will be sent on this server'},
-        channel: {type: 'string', description: 'will be sent on this channel'},
+        token: {
+            type: 'string',
+            editor: {suggestions: ['${secret:DISCORD_TOKEN}']},
+            description: 'guide to create a discord bot and get the token: https://discord.com/developers/docs/quick-start/getting-started',
+        },
+        channel: {
+            type: 'string',
+            editor: {suggestions: ['${secret:DISCORD_CHANNEL}']},
+            description: `enable developer mode, and right click a channel to copy the channel id`,
+        },
     },
 } satisfies JsonSchema;
 
@@ -24,12 +31,10 @@ export default trigger<typeof configSchema>({
     data({form, config}) {
         return {
             valid: true,
-            title: 'receive message',
             config: {
                 value: {
-                    token: form?.token ?? config?.token ?? '',
-                    server: form?.server ?? config?.server ?? '',
-                    channel: form?.channel ?? config?.channel ?? '',
+                    token: form?.token ?? config?.token ?? zero(configSchema.properties.token),
+                    channel: form?.channel ?? config?.channel ?? zero(configSchema.properties.channel),
                 },
                 schema: configSchema,
             },
