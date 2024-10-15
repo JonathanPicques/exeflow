@@ -16,7 +16,9 @@
     import Key from '$lib/core/widgets/icons/Key.svelte';
     import Save from '$lib/core/widgets/icons/Save.svelte';
     import Home from '$lib/core/widgets/icons/Home.svelte';
+    import Close from '$lib/core/widgets/icons/Close.svelte';
     import Console from '$lib/core/widgets/icons/Console.svelte';
+    import Sidebar from '$lib/core/widgets/icons/Sidebar.svelte';
     import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
     import Duplicate from '$lib/core/widgets/icons/Duplicate.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
@@ -41,10 +43,13 @@
     });
 
     let flow: MountedComponent<typeof Flow>;
-    let saving = $state(false);
-    let projectName = $state(data.project.name);
+
     let saveChecksum = $state(checksum());
     let currentChecksum = $derived.by(() => checksum($nodes, $edges));
+
+    let saving = $state(false);
+    let projectName = $state(data.project.name);
+    let sidebarHidden = $state(false); // TODO: move in projectContext
 
     const save = async () => {
         const {nodes, edges} = exportGraph();
@@ -80,6 +85,9 @@
     const showNodes = () => projectContext.setPane({type: 'nodes'});
     const showSecrets = () => projectContext.setPane({type: 'secrets'});
 
+    const hideSidebar = () => (sidebarHidden = true);
+    const showSidebar = () => (sidebarHidden = false);
+
     const exportToClipboard = async () => {
         const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
         if (valid(data, graphSchema)) {
@@ -110,7 +118,7 @@
 
 <SvelteFlowProvider>
     <main>
-        <SplitPane type="horizontal" min="200px" max="-100px" pos="70%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
+        <SplitPane type="horizontal" pos={sidebarHidden ? '100%' : '70%'} priority="min" --color="var(--color-bg-1)" --thickness="2rem">
             <section slot="a" class="flow">
                 <nav>
                     <div class="island">
@@ -145,12 +153,24 @@
                         <ProfileLink />
                         <GithubLink />
                     </div>
+                    {#if sidebarHidden}
+                        <div class="island">
+                            <button class="icon" title="Show sidebar" onclick={showSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
+                                <Sidebar />
+                            </button>
+                        </div>
+                    {/if}
                 </nav>
 
                 <Flow onNodeClick={showNodes} bind:this={flow} />
             </section>
             <section slot="b" class="sidebar">
                 <div class="tabs">
+                    {#if !sidebarHidden}
+                        <button class="icon" title="Close sidebar" onclick={hideSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
+                            <Close />
+                        </button>
+                    {/if}
                     <button class:active={projectContext.pane.type === 'nodes'} onclick={showNodes}>
                         <Add />
                         <span>Nodes</span>
@@ -227,13 +247,14 @@
 
         .tabs {
             gap: 1rem;
-            padding: 1rem;
             display: flex;
-            padding-bottom: unset;
-            flex-direction: row;
-            justify-content: start;
+            padding: 1rem;
             overflow-x: auto;
+            overflow-y: hidden;
             flex-shrink: 0;
+            flex-direction: row;
+            padding-bottom: unset;
+            justify-content: start;
 
             & button {
                 font-size: 0.9rem;
