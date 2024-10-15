@@ -66,7 +66,6 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
     let body;
     let status = 200;
     let headers: Record<string, string> = {};
-    const controller = new AbortController();
 
     const {nodes, edges} = project.content as Graph;
     const webhooks = nodes.filter(n => n.type === 'trigger' && n.data.id === 'webhook:webhook') as TriggerNode[];
@@ -86,6 +85,7 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
         }),
         {},
     );
+    const controller = new AbortController();
     const webhookGenerator = executeTrigger({node: suitableWebhook, signal: controller.signal, context, secrets, request, serverActions, serverTriggers});
 
     let iterator = webhookGenerator.next();
@@ -139,6 +139,7 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
                             if (step.pluginId === 'webhook:response' && valid(step.config, responseSchema)) {
                                 console.warn('use chunk instead of response');
                                 stream.enqueue(step.config.body);
+                                controller.abort();
                                 break;
                             }
                         }

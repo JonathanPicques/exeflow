@@ -272,16 +272,11 @@
         }
     });
 
-    onMount(() => {
-        console.log('onMount');
-    });
-
     onDestroy(() => {
         for (const component of components.values()) {
             unmount(component);
         }
         editor?.destroy();
-        console.log('onDestroy');
     });
 </script>
 

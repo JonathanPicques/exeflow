@@ -46,13 +46,14 @@ export const executeAction = async function* (
 
     const config = resolve(node.data.data.config.value, node.data.data.config.schema, {nodes: data, secrets});
 
-    yield* serverAction.exec({
-        next: async function* ({output: out, results}) {
-            data[node.id] = results;
-            yield {nodeId: node.id, pluginId: node.data.id, config, results};
+    yield {nodeId: node.id, pluginId: node.data.id, config, results: data};
 
-            const nextNode = context.getNextNode(node.id, out);
-            if (nextNode) {
+    yield* serverAction.exec({
+        next: async function* ({output, results}) {
+            const nextNode = context.getNextNode(node.id, output);
+
+            if (nextNode && !signal.aborted) {
+                data[node.id] = results;
                 yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
             }
         },
@@ -78,13 +79,14 @@ export const executeTrigger = async function* ({
     const data: ExecuteData = {};
     const config = resolve(node.data.data.config.value, node.data.data.config.schema, {nodes: data, secrets});
 
-    yield* serverTrigger.exec({
-        next: async function* ({output: out, results}) {
-            data[node.id] = results;
-            yield {nodeId: node.id, pluginId: node.data.id, config, results};
+    yield {nodeId: node.id, pluginId: node.data.id, config, results: data};
 
-            const nextNode = context.getNextNode(node.id, out);
-            if (nextNode) {
+    yield* serverTrigger.exec({
+        next: async function* ({output, results}) {
+            const nextNode = context.getNextNode(node.id, output);
+
+            if (nextNode && !signal.aborted) {
+                data[node.id] = results;
                 yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
             }
         },

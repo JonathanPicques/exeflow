@@ -12,7 +12,7 @@ export default serverAction<typeof action>({
                 const chat = new ChatOllama({baseUrl: url, model});
 
                 if (stream) {
-                    for await (const chunk of await chat.stream(input)) {
+                    for await (const chunk of await chat.stream(input, {signal})) {
                         yield* next({output: 'out', results: {result: chunk.content}});
                     }
                     return;
@@ -26,7 +26,7 @@ export default serverAction<typeof action>({
                 const chat = new ChatOpenAI({model, apiKey});
 
                 if (stream) {
-                    for await (const chunk of await chat.stream(input)) {
+                    for await (const chunk of await chat.stream(input, {signal})) {
                         yield* next({output: 'out', results: {result: chunk.content}});
                     }
                     return;
@@ -40,7 +40,7 @@ export default serverAction<typeof action>({
                 const chat = new ChatMistralAI({endpoint: url, model, apiKey});
 
                 if (stream) {
-                    for await (const chunk of await chat.stream(input)) {
+                    for await (const chunk of await chat.stream(input, {signal})) {
                         yield* next({output: 'out', results: {result: chunk.content}});
                     }
                     return;
