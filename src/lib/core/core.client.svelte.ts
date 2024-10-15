@@ -4,30 +4,30 @@ import {putSecret, deleteSecret} from '../../routes/api/secrets/secrets';
 import type {Secret} from '../../routes/api/secrets/secrets';
 import type {PluginNode} from './graph/nodes';
 
-type Pane = LogsPane | NodesPane | SecretsPane;
-type LogsPane = {type: 'logs'};
-type NodesPane = {type: 'nodes'};
-type SecretsPane = {type: 'secrets'};
+type Tab = LogsTab | NodesTab | SecretsTab;
+type LogsTab = {type: 'logs'};
+type NodesTab = {type: 'nodes'};
+type SecretsTab = {type: 'secrets'};
 
 interface Params {
-    pane: Pane;
+    tab: Tab;
     secrets: Secret[];
     sidebar: boolean;
 }
 
 export class ProjectContext {
-    public pane: Params['pane'] = $state({type: 'nodes'});
+    public tab: Params['tab'] = $state({type: 'nodes'});
     public secrets: Params['secrets'] = $state([]);
     public sidebar: Params['sidebar'] = $state(true);
 
-    public constructor({pane, secrets, sidebar}: Partial<Params>) {
-        if (pane !== undefined) this.pane = pane;
+    public constructor({tab, secrets, sidebar}: Partial<Params>) {
+        if (tab !== undefined) this.tab = tab;
         if (secrets !== undefined) this.secrets = secrets;
         if (sidebar !== undefined) this.sidebar = sidebar;
     }
 
-    public setPane = (pane: Pane) => {
-        this.pane = pane;
+    public setTab = (tab: Tab) => {
+        this.tab = tab;
     };
 
     public showSidebar = () => {

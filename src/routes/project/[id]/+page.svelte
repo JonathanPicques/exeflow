@@ -92,9 +92,9 @@
         importSelection(exportSelection($nodes.filter(n => n.selected).map(n => n.id)));
     };
 
-    const showLogs = () => projectContext.setPane({type: 'logs'});
-    const showNodes = () => projectContext.setPane({type: 'nodes'});
-    const showSecrets = () => projectContext.setPane({type: 'secrets'});
+    const showLogs = () => projectContext.setTab({type: 'logs'});
+    const showNodes = () => projectContext.setTab({type: 'nodes'});
+    const showSecrets = () => projectContext.setTab({type: 'secrets'});
 
     const exportToClipboard = async () => {
         const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
@@ -207,27 +207,27 @@
                             <Close />
                         </button>
                     {/if}
-                    <button class:active={projectContext.pane.type === 'nodes'} onclick={showNodes}>
+                    <button class:active={projectContext.tab.type === 'nodes'} onclick={showNodes}>
                         <Add />
                         <span>Nodes</span>
                     </button>
-                    <button class:active={projectContext.pane.type === 'logs'} onclick={showLogs}>
+                    <button class:active={projectContext.tab.type === 'logs'} onclick={showLogs}>
                         <Console />
                         <span>Logs</span>
                     </button>
-                    <button class:active={projectContext.pane.type === 'secrets'} onclick={showSecrets}>
+                    <button class:active={projectContext.tab.type === 'secrets'} onclick={showSecrets}>
                         <Key />
                         <span>Secrets</span>
                     </button>
                 </div>
 
-                {#if projectContext.pane.type === 'logs'}
+                {#if projectContext.tab.type === 'logs'}
                     <InspectorLogs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
                 {/if}
-                {#if projectContext.pane.type === 'nodes'}
+                {#if projectContext.tab.type === 'nodes'}
                     <InspectorNodes />
                 {/if}
-                {#if projectContext.pane.type === 'secrets'}
+                {#if projectContext.tab.type === 'secrets'}
                     <InspectorSecrets />
                 {/if}
             </section>
