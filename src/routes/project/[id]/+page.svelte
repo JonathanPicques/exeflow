@@ -29,11 +29,13 @@
     import {setProjectContext} from '$lib/core/core.client.svelte';
     import {graphSchema, setGraphContext} from '$lib/core/core';
 
+    type Length = `${number}%`;
+
     let {data} = $props();
     const nodes = writable(data.project.content.nodes);
     const edges = writable(data.project.content.edges);
 
-    const projectContext = setProjectContext({secrets: data.secrets});
+    const projectContext = setProjectContext({secrets: data.secrets, sidebar: !data.mobileHint});
     const {checksum, exportGraph, exportSelection, importSelection} = setGraphContext({
         nodes,
         edges,
@@ -49,6 +51,9 @@
 
     let saving = $state(false);
     let projectName = $state(data.project.name);
+
+    let smallWidth = $state(data.mobileHint); // (width <= 932px)
+    let targetSidebarPos: Length = $derived(projectContext.sidebar ? (smallWidth ? '0%' : '65%') : '100%');
 
     const save = async () => {
         const {nodes, edges} = exportGraph();
@@ -106,6 +111,19 @@
             flow.setViewport(viewport);
         }
     });
+
+    onMount(() => {
+        const media = matchMedia(`(width <= 932px)`);
+        const listener = ({matches}: {matches: boolean}) => {
+            smallWidth = matches;
+        };
+
+        listener(media);
+        media.addEventListener('change', listener);
+        return () => {
+            media.removeEventListener('change', listener);
+        };
+    });
 </script>
 
 <svelte:head>
@@ -114,15 +132,15 @@
 
 <SvelteFlowProvider>
     <main>
-        <SplitPane type="horizontal" pos={projectContext.sidebar ? '70%' : '100%'} priority="min" --color="var(--color-bg-1)" --thickness="2rem">
+        <SplitPane type="horizontal" pos={targetSidebarPos} priority="min" disabled={smallWidth} --color="var(--color-bg-1)" --thickness="2rem">
             <section slot="a" class="flow">
                 <nav>
-                    <div class="island">
+                    <div class="island collapse">
                         <a href="/home" role="button" class="icon button" aria-label="Back to home">
                             <Home />
                         </a>
                     </div>
-                    <div class="island">
+                    <div class="island collapse">
                         <input type="text" aria-label="Project name" bind:value={projectName} />
                     </div>
                     <div class="island">
@@ -145,7 +163,7 @@
                         </button>
                     </div>
                     <div style:flex-grow="1"></div>
-                    <div class="island">
+                    <div class="island collapse">
                         <ProfileLink />
                         <GithubLink />
                     </div>
@@ -233,13 +251,22 @@
                     all: unset;
                 }
             }
+
+            & .collapse {
+                @media (width <= 932px) {
+                    display: none;
+                }
+            }
         }
     }
 
     .sidebar {
         display: flex;
         flex-direction: column;
-        border-left: 0.15rem var(--color-bg-1) solid;
+
+        @media (width > 932px) {
+            border-left: 0.15rem var(--color-bg-1) solid;
+        }
 
         .tabs {
             gap: 1rem;

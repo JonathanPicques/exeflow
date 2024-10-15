@@ -3,7 +3,7 @@ import {error} from '@sveltejs/kit';
 import type {Project} from '../../api/project/project';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 
-export const load = async ({locals, params, parent}) => {
+export const load = async ({locals, params, parent, request}) => {
     const {user} = await parent();
     if (!user) throw error(401);
 
@@ -23,5 +23,6 @@ export const load = async ({locals, params, parent}) => {
         .where('owner_id', '=', user.id)
         .execute();
 
-    return {project, secrets};
+    const userAgent = request.headers.get('user-agent') ?? '';
+    return {project, secrets, mobileHint: userAgent.includes('iPhone') || userAgent.includes('Android')};
 };
