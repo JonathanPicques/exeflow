@@ -111,6 +111,18 @@
         });
     };
 
+    $effect(() => {
+        if (saveChecksum !== currentChecksum) {
+            const listener = (e: BeforeUnloadEvent) => {
+                e.preventDefault();
+            };
+            window.addEventListener('beforeunload', listener);
+            return () => {
+                window.removeEventListener('beforeunload', listener);
+            };
+        }
+    });
+
     onMount(() => {
         const {viewport} = data.project.content;
 
