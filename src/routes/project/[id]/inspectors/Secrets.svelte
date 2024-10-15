@@ -1,29 +1,45 @@
 <script lang="ts">
+    import Add from '$lib/core/widgets/icons/Add.svelte';
+    import Trash from '$lib/core/widgets/icons/Trash.svelte';
+
     import {getProjectContext} from '$lib/core/core.client.svelte';
 
     let secret = $state({key: '', value: ''});
 
-    const {secrets, putSecret, deleteSecret} = getProjectContext();
+    const projectContext = getProjectContext();
+
+    const putSecret = () => {
+        projectContext.putSecret(secret);
+        secret.key = '';
+        secret.value = '';
+    };
 </script>
 
 <div class="main">
-    <h1>Your Secrets</h1>
-    <p>
+    <div>
         Reusable values that are shared among your projects.<br />
-        Type <span>@</span> followed by the secret key to use in any node text input.
-    </p>
+    </div>
+    <div>
+        Type <span>@</span> followed by the secret key to reuse the value in any node text input.
+    </div>
 
-    {#each secrets as secret}
-        <div class="group">
-            <input type="text" class="key" value={secret.key} />
-            <input type="text" class="value" value={secret.value} />
-            <button class="icon" onclick={() => deleteSecret(secret.key)}>🗑</button>
+    <div class="secrets">
+        {#each projectContext.secrets as secret}
+            <div class="secret">
+                <input type="text" class="key" value={secret.key} />
+                <input type="text" class="value" value={secret.value} />
+                <button class="icon" onclick={() => projectContext.deleteSecret(secret.key)}>
+                    <Trash />
+                </button>
+            </div>
+        {/each}
+        <div class="secret">
+            <input type="text" class="key" placeholder="Secret key" bind:value={secret.key} />
+            <input type="text" class="value" placeholder="Secret value" bind:value={secret.value} />
+            <button class="icon" onclick={putSecret}>
+                <Add />
+            </button>
         </div>
-    {/each}
-    <div class="group">
-        <input type="text" class="key" placeholder="Secret key" bind:value={secret.key} />
-        <input type="text" class="value" placeholder="Secret value" bind:value={secret.value} />
-        <button class="icon" onclick={() => putSecret(secret)}>➕</button>
     </div>
 </div>
 
@@ -41,9 +57,21 @@
         flex-grow: 1;
     }
 
-    .group {
-        gap: 0.5rem;
+    .secrets {
+        gap: 1rem;
         display: flex;
-        align-items: center;
+        overflow-y: auto;
+        flex-direction: column;
+
+        input {
+            width: 40%;
+            min-width: 100px;
+        }
+
+        & .secret {
+            gap: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
     }
 </style>

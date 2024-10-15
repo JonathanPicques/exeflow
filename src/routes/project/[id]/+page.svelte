@@ -298,8 +298,9 @@
             overflow-y: hidden;
             flex-shrink: 0;
             flex-direction: row;
-            padding-bottom: unset;
             justify-content: start;
+
+            border-bottom: 0.15rem var(--color-bg-1) solid;
 
             & button {
                 font-size: 0.9rem;

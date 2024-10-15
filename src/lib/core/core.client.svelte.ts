@@ -39,14 +39,13 @@ export class ProjectContext {
     };
 
     public putSecret = async (secret: Secret) => {
-        const updatedSecret = await putSecret(secret);
+        const newSecret = await putSecret(secret);
+        const foundIndex = this.secrets.findIndex(s => s.key === newSecret.key);
 
-        if (updatedSecret) {
-            this.secrets.splice(
-                this.secrets.findIndex(s => s.key === updatedSecret.key),
-                1,
-            );
-            this.secrets.push(updatedSecret);
+        if (foundIndex === -1) {
+            this.secrets.push(newSecret);
+        } else {
+            this.secrets.splice(foundIndex, 1, newSecret);
         }
     };
 

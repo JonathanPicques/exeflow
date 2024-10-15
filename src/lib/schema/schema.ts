@@ -43,6 +43,9 @@ export interface JsonSchemaString extends JsonSchemaAll<string> {
     //
     enum?: string[];
     enumLabels?: string[];
+    //
+    minLength?: number;
+    maxLength?: number;
 }
 
 export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {

@@ -20,7 +20,7 @@ const putSchema = {
     type: 'object',
     required: ['key', 'value'] as const,
     properties: {
-        key: {type: 'string'},
+        key: {type: 'string', minLength: 1},
         value: {type: 'string'},
     },
 } satisfies JsonSchema;
