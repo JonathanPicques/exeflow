@@ -49,7 +49,6 @@
 
     let saving = $state(false);
     let projectName = $state(data.project.name);
-    let sidebarHidden = $state(false); // TODO: move in projectContext
 
     const save = async () => {
         const {nodes, edges} = exportGraph();
@@ -85,9 +84,6 @@
     const showNodes = () => projectContext.setPane({type: 'nodes'});
     const showSecrets = () => projectContext.setPane({type: 'secrets'});
 
-    const hideSidebar = () => (sidebarHidden = true);
-    const showSidebar = () => (sidebarHidden = false);
-
     const exportToClipboard = async () => {
         const data = exportSelection($nodes.filter(n => n.selected).map(n => n.id));
         if (valid(data, graphSchema)) {
@@ -118,7 +114,7 @@
 
 <SvelteFlowProvider>
     <main>
-        <SplitPane type="horizontal" pos={sidebarHidden ? '100%' : '70%'} priority="min" --color="var(--color-bg-1)" --thickness="2rem">
+        <SplitPane type="horizontal" pos={projectContext.sidebar ? '70%' : '100%'} priority="min" --color="var(--color-bg-1)" --thickness="2rem">
             <section slot="a" class="flow">
                 <nav>
                     <div class="island">
@@ -153,9 +149,9 @@
                         <ProfileLink />
                         <GithubLink />
                     </div>
-                    {#if sidebarHidden}
+                    {#if !projectContext.sidebar}
                         <div class="island">
-                            <button class="icon" title="Show sidebar" onclick={showSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
+                            <button class="icon" title="Show sidebar" onclick={projectContext.showSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
                                 <Sidebar />
                             </button>
                         </div>
@@ -166,8 +162,8 @@
             </section>
             <section slot="b" class="sidebar">
                 <div class="tabs">
-                    {#if !sidebarHidden}
-                        <button class="icon" title="Close sidebar" onclick={hideSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
+                    {#if projectContext.sidebar}
+                        <button class="icon" title="Close sidebar" onclick={projectContext.hideSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
                             <Close />
                         </button>
                     {/if}

@@ -12,19 +12,30 @@ type SecretsPane = {type: 'secrets'};
 interface Params {
     pane: Pane;
     secrets: Secret[];
+    sidebar: boolean;
 }
 
 export class ProjectContext {
     public pane: Params['pane'] = $state({type: 'nodes'});
-    public readonly secrets: Params['secrets'] = $state([]);
+    public secrets: Params['secrets'] = $state([]);
+    public sidebar: Params['sidebar'] = $state(true);
 
-    public constructor({pane, secrets}: Partial<Params>) {
-        if (pane) this.pane = pane;
-        if (secrets) this.secrets = secrets;
+    public constructor({pane, secrets, sidebar}: Partial<Params>) {
+        if (pane !== undefined) this.pane = pane;
+        if (secrets !== undefined) this.secrets = secrets;
+        if (sidebar !== undefined) this.sidebar = sidebar;
     }
 
     public setPane = (pane: Pane) => {
         this.pane = pane;
+    };
+
+    public showSidebar = () => {
+        this.sidebar = true;
+    };
+
+    public hideSidebar = () => {
+        this.sidebar = false;
     };
 
     public putSecret = async (secret: Secret) => {
