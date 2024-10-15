@@ -17,6 +17,7 @@
     import Save from '$lib/core/widgets/icons/Save.svelte';
     import Home from '$lib/core/widgets/icons/Home.svelte';
     import Close from '$lib/core/widgets/icons/Close.svelte';
+    import Trash from '$lib/core/widgets/icons/Trash.svelte';
     import Console from '$lib/core/widgets/icons/Console.svelte';
     import Sidebar from '$lib/core/widgets/icons/Sidebar.svelte';
     import Prettify from '$lib/core/widgets/icons/Prettify.svelte';
@@ -53,7 +54,8 @@
     let projectName = $state(data.project.name);
 
     let smallWidth = $state(data.mobileHint); // (width <= 932px)
-    let targetSidebarPos: Length = $derived(projectContext.sidebar ? (smallWidth ? '0%' : '65%') : '100%');
+    const hasSelection = $derived($nodes.some(n => n.selected));
+    const targetSidebarPos: Length = $derived(projectContext.sidebar ? (smallWidth ? '0%' : '65%') : '100%');
 
     const save = async () => {
         const {nodes, edges} = exportGraph();
@@ -83,7 +85,12 @@
 
     const prettify = () => flow.prettify();
     const fitToView = () => flow.fitToView();
-    const duplicate = () => importSelection(exportSelection($nodes.filter(n => n.selected).map(n => n.id)));
+    const removeSelection = () => {
+        nodes.update(nodes => nodes.filter(n => !n.selected));
+    };
+    const duplicateSelection = () => {
+        importSelection(exportSelection($nodes.filter(n => n.selected).map(n => n.id)));
+    };
 
     const showLogs = () => projectContext.setPane({type: 'logs'});
     const showNodes = () => projectContext.setPane({type: 'nodes'});
@@ -155,11 +162,14 @@
                         <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+2'}>
                             <Prettify />
                         </button>
-                        <button class="icon" title="Duplicate" onclick={duplicate} disabled={!$nodes.some(n => n.selected)} use:shortcut={['ctrl+d', 'command+d']}>
-                            <Duplicate />
-                        </button>
                         <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
                             <FitToView />
+                        </button>
+                        <button class="icon" title="Remove selection" onclick={removeSelection} disabled={!hasSelection}>
+                            <Trash />
+                        </button>
+                        <button class="icon" title="Duplicate selection" onclick={duplicateSelection} disabled={!hasSelection} use:shortcut={['ctrl+d', 'command+d']}>
+                            <Duplicate />
                         </button>
                     </div>
                     <div style:flex-grow="1"></div>
