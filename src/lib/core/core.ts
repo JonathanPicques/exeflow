@@ -127,9 +127,10 @@ export class GraphContext {
             id: this.createId(),
             type,
             data: {id, data: await data({constant})},
+            selected: true,
             position,
         } as PluginNode;
-        this.nodes.update(nodes => [...nodes, newNode]);
+        this.nodes.update(nodes => [...nodes.map(n => ({...n, selected: false})), newNode]);
         return newNode;
     };
     public renderNodeForm = async (id: PluginNode['id']) => {

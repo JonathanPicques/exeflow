@@ -1,9 +1,17 @@
 <script lang="ts">
+    import {getGraphContext} from '$lib/core/core';
+    import {useStore, useSvelteFlow} from '@xyflow/svelte';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
     import type {Plugin, PluginId} from '$lib/core/core';
 
     let props: {id: string; plugin: Plugin} = $props();
+    const {createNode} = getGraphContext();
+    const {width, height} = useStore();
+    const {screenToFlowPosition} = useSvelteFlow();
 
+    const onDblClick = (id: PluginId, plugin: Plugin) => {
+        createNode(id, plugin.type, screenToFlowPosition({x: $width / 2, y: $height / 2}));
+    };
     const onDragStart = (e: DragEvent, id: PluginId, plugin: Plugin) => {
         if (!e.dataTransfer) {
             return null;
@@ -21,6 +29,7 @@
     title={extractPluginNamespace(props.id)}
     style:--x-color-border={props.plugin.color}
     draggable={true}
+    ondblclick={() => onDblClick(props.id, props.plugin)}
     ondragstart={e => onDragStart(e, props.id, props.plugin)}
 >
     <div>
@@ -36,6 +45,7 @@
         display: flex;
         padding: 1rem;
         position: relative;
+        user-select: none;
         flex-direction: column;
 
         color: var(--color-fg);

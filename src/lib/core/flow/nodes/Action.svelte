@@ -6,12 +6,14 @@
     import OutputHandle from '../edges/OutputHandle.svelte';
 
     import {getGraphContext} from '$lib/core/core';
+    import {getProjectContext} from '$lib/core/core.client.svelte';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
     import type {ActionNode} from '$lib/core/graph/nodes';
 
     let {id, data, selected = undefined}: NodeProps<ActionNode> = $props();
     const edges = useEdges();
     const {actions} = getGraphContext();
+    const projectContext = getProjectContext();
 
     const {icon, name, color} = actions[data.id]!;
     const {valid, title, inputs, outputs} = $derived(data.data);
@@ -24,7 +26,7 @@
     const connectedOutputs = $derived([...new Set($edges.filter(e => e.source === id).map(e => e.sourceHandle))] as string[]);
 </script>
 
-<div class="node" style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
+<div role="presentation" class="node" ondblclick={projectContext.showSidebar} style:--x-color-border={selected ? color : 'transparent'} style:--x-color-plugin={color}>
     <div class="inputs">
         {#each inputs as input}
             <InputHandle id={input} connected={connectedInputs.includes(input)} />
