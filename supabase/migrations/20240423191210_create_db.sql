@@ -44,7 +44,9 @@ create table public.secrets (
     updated_at timestamp with time zone not null default now(),
     --
     constraint public_secrets_pkey primary key (key, owner_id),
-    constraint public_secrets_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade
+    constraint public_secrets_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade,
+    --
+    constraint public_secrets_key_not_empty_check check (trim(key) <> '')
 ) tablespace pg_default;
 
 create table public.triggers (
