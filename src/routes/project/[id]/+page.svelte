@@ -257,6 +257,7 @@
             display: flex;
             padding: 1rem;
             overflow: auto;
+            user-select: none;
 
             & .island {
                 display: flex;
