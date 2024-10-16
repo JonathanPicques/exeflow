@@ -18,7 +18,8 @@
 </Navbar>
 
 <main>
-    <h1>{$page.error?.message ?? $page.status}</h1>
+    <h1>{$page.status}</h1>
+    <div>{$page.error?.message ?? 'an error occured'}</div>
 </main>
 
 <style>

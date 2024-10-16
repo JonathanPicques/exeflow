@@ -105,7 +105,7 @@
     };
     export const fitToView = ({smooth} = {smooth: true}) => {
         const duration = smooth && window.matchMedia(`(prefers-reduced-motion)`).matches ? undefined : 300;
-        fitView({duration, padding: 0.2});
+        fitView({duration, padding: 0.25});
     };
     export const screenshot = async ({width = 320, height = 180} = {}) => {
         const viewport = getViewportForBounds(getNodesBounds($nodes), width, height, 0.1, 10, 0.2);

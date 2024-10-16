@@ -27,12 +27,22 @@
         <textarea {onblur}>{JSON.stringify(value, null, 2)}</textarea>
     </label>
 
-    {#each keys as key (key)}
-        <FormEditor {id} label={key} schema={schema.additionalProperties} {onchange} bind:value={value[key]} />
-    {/each}
+    <div>
+        {#each keys as key (key)}
+            <FormEditor {id} label={key} schema={schema.additionalProperties} {onchange} bind:value={value[key]} />
+        {/each}
+    </div>
 {/if}
 
 <style>
+    div {
+        gap: 1rem;
+        display: flex;
+        border-left: 0.2rem solid var(--color-bg-2);
+        padding-left: 1rem;
+        flex-direction: column;
+    }
+
     label {
         span {
             display: block;
