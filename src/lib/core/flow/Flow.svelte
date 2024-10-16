@@ -141,8 +141,8 @@
     {maxZoom}
     {onconnect}
     {isValidConnection}
-    {ondrop}
-    {ondragover}
+    on:drop={ondrop}
+    on:dragover={ondragover}
     on:nodedrag={onNodeClick}
     on:nodeclick={onNodeClick}
 >

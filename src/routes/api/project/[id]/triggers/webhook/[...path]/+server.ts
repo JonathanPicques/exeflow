@@ -1,6 +1,5 @@
 import {error} from '@sveltejs/kit';
 import {writable} from 'svelte/store';
-import {randomUUID} from 'crypto';
 
 import {valid} from '$lib/schema/validate';
 import {insertLog} from '../../log';
@@ -59,7 +58,7 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
     if (!project) throw error(404);
 
     let index = 0;
-    const execId = randomUUID();
+    const execId = crypto.randomUUID();
     const {actions, triggers} = await importPlugins();
     const {serverActions, serverTriggers} = await importServerPlugins();
 

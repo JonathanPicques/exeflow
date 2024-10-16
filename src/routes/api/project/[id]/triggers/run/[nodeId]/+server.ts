@@ -1,5 +1,4 @@
 import {writable} from 'svelte/store';
-import {randomUUID} from 'crypto';
 import {json, error} from '@sveltejs/kit';
 
 import {insertLog} from '../../log';
@@ -29,7 +28,7 @@ export const POST = async ({locals, params}) => {
     const {content, owner_id} = project;
     const {nodes, edges} = content as Graph;
 
-    const execId = randomUUID();
+    const execId = crypto.randomUUID();
     const controller = new AbortController();
     const {actions, triggers} = await importPlugins();
     const {serverActions, serverTriggers} = await importServerPlugins();
