@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
@@ -23,7 +23,7 @@ export default action<typeof configSchema>({
         return {
             valid: true,
             config: {
-                value: {text: form?.text ?? config?.text ?? ''},
+                value: {text: form?.text ?? config?.text ?? zero(configSchema.properties.text)},
                 schema: configSchema,
             },
             inputs: ['in'],

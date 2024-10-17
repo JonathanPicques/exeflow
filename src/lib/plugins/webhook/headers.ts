@@ -1,13 +1,13 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
     required: ['headers'] as const,
     properties: {
-        headers: {type: 'object', additionalProperties: {type: 'string'}},
+        headers: {type: 'object', default: {'Content-Type': 'application/json'}, additionalProperties: {type: 'string'}},
     },
 } satisfies JsonSchema;
 
@@ -20,7 +20,7 @@ export default action<typeof configSchema>({
         return fill(configSchema, config);
     },
     data({form, config, constant}) {
-        const headers = form?.headers ?? config?.headers ?? {'Content-Type': 'application/json'};
+        const headers = form?.headers ?? config?.headers ?? zero(configSchema.properties.headers);
 
         return {
             valid: true,

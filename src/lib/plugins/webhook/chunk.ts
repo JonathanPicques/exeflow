@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
@@ -24,7 +24,7 @@ export default action<typeof configSchema>({
             valid: true,
             config: {
                 value: {
-                    body: form?.body ?? config?.body ?? '',
+                    body: form?.body ?? config?.body ?? zero(configSchema.properties.body),
                 },
                 schema: configSchema,
             },

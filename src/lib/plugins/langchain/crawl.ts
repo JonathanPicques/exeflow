@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
@@ -8,8 +8,8 @@ const configSchema = {
     required: ['url', 'depth', 'timeout'],
     properties: {
         url: {type: 'string'},
-        depth: {type: 'number'},
-        timeout: {type: 'number'},
+        depth: {type: 'number', default: 8},
+        timeout: {type: 'number', default: 2000},
     },
 } satisfies JsonSchema;
 
@@ -22,9 +22,9 @@ export default action<typeof configSchema>({
         return fill(configSchema, config);
     },
     data({form, config}) {
-        const url = form?.url ?? config?.url ?? '';
-        const depth = form?.depth ?? config?.depth ?? 8;
-        const timeout = form?.timeout ?? config?.timeout ?? 2000;
+        const url = form?.url ?? config?.url ?? zero(configSchema.properties.url);
+        const depth = form?.depth ?? config?.depth ?? zero(configSchema.properties.depth);
+        const timeout = form?.timeout ?? config?.timeout ?? zero(configSchema.properties.timeout);
 
         return {
             valid: !!url && depth > 0 && timeout >= 0,

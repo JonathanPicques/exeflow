@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import {statusCodeMessages} from './+statusCodes';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -8,7 +8,7 @@ const configSchema = {
     type: 'object',
     required: ['status'] as const,
     properties: {
-        status: {type: 'number'},
+        status: {type: 'number', default: 200},
     },
 } satisfies JsonSchema;
 
@@ -21,7 +21,7 @@ export default action<typeof configSchema>({
         return fill(configSchema, config);
     },
     data({form, config, constant}) {
-        const statusCode = form?.status ?? config?.status ?? 200;
+        const statusCode = form?.status ?? config?.status ?? zero(configSchema.properties.status);
         const statusCodeMessage = statusCodeMessages[statusCode.toString()];
 
         return {

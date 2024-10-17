@@ -15,7 +15,7 @@ const ollama = {
             type: 'object',
             required: ['url', 'model'],
             properties: {
-                url: {type: 'string', editor: {suggestions: ['http://localhost:11434']}},
+                url: {type: 'string', default: 'http://localhost:11434'},
                 model: {type: 'string', editor: {suggestions: ['llama3.2', 'llama3.1', 'qwen2:0.5b']}},
             },
         },
@@ -35,7 +35,7 @@ const openai = {
             required: ['model', 'apiKey'],
             properties: {
                 model: {type: 'string', editor: {suggestions: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo']}},
-                apiKey: {type: 'string', title: 'api key', editor: {suggestions: ['${secret:OPENAI_API_KEY}']}},
+                apiKey: {type: 'string', title: 'api key', default: '${secret:OPENAI_API_KEY}'},
             },
         },
     },
@@ -53,9 +53,9 @@ const mistral = {
             type: 'object',
             required: ['url', 'model', 'apiKey'],
             properties: {
-                url: {type: 'string', editor: {suggestions: ['https://api.mistral.ai']}},
+                url: {type: 'string', default: 'https://api.mistral.ai'},
                 model: {type: 'string', editor: {suggestions: ['mistral-small', 'mistral-medium', 'mistral-large']}},
-                apiKey: {type: 'string', title: 'api key', editor: {suggestions: ['${secret:MISTRAL_API_KEY}']}},
+                apiKey: {type: 'string', title: 'api key', default: '${secret:MISTRAL_API_KEY}'},
             },
         },
     },
@@ -101,9 +101,9 @@ export default action<typeof configSchema>({
         };
     },
     data({form, config}) {
-        const type = form?.provider?.type ?? config?.provider.type ?? 'ollama';
-        const input = form?.input ?? config?.input ?? '';
-        const stream = form?.stream ?? config?.stream ?? false;
+        const type = form?.provider?.type ?? config?.provider.type ?? zero(ollama.properties.type);
+        const input = form?.input ?? config?.input ?? zero(configSchema.properties.input);
+        const stream = form?.stream ?? config?.stream ?? zero(configSchema.properties.stream);
         const provider =
             form?.provider?.type && form.provider.type !== config?.provider.type
                 ? zero(providers[form.provider.type]) // reset to default values if we switch the provider type

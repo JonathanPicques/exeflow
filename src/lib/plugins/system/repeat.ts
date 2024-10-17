@@ -1,13 +1,13 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
     required: ['count'] as const,
     properties: {
-        count: {type: 'number'},
+        count: {type: 'number', default: 3},
     },
 } satisfies JsonSchema;
 
@@ -24,7 +24,7 @@ export default action<typeof configSchema>({
             valid: true,
             config: {
                 value: {
-                    count: form?.count ?? config?.count ?? 3,
+                    count: form?.count ?? config?.count ?? zero(configSchema.properties.count),
                 },
                 schema: configSchema,
             },

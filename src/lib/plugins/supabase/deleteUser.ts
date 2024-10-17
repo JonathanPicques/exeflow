@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
@@ -27,10 +27,10 @@ export default action<typeof configSchema>({
             valid: true,
             config: {
                 value: {
-                    url: form?.url ?? config?.url ?? '',
-                    key: form?.key ?? config?.key ?? '',
+                    url: form?.url ?? config?.url ?? zero(configSchema.properties.url),
+                    key: form?.key ?? config?.key ?? zero(configSchema.properties.key),
                     //
-                    userId: form?.userId ?? config?.userId ?? '',
+                    userId: form?.userId ?? config?.userId ?? zero(configSchema.properties.userId),
                 },
                 schema: configSchema,
             },

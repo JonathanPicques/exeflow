@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const methods = ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE', 'OPTIONS'];
@@ -10,8 +10,8 @@ const configSchema = {
     required: ['url', 'method'],
     properties: {
         url: {type: 'string'},
-        method: {type: 'string', enum: methods},
-        headers: {type: 'string'},
+        method: {type: 'string', enum: methods, default: methods[0]},
+        headers: {type: 'string', default: '{"Accept": "application/json"}'},
     },
 } satisfies JsonSchema;
 
@@ -24,8 +24,8 @@ export default action<typeof configSchema>({
         return fill(configSchema, config);
     },
     data({form, config}) {
-        const url = form?.url ?? config?.url ?? '';
-        const method = form?.method ?? config?.method ?? 'POST';
+        const url = form?.url ?? config?.url ?? zero(configSchema.properties.url);
+        const method = form?.method ?? config?.method ?? zero(configSchema.properties.method);
 
         return {
             valid: url !== '',
@@ -33,8 +33,8 @@ export default action<typeof configSchema>({
             config: {
                 value: {
                     url,
-                    method: form?.method ?? config?.method ?? 'POST',
-                    headers: form?.headers ?? config?.headers ?? '{"Accept": "application/json"}',
+                    method,
+                    headers: form?.headers ?? config?.headers ?? zero(configSchema.properties.headers),
                 },
                 schema: configSchema,
             },

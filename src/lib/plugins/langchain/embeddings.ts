@@ -15,7 +15,7 @@ const ollama = {
             type: 'object',
             required: ['url', 'model'],
             properties: {
-                url: {type: 'string', editor: {suggestions: ['http://localhost:11434']}},
+                url: {type: 'string', default: 'http://localhost:11434'},
                 model: {type: 'string', editor: {suggestions: ['all-minilm', 'nomic-embed-text', 'mxbai-embed-large', 'snowflake-arctic-embed']}},
             },
         },
@@ -35,7 +35,7 @@ const openai = {
             required: ['model', 'apiKey'],
             properties: {
                 model: {type: 'string', editor: {suggestions: ['text-embedding-ada-002', 'text-embedding-3-small', 'text-embedding-3-large']}},
-                apiKey: {type: 'string', title: 'api key', editor: {suggestions: ['${secret:OPENAI_API_KEY}']}},
+                apiKey: {type: 'string', title: 'api key', default: '${secret:OPENAI_API_KEY}'},
             },
         },
     },
@@ -53,9 +53,9 @@ const mistral = {
             type: 'object',
             required: ['url', 'model', 'apiKey'],
             properties: {
-                url: {type: 'string', editor: {suggestions: ['https://api.mistral.ai']}},
+                url: {type: 'string', default: 'https://api.mistral.ai'},
                 model: {type: 'string', editor: {suggestions: ['mistral-embed']}},
-                apiKey: {type: 'string', title: 'api key', editor: {suggestions: ['${secret:MISTRAL_API_KEY}']}},
+                apiKey: {type: 'string', title: 'api key', default: '${secret:MISTRAL_API_KEY}'},
             },
         },
     },
@@ -100,8 +100,8 @@ export default action<typeof configSchema>({
         };
     },
     data({form, config}) {
-        const type = form?.provider?.type ?? config?.provider.type ?? 'ollama';
-        const input = form?.input ?? config?.input ?? '';
+        const type = form?.provider?.type ?? config?.provider.type ?? zero(ollama.properties.type);
+        const input = form?.input ?? config?.input ?? zero(configSchema.properties.input);
         const provider =
             form?.provider?.type && form.provider.type !== config?.provider.type
                 ? zero(providers[form.provider.type]) // reset to default values if we switch the provider type

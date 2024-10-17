@@ -9,12 +9,12 @@ const configSchema = {
     properties: {
         token: {
             type: 'string',
-            editor: {suggestions: ['${secret:DISCORD_TOKEN}']},
+            default: '${secret:DISCORD_TOKEN}',
             description: 'guide to create a discord bot and get the token: https://discord.com/developers/docs/quick-start/getting-started',
         },
         channel: {
             type: 'string',
-            editor: {suggestions: ['${secret:DISCORD_CHANNEL}']},
+            default: '${secret:DISCORD_CHANNEL}',
             description: `enable developer mode, and right click a channel to copy the channel id`,
         },
         message: {

@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {action} from '$lib/core/plugins/action';
+import {fill, zero} from '$lib/schema/data';
 import {statusCodeMessages} from './+statusCodes';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -9,8 +9,8 @@ const configSchema = {
     required: ['body', 'status', 'headers'] as const,
     properties: {
         body: {type: 'string', editor: {textarea: true}},
-        status: {type: 'number'},
-        headers: {type: 'object', additionalProperties: {type: 'string'}},
+        status: {type: 'number', default: 200},
+        headers: {type: 'object', default: {'Content-Type': 'application/json'}, additionalProperties: {type: 'string'}},
     },
 } satisfies JsonSchema;
 
@@ -23,7 +23,7 @@ export default action<typeof configSchema>({
         return fill(configSchema, config);
     },
     data({form, config, constant}) {
-        const statusCode = form?.status ?? config?.status ?? 200;
+        const statusCode = form?.status ?? config?.status ?? zero(configSchema.properties.status);
         const statusCodeMessage = statusCodeMessages[statusCode.toString()];
 
         return {
@@ -31,9 +31,9 @@ export default action<typeof configSchema>({
             title: statusCodeMessage ? `${statusCode} ${statusCodeMessage}` : undefined,
             config: {
                 value: {
-                    body: form?.body ?? config?.body ?? '{"success": true}',
+                    body: form?.body ?? config?.body ?? zero(configSchema.properties.body),
                     status: statusCode,
-                    headers: form?.headers ?? config?.headers ?? {'Content-Type': 'application/json'},
+                    headers: form?.headers ?? config?.headers ?? zero(configSchema.properties.headers),
                 },
                 schema: configSchema,
             },

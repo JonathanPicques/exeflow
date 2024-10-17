@@ -1,19 +1,19 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
 import {trigger} from '$lib/core/plugins/trigger';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
     required: ['tls', 'host', 'port', 'user', 'password', 'inbox'],
     properties: {
-        tls: {type: 'boolean'},
+        tls: {type: 'boolean', default: true},
         host: {type: 'string'},
-        port: {type: 'number', editor: {suggestions: ['993', '143']}},
+        port: {type: 'number', default: 993, editor: {suggestions: ['993', '143']}},
         user: {type: 'string'},
         password: {type: 'string'},
         //
-        inbox: {type: 'string', editor: {suggestions: ['INBOX']}},
+        inbox: {type: 'string', default: 'INBOX'},
     },
 } satisfies JsonSchema;
 
@@ -30,13 +30,13 @@ export default trigger<typeof configSchema>({
             valid: true,
             config: {
                 value: {
-                    tls: form?.tls ?? config?.tls ?? true,
-                    host: form?.host ?? config?.host ?? '',
-                    port: form?.port ?? config?.port ?? 993,
-                    user: form?.user ?? config?.user ?? '',
-                    password: form?.password ?? config?.password ?? '',
+                    tls: form?.tls ?? config?.tls ?? zero(configSchema.properties.tls),
+                    host: form?.host ?? config?.host ?? zero(configSchema.properties.host),
+                    port: form?.port ?? config?.port ?? zero(configSchema.properties.port),
+                    user: form?.user ?? config?.user ?? zero(configSchema.properties.user),
+                    password: form?.password ?? config?.password ?? zero(configSchema.properties.password),
                     //
-                    inbox: form?.inbox ?? config?.inbox ?? 'INBOX',
+                    inbox: form?.inbox ?? config?.inbox ?? zero(configSchema.properties.inbox),
                 },
                 schema: configSchema,
             },

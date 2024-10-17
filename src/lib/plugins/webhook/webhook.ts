@@ -1,5 +1,5 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
+import {fill, zero} from '$lib/schema/data';
 import {trigger} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
 
@@ -9,8 +9,8 @@ const configSchema = {
     type: 'object',
     required: ['path', 'method'] as const,
     properties: {
-        path: {type: 'string'},
-        method: {type: 'string', enum: methods},
+        path: {type: 'string', default: '/'},
+        method: {type: 'string', enum: methods, default: methods[0]},
     },
 } satisfies JsonSchema;
 
@@ -23,8 +23,8 @@ export default trigger<typeof configSchema>({
         return fill(configSchema, config);
     },
     data({form, config, constant}) {
-        const path = form?.path ?? config?.path ?? '/';
-        const method = form?.method ?? config?.method ?? 'GET';
+        const path = form?.path ?? config?.path ?? zero(configSchema.properties.path);
+        const method = form?.method ?? config?.method ?? zero(configSchema.properties.method);
 
         return {
             valid: true,
