@@ -176,7 +176,7 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
         }
     }
 
-    return error(500);
+    return new Response(null, {status, headers});
 };
 
 export const GET = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'GET');
