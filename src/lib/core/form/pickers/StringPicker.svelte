@@ -79,7 +79,9 @@
         const lines = value.split('\n');
 
         for (const line of lines) {
-            if (line !== '') {
+            if (line === '') {
+                doc.content.push({type: 'paragraph'});
+            } else {
                 doc.content.push({
                     type: 'paragraph',
                     content: parse(line).map(item => {
