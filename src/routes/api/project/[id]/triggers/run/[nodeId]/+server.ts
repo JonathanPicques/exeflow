@@ -5,12 +5,12 @@ import {insertLog} from '../../log';
 import {GraphContext, importPlugins} from '$lib/core/core';
 import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
 import type {Graph} from '$lib/core/core';
-
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggerNode} from '$lib/core/graph/nodes';
+import type {RequestEvent} from './$types';
 import type {TriggersNodeId} from '$lib/supabase/gen/public/Triggers';
 
-export const POST = async ({locals, params}) => {
+const handler = async ({locals, params}: RequestEvent) => {
     const trigger = await locals.db
         .selectFrom('triggers')
         .where('node_id', '=', params.nodeId as TriggersNodeId)
@@ -66,3 +66,10 @@ export const POST = async ({locals, params}) => {
 
     return json({index});
 };
+
+export const GET = handler;
+export const HEAD = handler;
+export const POST = handler;
+export const PATCH = handler;
+export const DELETE = handler;
+export const OPTIONS = handler;

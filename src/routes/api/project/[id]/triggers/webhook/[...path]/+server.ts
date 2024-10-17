@@ -5,11 +5,11 @@ import {valid} from '$lib/schema/validate';
 import {insertLog} from '../../log';
 import {GraphContext, importPlugins} from '$lib/core/core';
 import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
-import type {Db} from '$lib/supabase/db.server';
 import type {Graph} from '$lib/core/core';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {JsonSchema} from '$lib/schema/schema';
 import type {TriggerNode} from '$lib/core/graph/nodes';
+import type {RequestEvent} from './$types';
 
 const chunkSchema = {
     type: 'object',
@@ -48,11 +48,13 @@ const responseSchema = {
     },
 } satisfies JsonSchema;
 
-const execute = async (db: Db, id: string, request: Request, path: string, method: string) => {
-    const project = await db
+const handler = async ({locals, params, request}: RequestEvent) => {
+    const path = `/${params.path}`;
+    const method = request.method;
+    const project = await locals.db
         .selectFrom('projects')
         .select(['content', 'owner_id'])
-        .where('id', '=', id as ProjectsId)
+        .where('id', '=', params.id as ProjectsId)
         .limit(1)
         .executeTakeFirst();
     if (!project) throw error(404);
@@ -77,7 +79,7 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
     if (!suitableWebhook) return error(404, `no handler found for ${path}`);
 
     const context = new GraphContext({nodes: writable(nodes), edges: writable(edges), actions, triggers});
-    const secrets = (await db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', project.owner_id).execute()).reduce(
+    const secrets = (await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', project.owner_id).execute()).reduce(
         (acc, {key, value}) => ({
             ...acc,
             [key]: value,
@@ -92,11 +94,11 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
         const step = (await iterator).value;
         iterator = webhookGenerator.next();
 
-        insertLog(db, {
+        insertLog(locals.db, {
             execId,
             nodeId: step.nodeId,
             pluginId: step.pluginId,
-            projectId: id,
+            projectId: params.id,
             //
             index: index++,
             config: step.config,
@@ -115,11 +117,11 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
                             const step = (await iterator).value;
                             iterator = webhookGenerator.next();
 
-                            insertLog(db, {
+                            insertLog(locals.db, {
                                 execId,
                                 nodeId: step.nodeId,
                                 pluginId: step.pluginId,
-                                projectId: id,
+                                projectId: params.id,
                                 //
                                 index: index++,
                                 config: step.config,
@@ -179,9 +181,9 @@ const execute = async (db: Db, id: string, request: Request, path: string, metho
     return new Response(null, {status, headers});
 };
 
-export const GET = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'GET');
-export const HEAD = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'HEAD');
-export const POST = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'POST');
-export const PATCH = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'PATCH');
-export const DELETE = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'DELETE');
-export const OPTIONS = ({locals, params, request}) => execute(locals.db, params.id, request, `/${params.path}`, 'OPTIONS');
+export const GET = handler;
+export const HEAD = handler;
+export const POST = handler;
+export const PATCH = handler;
+export const DELETE = handler;
+export const OPTIONS = handler;

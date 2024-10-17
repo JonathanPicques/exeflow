@@ -1,6 +1,6 @@
 import icon from './+icon.svg';
-import {fill, zero} from '$lib/schema/data';
 import {trigger} from '$lib/core/plugins/trigger';
+import {fill, zero} from '$lib/schema/data';
 import type {JsonSchema} from '$lib/schema/schema';
 
 const methods = ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE', 'OPTIONS'];
