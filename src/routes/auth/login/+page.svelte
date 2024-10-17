@@ -17,7 +17,7 @@
 </Navbar>
 
 <main>
-    <form method="POST">
+    <form method="post">
         <Logo flow="horizontal" imgSize="4rem" textSize="3rem" />
         <input name="email" type="email" value={form?.email ?? ''} placeholder="Email" required />
         <input name="password" type="password" placeholder="Password" required />
