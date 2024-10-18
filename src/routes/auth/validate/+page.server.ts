@@ -7,8 +7,8 @@ export const load = async ({url, locals}) => {
     if (!code) return {error: true, description: 'validation code is missing'};
 
     try {
-        const result = await locals.supabase.auth.exchangeCodeForSession(code);
-        if (result.error) throw result.error;
+        const response = await locals.supabase.auth.exchangeCodeForSession(code);
+        if (response.error) throw response.error;
         return {success: true};
     } catch (e) {
         return {error: true, description: (e as Error).toString()};

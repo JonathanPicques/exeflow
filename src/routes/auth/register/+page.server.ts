@@ -10,12 +10,12 @@ export const actions = {
         const confirmPassword = form.get('confirmPassword') as string;
 
         if (email && password && confirmPassword && password === confirmPassword) {
-            const result = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: `${rootUrl}/auth/validate`}});
+            const response = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: `${rootUrl}/auth/validate`}});
 
-            if (result.data.user) {
+            if (response.data.user) {
                 return {email, success: true};
             }
-            return fail(400, {email, failed: true, message: result.error?.message ?? 'failed to register'});
+            return fail(400, {email, failed: true, message: response.error?.message ?? 'failed to register'});
         }
         return fail(400, {email, invalid: true});
     },

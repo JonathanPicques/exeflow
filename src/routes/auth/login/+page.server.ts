@@ -12,12 +12,12 @@ export const actions = {
         const password = form.get('password') as string;
 
         if (email && password) {
-            const result = await locals.supabase.auth.signInWithPassword({email, password});
+            const response = await locals.supabase.auth.signInWithPassword({email, password});
 
-            if (result.data.user) {
+            if (response.data.user) {
                 throw redirect(302, '/home');
             }
-            return fail(403, {email, failed: true, message: result.error?.message ?? 'login failed'});
+            return fail(403, {email, failed: true, message: response.error?.message ?? 'login failed'});
         }
         return fail(400, {email, invalid: true});
     },

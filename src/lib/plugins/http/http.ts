@@ -7,17 +7,19 @@ const methods = ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE', 'OPTIONS'];
 
 const configSchema = {
     type: 'object',
-    required: ['url', 'method'],
+    required: ['url', 'method', 'body', 'search', 'headers'],
     properties: {
         url: {type: 'string'},
         method: {type: 'string', enum: methods, default: methods[0]},
-        headers: {type: 'string', default: '{"Accept": "application/json"}'},
+        body: {type: 'string'},
+        search: {type: 'object', additionalProperties: {type: 'string'}, default: {page: '1', count: '10'}},
+        headers: {type: 'object', additionalProperties: {type: 'string'}, default: {'Content-Type': 'application/json'}},
     },
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({
     icon,
-    color: '#494e55',
+    color: '#c93762',
     description: 'perform a http request',
     //
     form({config}) {
@@ -33,7 +35,9 @@ export default action<typeof configSchema>({
             config: {
                 value: {
                     url,
+                    body: form?.body ?? config?.body ?? zero(configSchema.properties.body),
                     method,
+                    search: form?.search ?? config?.search ?? zero(configSchema.properties.search),
                     headers: form?.headers ?? config?.headers ?? zero(configSchema.properties.headers),
                 },
                 schema: configSchema,
@@ -41,7 +45,7 @@ export default action<typeof configSchema>({
             inputs: ['in'],
             outputs: ['out'],
             results: {
-                text: {type: 'string'},
+                body: {type: 'string'},
                 status: {type: 'number'},
                 headers: {type: 'string'},
             },

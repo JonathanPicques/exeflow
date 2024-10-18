@@ -7,8 +7,8 @@ export const handle = async ({event, resolve}) => {
     event.locals.supabase = supabase(supabaseApiUrl, supabaseServiceRoleKey, event.cookies);
 
     event.locals.user = async () => {
-        const userResult = await event.locals.supabase.auth.getUser();
-        return userResult.data.user ?? undefined;
+        const response = await event.locals.supabase.auth.getUser();
+        return response.data.user ?? undefined;
     };
 
     return await resolve(event);
