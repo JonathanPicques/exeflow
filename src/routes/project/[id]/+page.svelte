@@ -146,7 +146,7 @@
 </script>
 
 <svelte:head>
-    <title>Exeflow - {data.project.name}</title>
+    <title>Exeflow - {projectName}</title>
 </svelte:head>
 
 <SvelteFlowProvider>
