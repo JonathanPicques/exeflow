@@ -26,13 +26,18 @@
         const namespaceB = extractPluginNamespace(b);
 
         const compare = namespaceA.localeCompare(namespaceB);
-        if (compare === 0) return nameA.length - nameB.length;
         if (namespaceA === 'cron') return -1;
         if (namespaceB === 'cron') return 1;
-        if (namespaceA === 'http') return -1;
-        if (namespaceB === 'http') return 1;
+
+        if (namespaceA === 'webhook' && nameA === 'webhook') return -1;
+        if (namespaceB === 'webhook' && nameB === 'webhook') return 1;
+        if (namespaceA === 'webhook' && nameA === 'response') return -1;
+        if (namespaceB === 'webhook' && nameB === 'response') return 1;
         if (namespaceA === 'webhook') return -1;
         if (namespaceB === 'webhook') return 1;
+        if (namespaceA === 'http') return -1;
+        if (namespaceB === 'http') return 1;
+        if (compare === 0) return nameA.length - nameB.length;
         return compare;
     };
     const filterPlugins = ([id, plugin]: [PluginId, Plugin]) => {
