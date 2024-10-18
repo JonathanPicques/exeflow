@@ -9,7 +9,7 @@
     const copy = () => {
         const {port, hostname, protocol} = new URL(location.href);
 
-        window.navigator.clipboard.writeText(`${protocol}//${hostname}:${port}/api/project/${$page.params.id}/triggers/test/${node.id}`);
+        window.navigator.clipboard.writeText(`${protocol}//${hostname}:${port}/api/project/${$page.params.id}/triggers/run/${node.id}`);
     };
     const open = () => {
         window.open(`/api/project/${$page.params.id}/triggers/webhook${node.data.data.config.value.path}`);
