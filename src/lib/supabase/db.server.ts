@@ -1,4 +1,4 @@
-import Pg from 'pg';
+import pg from 'pg';
 import {Kysely, PostgresDialect} from 'kysely';
 
 import {supabaseDbUrl} from '$lib/core/conf.server';
@@ -6,8 +6,15 @@ import type {Database} from './gen/Database';
 
 export type Db = Kysely<Database>;
 
+const parseDate = (value: string) => (value === null ? null : new Date(value));
+pg.types.setTypeParser(pg.types.builtins.DATE, parseDate);
+pg.types.setTypeParser(pg.types.builtins.TIME, parseDate);
+pg.types.setTypeParser(pg.types.builtins.TIMETZ, parseDate);
+pg.types.setTypeParser(pg.types.builtins.TIMESTAMP, parseDate);
+pg.types.setTypeParser(pg.types.builtins.TIMESTAMPTZ, parseDate);
+
 const dialect = new PostgresDialect({
-    pool: new Pg.Pool({
+    pool: new pg.Pool({
         max: 10,
         connectionString: supabaseDbUrl,
     }),
