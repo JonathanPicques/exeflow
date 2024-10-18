@@ -10,7 +10,7 @@ import type {TriggerNode} from '$lib/core/graph/nodes';
 import type {RequestEvent} from './$types';
 import type {TriggersNodeId} from '$lib/supabase/gen/public/Triggers';
 
-const handler = async ({locals, params}: RequestEvent) => {
+const handler = async ({locals, params, request}: RequestEvent) => {
     const trigger = await locals.db
         .selectFrom('triggers')
         .where('node_id', '=', params.nodeId as TriggersNodeId)
@@ -48,7 +48,7 @@ const handler = async ({locals, params}: RequestEvent) => {
         signal: controller.signal,
         context,
         secrets,
-        request: undefined,
+        request,
         serverActions,
         serverTriggers,
     })) {
