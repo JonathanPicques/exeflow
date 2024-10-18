@@ -128,6 +128,9 @@ input[type='password'] {
     &:hover {
         background-color: var(--color-bg-2);
     }
+    &::placeholder {
+        user-select: none;
+    }
 }
 
 select {
@@ -150,6 +153,7 @@ button:not(.custom),
     color: var(--color-fg);
     border: 0.15rem solid transparent;
     font-weight: bold;
+    user-select: none;
     border-radius: 0.5em;
     background-color: var(--color-bg-1);
 
