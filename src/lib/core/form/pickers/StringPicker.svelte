@@ -204,6 +204,15 @@
                                 },
                             };
                         },
+                        command({props, range, editor}) {
+                            editor
+                                .chain()
+                                .focus()
+                                .insertContentAt(range, [{type: 'mention', attrs: props}])
+                                .run();
+
+                            editor.view.dom.ownerDocument.defaultView?.getSelection()?.collapseToEnd();
+                        },
                         allowSpaces: true,
                         allowedPrefixes: [' ', '"'],
                     },
