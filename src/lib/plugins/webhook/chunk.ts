@@ -7,7 +7,7 @@ const configSchema = {
     type: 'object',
     required: ['body'] as const,
     properties: {
-        body: {type: 'string', editor: {textarea: true}},
+        body: {type: 'string'},
     },
 } satisfies JsonSchema;
 

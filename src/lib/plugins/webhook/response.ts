@@ -8,7 +8,7 @@ const configSchema = {
     type: 'object',
     required: ['body', 'status', 'headers'] as const,
     properties: {
-        body: {type: 'string', editor: {textarea: true}},
+        body: {type: 'string'},
         status: {type: 'number', default: 200},
         headers: {type: 'object', default: {'Content-Type': 'application/json'}, additionalProperties: {type: 'string'}},
     },

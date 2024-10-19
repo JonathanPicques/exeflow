@@ -15,8 +15,8 @@ const configSchema = {
         to: {type: 'string'},
         from: {type: 'string'},
         subject: {type: 'string'},
-        bodyHtml: {type: 'string', title: 'mail in html', editor: {textarea: true}},
-        bodyText: {type: 'string', title: 'mail in plain text', editor: {textarea: true}},
+        bodyHtml: {type: 'string', title: 'mail in html'},
+        bodyText: {type: 'string', title: 'mail in plain text'},
     },
 } satisfies JsonSchema;
 

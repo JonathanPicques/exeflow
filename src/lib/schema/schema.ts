@@ -6,7 +6,6 @@ export interface JsonSchemaAll<T> {
     description?: string;
     //
     editor?: {
-        textarea?: boolean;
         suggestions?: string[];
     };
 }
