@@ -10,6 +10,12 @@
     let form = $state<{value: unknown; schema: JsonSchema}>();
     const {renderNodeForm, updateNodeData} = getGraphContext();
 
+    const onchange = () => {
+        if (form) {
+            updateNodeData(node.id, form.value);
+        }
+    };
+
     $effect(() => {
         renderNodeForm(node.id).then(f => {
             form = f;
@@ -18,12 +24,5 @@
 </script>
 
 {#if form}
-    <FormEditor
-        id={node.id}
-        schema={form.schema}
-        onchange={() => {
-            form && updateNodeData(node.id, form.value);
-        }}
-        bind:value={form.value}
-    />
+    <FormEditor id={node.id} schema={form.schema} {onchange} bind:value={form.value} />
 {/if}

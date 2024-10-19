@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const dotenv = require('dotenv');
 const {makeKyselyHook} = require('kanel-kysely');
 

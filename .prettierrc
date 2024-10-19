@@ -5,8 +5,6 @@
     "arrowParens": "avoid",
     "trailingComma": "all",
     "bracketSpacing": false,
-    "eslintIntegration": true,
-    "jsxBracketSameLine": false,
     "plugins": ["prettier-plugin-svelte"],
     "overrides": [{"files": "*.svelte", "options": {"parser": "svelte"}}]
 }

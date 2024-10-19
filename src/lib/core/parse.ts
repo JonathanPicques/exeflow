@@ -13,7 +13,7 @@ interface Variables {
     secrets: Record<string, string>;
 }
 
-const regex = /\${(node|secret):([a-zA-Z0-9_-]+)(:([\.a-zA-Z0-9_-]+))?(:([\.a-zA-Z0-9_-]+))?}/gm;
+const regex = /\${(node|secret):([a-zA-Z0-9_-]+)(:([.a-zA-Z0-9_-]+))?(:([.a-zA-Z0-9_-]+))?}/gm;
 
 /**
  * @returns an array of interpolations from the given string
@@ -79,7 +79,7 @@ export const parse = (str: string) => {
 export const access = (obj: any, path: string): unknown => {
     if (path === '') return obj;
     for (const p of path.split('.')) {
-        if (!obj || !obj.hasOwnProperty(p)) return undefined;
+        if (!obj || !Object.prototype.hasOwnProperty.call(obj, p)) return undefined;
         obj = obj[p];
     }
     return obj;
@@ -104,12 +104,13 @@ export const resolve = <T extends JsonSchema>(value: InferJsonSchema<T>, schema:
                     }
                 }
             }
-            return value as InferJsonSchema<T>;
+            return value;
         }
         case 'array': {
             if (schema.items) {
                 return (value as unknown[]).map(item => resolve(item, schema.items!, variables)) as InferJsonSchema<T>;
             }
+            return value;
         }
         case 'string':
             return evaluate(value, variables) as InferJsonSchema<T>;

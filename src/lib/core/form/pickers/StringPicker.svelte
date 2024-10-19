@@ -150,9 +150,9 @@
                                         unmount(component);
                                         instance.destroy();
 
-                                        // @ts-ignore - to make sure we do not double destroy
+                                        // @ts-expect-error - to make sure we do not double destroy
                                         instance = undefined;
-                                        // @ts-ignore - to make sure we do not double unmount
+                                        // @ts-expect-error - to make sure we do not double unmount
                                         component = undefined;
                                     }
                                 },
