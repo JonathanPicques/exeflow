@@ -7,6 +7,12 @@ const config = {
         adapter: adapter(),
     },
     preprocess: vitePreprocess(),
+    vitePlugin: {
+        inspector: {
+            toggleKeyCombo: 'shift-f',
+            showToggleButton: 'never',
+        },
+    },
 };
 
 export default config;
