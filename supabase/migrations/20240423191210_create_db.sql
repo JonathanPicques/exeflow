@@ -12,8 +12,8 @@ create table public.projects (
     content jsonb null,
     owner_id uuid not null,
     --
-    created_at timestamp with time zone not null default now(),
-    updated_at timestamp with time zone not null default now(),
+    created_at timestamptz with time zone not null default now(),
+    updated_at timestamptz with time zone not null default now(),
     --
     constraint public_projects_pkey primary key (id),
     constraint public_projects_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade
@@ -31,7 +31,7 @@ create table public.logs (
     config jsonb,
     results jsonb,
     --
-    created_at timestamp with time zone not null default now(),
+    created_at timestamptz with time zone not null default now(),
     --
     constraint public_logs_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
 ) tablespace pg_default;
@@ -42,8 +42,8 @@ create table public.secrets (
     value text not null,
     owner_id uuid not null,
     --
-    created_at timestamp with time zone not null default now(),
-    updated_at timestamp with time zone not null default now(),
+    created_at timestamptz with time zone not null default now(),
+    updated_at timestamptz with time zone not null default now(),
     --
     constraint public_secrets_pkey primary key (key, owner_id),
     constraint public_secrets_owner_id_fkey foreign key (owner_id) references auth.users (id) on delete cascade,
@@ -59,8 +59,8 @@ create table public.triggers (
     --
     config jsonb,
     --
-    created_at timestamp with time zone not null default now(),
-    updated_at timestamp with time zone not null default now(),
+    created_at timestamptz with time zone not null default now(),
+    updated_at timestamptz with time zone not null default now(),
     --
     constraint public_triggers_pkey primary key (node_id, plugin_id, project_id),
     constraint public_triggers_project_id_fkey foreign key (project_id) references public.projects (id) on delete cascade
