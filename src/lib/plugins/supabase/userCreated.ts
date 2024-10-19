@@ -6,10 +6,10 @@ export default trigger({
     color: '#3ecf8e',
     description: 'triggered when a new user is created',
     //
-    form(args) {
+    form() {
         throw new Error('not implemented');
     },
-    data(args) {
+    data() {
         throw new Error('not implemented');
     },
 });

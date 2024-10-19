@@ -39,7 +39,6 @@
 
     let editor: Editor | undefined = $state();
     let element: HTMLDivElement | undefined = $state();
-    let focused = $state(false);
 
     const components = new Map();
     const graphContext = getGraphContext();
@@ -231,11 +230,7 @@
                 }),
             ],
             onBlur() {
-                focused = false;
                 onchange?.();
-            },
-            onFocus() {
-                focused = true;
             },
             onUpdate(props) {
                 value = serialize(props.editor.getJSON() as DocEditorNode);
