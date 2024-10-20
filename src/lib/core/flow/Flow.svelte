@@ -36,7 +36,7 @@
         if (!animate) return;
         const timeout = setTimeout(() => {
             animate = false;
-        }, /* keep me in sync with css transition */ 300);
+        }, /* keep timing in sync with css transition */ 300);
         return () => {
             animate = false;
             clearTimeout(timeout);
@@ -158,15 +158,9 @@
 
         &.animate :global(.svelte-flow__node) {
             @media screen and (prefers-reduced-motion: no-preference) {
-                transition: all 0.3s ease; /* keep in sync with setTimeout */
+                transition: all 0.3s ease; /* keep timing in sync with setTimeout */
             }
         }
-    }
-
-    :global(.svelte-flow__edge) :global(path),
-    :global(.svelte-flow__connection) :global(path) {
-        stroke: var(--flow-color-edge);
-        stroke-width: 0.1rem;
     }
 
     :global(.svelte-flow__handle) {
@@ -177,6 +171,11 @@
         border-width: 0.15rem;
         border-color: var(--x-color-plugin);
         background-color: var(--x-color-handle);
+    }
+
+    :global(.svelte-flow__edge-path) {
+        stroke: var(--flow-color-edge);
+        stroke-width: 0.1rem;
     }
 
     :global(.svelte-flow__handle.connectingto),
