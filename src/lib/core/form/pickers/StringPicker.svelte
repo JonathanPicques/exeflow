@@ -214,7 +214,7 @@
                             editor.view.dom.ownerDocument.defaultView?.getSelection()?.collapseToEnd();
                         },
                         allowSpaces: true,
-                        allowedPrefixes: [' ', '"'],
+                        allowedPrefixes: null,
                     },
                     renderHTML({node: mentionNode}) {
                         const target = document.createElement('span');
