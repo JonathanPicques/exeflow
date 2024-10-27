@@ -1,4 +1,6 @@
 <script lang="ts">
+    import json5 from 'json5';
+
     import FormEditor from '$lib/core/form/FormEditor.svelte';
     import StringPicker from './StringPicker.svelte';
     import {tryFunction} from '$lib/helper/function';
@@ -8,7 +10,7 @@
     let {id, label, value = $bindable(), schema, onchange}: PickerProps<JsonSchemaObject> = $props();
 
     let text = $state('{}');
-    let parsed = $derived(tryFunction(() => JSON.parse(text) as Record<string, unknown>));
+    let parsed = $derived(tryFunction(() => json5.parse(text) as Record<string, unknown>));
     const onblur = () => {
         if (parsed) {
             value = parsed;

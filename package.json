@@ -38,6 +38,7 @@
         "fuse.js": "^7.0.0",
         "html-to-image": "^1.11.11",
         "jsdom": "^25.0.1",
+        "json5": "^2.2.3",
         "moment": "^2.30.1",
         "mousetrap": "^1.6.5",
         "nodemailer": "^6.9.15",

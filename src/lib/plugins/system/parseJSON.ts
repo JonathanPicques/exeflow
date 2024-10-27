@@ -5,9 +5,10 @@ import type {JsonSchema} from '$lib/schema/schema';
 
 const configSchema = {
     type: 'object',
-    required: ['json'] as const,
+    required: ['text', 'schema'] as const,
     properties: {
-        json: {type: 'string'},
+        text: {type: 'string'},
+        schema: {type: 'object'},
     },
 } satisfies JsonSchema;
 
@@ -20,16 +21,21 @@ export default action<typeof configSchema>({
         return fill(configSchema, config);
     },
     data({form, config}) {
+        const schema = form?.schema ?? config?.schema ?? zero(configSchema.properties.schema);
+
         return {
             valid: true,
             config: {
-                value: {json: form?.json ?? config?.json ?? zero(configSchema.properties.json)},
+                value: {
+                    text: form?.text ?? config?.text ?? zero(configSchema.properties.text),
+                    schema,
+                },
                 schema: configSchema,
             },
             inputs: ['in'],
             outputs: ['out'],
             results: {
-                json: {},
+                json: schema,
             },
         };
     },
