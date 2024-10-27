@@ -24,6 +24,7 @@
     import Duplicate from '$lib/core/widgets/icons/Duplicate.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
 
+    import {wait} from '$lib/helper/function';
     import {valid} from '$lib/schema/validate';
     import {shortcut} from '$lib/helper/shortcut';
     import {patchProject} from '../../api/project/project';
@@ -72,7 +73,7 @@
                     viewport: flow.getViewport(),
                 },
             }),
-            new Promise(resolve => setTimeout(resolve, 500)),
+            wait(500),
         ])
             .then(() => {
                 saving = false;

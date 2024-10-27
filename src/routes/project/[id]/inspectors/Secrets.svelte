@@ -2,16 +2,29 @@
     import Add from '$lib/core/widgets/icons/Add.svelte';
     import Trash from '$lib/core/widgets/icons/Trash.svelte';
 
+    import {wait} from '$lib/helper/function';
     import {getProjectContext} from '$lib/core/core.client.svelte';
 
     let secret = $state({key: '', value: ''});
 
     const projectContext = getProjectContext();
+    const validSecretName = $derived(secret.key !== '' && !projectContext.secrets.map(s => s.key).includes(secret.key));
 
     const putSecret = () => {
         projectContext.putSecret(secret);
         secret.key = '';
         secret.value = '';
+    };
+    const editSecret = (key: string, e: FocusEvent & {currentTarget: EventTarget & HTMLInputElement}) => {
+        const target = e.currentTarget;
+        target.setAttribute('disabled', 'true');
+        Promise.all([
+            projectContext.putSecret({
+                key,
+                value: target.value,
+            }),
+            wait(500),
+        ]).then(() => target.removeAttribute('disabled'));
     };
 </script>
 
@@ -26,8 +39,8 @@
     <div class="secrets">
         {#each projectContext.secrets as secret}
             <div class="secret">
-                <input type="text" class="key" value={secret.key} />
-                <input type="text" class="value" value={secret.value} />
+                <span>{secret.key}</span>
+                <input type="text" class="value" value={secret.value} onblur={e => editSecret(secret.key, e)} />
                 <button class="icon" onclick={() => projectContext.deleteSecret(secret.key)}>
                     <Trash />
                 </button>
@@ -36,7 +49,7 @@
         <div class="secret">
             <input type="text" class="key" placeholder="Secret key" bind:value={secret.key} />
             <input type="text" class="value" placeholder="Secret value" bind:value={secret.value} />
-            <button class="icon" onclick={putSecret}>
+            <button class="icon" onclick={putSecret} disabled={!validSecretName}>
                 <Add />
             </button>
         </div>
@@ -63,9 +76,12 @@
         overflow-y: auto;
         flex-direction: column;
 
+        span,
         input {
             width: 40%;
+            overflow: hidden;
             min-width: 100px;
+            text-overflow: ellipsis;
         }
 
         & .secret {

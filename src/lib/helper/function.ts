@@ -1,5 +1,17 @@
 /**
- * Returns what the specified function would return, or a default value if an exception was thrown
+ * @returns a promise that will resolve in the given amount of milliseconds
+ * @example
+ * ```ts
+ * await wait(500);
+ * await Promise.all([api.call(), wait(1000)]);
+ * ```
+ */
+export const wait = (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+/**
+ * @returns what the specified function would return, or a default value if an exception was thrown
  * @param fn - a function returning a value
  * @param defaultValue - returned when an exception is thrown, `undefined` if not specified
  * @example

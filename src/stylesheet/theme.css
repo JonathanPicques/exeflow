@@ -128,6 +128,11 @@ input[type='password'] {
     &:hover {
         background-color: var(--color-bg-2);
     }
+    &:disabled {
+        color: var(--color-fg-1);
+        cursor: not-allowed;
+        background-color: var(--color-bg-1);
+    }
     &::placeholder {
         user-select: none;
     }
