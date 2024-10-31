@@ -14,6 +14,10 @@ export interface JsonSchemaAny extends JsonSchemaAll<any> {
     type?: never;
 }
 
+export interface JsonSchemaNull extends JsonSchemaAll<null> {
+    type: 'null';
+}
+
 export interface JsonSchemaAnyOf extends JsonSchemaAll<any> {
     type?: never;
     anyOf: JsonSchema[];
@@ -51,4 +55,4 @@ export interface JsonSchemaBoolean extends JsonSchemaAll<boolean> {
     type: 'boolean';
 }
 
-export type JsonSchema = JsonSchemaAnyOf | JsonSchemaAny | JsonSchemaArray | JsonSchemaObject | JsonSchemaNumber | JsonSchemaString | JsonSchemaBoolean;
+export type JsonSchema = JsonSchemaAnyOf | JsonSchemaAny | JsonSchemaNull | JsonSchemaArray | JsonSchemaObject | JsonSchemaNumber | JsonSchemaString | JsonSchemaBoolean;

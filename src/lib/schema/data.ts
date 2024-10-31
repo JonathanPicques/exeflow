@@ -22,6 +22,8 @@ export const zero = <T extends JsonSchema>(schema: T): InferJsonSchema<T> => {
     switch (schema.type) {
         case undefined:
             return undefined as InferJsonSchema<T>; // any
+        case 'null':
+            return null as InferJsonSchema<T>;
         case 'number':
             return 0 as InferJsonSchema<T>;
         case 'string':

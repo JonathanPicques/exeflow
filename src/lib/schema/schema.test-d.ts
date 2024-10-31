@@ -3,6 +3,8 @@ import {test, expectTypeOf} from 'vitest';
 import type {InferJsonSchema} from './infer';
 
 test('InferJsonSchema', () => {
+    expectTypeOf<InferJsonSchema<{type: 'null'}>>().toEqualTypeOf<null>();
+
     expectTypeOf<InferJsonSchema<{type: 'number'}>>().toEqualTypeOf<number>();
     expectTypeOf<InferJsonSchema<{type: 'number'; const: 32}>>().toEqualTypeOf<32>();
 
