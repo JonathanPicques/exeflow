@@ -22,8 +22,6 @@
             "tsconfig.json": true,
             "vite.config.ts": true,
             "svelte.config.js": true,
-            // Zen mode (tests)
-            "**/*.test*.ts": true,
             // Zen mode (supabase)
             "supabase/.temp": true,
             "supabase/.branches": true,
