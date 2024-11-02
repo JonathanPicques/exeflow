@@ -1,6 +1,6 @@
-import {valid} from '$lib/schema/validate';
-import type {JsonSchema} from '$lib/schema/schema';
-import type {InferJsonSchema} from '$lib/schema/infer';
+import {valid} from '$lib/core/schema/validate';
+import type {JsonSchema} from '$lib/core/schema/schema';
+import type {InferJsonSchema} from '$lib/core/schema/infer';
 
 /**
  * @returns a new value from the given schema

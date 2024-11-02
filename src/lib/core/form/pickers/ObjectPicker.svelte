@@ -3,9 +3,9 @@
 
     import FormEditor from '$lib/core/form/FormEditor.svelte';
     import StringPicker from './StringPicker.svelte';
-    import {tryFunction} from '$lib/helper/function';
+    import {tryFunction} from '$lib/core/helper/function';
     import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
-    import type {JsonSchemaObject} from '$lib/schema/schema';
+    import type {JsonSchemaObject} from '$lib/core/schema/schema';
 
     let {id, label, value = $bindable(), schema, onchange}: PickerProps<JsonSchemaObject> = $props();
 

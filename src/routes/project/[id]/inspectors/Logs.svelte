@@ -4,7 +4,7 @@
     import {getLogsGroups} from '../../../api/project/logs';
     import type {Action} from '$lib/core/plugins/action';
     import type {Trigger} from '$lib/core/plugins/trigger';
-    import type {JsonSchema} from '$lib/schema/schema';
+    import type {JsonSchema} from '$lib/core/schema/schema';
 
     interface Props {
         actions: Record<string, Action<JsonSchema>>;

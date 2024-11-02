@@ -2,9 +2,9 @@ import cronstrue from 'cronstrue';
 
 import icon from './+icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
-import {fill, zero} from '$lib/schema/data';
-import {tryFunction} from '$lib/helper/function';
-import type {JsonSchema} from '$lib/schema/schema';
+import {fill, zero} from '$lib/core/schema/data';
+import {tryFunction} from '$lib/core/helper/function';
+import type {JsonSchema} from '$lib/core/schema/schema';
 
 const configSchema = {
     type: 'object',

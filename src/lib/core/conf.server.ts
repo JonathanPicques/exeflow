@@ -1,5 +1,5 @@
 import * as env from '$env/static/private';
-import {ensure} from '$lib/schema/validate';
+import {ensure} from '$lib/core/schema/validate';
 
 const string = {type: 'string'} as const;
 

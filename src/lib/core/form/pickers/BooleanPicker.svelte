@@ -1,6 +1,6 @@
 <script lang="ts">
     import type {PickerProps} from '../FormEditor.svelte';
-    import type {JsonSchemaBoolean} from '$lib/schema/schema';
+    import type {JsonSchemaBoolean} from '$lib/core/schema/schema';
 
     let {label, value = $bindable(), onchange}: PickerProps<JsonSchemaBoolean> = $props();
 </script>

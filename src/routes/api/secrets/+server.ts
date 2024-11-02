@@ -1,7 +1,7 @@
 import {json, error} from '@sveltejs/kit';
 
-import {valid} from '$lib/schema/validate';
-import type {JsonSchema} from '$lib/schema/schema';
+import {valid} from '$lib/core/schema/validate';
+import type {JsonSchema} from '$lib/core/schema/schema';
 
 export const GET = async ({locals}) => {
     const user = await locals.user();

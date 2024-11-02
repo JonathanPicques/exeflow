@@ -1,4 +1,4 @@
-import {valid} from '$lib/schema/validate';
+import {valid} from '$lib/core/schema/validate';
 import {serverAction} from '$lib/core/plugins/action.server';
 import type action from './sendMessage';
 

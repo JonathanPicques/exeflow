@@ -1,4 +1,4 @@
-import {valid} from '$lib/schema/validate';
+import {valid} from '$lib/core/schema/validate';
 
 export const getMe = async () => {
     const response = await fetch(`/api/me`, {method: 'GET'});

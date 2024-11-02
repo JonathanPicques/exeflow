@@ -1,6 +1,6 @@
 import type {Action} from '$lib/core/plugins/action';
-import type {JsonSchema} from '$lib/schema/schema';
-import type {InferJsonSchema} from '$lib/schema/infer';
+import type {JsonSchema} from '$lib/core/schema/schema';
+import type {InferJsonSchema} from '$lib/core/schema/infer';
 import type {PluginId, PluginNode} from '$lib/core/core';
 
 export interface ServerAction<Config extends JsonSchema> {

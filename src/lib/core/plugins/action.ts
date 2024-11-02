@@ -1,5 +1,5 @@
-import type {JsonSchema} from '$lib/schema/schema';
-import type {InferJsonSchema} from '$lib/schema/infer';
+import type {JsonSchema} from '$lib/core/schema/schema';
+import type {InferJsonSchema} from '$lib/core/schema/infer';
 
 export type ActionId = string;
 

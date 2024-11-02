@@ -2,7 +2,7 @@
     import Add from '$lib/core/widgets/icons/Add.svelte';
     import Trash from '$lib/core/widgets/icons/Trash.svelte';
 
-    import {wait} from '$lib/helper/function';
+    import {wait} from '$lib/core/helper/function';
     import {getProjectContext} from '$lib/core/core.client.svelte';
 
     let secret = $state({key: '', value: ''});

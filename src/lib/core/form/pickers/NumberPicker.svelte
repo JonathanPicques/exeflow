@@ -1,6 +1,6 @@
 <script lang="ts">
     import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
-    import type {JsonSchemaNumber} from '$lib/schema/schema';
+    import type {JsonSchemaNumber} from '$lib/core/schema/schema';
 
     let {label, value = $bindable(), onchange}: PickerProps<JsonSchemaNumber> = $props();
 </script>

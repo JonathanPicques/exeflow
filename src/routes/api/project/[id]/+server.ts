@@ -1,11 +1,11 @@
 import {sql} from 'kysely';
 import {json, error} from '@sveltejs/kit';
 
-import {valid} from '$lib/schema/validate';
+import {valid} from '$lib/core/schema/validate';
 import {graphSchema} from '$lib/core/core';
 import {triggerRootUrl} from '$lib/core/conf.server';
 import type {Db} from '$lib/supabase/db.server';
-import type {JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/core/schema/schema';
 import type {TriggerNode} from '$lib/core/core';
 
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';

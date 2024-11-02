@@ -1,7 +1,7 @@
 import {resolve, pluginId} from '$lib/core/parse';
 import type {ActionId} from '$lib/core/plugins/action';
 import type {TriggerId} from '$lib/core/plugins/trigger';
-import type {JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/core/schema/schema';
 import type {ServerAction} from '$lib/core/plugins/action.server';
 import type {ServerTrigger} from '$lib/core/plugins/trigger.server';
 import type {PluginId, ActionNode, PluginNode, TriggerNode, GraphContext} from '$lib/core/core';

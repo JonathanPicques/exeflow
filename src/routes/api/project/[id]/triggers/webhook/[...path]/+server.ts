@@ -1,12 +1,12 @@
 import {error} from '@sveltejs/kit';
 import {writable} from 'svelte/store';
 
-import {valid} from '$lib/schema/validate';
+import {valid} from '$lib/core/schema/validate';
 import {insertLog} from '../../log';
 import {GraphContext, importPlugins} from '$lib/core/core';
 import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
-import type {JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/core/schema/schema';
 import type {RequestEvent} from './$types';
 import type {Graph, TriggerNode} from '$lib/core/core';
 

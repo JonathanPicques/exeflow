@@ -1,7 +1,7 @@
 import icon from './+icon.svg';
 import {action} from '$lib/core/plugins/action';
-import {zero, fill} from '$lib/schema/data';
-import type {JsonSchema} from '$lib/schema/schema';
+import {zero, fill} from '$lib/core/schema/data';
+import type {JsonSchema} from '$lib/core/schema/schema';
 
 const ollama = {
     type: 'object',

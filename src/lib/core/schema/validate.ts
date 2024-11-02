@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
-import type {JsonSchema} from '$lib/schema/schema';
-import type {InferJsonSchema} from '$lib/schema/infer';
+import type {JsonSchema} from '$lib/core/schema/schema';
+import type {InferJsonSchema} from '$lib/core/schema/infer';
 
 const validator = new Ajv({keywords: ['editor']});
 

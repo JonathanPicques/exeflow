@@ -2,7 +2,7 @@
     import FormEditor from '$lib/core/form/FormEditor.svelte';
 
     import {getGraphContext} from '$lib/core/core';
-    import type {JsonSchema} from '$lib/schema/schema';
+    import type {JsonSchema} from '$lib/core/schema/schema';
     import type {PluginNode} from '$lib/core/core';
 
     let {node}: {node: PluginNode} = $props();

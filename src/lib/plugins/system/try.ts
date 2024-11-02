@@ -1,7 +1,7 @@
 import icon from './+icon.svg';
-import {fill} from '$lib/schema/data';
+import {fill} from '$lib/core/schema/data';
 import {action} from '$lib/core/plugins/action';
-import type {JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/core/schema/schema';
 
 const configSchema = {} satisfies JsonSchema;
 

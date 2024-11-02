@@ -10,7 +10,7 @@
     import ActionNode from '$lib/core/flow/nodes/Action.svelte';
     import TriggerNode from '$lib/core/flow/nodes/Trigger.svelte';
 
-    import {valid} from '$lib/schema/validate';
+    import {valid} from '$lib/core/schema/validate';
     import {layout} from '$lib/core/flow/dagre/layout';
     import {getGraphContext} from '$lib/core/core';
 

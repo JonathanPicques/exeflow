@@ -4,11 +4,11 @@ import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 import type {Edge, Node} from '@xyflow/svelte';
 
-import {zero} from '$lib/schema/data';
-import {stableChecksum} from '$lib/helper/check';
+import {zero} from '$lib/core/schema/data';
+import {stableChecksum} from '$lib/core/helper/check';
 import {constant, pluginId} from '$lib/core/parse';
 
-import type {JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/core/schema/schema';
 import type {Action, ActionId, ActionData} from '$lib/core/plugins/action';
 import type {Trigger, TriggerId, TriggerData} from '$lib/core/plugins/trigger';
 

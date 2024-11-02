@@ -1,7 +1,7 @@
-import {valid} from '$lib/schema/validate';
+import {valid} from '$lib/core/schema/validate';
 import type {PluginId} from '$lib/core/core';
-import type {InferJsonSchema} from '$lib/schema/infer';
-import type {JsonSchema, JsonSchemaAnyOf} from '$lib/schema/schema';
+import type {InferJsonSchema} from '$lib/core/schema/infer';
+import type {JsonSchema, JsonSchemaAnyOf} from '$lib/core/schema/schema';
 
 type Text = {type: 'text'; text: string};
 type Node = {type: 'node'; id: string; key: string; path?: string};

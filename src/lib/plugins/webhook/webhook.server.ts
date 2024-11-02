@@ -1,4 +1,4 @@
-import {tryFunction} from '$lib/helper/function';
+import {tryFunction} from '$lib/core/helper/function';
 import {serverTrigger} from '$lib/core/plugins/trigger.server';
 import type trigger from './webhook';
 

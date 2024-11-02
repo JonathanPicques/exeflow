@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import type {JsonSchema} from '$lib/schema/schema';
+    import type {JsonSchema} from '$lib/core/schema/schema';
 
     type EditorMention = NodeEditorMention | SecretEditorMention;
     type NodeEditorMention = {type: 'node'; node: PluginNode; key: string; schema: JsonSchema};
@@ -27,13 +27,13 @@
     import MentionList from './mentions/MentionList.svelte';
     import MentionSpan from './mentions/MentionSpan.svelte';
 
-    import {valid} from '$lib/schema/validate';
+    import {valid} from '$lib/core/schema/validate';
     import {graphContextKey, getGraphContext} from '$lib/core/core';
     import {projectContextKey, getProjectContext} from '$lib/core/core.client.svelte';
     import {parse, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
     import type {PluginNode} from '$lib/core/core';
     import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
-    import type {JsonSchemaString} from '$lib/schema/schema';
+    import type {JsonSchemaString} from '$lib/core/schema/schema';
 
     let {id, label, value = $bindable(), schema, onchange}: PickerProps<JsonSchemaString> = $props();
 

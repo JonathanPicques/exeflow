@@ -1,6 +1,6 @@
 import type {Trigger} from '$lib/core/plugins/trigger';
-import type {JsonSchema} from '$lib/schema/schema';
-import type {InferJsonSchema} from '$lib/schema/infer';
+import type {JsonSchema} from '$lib/core/schema/schema';
+import type {InferJsonSchema} from '$lib/core/schema/infer';
 import type {PluginId, PluginNode} from '$lib/core/core';
 
 export interface ServerTrigger<Config extends JsonSchema> {

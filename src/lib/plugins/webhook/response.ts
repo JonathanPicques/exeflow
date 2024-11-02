@@ -1,8 +1,8 @@
 import icon from './+icon.svg';
 import {action} from '$lib/core/plugins/action';
-import {fill, zero} from '$lib/schema/data';
+import {fill, zero} from '$lib/core/schema/data';
 import {statusCodeMessages} from './+statusCodes';
-import type {JsonSchema} from '$lib/schema/schema';
+import type {JsonSchema} from '$lib/core/schema/schema';
 
 const configSchema = {
     type: 'object',

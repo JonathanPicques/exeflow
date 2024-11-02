@@ -24,9 +24,9 @@
     import Duplicate from '$lib/core/widgets/icons/Duplicate.svelte';
     import FitToView from '$lib/core/widgets/icons/FitToView.svelte';
 
-    import {wait} from '$lib/helper/function';
-    import {valid} from '$lib/schema/validate';
-    import {shortcut} from '$lib/helper/shortcut';
+    import {wait} from '$lib/core/helper/function';
+    import {valid} from '$lib/core/schema/validate';
+    import {shortcut} from '$lib/core/helper/shortcut';
     import {patchProject} from '../../api/project/project';
     import {setProjectContext} from '$lib/core/core.client.svelte';
     import {graphSchema, setGraphContext} from '$lib/core/core';
