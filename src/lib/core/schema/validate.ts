@@ -1,6 +1,8 @@
+// imports must be relative for vite typechecking to work
+
 import Ajv from 'ajv';
-import type {JsonSchema} from '$lib/core/schema/schema';
-import type {InferJsonSchema} from '$lib/core/schema/infer';
+import type {JsonSchema} from './schema';
+import type {InferJsonSchema} from './infer';
 
 const validator = new Ajv({keywords: ['editor']});
 

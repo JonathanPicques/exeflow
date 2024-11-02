@@ -1,6 +1,8 @@
-import {valid} from '$lib/core/schema/validate';
-import type {JsonSchema} from '$lib/core/schema/schema';
-import type {InferJsonSchema} from '$lib/core/schema/infer';
+// imports must be relative for vite typechecking to work
+
+import {valid} from './validate';
+import type {JsonSchema} from './schema';
+import type {InferJsonSchema} from './infer';
 
 /**
  * @returns a new value from the given schema

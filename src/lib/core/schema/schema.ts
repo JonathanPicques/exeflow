@@ -1,3 +1,5 @@
+// imports must be relative for vite typechecking to work
+
 export interface JsonSchemaAll<T> {
     const?: T;
     default?: T;

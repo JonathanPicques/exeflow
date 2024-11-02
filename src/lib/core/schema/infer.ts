@@ -1,14 +1,6 @@
-import type {
-    JsonSchema,
-    JsonSchemaAny,
-    JsonSchemaNull,
-    JsonSchemaAnyOf,
-    JsonSchemaArray,
-    JsonSchemaNumber,
-    JsonSchemaObject,
-    JsonSchemaString,
-    JsonSchemaBoolean,
-} from '$lib/core/schema/schema';
+// imports must be relative for vite typechecking to work
+
+import type {JsonSchema, JsonSchemaAny, JsonSchemaNull, JsonSchemaAnyOf, JsonSchemaArray, JsonSchemaNumber, JsonSchemaObject, JsonSchemaString, JsonSchemaBoolean} from './schema';
 
 type Const<T extends JsonSchema, Fallback> = T['const'] extends infer C extends {} ? C : Fallback;
 type MapObject<T extends JsonSchemaObject> =
