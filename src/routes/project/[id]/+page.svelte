@@ -34,14 +34,11 @@
     type Length = `${number}%`;
 
     let {data} = $props();
-    const nodes = writable(data.project.content.nodes);
-    const edges = writable(data.project.content.edges);
 
     const projectContext = setProjectContext({secrets: data.secrets, sidebar: !data.mobileHint});
-    const {checksum, exportGraph, exportSelection, importSelection} = setGraphContext({
-        nodes,
-        edges,
-        //
+    const {nodes, edges, checksum, exportGraph, exportSelection, importSelection} = setGraphContext({
+        nodes: data.project.content.nodes,
+        edges: data.project.content.edges,
         actions: data.actions,
         triggers: data.triggers,
     });

@@ -3,7 +3,6 @@ import {getContext, setContext} from 'svelte';
 import {putSecret, deleteSecret} from '../../routes/api/secrets/secrets';
 import type {Secret} from '../../routes/api/secrets/secrets';
 import type {PluginNode} from '$lib/core/core';
-import type {ConstructorParameters} from '$lib/core/helper/typescript';
 
 type Tab = LogsTab | NodesTab | SecretsTab;
 type LogsTab = {type: 'logs'};
@@ -72,4 +71,4 @@ export class ProjectContext {
 
 export const projectContextKey = Symbol('graph');
 export const getProjectContext = () => getContext<ProjectContext>(projectContextKey);
-export const setProjectContext = (params: ConstructorParameters<ProjectContext>) => setContext(projectContextKey, new ProjectContext(params));
+export const setProjectContext = (...params: ConstructorParameters<typeof ProjectContext>) => setContext(projectContextKey, new ProjectContext(...params));

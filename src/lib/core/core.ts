@@ -1,5 +1,5 @@
-import {get} from 'svelte/store';
 import {init} from '@paralleldrive/cuid2';
+import {get, writable} from 'svelte/store';
 import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
 import type {Edge, Node} from '@xyflow/svelte';
@@ -9,7 +9,6 @@ import {stableChecksum} from '$lib/core/helper/check';
 import {constant, pluginId} from '$lib/core/parser/parser';
 
 import type {JsonSchema} from '$lib/core/schema/schema';
-import type {ConstructorParameters} from '$lib/core/helper/typescript';
 import type {Action, ActionId, ActionData} from '$lib/core/plugins/action';
 import type {Trigger, TriggerId, TriggerData} from '$lib/core/plugins/trigger';
 
@@ -47,19 +46,9 @@ export class GraphContext {
     public readonly triggers: Record<TriggerId, Trigger<JsonSchema>>;
     private readonly createId = init({length: 5});
 
-    public constructor({
-        nodes,
-        edges,
-        actions,
-        triggers,
-    }: {
-        nodes: GraphContext['nodes'];
-        edges: GraphContext['edges'];
-        actions: GraphContext['actions'];
-        triggers: GraphContext['triggers'];
-    }) {
-        this.nodes = nodes;
-        this.edges = edges;
+    public constructor({nodes, edges, actions, triggers}: {nodes: PluginNode[]; edges: PluginEdge[]; actions: GraphContext['actions']; triggers: GraphContext['triggers']}) {
+        this.nodes = writable(nodes);
+        this.edges = writable(edges);
         this.actions = actions;
         this.triggers = triggers;
     }
@@ -272,7 +261,7 @@ export const importPlugins = async () => {
 
 export const graphContextKey = Symbol('graph');
 export const getGraphContext = () => getContext<GraphContext>(graphContextKey);
-export const setGraphContext = (params: ConstructorParameters<GraphContext>) => setContext(graphContextKey, new GraphContext(params));
+export const setGraphContext = (...params: ConstructorParameters<typeof GraphContext>) => setContext(graphContextKey, new GraphContext(...params));
 
 export const edgeSchema = {
     type: 'object',
