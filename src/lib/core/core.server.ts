@@ -132,7 +132,7 @@ export class ServerGraphContext {
         return Object.fromEntries(
             nodes.map(node => {
                 return [
-                    '',
+                    node.id,
                     {
                         id: node.id,
                         type: node.type,
