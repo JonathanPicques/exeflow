@@ -18,6 +18,18 @@ const cyrb53 = (str: string, seed = 0) => {
 };
 
 /**
+ * @returns whether the checksums of a and b are equal
+ * @example
+ * ```ts
+ * stableEqual({name: 'John'}, {name: 'Jane'}) => false
+ * stableEqual({name: 'John', age: 64}, {age: 64, name: 'John'}) => true
+ * ```
+ */
+export const stableEqual = (a: unknown, b: unknown) => {
+    return stableChecksum(a) === stableChecksum(b);
+};
+
+/**
  * @returns a stable checksum for the given value (will fail for a value containing cyclic references)
  * @example
  * ```ts
@@ -79,6 +91,5 @@ export const stableStringify = (value: any): string => {
             throw new Error(`${value} is not stable`);
         }
     }
-
     return stringified;
 };
