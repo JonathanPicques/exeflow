@@ -2,7 +2,7 @@ import {getContext, setContext} from 'svelte';
 
 import {putSecret, deleteSecret} from '../../routes/api/secrets/secrets';
 import type {Secret} from '../../routes/api/secrets/secrets';
-import type {PluginNode} from './graph/nodes';
+import type {PluginNode} from '$lib/core/core';
 
 type Tab = LogsTab | NodesTab | SecretsTab;
 type LogsTab = {type: 'logs'};

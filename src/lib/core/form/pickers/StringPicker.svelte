@@ -31,7 +31,7 @@
     import {graphContextKey, getGraphContext} from '$lib/core/core';
     import {projectContextKey, getProjectContext} from '$lib/core/core.client.svelte';
     import {parse, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
-    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {PluginNode} from '$lib/core/core';
     import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
     import type {JsonSchemaString} from '$lib/schema/schema';
 

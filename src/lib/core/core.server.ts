@@ -4,8 +4,7 @@ import type {TriggerId} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/schema/schema';
 import type {ServerAction} from '$lib/core/plugins/action.server';
 import type {ServerTrigger} from '$lib/core/plugins/trigger.server';
-import type {PluginId, GraphContext} from '$lib/core/core';
-import type {PluginNode, ActionNode, TriggerNode} from '$lib/core/graph/nodes';
+import type {PluginId, ActionNode, PluginNode, TriggerNode, GraphContext} from '$lib/core/core';
 
 interface ExecuteData {
     [K: PluginNode['id']]: Record<string, unknown>;

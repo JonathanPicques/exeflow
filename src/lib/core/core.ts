@@ -2,22 +2,45 @@ import {get} from 'svelte/store';
 import {init} from '@paralleldrive/cuid2';
 import {getContext, setContext} from 'svelte';
 import type {Writable} from 'svelte/store';
+import type {Edge, Node} from '@xyflow/svelte';
 
 import {zero} from '$lib/schema/data';
-import {nodeSchema} from '$lib/core/graph/nodes';
-import {edgeSchema} from '$lib/core/graph/edges';
 import {stableChecksum} from '$lib/helper/check';
 import {constant, pluginId} from '$lib/core/parse';
 
-import type {PluginEdge} from '$lib/core/graph/edges';
 import type {JsonSchema} from '$lib/schema/schema';
-import type {Action, ActionId} from '$lib/core/plugins/action';
-import type {Trigger, TriggerId} from '$lib/core/plugins/trigger';
-import type {PluginNode, ActionNode} from '$lib/core/graph/nodes';
+import type {Action, ActionId, ActionData} from '$lib/core/plugins/action';
+import type {Trigger, TriggerId, TriggerData} from '$lib/core/plugins/trigger';
+
+export interface ActionNode extends Node<ActionNodeData> {
+    type: 'action';
+}
+export interface TriggerNode extends Node<TriggerNodeData> {
+    type: 'trigger';
+}
+
+export interface ActionNodeData {
+    id: ActionId;
+    data: ActionData<JsonSchema>;
+    //
+    [x: string]: unknown;
+}
+export interface TriggerNodeData {
+    id: TriggerId;
+    data: TriggerData<JsonSchema>;
+    //
+    [x: string]: unknown;
+}
 
 export type Graph = {nodes: PluginNode[]; edges: PluginEdge[]};
 export type Plugin = Action<JsonSchema> | Trigger<JsonSchema>;
 export type PluginId = ActionId | TriggerId;
+export type PluginNode = ActionNode | TriggerNode;
+export type PluginEdge = Edge;
+export type PluginNodeData = ActionNodeData | TriggerNodeData;
+
+export const isActionNode = (node: PluginNode): node is ActionNode => node.type === 'action';
+export const isTriggerNode = (node: PluginNode): node is TriggerNode => node.type === 'trigger';
 
 interface Params {
     nodes: Writable<PluginNode[]>;
@@ -246,6 +269,52 @@ export const importPlugins = async () => {
 export const graphContextKey = Symbol('graph');
 export const getGraphContext = () => getContext<GraphContext>(graphContextKey);
 export const setGraphContext = (params: Params) => setContext(graphContextKey, new GraphContext(params));
+
+export const edgeSchema = {
+    type: 'object',
+    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle'] as const,
+    properties: {
+        id: {type: 'string'},
+        source: {type: 'string'},
+        target: {type: 'string'},
+        sourceHandle: {type: 'string'},
+        targetHandle: {type: 'string'},
+        selected: {type: 'boolean'},
+    },
+} satisfies JsonSchema;
+
+export const nodeSchema = {
+    type: 'object',
+    required: ['id', 'type', 'data', 'position'] as const,
+    properties: {
+        id: {
+            type: 'string',
+        },
+        type: {
+            type: 'string',
+            enum: ['action', 'trigger'] as const,
+        },
+        data: {
+            type: 'object',
+            required: ['id', 'data'] as const,
+            properties: {
+                id: {type: 'string'},
+                data: {},
+            },
+        },
+        position: {
+            type: 'object',
+            required: ['x', 'y'] as const,
+            properties: {
+                x: {type: 'number'},
+                y: {type: 'number'},
+            },
+        },
+        selected: {
+            type: 'boolean',
+        },
+    },
+} satisfies JsonSchema;
 
 export const graphSchema = {
     type: 'object',

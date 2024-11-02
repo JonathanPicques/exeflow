@@ -1,7 +1,7 @@
 <script lang="ts">
     import {page} from '$app/stores';
     import {getGraphContext} from '$lib/core/core';
-    import type {TriggerNode} from '$lib/core/graph/nodes';
+    import type {TriggerNode} from '$lib/core/core';
 
     let {node}: {node: TriggerNode} = $props();
     const {nodes, edges} = getGraphContext();

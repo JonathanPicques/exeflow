@@ -4,11 +4,10 @@ import {json, error} from '@sveltejs/kit';
 import {insertLog} from '../../log';
 import {GraphContext, importPlugins} from '$lib/core/core';
 import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
-import type {Graph} from '$lib/core/core';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
-import type {TriggerNode} from '$lib/core/graph/nodes';
 import type {RequestEvent} from './$types';
 import type {TriggersNodeId} from '$lib/supabase/gen/public/Triggers';
+import type {Graph, TriggerNode} from '$lib/core/core';
 
 const handler = async ({locals, params, request}: RequestEvent) => {
     const trigger = await locals.db

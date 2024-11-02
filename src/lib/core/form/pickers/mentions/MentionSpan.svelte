@@ -6,7 +6,7 @@
     import {getProjectContext} from '$lib/core/core.client.svelte';
     import {humanPluginName, extractPluginName, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
     import type {parse} from '$lib/core/parse';
-    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {PluginNode} from '$lib/core/core';
 
     interface Props {
         id: PluginNode['id'];

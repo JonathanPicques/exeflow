@@ -3,7 +3,7 @@
 
     import {getGraphContext} from '$lib/core/core';
     import type {JsonSchema} from '$lib/schema/schema';
-    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {PluginNode} from '$lib/core/core';
 
     let {node}: {node: PluginNode} = $props();
 

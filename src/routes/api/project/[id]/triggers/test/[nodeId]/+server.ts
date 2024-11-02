@@ -2,9 +2,8 @@ import {error} from '@sveltejs/kit';
 import {writable} from 'svelte/store';
 
 import {valid} from '$lib/schema/validate';
-import {isTriggerNode} from '$lib/core/graph/nodes';
 import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
-import {graphSchema, GraphContext, importPlugins} from '$lib/core/core';
+import {graphSchema, GraphContext, importPlugins, isTriggerNode} from '$lib/core/core';
 
 export const POST = async ({locals, params, request}) => {
     const user = await locals.user();

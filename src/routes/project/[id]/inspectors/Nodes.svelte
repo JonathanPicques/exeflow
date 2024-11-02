@@ -3,11 +3,10 @@
     import NodesTrigger from './NodesTrigger.svelte';
     import FlowNodeCard from '$lib/core/flow/FlowNodeCard.svelte';
 
-    import {isTriggerNode} from '$lib/core/graph/nodes';
+    import {isTriggerNode} from '$lib/core/core';
     import {getGraphContext} from '$lib/core/core';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
-    import type {PluginNode} from '$lib/core/graph/nodes';
-    import type {Plugin, PluginId} from '$lib/core/core';
+    import type {Plugin, PluginId, PluginNode} from '$lib/core/core';
 
     const {nodes, actions, triggers, getPlugin} = getGraphContext();
 

@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import type {JsonSchema} from '$lib/schema/schema';
-    import type {PluginNode} from '$lib/core/graph/nodes';
+    import type {PluginNode} from '$lib/core/core';
     import type {InferJsonSchema} from '$lib/schema/infer';
 
     export type PickerProps<T extends JsonSchema = JsonSchema, V = InferJsonSchema<T>> = {

@@ -6,7 +6,7 @@ import {graphSchema} from '$lib/core/core';
 import {triggerRootUrl} from '$lib/core/conf.server';
 import type {Db} from '$lib/supabase/db.server';
 import type {JsonSchema} from '$lib/schema/schema';
-import type {TriggerNode} from '$lib/core/graph/nodes';
+import type {TriggerNode} from '$lib/core/core';
 
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {TriggersNodeId, TriggersPluginId} from '$lib/supabase/gen/public/Triggers';
