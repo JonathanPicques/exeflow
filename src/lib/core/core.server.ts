@@ -4,7 +4,7 @@ import type {TriggerId} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/core/schema/schema';
 import type {ServerAction} from '$lib/core/plugins/action.server';
 import type {ServerTrigger} from '$lib/core/plugins/trigger.server';
-import type {PluginId, PluginNode, PluginEdge} from '$lib/core/core';
+import type {PluginId, PluginEdge, PluginNode} from '$lib/core/core';
 
 type ExecuteData = {
     [k: ServerPluginNode['id']]: Record<string, unknown>;
@@ -17,20 +17,29 @@ type ExecuteStep = {
     results: Record<string, unknown>;
 };
 
-interface ServerPluginNode {
+export interface ServerActionNode {
     id: PluginNode['id'];
-    type: 'action' | 'trigger';
+    type: 'action';
     config: {value: unknown; schema: JsonSchema};
     pluginId: PluginId;
 }
 
-interface ServerPluginEdge {
+export interface ServerTriggerNode {
+    id: PluginNode['id'];
+    type: 'trigger';
+    config: {value: unknown; schema: JsonSchema};
+    pluginId: PluginId;
+}
+
+export type ServerGraph = {serverNodes: ServerActionNode[]; serverEdges: ServerPluginEdge[]};
+export type ServerPluginNode = ServerActionNode | ServerTriggerNode;
+export type ServerPluginEdge = {
     id: string;
     source: string;
     target: string;
     sourceHandle: string;
     targetHandle: string;
-}
+};
 
 export class ServerGraphContext {
     private readonly secrets: Record<string, string>;
@@ -154,6 +163,8 @@ export class ServerGraphContext {
             } satisfies ServerPluginEdge;
         });
     };
+    public static isServerActionNode = (node: ServerPluginNode): node is ServerActionNode => node.type === 'action';
+    public static isServerTriggerNode = (node: ServerPluginNode): node is ServerTriggerNode => node.type === 'trigger';
 }
 
 export const importServerPlugins = async () => {
@@ -178,3 +189,40 @@ export const importServerPlugins = async () => {
     }
     return {serverActions, serverTriggers};
 };
+
+export const serverNodeSchema = {
+    type: 'object',
+    required: ['id', 'type', 'config', 'pluginId'] as const,
+    properties: {
+        id: {type: 'string'},
+        type: {type: 'string', enum: ['action', 'trigger'] as const},
+        config: {
+            type: 'object',
+            required: ['value', 'schema'] as const,
+            properties: {
+                value: {},
+                schema: {},
+            },
+        },
+        pluginId: {type: 'string'},
+    },
+} satisfies JsonSchema;
+export const serverEdgeSchema = {
+    type: 'object',
+    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle'] as const,
+    properties: {
+        id: {type: 'string'},
+        source: {type: 'string'},
+        target: {type: 'string'},
+        sourceHandle: {type: 'string'},
+        targetHandle: {type: 'string'},
+    },
+} satisfies JsonSchema;
+export const serverGraphSchema = {
+    type: 'object',
+    required: ['nodes', 'edges'] as const,
+    properties: {
+        nodes: {type: 'array', items: serverNodeSchema},
+        edges: {type: 'array', items: serverEdgeSchema},
+    },
+} satisfies JsonSchema;

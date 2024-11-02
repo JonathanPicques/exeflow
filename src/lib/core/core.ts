@@ -286,7 +286,6 @@ export const edgeSchema = {
         selected: {type: 'boolean'},
     },
 } satisfies JsonSchema;
-
 export const nodeSchema = {
     type: 'object',
     required: ['id', 'type', 'data', 'position'] as const,
@@ -319,7 +318,6 @@ export const nodeSchema = {
         },
     },
 } satisfies JsonSchema;
-
 export const graphSchema = {
     type: 'object',
     required: ['nodes', 'edges'] as const,
