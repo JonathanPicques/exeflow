@@ -3,8 +3,7 @@
     import NodesTrigger from './NodesTrigger.svelte';
     import FlowNodeCard from '$lib/core/flow/FlowNodeCard.svelte';
 
-    import {isTriggerNode} from '$lib/core/core';
-    import {getGraphContext} from '$lib/core/core';
+    import {GraphContext, getGraphContext} from '$lib/core/core';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parser/parser';
     import type {Plugin, PluginId, PluginNode} from '$lib/core/core';
 
@@ -65,7 +64,7 @@
         </h1>
 
         <div class="list">
-            {#if isTriggerNode(node)}
+            {#if GraphContext.isTriggerNode(node)}
                 <NodesTrigger {node} />
             {/if}
             <NodesEditor {node} />

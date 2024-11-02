@@ -9,6 +9,7 @@ import {stableChecksum} from '$lib/core/helper/check';
 import {constant, pluginId} from '$lib/core/parser/parser';
 
 import type {JsonSchema} from '$lib/core/schema/schema';
+import type {ConstructorParameters} from '$lib/core/helper/typescript';
 import type {Action, ActionId, ActionData} from '$lib/core/plugins/action';
 import type {Trigger, TriggerId, TriggerData} from '$lib/core/plugins/trigger';
 
@@ -39,16 +40,6 @@ export type PluginNode = ActionNode | TriggerNode;
 export type PluginEdge = Edge;
 export type PluginNodeData = ActionNodeData | TriggerNodeData;
 
-export const isActionNode = (node: PluginNode): node is ActionNode => node.type === 'action';
-export const isTriggerNode = (node: PluginNode): node is TriggerNode => node.type === 'trigger';
-
-interface Params {
-    nodes: Writable<PluginNode[]>;
-    edges: Writable<PluginEdge[]>;
-    actions: Record<ActionId, Action<JsonSchema>>;
-    triggers: Record<TriggerId, Trigger<JsonSchema>>;
-}
-
 export class GraphContext {
     public readonly nodes: Writable<PluginNode[]>;
     public readonly edges: Writable<PluginEdge[]>;
@@ -56,7 +47,17 @@ export class GraphContext {
     public readonly triggers: Record<TriggerId, Trigger<JsonSchema>>;
     private readonly createId = init({length: 5});
 
-    public constructor({nodes, edges, actions, triggers}: Params) {
+    public constructor({
+        nodes,
+        edges,
+        actions,
+        triggers,
+    }: {
+        nodes: GraphContext['nodes'];
+        edges: GraphContext['edges'];
+        actions: GraphContext['actions'];
+        triggers: GraphContext['triggers'];
+    }) {
         this.nodes = nodes;
         this.edges = edges;
         this.actions = actions;
@@ -241,6 +242,9 @@ export class GraphContext {
 
     private serializeNode = ({id, type, data, position, selected}: PluginNode) => ({id, type, data, position, selected}) as PluginNode;
     private serializeEdge = ({id, source, target, sourceHandle, targetHandle, selected}: PluginEdge) => ({id, source, target, sourceHandle, targetHandle, selected}) as PluginEdge;
+
+    public static isActionNode = (node: PluginNode): node is ActionNode => node.type === 'action';
+    public static isTriggerNode = (node: PluginNode): node is TriggerNode => node.type === 'trigger';
 }
 
 export const importPlugins = async () => {
@@ -268,7 +272,7 @@ export const importPlugins = async () => {
 
 export const graphContextKey = Symbol('graph');
 export const getGraphContext = () => getContext<GraphContext>(graphContextKey);
-export const setGraphContext = (params: Params) => setContext(graphContextKey, new GraphContext(params));
+export const setGraphContext = (params: ConstructorParameters<GraphContext>) => setContext(graphContextKey, new GraphContext(params));
 
 export const edgeSchema = {
     type: 'object',

@@ -143,7 +143,7 @@ export class ServerGraphContext {
             }),
         );
     };
-    public static fromEdges = (edges: PluginEdge[]) => {
+    public static fromEdges = (edges: PluginEdge[]): ServerGraphContext['serverEdges'] => {
         return edges.map(edge => {
             return {
                 id: edge.id,
