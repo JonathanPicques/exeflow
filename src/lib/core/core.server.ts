@@ -4,97 +4,157 @@ import type {TriggerId} from '$lib/core/plugins/trigger';
 import type {JsonSchema} from '$lib/core/schema/schema';
 import type {ServerAction} from '$lib/core/plugins/action.server';
 import type {ServerTrigger} from '$lib/core/plugins/trigger.server';
-import type {PluginId, ActionNode, PluginNode, TriggerNode, GraphContext} from '$lib/core/core';
+import type {PluginId, PluginNode, PluginEdge} from '$lib/core/core';
 
-interface ExecuteData {
-    [K: PluginNode['id']]: Record<string, unknown>;
-}
+type ExecuteData = {
+    [k: ServerPluginNode['id']]: Record<string, unknown>;
+};
 
-interface ExecuteStep {
-    nodeId: PluginNode['id'];
+type ExecuteStep = {
+    nodeId: ServerPluginNode['id'];
     pluginId: PluginId;
     config: unknown;
     results: Record<string, unknown>;
-}
-
-interface ActionExecuteArgs<T extends PluginNode> {
-    node: T;
-    input: string;
-    signal: AbortSignal;
-    context: GraphContext;
-    secrets: Record<string, string>;
-    serverActions: Record<ActionId, ServerAction<JsonSchema>>;
-}
-
-interface TriggerExecuteArgs<T extends PluginNode> {
-    node: T;
-    signal: AbortSignal;
-    context: GraphContext;
-    secrets: Record<string, string>;
-    request?: Request;
-    serverActions: Record<ActionId, ServerAction<JsonSchema>>;
-    serverTriggers: Record<TriggerId, ServerTrigger<JsonSchema>>;
-}
-
-export const executeAction = async function* (
-    {node, input, signal, context, secrets, serverActions}: ActionExecuteArgs<ActionNode>,
-    data: ExecuteData = {},
-): AsyncGenerator<ExecuteStep> {
-    const serverAction = serverActions[node.data.id];
-    if (!serverAction) throw new Error(`server action ${node.data.id} not found`);
-
-    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {nodes: data, secrets});
-
-    yield {nodeId: node.id, pluginId: node.data.id, config, results: data};
-
-    yield* serverAction.exec({
-        next: async function* ({output, results}) {
-            const nextNode = context.getNextNode(node.id, output);
-
-            if (nextNode && !signal.aborted) {
-                data[node.id] = results;
-                yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
-            }
-        },
-        input,
-        //
-        config,
-        signal,
-    });
 };
 
-export const executeTrigger = async function* ({
-    node,
-    signal,
-    context,
-    secrets,
-    request,
-    serverActions,
-    serverTriggers,
-}: TriggerExecuteArgs<TriggerNode>): AsyncGenerator<ExecuteStep> {
-    const serverTrigger = serverTriggers[node.data.id];
-    if (!serverTrigger) throw new Error(`server trigger ${node.data.id} not found`);
+interface ServerPluginNode {
+    id: PluginNode['id'];
+    type: 'action' | 'trigger';
+    config: {value: unknown; schema: JsonSchema};
+    pluginId: PluginId;
+}
 
-    const data: ExecuteData = {};
-    const config = resolve(node.data.data.config.value, node.data.data.config.schema, {nodes: data, secrets});
+interface ServerPluginEdge {
+    id: string;
+    source: string;
+    target: string;
+    sourceHandle: string;
+    targetHandle: string;
+}
 
-    yield {nodeId: node.id, pluginId: node.data.id, config, results: data};
+export class ServerGraphContext {
+    private readonly secrets: Record<string, string>;
+    private readonly serverNodes: Record<ServerPluginNode['id'], ServerPluginNode>;
+    private readonly serverEdges: ServerPluginEdge[];
+    private readonly serverActions: Record<ActionId, ServerAction<JsonSchema>>;
+    private readonly serverTriggers: Record<ActionId, ServerTrigger<JsonSchema>>;
 
-    yield* serverTrigger.exec({
-        next: async function* ({output, results}) {
-            const nextNode = context.getNextNode(node.id, output);
+    public constructor({
+        secrets,
+        serverNodes,
+        serverEdges,
+        serverActions,
+        serverTriggers,
+    }: {
+        secrets: ServerGraphContext['secrets'];
+        serverNodes: ServerGraphContext['serverNodes'];
+        serverEdges: ServerGraphContext['serverEdges'];
+        serverActions: ServerGraphContext['serverActions'];
+        serverTriggers: ServerGraphContext['serverTriggers'];
+    }) {
+        this.secrets = secrets;
+        this.serverNodes = serverNodes;
+        this.serverEdges = serverEdges;
+        this.serverActions = serverActions;
+        this.serverTriggers = serverTriggers;
+    }
 
-            if (nextNode && !signal.aborted) {
-                data[node.id] = results;
-                yield* executeAction({node: nextNode.node, input: nextNode.input, signal, context, secrets, serverActions}, data);
-            }
-        },
-        //
-        config,
-        signal,
-        request,
-    });
-};
+    public getServerNode = (id: ServerPluginNode['id']) => {
+        const node = this.serverNodes[id];
+        if (!node) throw new Error(`server node ${id} not found`);
+
+        return node;
+    };
+    public getNextServerNode = (id: ServerPluginNode['id'], sourceHandle: string) => {
+        const edge = this.serverEdges.find(e => e.source === id && e.sourceHandle === sourceHandle);
+        if (!edge || !edge.sourceHandle || !edge.targetHandle) return undefined;
+
+        return {
+            node: this.serverNodes[edge.target],
+            input: edge.targetHandle!,
+            output: edge.sourceHandle!,
+        };
+    };
+
+    public async *executeAction({node, data, input, signal}: {node: ServerPluginNode; data: ExecuteData; input: string; signal: AbortSignal}): AsyncGenerator<ExecuteStep> {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const ctx = this;
+        const serverAction = this.serverActions[node.pluginId];
+        if (!serverAction) throw new Error(`server action ${node.pluginId} not found`);
+
+        const config = resolve(node.config.value, node.config.schema, {nodes: data, secrets: this.secrets});
+
+        yield {nodeId: node.id, pluginId: node.pluginId, config, results: data};
+
+        yield* serverAction.exec({
+            next: async function* ({output, results}) {
+                const nextNode = ctx.getNextServerNode(node.id, output);
+
+                if (nextNode && !signal.aborted) {
+                    data[node.id] = results;
+                    yield* ctx.executeAction({data, node: nextNode.node, input: nextNode.input, signal});
+                }
+            },
+            input,
+            //
+            config,
+            signal,
+        });
+    }
+    public async *executeTrigger({node, signal, request}: {node: ServerPluginNode; signal: AbortSignal; request?: Request}): AsyncGenerator<ExecuteStep> {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const ctx = this;
+        const serverTrigger = this.serverTriggers[node.pluginId];
+        if (!serverTrigger) throw new Error(`server trigger ${node.pluginId} not found`);
+
+        const data: ExecuteData = {};
+        const config = resolve(node.config.value, node.config.schema, {nodes: data, secrets: this.secrets});
+
+        yield {nodeId: node.id, pluginId: node.pluginId, config, results: data};
+
+        yield* serverTrigger.exec({
+            next: async function* ({output, results}) {
+                const nextNode = ctx.getNextServerNode(node.id, output);
+
+                if (nextNode && !signal.aborted) {
+                    data[node.id] = results;
+                    yield* ctx.executeAction({data, node: nextNode.node, input: nextNode.input, signal});
+                }
+            },
+            //
+            config,
+            signal,
+            request,
+        });
+    }
+
+    public static fromNodes = (nodes: PluginNode[]): ServerGraphContext['serverNodes'] => {
+        return Object.fromEntries(
+            nodes.map(node => {
+                return [
+                    '',
+                    {
+                        id: node.id,
+                        type: node.type,
+                        config: node.data.data.config,
+                        pluginId: node.data.id,
+                    } satisfies ServerPluginNode,
+                ];
+            }),
+        );
+    };
+    public static fromEdges = (edges: PluginEdge[]) => {
+        return edges.map(edge => {
+            return {
+                id: edge.id,
+                source: edge.source,
+                sourceHandle: edge.sourceHandle!,
+                target: edge.target,
+                targetHandle: edge.targetHandle!,
+            } satisfies ServerPluginEdge;
+        });
+    };
+}
 
 export const importServerPlugins = async () => {
     const serverActions: Record<ActionId, ServerAction<JsonSchema>> = {};

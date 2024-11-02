@@ -4,8 +4,8 @@
 
     import {getGraphContext} from '$lib/core/core';
     import {getProjectContext} from '$lib/core/core.client.svelte';
-    import {humanPluginName, extractPluginName, nodeInterpolation, secretInterpolation} from '$lib/core/parse';
-    import type {parse} from '$lib/core/parse';
+    import {humanPluginName, extractPluginName, nodeInterpolation, secretInterpolation} from '$lib/core/parser/parser';
+    import type {parse} from '$lib/core/parser/parser';
     import type {PluginNode} from '$lib/core/core';
 
     interface Props {

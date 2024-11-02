@@ -1,7 +1,7 @@
 <script lang="ts">
     import {getGraphContext} from '$lib/core/core';
     import {useStore, useSvelteFlow} from '@xyflow/svelte';
-    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parser/parser';
     import type {Plugin, PluginId} from '$lib/core/core';
 
     let props: {id: string; plugin: Plugin} = $props();

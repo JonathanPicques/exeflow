@@ -5,7 +5,7 @@
 
     import {isTriggerNode} from '$lib/core/core';
     import {getGraphContext} from '$lib/core/core';
-    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parser/parser';
     import type {Plugin, PluginId, PluginNode} from '$lib/core/core';
 
     const {nodes, actions, triggers, getPlugin} = getGraphContext();

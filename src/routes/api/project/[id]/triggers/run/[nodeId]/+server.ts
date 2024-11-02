@@ -1,13 +1,11 @@
-import {writable} from 'svelte/store';
 import {json, error} from '@sveltejs/kit';
 
 import {insertLog} from '../../log';
-import {GraphContext, importPlugins} from '$lib/core/core';
-import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
+import {importServerPlugins, ServerGraphContext} from '$lib/core/core.server';
+import type {Graph} from '$lib/core/core';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {RequestEvent} from './$types';
 import type {TriggersNodeId} from '$lib/supabase/gen/public/Triggers';
-import type {Graph, TriggerNode} from '$lib/core/core';
 
 const handler = async ({locals, params, request}: RequestEvent) => {
     const trigger = await locals.db
@@ -29,11 +27,11 @@ const handler = async ({locals, params, request}: RequestEvent) => {
 
     const execId = crypto.randomUUID();
     const controller = new AbortController();
-    const {actions, triggers} = await importPlugins();
+    const serverNodes = ServerGraphContext.fromNodes(nodes);
+    const serverEdges = ServerGraphContext.fromEdges(edges);
     const {serverActions, serverTriggers} = await importServerPlugins();
 
     let index = 0;
-    const context = new GraphContext({nodes: writable(nodes), edges: writable(edges), actions, triggers});
     const secrets = (await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', owner_id).execute()).reduce(
         (acc, {key, value}) => ({
             ...acc,
@@ -41,16 +39,9 @@ const handler = async ({locals, params, request}: RequestEvent) => {
         }),
         {},
     );
+    const context = new ServerGraphContext({secrets, serverNodes, serverEdges, serverActions, serverTriggers});
 
-    for await (const step of executeTrigger({
-        node: context.getNode(params.nodeId) as TriggerNode,
-        signal: controller.signal,
-        context,
-        secrets,
-        request,
-        serverActions,
-        serverTriggers,
-    })) {
+    for await (const step of context.executeTrigger({node: context.getServerNode(params.nodeId), signal: controller.signal, request})) {
         insertLog(locals.db, {
             execId,
             nodeId: step.nodeId,

@@ -1,10 +1,8 @@
 import {error} from '@sveltejs/kit';
-import {writable} from 'svelte/store';
 
 import {valid} from '$lib/core/schema/validate';
 import {insertLog} from '../../log';
-import {GraphContext, importPlugins} from '$lib/core/core';
-import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
+import {ServerGraphContext, importServerPlugins} from '$lib/core/core.server';
 import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {JsonSchema} from '$lib/core/schema/schema';
 import type {RequestEvent} from './$types';
@@ -60,7 +58,6 @@ const handler = async ({locals, params, request}: RequestEvent) => {
 
     let index = 0;
     const execId = crypto.randomUUID();
-    const {actions, triggers} = await importPlugins();
     const {serverActions, serverTriggers} = await importServerPlugins();
 
     let body;
@@ -76,8 +73,11 @@ const handler = async ({locals, params, request}: RequestEvent) => {
         return (path === webhookPath || (path === '' && webhookPath === '/')) && method === webhookMethod;
     });
     if (!suitableWebhook) return error(404, `no handler found for ${path}`);
+    const serverNodes = ServerGraphContext.fromNodes(nodes);
+    const serverEdges = ServerGraphContext.fromEdges(edges);
+    const serverSuitableWebhook = serverNodes[suitableWebhook.id];
+    if (!serverSuitableWebhook) return error(404, `no handler found for ${path}`);
 
-    const context = new GraphContext({nodes: writable(nodes), edges: writable(edges), actions, triggers});
     const secrets = (await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', project.owner_id).execute()).reduce(
         (acc, {key, value}) => ({
             ...acc,
@@ -85,8 +85,9 @@ const handler = async ({locals, params, request}: RequestEvent) => {
         }),
         {},
     );
+    const context = new ServerGraphContext({secrets, serverNodes, serverEdges, serverActions, serverTriggers});
     const controller = new AbortController();
-    const webhookGenerator = executeTrigger({node: suitableWebhook, signal: controller.signal, context, secrets, request, serverActions, serverTriggers});
+    const webhookGenerator = context.executeTrigger({node: serverSuitableWebhook, signal: controller.signal, request});
 
     let iterator = webhookGenerator.next();
     while (!(await iterator).done) {

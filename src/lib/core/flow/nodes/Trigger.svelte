@@ -6,7 +6,7 @@
 
     import {getGraphContext} from '$lib/core/core';
     import {getProjectContext} from '$lib/core/core.client.svelte';
-    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parse';
+    import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parser/parser';
     import type {TriggerNode} from '$lib/core/core';
 
     let {id, data, selected = undefined}: NodeProps<TriggerNode> = $props();

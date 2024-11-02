@@ -1,21 +1,20 @@
 import {error} from '@sveltejs/kit';
-import {writable} from 'svelte/store';
 
 import {valid} from '$lib/core/schema/validate';
-import {executeTrigger, importServerPlugins} from '$lib/core/core.server';
-import {graphSchema, GraphContext, importPlugins, isTriggerNode} from '$lib/core/core';
+import {graphSchema} from '$lib/core/core';
+import {ServerGraphContext, importServerPlugins} from '$lib/core/core.server';
 
+// TODO: instead of taking a graph, we should take a server graph
 export const POST = async ({locals, params, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
     const graph = await request.json();
-
     if (valid(graph, graphSchema)) {
-        const {actions, triggers} = await importPlugins();
+        const serverNodes = ServerGraphContext.fromNodes(graph.nodes);
+        const serverEdges = ServerGraphContext.fromEdges(graph.edges);
         const {serverActions, serverTriggers} = await importServerPlugins();
 
-        const context = new GraphContext({nodes: writable(graph.nodes), edges: writable(graph.edges), actions, triggers});
         const secrets = (await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', user.id).execute()).reduce(
             (acc, {key, value}) => ({
                 ...acc,
@@ -23,14 +22,13 @@ export const POST = async ({locals, params, request}) => {
             }),
             {},
         );
-
+        const context = new ServerGraphContext({secrets, serverNodes, serverEdges, serverActions, serverTriggers});
         const controller = new AbortController();
         const responseStream = new ReadableStream({
             async start(stream) {
                 try {
-                    const node = context.getNode(params.nodeId);
-                    if (!isTriggerNode(node)) throw new Error(`cannot execute an action`);
-                    for await (const step of executeTrigger({node, signal: controller.signal, context, secrets, serverActions, serverTriggers})) {
+                    const node = context.getServerNode(params.nodeId);
+                    for await (const step of context.executeTrigger({node, signal: controller.signal, request})) {
                         if (controller.signal.aborted) return;
                         stream.enqueue(JSON.stringify(step));
                         stream.enqueue('\n');
