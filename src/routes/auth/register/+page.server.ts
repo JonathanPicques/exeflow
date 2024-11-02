@@ -1,6 +1,6 @@
 import {fail} from '@sveltejs/kit';
 
-import {rootUrl} from '$lib/core/conf.server';
+import {rootUrl} from '$lib/core/env/env.server';
 
 export const actions = {
     default: async ({locals, request}) => {

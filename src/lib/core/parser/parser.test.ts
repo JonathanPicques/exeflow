@@ -1,6 +1,6 @@
 import {test, expect} from 'vitest';
 
-import {parse, access, resolve, constant, evaluate, nodeInterpolation, secretInterpolation} from './parse';
+import {parse, access, resolve, constant, evaluate, nodeInterpolation, secretInterpolation} from './parser';
 
 test('parse', () => {
     expect(parse('Hello world')).toStrictEqual([{type: 'text', text: 'Hello world'}]);

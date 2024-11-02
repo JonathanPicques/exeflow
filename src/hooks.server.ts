@@ -1,6 +1,6 @@
 import {db} from '$lib/supabase/db.server';
 import {supabase} from '$lib/supabase/supabase.server';
-import {supabaseApiUrl, supabaseServiceRoleKey} from '$lib/core/conf.server';
+import {supabaseApiUrl, supabaseServiceRoleKey} from '$lib/core/env/env.server';
 
 export const handle = async ({event, resolve}) => {
     event.locals.db = db();

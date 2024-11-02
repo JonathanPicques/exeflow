@@ -1,7 +1,7 @@
 import pg from 'pg';
 import {Kysely, PostgresDialect} from 'kysely';
 
-import {supabaseDbUrl} from '$lib/core/conf.server';
+import {supabaseDbUrl} from '$lib/core/env/env.server';
 import type {Database} from './gen/Database';
 
 export type Db = Kysely<Database>;

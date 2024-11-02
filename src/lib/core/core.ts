@@ -6,7 +6,7 @@ import type {Edge, Node} from '@xyflow/svelte';
 
 import {zero} from '$lib/core/schema/data';
 import {stableChecksum} from '$lib/core/helper/check';
-import {constant, pluginId} from '$lib/core/parse';
+import {constant, pluginId} from '$lib/core/parser/parser';
 
 import type {JsonSchema} from '$lib/core/schema/schema';
 import type {Action, ActionId, ActionData} from '$lib/core/plugins/action';
