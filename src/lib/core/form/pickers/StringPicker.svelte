@@ -24,8 +24,8 @@
     import type {Instance} from 'tippy.js';
     import type {ComponentProps, MountedComponent} from 'svelte';
 
-    import MentionList from './mentions/MentionList.svelte';
-    import MentionSpan from './mentions/MentionSpan.svelte';
+    import MentionList from '$lib/core/form/pickers/mentions/MentionList.svelte';
+    import MentionSpan from '$lib/core/form/pickers/mentions/MentionSpan.svelte';
 
     import {valid} from '$lib/core/schema/validate';
     import {graphContextKey, getGraphContext} from '$lib/core/core';

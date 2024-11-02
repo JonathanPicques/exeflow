@@ -2,7 +2,7 @@
     import json5 from 'json5';
 
     import FormEditor from '$lib/core/form/FormEditor.svelte';
-    import StringPicker from './StringPicker.svelte';
+    import StringPicker from '$lib/core/form/pickers/StringPicker.svelte';
     import {tryFunction} from '$lib/core/helper/function';
     import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
     import type {JsonSchemaObject} from '$lib/core/schema/schema';

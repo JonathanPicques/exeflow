@@ -14,7 +14,7 @@
 
 <script lang="ts">
     import AnyPicker from '$lib/core/form/pickers/AnyPicker.svelte';
-    import ArrayPicker from './pickers/ArrayPicker.svelte';
+    import ArrayPicker from '$lib/core/form/pickers/ArrayPicker.svelte';
     import StringPicker from '$lib/core/form/pickers/StringPicker.svelte';
     import NumberPicker from '$lib/core/form/pickers/NumberPicker.svelte';
     import ObjectPicker from '$lib/core/form/pickers/ObjectPicker.svelte';
