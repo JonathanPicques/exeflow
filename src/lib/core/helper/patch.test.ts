@@ -10,61 +10,50 @@ test('diff', () => {
     expect(diff(false, false)).toStrictEqual({same: {prev: false, next: false}});
     expect(diff('string', 'string')).toStrictEqual({same: {prev: 'string', next: 'string'}});
 
-    expect(diff(1, 2)).toStrictEqual({changed: {prev: 1, next: 2}});
-    expect(diff({}, [])).toStrictEqual({changed: {prev: {}, next: []}});
-    expect(diff([], {})).toStrictEqual({changed: {prev: [], next: {}}});
-    expect(diff(true, false)).toStrictEqual({changed: {prev: true, next: false}});
-    expect(diff(false, true)).toStrictEqual({changed: {prev: false, next: true}});
-    expect(diff('string', 'not same string')).toStrictEqual({changed: {prev: 'string', next: 'not same string'}});
+    expect(diff(1, 2)).toStrictEqual({changed: {value: {prev: 1, next: 2}}});
+    expect(diff({}, [])).toStrictEqual({changed: {value: {prev: {}, next: []}}});
+    expect(diff([], {})).toStrictEqual({changed: {value: {prev: [], next: {}}}});
+    expect(diff(true, false)).toStrictEqual({changed: {value: {prev: true, next: false}}});
+    expect(diff(false, true)).toStrictEqual({changed: {value: {prev: false, next: true}}});
+    expect(diff('string', 'not same string')).toStrictEqual({changed: {value: {prev: 'string', next: 'not same string'}}});
 
-    expect(diff([true], [true])).toStrictEqual({
-        same: {
-            prev: [true],
-            next: [true],
-        },
-    });
+    expect(diff([true], [true])).toStrictEqual({same: {prev: [true], next: [true]}});
     expect(diff([true], [false])).toStrictEqual({
         changed: {
-            prev: [true],
-            next: [false],
-            changes: {
+            array: {
                 moved: {},
                 added: {},
                 removed: {},
-                changed: {
-                    0: {changed: {prev: true, next: false}},
+                modified: {
+                    0: {changed: {value: {prev: true, next: false}}},
                 },
             },
         },
     });
     expect(diff(['hello'], ['welcome', 'goodbye'])).toStrictEqual({
         changed: {
-            prev: ['hello'],
-            next: ['welcome', 'goodbye'],
-            changes: {
+            array: {
                 moved: {},
                 added: {
-                    1: {added: 'goodbye'},
+                    1: 'goodbye',
                 },
                 removed: {},
-                changed: {
-                    0: {changed: {prev: 'hello', next: 'welcome'}},
+                modified: {
+                    0: {changed: {value: {prev: 'hello', next: 'welcome'}}},
                 },
             },
         },
     });
     expect(diff(['hello', 'goodbye'], [])).toStrictEqual({
         changed: {
-            prev: ['hello', 'goodbye'],
-            next: [],
-            changes: {
+            array: {
                 moved: {},
                 added: {},
                 removed: {
-                    0: {removed: 'hello'},
-                    1: {removed: 'goodbye'},
+                    0: 'hello',
+                    1: 'goodbye',
                 },
-                changed: {},
+                modified: {},
             },
         },
     });
@@ -80,19 +69,15 @@ test('diff', () => {
         ),
     ).toStrictEqual({
         changed: {
-            prev: [{id: 'pk_123', name: 'John'}],
-            next: [{id: 'pk_123', name: 'Jane'}],
-            changes: {
+            array: {
                 moved: {},
                 added: {},
                 removed: {},
-                changed: {
+                modified: {
                     pk_123: {
                         changed: {
-                            prev: {id: 'pk_123', name: 'John'},
-                            next: {id: 'pk_123', name: 'Jane'},
-                            changes: {
-                                name: {changed: {prev: 'John', next: 'Jane'}},
+                            object: {
+                                name: {changed: {value: {prev: 'John', next: 'Jane'}}},
                             },
                         },
                     },
@@ -115,37 +100,25 @@ test('diff', () => {
         ),
     ).toStrictEqual({
         changed: {
-            prev: [
-                {id: 'pk_123', name: 'John'},
-                {id: 'pk_987', name: 'Jane'},
-            ],
-            next: [
-                {id: 'pk_987', name: 'New Jane'},
-                {id: 'pk_123', name: 'New John'},
-            ],
-            changes: {
+            array: {
                 moved: {
                     pk_123: {from: 0, to: 1},
                     pk_987: {from: 1, to: 0},
                 },
                 added: {},
                 removed: {},
-                changed: {
+                modified: {
                     pk_123: {
                         changed: {
-                            prev: {id: 'pk_123', name: 'John'},
-                            next: {id: 'pk_123', name: 'New John'},
-                            changes: {
-                                name: {changed: {prev: 'John', next: 'New John'}},
+                            object: {
+                                name: {changed: {value: {prev: 'John', next: 'New John'}}},
                             },
                         },
                     },
                     pk_987: {
                         changed: {
-                            prev: {id: 'pk_987', name: 'Jane'},
-                            next: {id: 'pk_987', name: 'New Jane'},
-                            changes: {
-                                name: {changed: {prev: 'Jane', next: 'New Jane'}},
+                            object: {
+                                name: {changed: {value: {prev: 'Jane', next: 'New Jane'}}},
                             },
                         },
                     },
@@ -169,31 +142,19 @@ test('diff', () => {
         ),
     ).toStrictEqual({
         changed: {
-            prev: [
-                {id: 'pk_123', name: 'John'},
-                {id: 'pk_987', name: 'Jane'},
-                {id: 'pk_666', name: 'James'},
-            ],
-            next: [
-                {id: 'pk_987', name: 'Jane'},
-                {id: 'pk_123', name: 'John'},
-                {id: 'pk_666', name: 'Boris', age: 32},
-            ],
-            changes: {
+            array: {
                 moved: {
                     pk_987: {from: 1, to: 0},
                     pk_123: {from: 0, to: 1},
                 },
                 added: {},
                 removed: {},
-                changed: {
+                modified: {
                     pk_666: {
                         changed: {
-                            prev: {id: 'pk_666', name: 'James'},
-                            next: {id: 'pk_666', name: 'Boris', age: 32},
-                            changes: {
+                            object: {
                                 age: {added: 32},
-                                name: {changed: {prev: 'James', next: 'Boris'}},
+                                name: {changed: {value: {prev: 'James', next: 'Boris'}}},
                             },
                         },
                     },
@@ -210,16 +171,12 @@ test('diff', () => {
         ),
     ).toStrictEqual({
         changed: {
-            prev: {age: 64, contact: {phone: '123'}, address: {city: 'Paris'}},
-            next: {name: 'John', contact: {email: 'john.doe@host.com'}, address: {city: 'Paris'}},
-            changes: {
+            object: {
                 age: {removed: 64},
                 name: {added: 'John'},
                 contact: {
                     changed: {
-                        prev: {phone: '123'},
-                        next: {email: 'john.doe@host.com'},
-                        changes: {
+                        object: {
                             phone: {removed: '123'},
                             email: {added: 'john.doe@host.com'},
                         },

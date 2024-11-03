@@ -1,10 +1,74 @@
 import {stableEqual} from './check';
 
+type Diff = Same | Changed;
+type Same = {
+    same: {prev: unknown; next: unknown};
+    changed?: never;
+};
+type Changed = ChangedValue | ChangedArray | ChangedObject;
+type ChangedValue = {
+    same?: never;
+    changed: {
+        value: {
+            prev: unknown;
+            next: unknown;
+        };
+        array?: never;
+        object?: never;
+    };
+};
+type ChangedArray = {
+    same?: never;
+    changed: {
+        value?: never;
+        array: {
+            moved: Record<number | string | symbol, {from: number; to: number}>;
+            added: Record<number | string | symbol, unknown>;
+            removed: Record<number | string | symbol, unknown>;
+            modified: Record<number | string | symbol, Diff>;
+        };
+        object?: never;
+    };
+};
+type ChangedObject = {
+    same?: never;
+    changed: {
+        value?: never;
+        array?: never;
+        object: Record<
+            number | string | symbol,
+            | {
+                  added: unknown;
+                  removed?: never;
+                  changed?: never;
+              }
+            | {
+                  added?: never;
+                  removed: unknown;
+                  changed?: never;
+              }
+            | {
+                  added?: never;
+                  removed?: never;
+                  changed: Changed['changed'];
+              }
+        >;
+    };
+};
+
 export const diff = (
     prev: unknown,
     next: unknown,
-    {equal = stableEqual, mapper = (_, i) => i}: {equal?: (a: unknown, b: unknown) => boolean; mapper?: (_: any, i: number, arr: any[]) => string | number | symbol} = {},
-) => {
+    {
+        path = '',
+        equal = stableEqual,
+        mapper = (_, i) => i,
+    }: {
+        path?: string;
+        equal?: (a: unknown, b: unknown) => boolean;
+        mapper?: (_: any, i: number, arr: any[], path?: string) => number | string | symbol;
+    } = {},
+): Diff => {
     if (equal(prev, next)) return {same: {prev, next}};
 
     switch (typeof prev) {
@@ -15,48 +79,48 @@ export const diff = (
         case 'boolean':
         case 'function':
         case 'undefined': {
-            return {changed: {prev, next}};
+            return {changed: {value: {prev, next}}};
         }
         case 'object': {
-            if (prev === null) return {changed: {prev, next}};
-            if (prev === undefined) return {changed: {prev, next}};
-            if (next === null) return {changed: {prev, next}};
-            if (next === undefined) return {changed: {prev, next}};
+            if (prev === null) return {changed: {value: {prev, next}}};
+            if (prev === undefined) return {changed: {value: {prev, next}}};
+            if (next === null) return {changed: {value: {prev, next}}};
+            if (next === undefined) return {changed: {value: {prev, next}}};
 
             if (typeof next === 'object') {
                 if (Array.isArray(prev) && Array.isArray(next)) {
-                    const changes = {
-                        moved: {} as Record<string | number | symbol, unknown>,
-                        added: {} as Record<string | number | symbol, unknown>,
-                        removed: {} as Record<string | number | symbol, unknown>,
-                        changed: {} as Record<string | number | symbol, unknown>,
+                    const prevs = new Map(prev.map((prev, index, arr) => [mapper(prev, index, arr, path), {index, value: prev}]));
+                    const nexts = new Map(next.map((next, index, arr) => [mapper(next, index, arr, path), {index, value: next}]));
+                    const changes: ChangedArray['changed']['array'] = {
+                        moved: {},
+                        added: {},
+                        removed: {},
+                        modified: {},
                     };
-                    const prevMap = new Map(prev.map((prev, index, arr) => [mapper(prev, index, arr), {index, value: prev}]));
-                    const nextMap = new Map(next.map((next, index, arr) => [mapper(next, index, arr), {index, value: next}]));
 
-                    for (const [prevId, {value: prevValue}] of prevMap) {
-                        if (!nextMap.has(prevId)) {
-                            changes.removed[prevId] = {removed: prevValue};
+                    for (const [prevId, {value: prevValue}] of prevs) {
+                        if (!nexts.has(prevId)) {
+                            changes.removed[prevId] = prevValue;
                         }
                     }
-                    for (const [nextId, {index: nextIndex, value: nextValue}] of nextMap) {
-                        if (!prevMap.has(nextId)) {
-                            changes.added[nextId] = {added: nextValue};
+                    for (const [nextId, {index: nextIndex, value: nextValue}] of nexts) {
+                        if (!prevs.has(nextId)) {
+                            changes.added[nextId] = nextValue;
                         } else {
-                            const {index: prevIndex, value: prevValue} = prevMap.get(nextId)!;
+                            const {index: prevIndex, value: prevValue} = prevs.get(nextId)!;
 
                             if (prevIndex !== nextIndex) {
                                 changes.moved[nextId] = {from: prevIndex, to: nextIndex};
                             }
                             if (!equal(prevValue, nextValue)) {
-                                changes.changed[nextId] = diff(prevValue, nextValue, {equal, mapper});
+                                changes.modified[nextId] = diff(prevValue, nextValue, {path, equal, mapper});
                             }
                         }
                     }
-                    return {changed: {prev, next, changes}};
+                    return {changed: {array: changes}};
                 } else if (!Array.isArray(prev) && !Array.isArray(next)) {
                     const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
-                    const changes: Record<string, any> = {};
+                    const changes: ChangedObject['changed']['object'] = {};
 
                     for (const key of keys) {
                         const hasPrev = key in prev;
@@ -66,15 +130,19 @@ export const diff = (
 
                         if (!hasPrev) changes[key] = {added: nextValue};
                         else if (!hasNext) changes[key] = {removed: prevValue};
-                        else if (!equal(prevValue, nextValue)) changes[key] = diff(prevValue, nextValue, {equal, mapper});
+                        else if (!equal(prevValue, nextValue)) changes[key] = {changed: (diff(prevValue, nextValue, {path: join(path, key), equal, mapper}) as Changed).changed};
                     }
-                    return {changed: {prev, next, changes}};
+                    return {changed: {object: changes}};
                 }
             }
-            return {changed: {prev, next}};
+            return {changed: {value: {prev, next}}};
         }
         default: {
-            return {changed: {prev, next}};
+            return {changed: {value: {prev, next}}};
         }
     }
+};
+
+const join = (...parts: string[]) => {
+    return parts.filter(p => p !== undefined).join('.');
 };
