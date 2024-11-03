@@ -2,8 +2,8 @@ import cronstrue from 'cronstrue';
 
 import icon from './+icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
+import {trySync} from '$lib/core/helper/function';
 import {fill, zero} from '$lib/core/schema/data';
-import {tryFunction} from '$lib/core/helper/function';
 import type {JsonSchema} from '$lib/core/schema/schema';
 
 const configSchema = {
@@ -24,7 +24,7 @@ export default trigger<typeof configSchema>({
     },
     data({form, config, constant}) {
         const interval = form?.interval ?? config?.interval ?? zero(configSchema.properties.interval);
-        const intervalForHumans = constant(interval) ? tryFunction(() => cronstrue.toString(interval, {use24HourTimeFormat: true})) : 'dynamic interval';
+        const intervalForHumans = constant(interval) ? trySync(() => cronstrue.toString(interval, {use24HourTimeFormat: true})) : 'dynamic interval';
 
         return {
             valid: intervalForHumans !== undefined,

@@ -9,7 +9,8 @@ export const POST = async ({locals, params, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const graph = await request.json();
+    const req = request.clone();
+    const graph = await req.json();
     if (valid(graph, graphSchema)) {
         const serverNodes = ServerGraphContext.fromNodes(graph.nodes);
         const serverEdges = ServerGraphContext.fromEdges(graph.edges);
@@ -28,7 +29,7 @@ export const POST = async ({locals, params, request}) => {
             async start(stream) {
                 try {
                     const node = context.getServerNode(params.nodeId);
-                    for await (const step of context.executeTrigger({node, signal: controller.signal, request})) {
+                    for await (const step of context.executeTrigger({node, signal: controller.signal, request: req})) {
                         if (controller.signal.aborted) return;
                         stream.enqueue(JSON.stringify(step));
                         stream.enqueue('\n');

@@ -1,4 +1,5 @@
 import {test, expect} from 'vitest';
+
 import {makeUrl} from './makeurl';
 
 test('makeUrl', () => {

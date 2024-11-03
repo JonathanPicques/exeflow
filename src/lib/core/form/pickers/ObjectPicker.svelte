@@ -3,14 +3,15 @@
 
     import FormEditor from '$lib/core/form/FormEditor.svelte';
     import StringPicker from '$lib/core/form/pickers/StringPicker.svelte';
-    import {tryFunction} from '$lib/core/helper/function';
+
+    import {trySync} from '$lib/core/helper/function';
     import type {PickerProps} from '$lib/core/form/FormEditor.svelte';
     import type {JsonSchemaObject} from '$lib/core/schema/schema';
 
     let {id, label, value = $bindable(), schema, onchange}: PickerProps<JsonSchemaObject> = $props();
 
     let text = $state('{}');
-    let parsed = $derived(tryFunction(() => json5.parse(text) as Record<string, unknown>));
+    let parsed = $derived(trySync(() => json5.parse(text) as Record<string, unknown>));
     const onblur = () => {
         if (parsed) {
             value = parsed;
@@ -19,7 +20,7 @@
     };
 
     $effect(() => {
-        text = tryFunction(() => JSON.stringify(value, null, 2), '');
+        text = trySync(() => JSON.stringify(value, null, 2), '');
     });
 </script>
 
