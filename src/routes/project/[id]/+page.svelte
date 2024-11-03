@@ -1,6 +1,5 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import {writable} from 'svelte/store';
     import {SplitPane} from '@rich_harris/svelte-split-pane';
     import {SvelteFlowProvider} from '@xyflow/svelte';
     import type {MountedComponent} from 'svelte';
