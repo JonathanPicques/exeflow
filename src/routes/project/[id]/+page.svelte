@@ -143,7 +143,7 @@
 </script>
 
 <svelte:head>
-    <title>Exeflow - {projectName}</title>
+    <title>Exeflow - {projectName || 'Untitled project'}</title>
 </svelte:head>
 
 <SvelteFlowProvider>
@@ -157,7 +157,7 @@
                         </a>
                     </div>
                     <div class="island collapse">
-                        <input type="text" aria-label="Project name" bind:value={projectName} />
+                        <input type="text" aria-label="Project name" placeholder="Untitled project..." bind:value={projectName} />
                     </div>
                     <div class="island">
                         <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
@@ -269,6 +269,12 @@
 
                 input {
                     all: unset;
+                    color: var(--color-fg);
+
+                    &::placeholder {
+                        color: var(--color-fg-1);
+                        user-select: none;
+                    }
                 }
             }
 

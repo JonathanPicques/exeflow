@@ -95,9 +95,10 @@
             background-color: var(--color-bg-1);
 
             transition: 0.3s;
-        }
-        &:hover img {
-            border: 0.15rem solid var(--color-fg);
+
+            &:hover {
+                border: 0.15rem solid var(--color-fg);
+            }
         }
 
         & > div {

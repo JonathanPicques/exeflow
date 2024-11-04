@@ -134,6 +134,7 @@ input[type='password'] {
         background-color: var(--color-bg-1);
     }
     &::placeholder {
+        color: var(--color-fg-1);
         user-select: none;
     }
 }
