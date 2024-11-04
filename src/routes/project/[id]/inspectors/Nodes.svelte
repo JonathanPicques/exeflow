@@ -5,17 +5,13 @@
 
     import {GraphContext, getGraphContext} from '$lib/core/core';
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parser/parser';
-    import type {Plugin, PluginId, PluginNode} from '$lib/core/core';
+    import type {Plugin, PluginId} from '$lib/core/core';
 
     const {nodes, actions, triggers, getPlugin} = getGraphContext();
 
-    let node = $state<PluginNode>();
+    let node = $derived($nodes.find(n => n.selected));
     let plugin = $derived(node && getPlugin(node));
     let filter = $state('');
-
-    $effect(() => {
-        node = $nodes.find(n => n.selected);
-    });
 
     const sort = ([a]: [PluginId, Plugin], [b]: [PluginId, Plugin]) => {
         const nameA = extractPluginName(a);
