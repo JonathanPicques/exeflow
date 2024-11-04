@@ -151,7 +151,7 @@
         <SplitPane type="horizontal" pos={targetSidebarPos} priority="min" disabled={smallWidth} --color="var(--color-bg-1)" --thickness="2rem">
             <section slot="a" class="flow">
                 <nav>
-                    <div class="island collapse">
+                    <div class="island">
                         <a href="/home" role="button" class="icon button" aria-label="Back to home">
                             <Home />
                         </a>
@@ -252,7 +252,7 @@
 
             gap: 0.5rem;
             display: flex;
-            padding: 1rem;
+            padding: 0.7rem; /** magic number to align with tabs */
             overflow: auto;
             user-select: none;
 
@@ -297,7 +297,7 @@
         .tabs {
             gap: 1rem;
             display: flex;
-            padding: 1rem;
+            padding: 1rem; /** magic number to align with navbar */
             overflow-x: auto;
             overflow-y: hidden;
             flex-shrink: 0;
