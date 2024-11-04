@@ -48,6 +48,20 @@ export default serverAction<typeof action>({
                 yield* next({output: 'out', results: {result: (await chat.invoke(input, {tools: [], signal})).content}});
                 return;
             }
+            case 'anthropic': {
+                const {ChatAnthropic} = await import('@langchain/anthropic');
+                const {url, model, apiKey} = config.provider.settings;
+                const chat = new ChatAnthropic({model, anthropicApiUrl: url, anthropicApiKey: apiKey});
+
+                if (stream) {
+                    for await (const chunk of await chat.stream(input)) {
+                        yield* next({output: 'out', results: {result: chunk.content}});
+                    }
+                    return;
+                }
+                yield* next({output: 'out', results: {result: (await chat.invoke(input, {tools: [], signal})).content}});
+                return;
+            }
         }
     },
 });

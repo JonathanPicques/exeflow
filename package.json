@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@dagrejs/dagre": "^1.1.4",
+        "@langchain/anthropic": "^0.3.7",
         "@langchain/community": "^0.3.11",
         "@langchain/core": "^0.3.17",
         "@langchain/mistralai": "^0.1.1",

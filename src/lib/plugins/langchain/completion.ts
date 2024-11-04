@@ -61,7 +61,27 @@ const mistral = {
     },
 } satisfies JsonSchema;
 
-const providers = {ollama, openai, mistral};
+const anthropic = {
+    type: 'object',
+    required: ['type', 'settings'],
+    properties: {
+        type: {
+            type: 'string' as const,
+            const: 'anthropic' as const,
+        },
+        settings: {
+            type: 'object',
+            required: ['url', 'model', 'apiKey'],
+            properties: {
+                url: {type: 'string', editor: {suggestions: ['https://api.anthropic.com/v1']}},
+                model: {type: 'string', editor: {suggestions: ['claude-3-5-sonnet-20241022']}},
+                apiKey: {type: 'string', title: 'api key', editor: {suggestions: ['${secret:ANTHROPIC_API_KEY}']}},
+            },
+        },
+    },
+} satisfies JsonSchema;
+
+const providers = {ollama, openai, mistral, anthropic};
 
 const configSchema = {
     type: 'object',
@@ -69,14 +89,14 @@ const configSchema = {
     properties: {
         input: {type: 'string'},
         stream: {type: 'boolean'},
-        provider: {anyOf: [ollama, openai, mistral]},
+        provider: {anyOf: Object.values(providers)},
     },
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({
     icon,
     color: '#CFC8FE',
-    description: 'chat completion using Ollama, MistralAI or OpenAI',
+    description: 'chat completion using Ollama, OpenAI (ChatGPT), MistralAI or Anthropic (Claude)',
     //
     form({config}) {
         const provider = providers[config.provider.type];
