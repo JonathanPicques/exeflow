@@ -73,8 +73,8 @@ const anthropic = {
             type: 'object',
             required: ['url', 'model', 'apiKey'],
             properties: {
-                url: {type: 'string', editor: {suggestions: ['https://api.anthropic.com/v1']}},
-                model: {type: 'string', editor: {suggestions: ['claude-3-5-sonnet-20241022']}},
+                url: {type: 'string', editor: {suggestions: ['https://api.anthropic.com']}},
+                model: {type: 'string', editor: {suggestions: ['claude-3-5-sonnet-latest']}},
                 apiKey: {type: 'string', title: 'api key', editor: {suggestions: ['${secret:ANTHROPIC_API_KEY}']}},
             },
         },
