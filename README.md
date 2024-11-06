@@ -28,7 +28,7 @@ Exeflow is perfect for:
 1.  Run `pnpm install`
 2.  Run `cp .env.example .env`
 3.  Run `supabase start` or `npx supabase start`
-4.  Edit `.env` to update `EXEFLOW_SUPABASE_ANON_KEY` and `EXEFLOW_SUPABASE_SERVICE_ROLE_KEY` from `supabase start` output
+4.  Update `.env`
 5.  Run `pnpm dev`
 
 #### Create a development user
