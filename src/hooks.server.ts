@@ -1,9 +1,11 @@
-import {db} from '$lib/supabase/db.server';
+import {createDb} from '$lib/supabase/db.server';
 import {supabase} from '$lib/supabase/supabase.server';
 import {supabaseApiUrl, supabaseServiceRoleKey} from '$lib/core/env/env.server';
 
+const db = createDb();
+
 export const handle = async ({event, resolve}) => {
-    event.locals.db = db();
+    event.locals.db = db;
     event.locals.supabase = supabase(supabaseApiUrl, supabaseServiceRoleKey, event.cookies);
 
     event.locals.user = async () => {
