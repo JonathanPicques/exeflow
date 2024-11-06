@@ -27,7 +27,7 @@ Exeflow is perfect for:
 
 1.  Run `pnpm install`
 2.  Run `cp .env.example .env`
-3.  Run `supabase start` or `npx supabase start`
+3.  Run `pnpx supabase start`
 4.  Update `.env`
 5.  Run `pnpm dev`
 
