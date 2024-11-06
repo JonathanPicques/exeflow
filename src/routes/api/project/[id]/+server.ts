@@ -8,9 +8,6 @@ import type {Db} from '$lib/supabase/db.server';
 import type {JsonSchema} from '$lib/core/schema/schema';
 import type {TriggerNode} from '$lib/core/core';
 
-import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
-import type {TriggersNodeId, TriggersPluginId} from '$lib/supabase/gen/public/Triggers';
-
 const patchSchema = {
     type: 'object',
     required: ['name', 'image', 'content'] as const,
@@ -48,13 +45,7 @@ export const PATCH = async ({locals, params, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const project = await locals.db
-        .selectFrom('projects')
-        .select('id')
-        .where('id', '=', params.id as ProjectsId)
-        .where('owner_id', '=', user.id)
-        .limit(1)
-        .executeTakeFirst();
+    const project = await locals.db.selectFrom('public.projects').select('id').where('id', '=', params.id).where('owner_id', '=', user.id).limit(1).executeTakeFirst();
     if (!project) throw error(404);
 
     const body = await request.json();
@@ -62,12 +53,9 @@ export const PATCH = async ({locals, params, request}) => {
 
     await locals.db.transaction().execute(async trx => {
         const triggerNodes = body.content.nodes.filter(n => n.type === 'trigger') as TriggerNode[];
-        const triggerNodeIds = triggerNodes.map(n => n.id as TriggersNodeId);
+        const triggerNodeIds = triggerNodes.map(n => n.id);
 
-        const deleteTriggers = trx
-            .deleteFrom('triggers')
-            .returning(['node_id', 'plugin_id', 'project_id'])
-            .where('project_id', '=', params.id as ProjectsId);
+        const deleteTriggers = trx.deleteFrom('public.triggers').returning(['node_id', 'plugin_id', 'project_id']).where('project_id', '=', params.id);
         if (triggerNodeIds.length > 0) deleteTriggers.where('node_id', 'not in', triggerNodeIds);
         const triggersDeleted = await deleteTriggers.execute();
 
@@ -82,12 +70,12 @@ export const PATCH = async ({locals, params, request}) => {
         await Promise.all(
             triggerNodes.map(async triggerNode => {
                 const newTrigger = await trx
-                    .insertInto('triggers')
+                    .insertInto('public.triggers')
                     .returning(['node_id', 'plugin_id', 'project_id'])
                     .values({
-                        node_id: triggerNode.id as TriggersNodeId,
-                        plugin_id: triggerNode.data.id as TriggersPluginId,
-                        project_id: params.id as ProjectsId,
+                        node_id: triggerNode.id,
+                        plugin_id: triggerNode.data.id,
+                        project_id: params.id,
                         //
                         config: triggerNode.data.data.config,
                     })
@@ -112,8 +100,8 @@ export const PATCH = async ({locals, params, request}) => {
         );
 
         const {numUpdatedRows} = await trx
-            .updateTable('projects')
-            .where('id', '=', params.id as ProjectsId)
+            .updateTable('public.projects')
+            .where('id', '=', params.id)
             .where('owner_id', '=', user.id)
             .set({
                 name: body.name,
@@ -132,21 +120,11 @@ export const DELETE = async ({locals, params}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const project = await locals.db
-        .selectFrom('projects')
-        .select('id')
-        .where('id', '=', params.id as ProjectsId)
-        .where('owner_id', '=', user.id)
-        .limit(1)
-        .executeTakeFirst();
+    const project = await locals.db.selectFrom('public.projects').select('id').where('id', '=', params.id).where('owner_id', '=', user.id).limit(1).executeTakeFirst();
     if (!project) throw error(404);
 
     await locals.db.transaction().execute(async trx => {
-        const triggersDeleted = await trx
-            .deleteFrom('triggers')
-            .returning(['node_id', 'plugin_id', 'project_id'])
-            .where('project_id', '=', params.id as ProjectsId)
-            .execute();
+        const triggersDeleted = await trx.deleteFrom('public.triggers').returning(['node_id', 'plugin_id', 'project_id']).where('project_id', '=', params.id).execute();
 
         await Promise.all(
             triggersDeleted
@@ -156,11 +134,7 @@ export const DELETE = async ({locals, params}) => {
                 }),
         );
 
-        const {numDeletedRows} = await trx
-            .deleteFrom('projects')
-            .where('id', '=', params.id as ProjectsId)
-            .where('owner_id', '=', user.id)
-            .executeTakeFirst();
+        const {numDeletedRows} = await trx.deleteFrom('public.projects').where('id', '=', params.id).where('owner_id', '=', user.id).executeTakeFirst();
         if (numDeletedRows < 1) throw error(500);
     });
 

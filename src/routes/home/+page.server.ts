@@ -7,7 +7,7 @@ export const load = async ({locals}) => {
     if (!user) throw redirect(302, '/auth/login');
 
     const projects = (await locals.db
-        .selectFrom('projects')
+        .selectFrom('public.projects')
         .select(['id', 'name', 'image', 'content', 'created_at', 'updated_at'])
         .where('owner_id', '=', user.id)
         .orderBy(['updated_at desc', 'created_at desc'])

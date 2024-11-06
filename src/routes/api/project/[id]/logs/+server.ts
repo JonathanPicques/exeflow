@@ -1,23 +1,15 @@
 import {sql} from 'kysely';
 import {json, error} from '@sveltejs/kit';
 
-import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
-
 export const GET = async ({locals, params}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const project = await locals.db
-        .selectFrom('projects')
-        .select('id')
-        .where('id', '=', params.id as ProjectsId)
-        .where('owner_id', '=', user.id)
-        .limit(1)
-        .executeTakeFirst();
+    const project = await locals.db.selectFrom('public.projects').select('id').where('id', '=', params.id).where('owner_id', '=', user.id).limit(1).executeTakeFirst();
     if (!project) throw error(404);
 
     const inner = locals.db
-        .selectFrom('logs')
+        .selectFrom('public.logs')
         .select([
             'exec_id',
             sql<Date>`min(created_at)`.as('started_at'),
@@ -26,7 +18,7 @@ export const GET = async ({locals, params}) => {
         ])
         .groupBy('exec_id')
         .orderBy('exec_id desc')
-        .where('project_id', '=', params.id as ProjectsId);
+        .where('project_id', '=', params.id);
     const query = await locals.db
         .selectFrom(inner.as('inner'))
         .select(['exec_id', 'plugins', 'started_at', 'finished_at'])
@@ -48,19 +40,10 @@ export const DELETE = async ({locals, params}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const project = await locals.db
-        .selectFrom('projects')
-        .select('id')
-        .where('id', '=', params.id as ProjectsId)
-        .where('owner_id', '=', user.id)
-        .limit(1)
-        .executeTakeFirst();
+    const project = await locals.db.selectFrom('public.projects').select('id').where('id', '=', params.id).where('owner_id', '=', user.id).limit(1).executeTakeFirst();
     if (!project) throw error(404);
 
-    const {numDeletedRows} = await locals.db
-        .deleteFrom('logs')
-        .where('project_id', '=', params.id as ProjectsId)
-        .executeTakeFirst();
+    const {numDeletedRows} = await locals.db.deleteFrom('public.logs').where('project_id', '=', params.id).executeTakeFirst();
     if (numDeletedRows < 1) throw error(500);
 
     return new Response(null, {status: 200});

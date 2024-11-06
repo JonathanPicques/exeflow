@@ -5,7 +5,9 @@ import type {JsonSchema, JsonSchemaAny, JsonSchemaNull, JsonSchemaAnyOf, JsonSch
 type Const<T extends JsonSchema, Fallback> = T['const'] extends infer C extends {} ? C : Fallback;
 type MapObject<T extends JsonSchemaObject> =
     T['properties'] extends Record<string, JsonSchema>
-        ? {[K in RequiredKeys<T>]: InferJsonSchema<T['properties'][K]>} & {[K in NonRequiredKeys<T>]+?: InferJsonSchema<T['properties'][K]>}
+        ? {[K in RequiredKeys<T>]: InferJsonSchema<T['properties'][K]>} & {
+              [K in NonRequiredKeys<T>]+?: InferJsonSchema<T['properties'][K]>;
+          }
         : Record<string, unknown>;
 type PropertyKeys<T extends JsonSchemaObject> = keyof T['properties'];
 type RequiredKeys<T extends JsonSchemaObject> = T['required'] extends (infer K)[] ? K & PropertyKeys<T> : never;

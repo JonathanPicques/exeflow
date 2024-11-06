@@ -1,16 +1,15 @@
 import {error} from '@sveltejs/kit';
 
 import type {Project} from '../../api/project/project';
-import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 
 export const load = async ({locals, params, parent, request}) => {
     const {user} = await parent();
     if (!user) throw error(401);
 
     const project = (await locals.db
-        .selectFrom('projects')
+        .selectFrom('public.projects')
         .select(['id', 'name', 'image', 'content', 'created_at', 'updated_at'])
-        .where('id', '=', params.id as ProjectsId)
+        .where('id', '=', params.id)
         .where('owner_id', '=', user.id)
         .limit(1)
         .executeTakeFirst()) as Project | undefined;
@@ -18,7 +17,7 @@ export const load = async ({locals, params, parent, request}) => {
 
     const secrets = await locals.db
         //
-        .selectFrom('secrets')
+        .selectFrom('public.secrets')
         .select(['key', 'value'])
         .where('owner_id', '=', user.id)
         .execute();

@@ -3,7 +3,6 @@ import {error} from '@sveltejs/kit';
 import {valid} from '$lib/core/schema/validate';
 import {insertLog} from '../../log';
 import {ServerGraphContext, importServerPlugins} from '$lib/core/core.server';
-import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
 import type {JsonSchema} from '$lib/core/schema/schema';
 import type {RequestEvent} from './$types';
 import type {Graph, TriggerNode} from '$lib/core/core';
@@ -48,12 +47,7 @@ const responseSchema = {
 const handler = async ({locals, params, request}: RequestEvent) => {
     const path = `/${params.path}`;
     const method = request.method;
-    const project = await locals.db
-        .selectFrom('projects')
-        .select(['content', 'owner_id'])
-        .where('id', '=', params.id as ProjectsId)
-        .limit(1)
-        .executeTakeFirst();
+    const project = await locals.db.selectFrom('public.projects').select(['content', 'owner_id']).where('id', '=', params.id).limit(1).executeTakeFirst();
     if (!project) throw error(404);
 
     let index = 0;
@@ -78,7 +72,7 @@ const handler = async ({locals, params, request}: RequestEvent) => {
     const serverSuitableWebhook = serverNodes[suitableWebhook.id];
     if (!serverSuitableWebhook) return error(404, `no handler found for ${path}`);
 
-    const secrets = (await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', project.owner_id).execute()).reduce(
+    const secrets = (await locals.db.selectFrom('public.secrets').select(['key', 'value']).where('owner_id', '=', project.owner_id).execute()).reduce(
         (acc, {key, value}) => ({
             ...acc,
             [key]: value,

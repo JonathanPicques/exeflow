@@ -6,7 +6,7 @@ export const DELETE = async ({locals, params}) => {
 
     const {numDeletedRows} = await locals.db
         //
-        .deleteFrom('secrets')
+        .deleteFrom('public.secrets')
         .where('key', '=', params.key)
         .where('owner_id', '=', user.id)
         .executeTakeFirst();

@@ -1,0 +1,5 @@
+{
+    "customTypes": {
+        "public.triggers.config": "{value: Record<string, unknown>, schema: {}}"
+    }
+}

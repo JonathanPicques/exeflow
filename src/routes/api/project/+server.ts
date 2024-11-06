@@ -19,7 +19,7 @@ export const POST = async ({locals, request}) => {
     if (!valid(body, postSchema)) throw error(400);
 
     const project = await locals.db
-        .insertInto('projects')
+        .insertInto('public.projects')
         .values({name: body.name, content: JSON.stringify({nodes: [], edges: []}), owner_id: user.id})
         .returning(['id', 'name', 'image', 'content'])
         .executeTakeFirst();

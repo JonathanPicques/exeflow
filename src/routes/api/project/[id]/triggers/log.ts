@@ -1,8 +1,5 @@
 import type {Db} from '$lib/supabase/db.server';
 
-import type {ProjectsId} from '$lib/supabase/gen/public/Projects';
-import type {LogsExecId, LogsNodeId, LogsPluginId} from '$lib/supabase/gen/public/Logs';
-
 export const insertLog = (
     db: Db,
     {
@@ -25,12 +22,12 @@ export const insertLog = (
         results: unknown;
     },
 ) => {
-    db.insertInto('logs')
+    db.insertInto('public.logs')
         .values({
-            exec_id: execId as LogsExecId,
-            node_id: nodeId as LogsNodeId,
-            plugin_id: pluginId as LogsPluginId,
-            project_id: projectId as ProjectsId,
+            exec_id: execId,
+            node_id: nodeId,
+            plugin_id: pluginId,
+            project_id: projectId,
             //
             index,
             config,

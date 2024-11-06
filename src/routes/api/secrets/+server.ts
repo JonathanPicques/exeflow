@@ -9,7 +9,7 @@ export const GET = async ({locals}) => {
 
     const secrets = await locals.db
         //
-        .selectFrom('secrets')
+        .selectFrom('public.secrets')
         .select(['key', 'value'])
         .where('owner_id', '=', user.id)
         .execute();
@@ -33,7 +33,7 @@ export const PUT = async ({locals, request}) => {
     if (!valid(body, putSchema)) throw error(400);
 
     const secret = await locals.db
-        .insertInto('secrets')
+        .insertInto('public.secrets')
         .values({
             key: body.key,
             value: body.value,

@@ -16,7 +16,7 @@ export const POST = async ({locals, params, request}) => {
         const serverEdges = ServerGraphContext.fromEdges(graph.edges);
         const {serverActions, serverTriggers} = await importServerPlugins();
 
-        const secrets = (await locals.db.selectFrom('secrets').select(['key', 'value']).where('owner_id', '=', user.id).execute()).reduce(
+        const secrets = (await locals.db.selectFrom('public.secrets').select(['key', 'value']).where('owner_id', '=', user.id).execute()).reduce(
             (acc, {key, value}) => ({
                 ...acc,
                 [key]: value,
