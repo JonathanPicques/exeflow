@@ -1,8 +1,8 @@
 import {createClient} from '@supabase/supabase-js';
 import type {Cookies} from '@sveltejs/kit';
 
-export const supabase = (url: string, key: string, cookies: Cookies) => {
-    return createClient(url, key, {
+export const createSupabase = ({url, key, cookies}: {url: string; key: string; cookies: Cookies}) => {
+    const supabase = createClient(url, key, {
         auth: {
             flowType: 'pkce',
             persistSession: true,
@@ -43,4 +43,12 @@ export const supabase = (url: string, key: string, cookies: Cookies) => {
             },
         },
     });
+
+    return {
+        getUser: async () => {
+            const response = await supabase.auth.getUser();
+            return response.data.user ?? undefined;
+        },
+        supabase: supabase,
+    };
 };

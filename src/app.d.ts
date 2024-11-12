@@ -1,5 +1,5 @@
 import type {Db} from '$lib/supabase/db.server';
-import type {User, SupabaseClient} from '@supabase/supabase-js';
+import type {createSupabase} from '$lib/supabase/supabase.server';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -8,9 +8,8 @@ declare global {
         interface Error {}
         interface Locals {
             db: Db;
-            supabase: SupabaseClient;
-            //
-            user: () => Promise<User | undefined>;
+            user: ReturnType<typeof createSupabase>['getUser'];
+            supabase: ReturnType<typeof createSupabase>['supabase'];
         }
         interface PageData {}
         interface PageState {}

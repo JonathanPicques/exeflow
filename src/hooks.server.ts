@@ -1,17 +1,14 @@
 import {createDb} from '$lib/supabase/db.server';
-import {supabase} from '$lib/supabase/supabase.server';
+import {createSupabase} from '$lib/supabase/supabase.server';
 import {supabaseApiUrl, supabaseServiceRoleKey} from '$lib/core/env/env.server';
 
 const db = createDb();
 
 export const handle = async ({event, resolve}) => {
+    const {getUser, supabase} = createSupabase({url: supabaseApiUrl, key: supabaseServiceRoleKey, cookies: event.cookies});
+
     event.locals.db = db;
-    event.locals.supabase = supabase(supabaseApiUrl, supabaseServiceRoleKey, event.cookies);
-
-    event.locals.user = async () => {
-        const response = await event.locals.supabase.auth.getUser();
-        return response.data.user ?? undefined;
-    };
-
+    event.locals.user = getUser;
+    event.locals.supabase = supabase;
     return await resolve(event);
 };
