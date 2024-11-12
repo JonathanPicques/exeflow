@@ -25,6 +25,7 @@
         <input id="password" name="password" type="password" placeholder="Enter your password…" autocomplete="current-password" required />
         <button type="submit">Login</button>
         <a href="/auth/register">Register instead</a>
+        <a href="/auth/login/forgot">Forgot password?</a>
         {#if form?.failed}<p class="error">{form.message}</p>{/if}
         {#if form?.invalid}<p class="error">Email and password are required</p>{/if}
     </form>
