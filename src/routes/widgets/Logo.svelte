@@ -40,6 +40,8 @@
         align-items: center;
         justify-content: center;
 
+        view-transition-name: exeflow-logo;
+
         &.horizontal {
             flex-direction: column;
         }

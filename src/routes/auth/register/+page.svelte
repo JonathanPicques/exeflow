@@ -19,9 +19,12 @@
 <main>
     <form method="post">
         <Logo flow="horizontal" imgSize="4rem" textSize="3rem" />
-        <input name="email" type="email" placeholder="Email" value={form?.email ?? ''} required />
-        <input name="password" type="password" placeholder="Password" required />
-        <input name="confirmPassword" type="password" placeholder="Confirm password" required />
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" value={form?.email ?? ''} placeholder="Enter your email address…" autocomplete="email" required />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter your password…" autocomplete="new-password" required />
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password…" autocomplete="new-password" required />
         <button type="submit">Register</button>
         <a href="/auth/login">Login instead</a>
 
@@ -43,7 +46,7 @@
 
     form {
         gap: 0.5rem;
-        width: 16rem;
+        width: 18rem;
         display: flex;
         flex-direction: column;
     }
@@ -51,5 +54,9 @@
     input[type='email'],
     input[type='password'] {
         width: 100%;
+    }
+
+    button[type='submit'] {
+        margin-top: 0.5rem;
     }
 </style>

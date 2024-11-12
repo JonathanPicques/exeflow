@@ -43,3 +43,7 @@ button {
         animation: none !important;
     }
 }
+
+@view-transition {
+    navigation: auto;
+}

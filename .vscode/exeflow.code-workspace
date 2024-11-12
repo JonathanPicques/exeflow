@@ -26,6 +26,8 @@
             "supabase/.branches": true,
             "supabase/functions": true,
         },
+        // CSS
+        "css.lint.unknownAtRules": "ignore",
         // Editor
         "editor.tabSize": 4,
         "editor.formatOnSave": true,
