@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Logo from '../../widgets/Logo.svelte';
-    import Navbar from '../../widgets/Navbar.svelte';
-    import GithubLink from '../../widgets/GithubLink.svelte';
+    import Logo from '$lib/core/widgets/Logo.svelte';
+    import Navbar from '$lib/core/widgets/Navbar.svelte';
+    import GithubLink from '$lib/core/widgets/GithubLink.svelte';
 
     let {form} = $props();
 </script>

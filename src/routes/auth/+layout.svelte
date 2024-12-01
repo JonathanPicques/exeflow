@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Bg from '../widgets/Bg.svelte';
+    import Bg from '$lib/core/widgets/Bg.svelte';
 
     let {children} = $props();
 </script>

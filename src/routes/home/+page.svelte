@@ -4,10 +4,10 @@
 
     import empty from './+empty.svg';
 
-    import Logo from '../widgets/Logo.svelte';
-    import Navbar from '../widgets/Navbar.svelte';
-    import GithubLink from '../widgets/GithubLink.svelte';
-    import ProfileLink from '../widgets/ProfileLink.svelte';
+    import Logo from '$lib/core/widgets/Logo.svelte';
+    import Navbar from '$lib/core/widgets/Navbar.svelte';
+    import GithubLink from '$lib/core/widgets/GithubLink.svelte';
+    import ProfileLink from '$lib/core/widgets/ProfileLink.svelte';
 
     import {postProject, deleteProject} from '../api/project/project';
     import type {Project} from '../api/project/project';

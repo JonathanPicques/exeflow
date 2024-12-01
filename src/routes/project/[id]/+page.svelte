@@ -5,8 +5,8 @@
     import type {MountedComponent} from 'svelte';
 
     import Flow from '$lib/core/flow/Flow.svelte';
-    import GithubLink from '../../widgets/GithubLink.svelte';
-    import ProfileLink from '../../widgets/ProfileLink.svelte';
+    import GithubLink from '$lib/core/widgets/GithubLink.svelte';
+    import ProfileLink from '$lib/core/widgets/ProfileLink.svelte';
     import InspectorLogs from './inspectors/Logs.svelte';
     import InspectorNodes from './inspectors/Nodes.svelte';
     import InspectorSecrets from './inspectors/Secrets.svelte';
