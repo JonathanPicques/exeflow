@@ -4,12 +4,13 @@
         flow?: 'vertical' | 'horizontal';
         imgSize?: string;
         textSize?: string;
+        transition?: boolean;
     }
 
-    let {to = '/', flow = 'vertical', imgSize, textSize}: Props = $props();
+    let {to = '/', flow = 'vertical', imgSize, textSize, transition}: Props = $props();
 </script>
 
-<div class:horizontal={flow === 'horizontal'} style:--img-size={imgSize} style:--text-size={textSize}>
+<div class:horizontal={flow === 'horizontal'} class:transition style:--img-size={imgSize} style:--text-size={textSize}>
     <a href={to} aria-label="Exeflow logo">
         <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="42" height="42" rx="15" fill="url(#gradient)" />
@@ -40,8 +41,9 @@
         align-items: center;
         justify-content: center;
 
-        view-transition-name: exeflow-logo;
-
+        &.transition {
+            view-transition-name: exeflow-logo;
+        }
         &.horizontal {
             flex-direction: column;
         }

@@ -18,7 +18,7 @@
 
 <main>
     <form method="post">
-        <Logo flow="horizontal" imgSize="4rem" textSize="3rem" />
+        <Logo flow="horizontal" imgSize="4rem" textSize="3rem" transition={true} />
         <label for="email">Email</label>
         <input id="email" name="email" type="email" value={form?.email ?? ''} placeholder="Enter your email address…" autocomplete="email" required />
         <label for="password">Password</label>
