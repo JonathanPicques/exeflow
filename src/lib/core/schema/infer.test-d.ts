@@ -20,14 +20,33 @@ test('InferJsonSchema', () => {
     expectTypeOf<InferJsonSchema<{type: 'array'; items: {type: 'string'}}>>().toEqualTypeOf<string[]>();
     expectTypeOf<InferJsonSchema<{type: 'array'; const: [12, '13', false]}>>().toEqualTypeOf<[12, '13', false]>();
 
+    expectTypeOf<InferJsonSchema<{type: 'object'}>>().toEqualTypeOf<{[x: string]: unknown}>();
     expectTypeOf<InferJsonSchema<{type: 'object'}>>().toEqualTypeOf<Record<string, unknown>>();
-    expectTypeOf<InferJsonSchema<{type: 'object'; const: {id: '123'}}>>().toMatchTypeOf<{id: '123'}>();
-    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}}>>().toMatchTypeOf<{id?: string}>();
-    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}; required: ['id']}>>().toMatchTypeOf<{id: string}>();
-    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}; name: {type: 'string'}}; required: ['id']}>>().toMatchTypeOf<{id: string; name?: string}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; const: {id: '123'}}>>().toEqualTypeOf<{id: '123'}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}}>>().toEqualTypeOf<{id?: string; [x: string]: unknown}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}; required: ['id']}>>().toEqualTypeOf<{id: string; [x: string]: unknown}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}; name: {type: 'string'}}; required: ['id']}>>().toEqualTypeOf<{
+        id: string;
+        name?: string;
+        [x: string]: unknown;
+    }>();
+
+    expectTypeOf<InferJsonSchema<{type: 'object'; additionalProperties: true}>>().toEqualTypeOf<{[x: string]: unknown}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; additionalProperties: false}>>().toEqualTypeOf<{}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}; additionalProperties: true}>>().toEqualTypeOf<{id?: string; [x: string]: unknown}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}; additionalProperties: false}>>().toEqualTypeOf<{id?: string}>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}; required: ['id']; additionalProperties: true}>>().toEqualTypeOf<{
+        id: string;
+        [x: string]: unknown;
+    }>();
+    expectTypeOf<InferJsonSchema<{type: 'object'; properties: {id: {type: 'string'}}; required: ['id']; additionalProperties: {type: 'string'}}>>().toEqualTypeOf<{
+        id: string;
+        [x: string]: string;
+    }>();
 
     type Scalar = {type: 'number'};
-    type Vector2 = {type: 'object'; required: ['x', 'y']; properties: {x: {type: 'number'}; y: {type: 'number'}}};
+    type Vector2 = {type: 'object'; required: ['x', 'y']; properties: {x: {type: 'number'}; y: {type: 'number'}}; additionalProperties: false};
+
     expectTypeOf<InferJsonSchema<{anyOf: [Scalar, Vector2]}>>().toEqualTypeOf<number | {x: number; y: number}>();
     expectTypeOf<InferJsonSchema<{anyOf: [{type: 'string'}, {type: 'number'}, {type: 'boolean'}, {type: 'array'; items: {type: 'string'}}]}>>().toEqualTypeOf<
         string | number | boolean | string[]

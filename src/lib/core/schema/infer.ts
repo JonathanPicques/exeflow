@@ -6,11 +6,16 @@ type Const<T extends JsonSchema, Fallback> = T['const'] extends infer C extends 
 type MapEnum<T extends JsonSchemaString> = T['enum'] extends (infer E)[] ? E : string;
 type MapObject<T extends JsonSchemaObject> =
     T['properties'] extends Record<string, JsonSchema>
-        ? {[K in RequiredKeys<T>]: InferJsonSchema<T['properties'][K]>} & {[K in NonRequiredKeys<T>]+?: InferJsonSchema<T['properties'][K]>}
-        : Record<string, unknown>;
+        ? {[K in RequiredKeys<T>]: InferJsonSchema<T['properties'][K]>} & {[K in NonRequiredKeys<T>]+?: InferJsonSchema<T['properties'][K]>} & AdditionalProperties<T>
+        : AdditionalProperties<T>;
 type PropertyKeys<T extends JsonSchemaObject> = keyof T['properties'];
 type RequiredKeys<T extends JsonSchemaObject> = T['required'] extends (infer K)[] ? K & PropertyKeys<T> : never;
 type NonRequiredKeys<T extends JsonSchemaObject> = Exclude<PropertyKeys<T>, RequiredKeys<T>>;
+type AdditionalProperties<T extends JsonSchemaObject> = T['additionalProperties'] extends false
+    ? {}
+    : T['additionalProperties'] extends JsonSchema
+      ? Record<string, InferJsonSchema<T['additionalProperties']>>
+      : Record<string, unknown>;
 
 type InferJsonSchemaAny<T extends JsonSchemaAny> = Const<T, any>;
 type InferJsonSchemaNull<T extends JsonSchemaNull> = Const<T, null>;
