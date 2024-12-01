@@ -22,17 +22,19 @@
         <label for="email">Email</label>
         <input id="email" name="email" type="email" value={form?.email ?? ''} placeholder="Enter your email address…" autocomplete="email" required />
         <label for="password">Password</label>
-        <input id="password" name="password" type="password" placeholder="Enter your password…" autocomplete="new-password" required />
+        <input id="password" name="password" type="password" placeholder="Enter your password…" autocomplete="new-password" minlength="6" required />
         <label for="confirmPassword">Confirm password</label>
-        <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password…" autocomplete="new-password" required />
+        <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password…" autocomplete="new-password" minlength="6" required />
         <button type="submit">Register</button>
-        <a href="/auth/login">Login instead</a>
-
-        {#if form?.failed}<p>{form.message}</p>{/if}
-        {#if form?.invalid}<p>Email and password fields are required</p>{/if}
-        {#if form?.success}
-            <p>Account created! Check your inbox ({form.email}) to validate your account</p>
+        {#if form?.error}
+            <p class="error">{form.error.message}</p>
         {/if}
+        {#if form?.success}
+            <p class="success">
+                Account created! Check your {#if form.success.inbox}<a href={form.success.inbox}>inbox</a>{:else}inbox{/if} to validate your account
+            </p>
+        {/if}
+        <a href="/auth/login">Login instead</a>
     </form>
 </main>
 
@@ -58,5 +60,12 @@
 
     button[type='submit'] {
         margin-top: 0.5rem;
+    }
+
+    .error {
+        color: var(--color-error);
+    }
+    .success {
+        color: var(--color-success);
     }
 </style>

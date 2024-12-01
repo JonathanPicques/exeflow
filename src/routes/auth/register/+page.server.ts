@@ -1,6 +1,7 @@
 import {fail} from '@sveltejs/kit';
 
 import {rootUrl} from '$lib/core/env/env.server';
+import {inboxFromEmail} from '$lib/core/helper/inbox';
 
 export const actions = {
     default: async ({locals, request}) => {
@@ -13,10 +14,10 @@ export const actions = {
             const response = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: `${rootUrl}/auth/validate`}});
 
             if (response.data.user) {
-                return {email, success: true};
+                return {email, success: {inbox: inboxFromEmail(email)}};
             }
-            return fail(400, {email, failed: true, message: response.error?.message ?? 'failed to register'});
+            return fail(400, {email, error: {message: response.error?.message ?? 'failed to register'}});
         }
-        return fail(400, {email, invalid: true});
+        return fail(400, {email, error: {message: 'email and password are required'}});
     },
 };
