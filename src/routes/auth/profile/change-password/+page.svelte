@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-    <title>Exeflow - Forgot password</title>
+    <title>Exeflow - Change password</title>
 </svelte:head>
 
 <Navbar>
@@ -19,18 +19,19 @@
 <main>
     <form method="post">
         <Logo flow="horizontal" imgSize="4rem" textSize="3rem" transition={true} />
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" value={form?.email ?? ''} placeholder="Enter your email address…" autocomplete="email" required />
-        <button type="submit">Send</button>
-        <a href="/auth/login">Login instead</a>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter your password…" autocomplete="new-password" minlength="6" required />
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password…" autocomplete="new-password" minlength="6" required />
+        <button type="submit">Change password</button>
         {#if form?.error}
             <p class="error">
                 {form.error.message}
             </p>
         {:else if form?.success}
             <p class="success">
-                If your account exists, an email with a link to reset your password is on its way to your
-                {#if form.success.inbox}<a href={form.success.inbox}>inbox</a>{:else}inbox{/if}.
+                Password changed!
+                <a href="/home">Start automating!</a>
             </p>
         {/if}
     </form>
@@ -51,7 +52,7 @@
         flex-direction: column;
     }
 
-    input[type='email'] {
+    input[type='password'] {
         width: 100%;
     }
 

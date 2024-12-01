@@ -25,7 +25,9 @@
         <input id="password" name="password" type="password" placeholder="Enter your password…" autocomplete="current-password" minlength="6" required />
         <button type="submit">Login</button>
         {#if form?.error}
-            <p class="error">{form.error.message}</p>
+            <p class="error">
+                {form.error.message}
+            </p>
         {/if}
         <a href="/auth/register">Register instead</a>
         <a href="/auth/login/forgot">Forgot password?</a>

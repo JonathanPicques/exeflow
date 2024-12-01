@@ -1,6 +1,7 @@
 import {fail, redirect} from '@sveltejs/kit';
 
-import {rootUrl} from '$lib/core/env/env.server.js';
+import {rootUrl} from '$lib/core/env/env.server';
+import {inboxFromEmail} from '$lib/core/helper/inbox';
 
 export const load = async ({locals}) => {
     const user = await locals.user();
@@ -12,12 +13,10 @@ export const actions = {
         const form = await request.formData();
         const email = form.get('email') as string;
 
-        const resetResponse = await locals.supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${rootUrl}/auth/login/reset`,
-        });
+        const resetResponse = await locals.supabase.auth.resetPasswordForEmail(email, {redirectTo: `${rootUrl}/auth/login/forgot/reset`});
         if (resetResponse.error) {
-            return fail(400, {email, sent: false, failed: true, message: resetResponse.error.message});
+            return fail(resetResponse.error.status ?? 500, {email, error: {message: resetResponse.error.message}});
         }
-        return fail(200, {email, sent: true, failed: false, message: ''});
+        return {email, success: {inbox: inboxFromEmail(email)}};
     },
 };

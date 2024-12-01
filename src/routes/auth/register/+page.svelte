@@ -27,9 +27,10 @@
         <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password…" autocomplete="new-password" minlength="6" required />
         <button type="submit">Register</button>
         {#if form?.error}
-            <p class="error">{form.error.message}</p>
-        {/if}
-        {#if form?.success}
+            <p class="error">
+                {form.error.message}
+            </p>
+        {:else if form?.success}
             <p class="success">
                 Account created! Check your {#if form.success.inbox}<a href={form.success.inbox}>inbox</a>{:else}inbox{/if} to confirm your account
             </p>

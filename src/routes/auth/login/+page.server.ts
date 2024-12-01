@@ -17,7 +17,7 @@ export const actions = {
             if (response.data.user) {
                 throw redirect(302, '/home');
             }
-            return fail(403, {email, error: {message: response.error?.message ?? 'login failed'}});
+            return fail(response.error?.status ?? 500, {email, error: {message: response.error?.message ?? 'login failed'}});
         }
         return fail(400, {email, error: {message: 'email and password are required'}});
     },

@@ -16,7 +16,7 @@ export const actions = {
             if (response.data.user) {
                 return {email, success: {inbox: inboxFromEmail(email)}};
             }
-            return fail(400, {email, error: {message: response.error?.message ?? 'failed to register'}});
+            return fail(response.error?.status ?? 500, {email, error: {message: response.error?.message ?? 'failed to register'}});
         }
         return fail(400, {email, error: {message: 'email and password are required'}});
     },
