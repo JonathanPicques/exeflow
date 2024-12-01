@@ -1,6 +1,7 @@
-import {chunkedClear, chunkedGet, chunkedSet} from '$lib/core/helper/chunk';
 import {createClient} from '@supabase/supabase-js';
 import type {Cookies} from '@sveltejs/kit';
+
+import {chunkedGet, chunkedSet, chunkedClear} from '$lib/core/helper/chunk';
 
 export const createSupabase = ({url, key, cookies}: {url: string; key: string; cookies: Cookies}) => {
     const supabase = createClient(url, key, {
