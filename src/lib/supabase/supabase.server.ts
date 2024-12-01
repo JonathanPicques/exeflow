@@ -1,7 +1,7 @@
 import {createClient} from '@supabase/supabase-js';
 import type {Cookies} from '@sveltejs/kit';
 
-import {chunkedGet, chunkedSet, chunkedClear} from '$lib/core/helper/chunk';
+import {kvGet, kvSet, kvClear} from '$lib/core/helper/kvstore';
 
 export const createSupabase = ({url, key, cookies}: {url: string; key: string; cookies: Cookies}) => {
     const supabase = createClient(url, key, {
@@ -16,14 +16,14 @@ export const createSupabase = ({url, key, cookies}: {url: string; key: string; c
                 //
                 getItem(key) {
                     return (
-                        chunkedGet(key, {
+                        kvGet(key, {
                             get: cookies.get,
                         }) ?? null
                     );
                 },
                 setItem(key, value) {
                     try {
-                        chunkedSet(key, value, {
+                        kvSet(key, value, {
                             set(key, value) {
                                 cookies.set(key, value, {
                                     path: '/',
@@ -33,7 +33,7 @@ export const createSupabase = ({url, key, cookies}: {url: string; key: string; c
                                     sameSite: 'lax', // TODO: can only be strict if supabase and exeflow share the same domain
                                 });
                             },
-                            size: 3600,
+                            maxSize: 3600,
                         });
                     } catch (error) {
                         console.error('setItem failed', {key, value, error});
@@ -41,7 +41,7 @@ export const createSupabase = ({url, key, cookies}: {url: string; key: string; c
                 },
                 removeItem(key) {
                     try {
-                        chunkedClear(key, {
+                        kvClear(key, {
                             get: cookies.get,
                             clear: key => {
                                 cookies.delete(key, {
