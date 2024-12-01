@@ -3,11 +3,10 @@
 import type {JsonSchema, JsonSchemaAny, JsonSchemaNull, JsonSchemaAnyOf, JsonSchemaArray, JsonSchemaNumber, JsonSchemaObject, JsonSchemaString, JsonSchemaBoolean} from './schema';
 
 type Const<T extends JsonSchema, Fallback> = T['const'] extends infer C extends {} ? C : Fallback;
+type MapEnum<T extends JsonSchemaString> = T['enum'] extends (infer E)[] ? E : string;
 type MapObject<T extends JsonSchemaObject> =
     T['properties'] extends Record<string, JsonSchema>
-        ? {[K in RequiredKeys<T>]: InferJsonSchema<T['properties'][K]>} & {
-              [K in NonRequiredKeys<T>]+?: InferJsonSchema<T['properties'][K]>;
-          }
+        ? {[K in RequiredKeys<T>]: InferJsonSchema<T['properties'][K]>} & {[K in NonRequiredKeys<T>]+?: InferJsonSchema<T['properties'][K]>}
         : Record<string, unknown>;
 type PropertyKeys<T extends JsonSchemaObject> = keyof T['properties'];
 type RequiredKeys<T extends JsonSchemaObject> = T['required'] extends (infer K)[] ? K & PropertyKeys<T> : never;
@@ -19,7 +18,7 @@ type InferJsonSchemaAnyOf<T extends JsonSchemaAnyOf> = Const<T, InferJsonSchema<
 type InferJsonSchemaArray<T extends JsonSchemaArray> = Const<T, InferJsonSchema<T['items'] extends {} ? T['items'] : {}>[]>;
 type InferJsonSchemaObject<T extends JsonSchemaObject> = Const<T, MapObject<T> extends infer Values ? {[K in keyof Values]: Values[K]} : never>;
 type InferJsonSchemaNumber<T extends JsonSchemaNumber> = Const<T, number>;
-type InferJsonSchemaString<T extends JsonSchemaString> = Const<T, T['enum'] extends (infer E)[] ? E : string>;
+type InferJsonSchemaString<T extends JsonSchemaString> = Const<T, MapEnum<T>>;
 type InferJsonSchemaBoolean<T extends JsonSchemaBoolean> = Const<T, boolean>;
 
 export type InferJsonSchema<T extends JsonSchema> = T extends JsonSchemaAny
