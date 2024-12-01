@@ -31,7 +31,7 @@
         {/if}
         {#if form?.success}
             <p class="success">
-                Account created! Check your {#if form.success.inbox}<a href={form.success.inbox}>inbox</a>{:else}inbox{/if} to validate your account
+                Account created! Check your {#if form.success.inbox}<a href={form.success.inbox}>inbox</a>{:else}inbox{/if} to confirm your account
             </p>
         {/if}
         <a href="/auth/login">Login instead</a>

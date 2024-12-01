@@ -11,7 +11,7 @@ export const actions = {
         const confirmPassword = form.get('confirmPassword') as string;
 
         if (email && password && confirmPassword && password === confirmPassword) {
-            const response = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: `${rootUrl}/auth/validate`}});
+            const response = await locals.supabase.auth.signUp({email, password, options: {emailRedirectTo: `${rootUrl}/auth/register/confirm`}});
 
             if (response.data.user) {
                 return {email, success: {inbox: inboxFromEmail(email)}};

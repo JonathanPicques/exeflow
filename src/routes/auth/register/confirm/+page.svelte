@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-    <title>Exeflow - Validate email</title>
+    <title>Exeflow - Confirm account</title>
 </svelte:head>
 
 <Navbar>
@@ -20,13 +20,12 @@
 </Navbar>
 
 <main>
-    {#if data.success}
-        <h1>Account validated!</h1>
-        <a href="/home">Start automating!</a>
-    {/if}
     {#if data.error}
-        <h1>There was an error while validating your account</h1>
-        <p>{data.description}</p>
+        <h1>There was an error while confirming your account</h1>
+        <p class="error">{data.error.message}</p>
+    {:else}
+        <h1>Account confirmed!</h1>
+        <a href="/home">Start automating!</a>
     {/if}
 </main>
 
@@ -38,5 +37,9 @@
         align-items: center;
         flex-direction: column;
         justify-content: center;
+    }
+
+    .error {
+        color: var(--color-error);
     }
 </style>
