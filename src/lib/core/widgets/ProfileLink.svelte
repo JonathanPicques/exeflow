@@ -5,9 +5,3 @@
 <a href="/auth/profile" class="icon button" title="Your profile">
     <Avatar />
 </a>
-
-<style>
-    a {
-        view-transition-name: profile-link;
-    }
-</style>
