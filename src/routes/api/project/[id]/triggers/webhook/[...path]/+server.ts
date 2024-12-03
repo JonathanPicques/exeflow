@@ -153,7 +153,9 @@ const handler = async ({locals, params, request}: RequestEvent) => {
                 status,
                 headers: {
                     ...headers,
-                    'content-type': 'text/event-stream',
+                    Connection: 'keep-alive',
+                    'Content-Type': 'text/event-stream',
+                    'Cache-Control': 'no-cache',
                 },
             });
         }

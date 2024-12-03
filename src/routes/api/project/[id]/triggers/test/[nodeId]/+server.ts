@@ -48,7 +48,9 @@ export const POST = async ({locals, params, request}) => {
 
         return new Response(responseStream, {
             headers: {
-                'content-type': 'text/event-stream',
+                Connection: 'keep-alive',
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
             },
         });
     }
