@@ -3,7 +3,7 @@ import cronstrue from 'cronstrue';
 import icon from './+icon.svg';
 import {trigger} from '$lib/core/plugins/trigger';
 import {trySync} from '$lib/core/helper/function';
-import {fill, zero} from '$lib/core/schema/data';
+import {fill, zero} from '$lib/core/plugins/config/data';
 import type {JsonSchema} from '$lib/core/schema/schema';
 
 const configSchema = {

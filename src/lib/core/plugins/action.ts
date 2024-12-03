@@ -1,5 +1,5 @@
 import type {JsonSchema} from '$lib/core/schema/schema';
-import type {InferJsonSchema} from '$lib/core/schema/infer';
+import type {InferRootConfig} from '$lib/core/plugins/config/infer';
 
 export type ActionId = string;
 
@@ -18,23 +18,23 @@ export interface Action<Config extends JsonSchema> {
 export interface ActionData<Config extends JsonSchema> {
     valid: boolean;
     title?: string;
-    config: {value: InferJsonSchema<Config>; schema: Config};
+    config: {value: InferRootConfig<Config>; schema: Config};
     inputs: string[];
     outputs: string[];
     results: Record<string, JsonSchema>;
 }
 
 interface FormArgs<Config extends JsonSchema> {
-    config: InferJsonSchema<Config>;
+    config: InferRootConfig<Config>;
     //
-    constant: (config: unknown) => boolean;
+    constant: <T>(config: T | {type: 'code'; code: string}) => config is T;
 }
 
 interface DataArgs<Config extends JsonSchema> {
-    form?: Partial<InferJsonSchema<Config>>;
-    config?: InferJsonSchema<Config>;
+    form?: Partial<InferRootConfig<Config>>;
+    config?: InferRootConfig<Config>;
     //
-    constant: (config: unknown) => boolean;
+    constant: <T>(config: T | {type: 'code'; code: string}) => config is T;
 }
 
 export const action = <Config extends JsonSchema>(action: Omit<Action<Config>, 'type'>): Action<Config> => ({type: 'action', ...action});

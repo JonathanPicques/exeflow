@@ -1,5 +1,5 @@
 import type {JsonSchema} from '$lib/core/schema/schema';
-import type {InferJsonSchema} from '$lib/core/schema/infer';
+import type {InferRootConfig} from '$lib/core/plugins/config/infer';
 
 export type TriggerId = string;
 
@@ -18,22 +18,22 @@ export interface Trigger<Config extends JsonSchema> {
 export interface TriggerData<Config extends JsonSchema> {
     valid: boolean;
     title?: string;
-    config: {value: InferJsonSchema<Config>; schema: Config};
+    config: {value: InferRootConfig<Config>; schema: Config};
     outputs: string[];
     results: Record<string, JsonSchema>;
 }
 
 interface FormArgs<Config extends JsonSchema> {
-    config: InferJsonSchema<Config>;
+    config: InferRootConfig<Config>;
     //
-    constant: (config: unknown) => boolean;
+    constant: <T>(config: T | {type: 'code'; code: string}) => config is T;
 }
 
 interface DataArgs<Config extends JsonSchema> {
-    form?: Partial<InferJsonSchema<Config>>;
-    config?: InferJsonSchema<Config>;
+    form?: Partial<InferRootConfig<Config>>;
+    config?: InferRootConfig<Config>;
     //
-    constant: (config: unknown) => boolean;
+    constant: <T>(config: T | {type: 'code'; code: string}) => config is T;
 }
 
 export const trigger = <Config extends JsonSchema>(trigger: Omit<Trigger<Config>, 'type'>): Trigger<Config> => ({type: 'trigger', ...trigger});
