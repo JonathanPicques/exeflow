@@ -13,6 +13,7 @@ const configSchema = {
         email: {type: 'string'},
         password: {type: 'string'},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

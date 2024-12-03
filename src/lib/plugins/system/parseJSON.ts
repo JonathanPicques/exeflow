@@ -10,6 +10,7 @@ const configSchema = {
         text: {type: 'string'},
         schema: {type: 'object'},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

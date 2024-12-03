@@ -20,6 +20,7 @@ const ollama = {
             },
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 const openai = {
@@ -39,6 +40,7 @@ const openai = {
             },
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 const mistral = {
@@ -59,6 +61,7 @@ const mistral = {
             },
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 const anthropic = {
@@ -79,6 +82,7 @@ const anthropic = {
             },
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 const providers = {ollama, openai, mistral, anthropic};
@@ -91,6 +95,7 @@ const configSchema = {
         stream: {type: 'boolean'},
         provider: {anyOf: Object.values(providers)},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

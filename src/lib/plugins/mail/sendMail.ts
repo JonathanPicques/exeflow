@@ -18,6 +18,7 @@ const configSchema = {
         bodyHtml: {type: 'string', title: 'mail in html'},
         bodyText: {type: 'string', title: 'mail in plain text'},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

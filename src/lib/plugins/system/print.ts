@@ -9,6 +9,7 @@ const configSchema = {
     properties: {
         text: {type: 'string'},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

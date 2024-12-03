@@ -11,6 +11,7 @@ const configSchema = {
         depth: {type: 'number', default: 8},
         timeout: {type: 'number', default: 2000},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

@@ -22,6 +22,7 @@ const configSchema = {
             default: 'Hello from Exeflow!',
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

@@ -12,6 +12,7 @@ const configSchema = {
         path: {type: 'string', default: '/'},
         method: {type: 'string', enum: methods, default: methods[0]},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default trigger<typeof configSchema>({

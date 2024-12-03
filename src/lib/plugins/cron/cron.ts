@@ -12,6 +12,7 @@ const configSchema = {
     properties: {
         interval: {type: 'string', default: '*/5 * * * *'},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default trigger<typeof configSchema>({

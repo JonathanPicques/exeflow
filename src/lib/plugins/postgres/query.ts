@@ -10,6 +10,7 @@ const configSchema = {
         query: {type: 'string', default: 'select * from users'},
         connection: {type: 'string'},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

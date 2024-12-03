@@ -15,6 +15,7 @@ const configSchema = {
         search: {type: 'object', additionalProperties: {type: 'string'}, default: {page: '1', count: '10'}},
         headers: {type: 'object', additionalProperties: {type: 'string'}, default: {'Content-Type': 'application/json'}},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

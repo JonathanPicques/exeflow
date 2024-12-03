@@ -18,6 +18,7 @@ const configSchema = {
             description: `enable developer mode, and right click a channel to copy the channel id`,
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default trigger<typeof configSchema>({

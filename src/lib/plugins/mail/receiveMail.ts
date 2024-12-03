@@ -15,6 +15,7 @@ const configSchema = {
         //
         inbox: {type: 'string', default: 'INBOX'},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default trigger<typeof configSchema>({

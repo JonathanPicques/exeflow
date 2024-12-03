@@ -20,6 +20,7 @@ const ollama = {
             },
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 const openai = {
@@ -39,6 +40,7 @@ const openai = {
             },
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 const mistral = {
@@ -59,6 +61,7 @@ const mistral = {
             },
         },
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 const providers = {ollama, openai, mistral};
@@ -70,6 +73,7 @@ const configSchema = {
         input: {type: 'string'},
         provider: {anyOf: [ollama, openai, mistral]},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

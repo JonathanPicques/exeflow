@@ -9,6 +9,7 @@ const configSchema = {
     properties: {
         count: {type: 'number', default: 3},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({

@@ -10,6 +10,7 @@ const configSchema = {
     properties: {
         status: {type: 'number', default: 200},
     },
+    additionalProperties: false,
 } satisfies JsonSchema;
 
 export default action<typeof configSchema>({
