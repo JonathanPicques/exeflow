@@ -1,5 +1,5 @@
-import trigger from './cron';
 import {serverTrigger} from '$lib/core/plugins/trigger.server';
+import type trigger from './cron';
 
 export default serverTrigger<typeof trigger>({
     exec: async function* ({next}) {
