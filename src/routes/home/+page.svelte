@@ -96,7 +96,7 @@
         overflow: auto;
         flex-grow: 1;
         margin-top: 6rem;
-        padding-inline: 3rem;
+        padding-inline: 2rem;
         flex-direction: column;
     }
 
@@ -141,6 +141,10 @@
     .toolbar {
         gap: 1rem;
         display: flex;
+
+        @media (width <= 932px) {
+            flex-direction: column;
+        }
     }
 
     .projects {
@@ -148,7 +152,6 @@
         grid-gap: 2rem;
         overflow: auto;
         flex-grow: 1;
-        padding-right: 1rem;
         align-content: start;
         grid-template-columns: repeat(auto-fill, minmax(clamp(15rem, 25vw, 25rem), 1fr));
     }
