@@ -50,9 +50,9 @@
     let saving = $state(false);
     let projectName = $state(data.project.name);
 
-    let smallWidth = $state(data.mobileHint); // (width <= 932px)
+    let mobile = $state(data.mobileHint); // (width <= 932px)
     const hasSelection = $derived($nodes.some(n => n.selected));
-    const targetSidebarPos: Length = $derived(projectContext.sidebar ? (smallWidth ? '0%' : '65%') : '100%');
+    const targetSidebarPos: Length = $derived(projectContext.sidebar ? (mobile ? '0%' : '65%') : '100%');
 
     const save = async () => {
         const {nodes, edges} = exportGraph();
@@ -131,7 +131,7 @@
     onMount(() => {
         const media = matchMedia(`(width <= 932px)`);
         const listener = ({matches}: {matches: boolean}) => {
-            smallWidth = matches;
+            mobile = matches;
         };
 
         listener(media);
@@ -146,56 +146,116 @@
     <title>Exeflow - {projectName || 'Untitled project'}</title>
 </svelte:head>
 
+{#snippet HomeButton()}
+    <a href="/home" role="button" class="icon button" aria-label="Back to home">
+        <Home />
+    </a>
+{/snippet}
+{#snippet SaveButton()}
+    <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
+        <Save />
+        {#if !saving && saveChecksum !== currentChecksum}
+            <span class="save-indicator"></span>
+        {/if}
+    </button>
+{/snippet}
+{#snippet CopyButton()}
+    <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
+{/snippet}
+{#snippet PasteButton()}
+    <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
+{/snippet}
+{#snippet SidebarButton()}
+    <button class="icon" title="Show sidebar" onclick={projectContext.showSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
+        <Sidebar />
+    </button>
+{/snippet}
+{#snippet PrettifyButton()}
+    <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+2'}>
+        <Prettify />
+    </button>
+{/snippet}
+{#snippet FitToViewButton()}
+    <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
+        <FitToView />
+    </button>
+{/snippet}
+{#snippet RemoveSelectionButton()}
+    <button class="icon" title="Remove selection" onclick={removeSelection} disabled={!hasSelection}>
+        <Trash />
+    </button>
+{/snippet}
+{#snippet DuplicateSelectionButton()}
+    <button class="icon" title="Duplicate selection" onclick={duplicateSelection} disabled={!hasSelection} use:shortcut={['ctrl+d', 'command+d']}>
+        <Duplicate />
+    </button>
+{/snippet}
+
+{#snippet NavbarMobile()}
+    <nav class="top">
+        <div class="island">
+            {@render HomeButton()}
+        </div>
+        <div style:flex-grow="1"></div>
+        <div class="island">
+            <ProfileLink />
+            <GithubLink />
+        </div>
+        {#if !projectContext.sidebar}
+            <div class="island">
+                {@render SidebarButton()}
+            </div>
+        {/if}
+    </nav>
+
+    <nav class="bottom">
+        <div class="island">
+            {@render SaveButton()}
+            {@render CopyButton()}
+            {@render PasteButton()}
+            {@render PrettifyButton()}
+            {@render FitToViewButton()}
+            {@render RemoveSelectionButton()}
+            {@render DuplicateSelectionButton()}
+        </div>
+    </nav>
+{/snippet}
+{#snippet NavbarDesktop()}
+    <nav class="top">
+        <div class="island">
+            {@render HomeButton()}
+        </div>
+        <div class="island">
+            <input type="text" aria-label="Project name" placeholder="Untitled project..." bind:value={projectName} />
+        </div>
+        <div class="island">
+            {@render SaveButton()}
+            {@render CopyButton()}
+            {@render PasteButton()}
+            {@render PrettifyButton()}
+            {@render FitToViewButton()}
+            {@render RemoveSelectionButton()}
+            {@render DuplicateSelectionButton()}
+        </div>
+        <div style:flex-grow="1"></div>
+        <div class="island">
+            <ProfileLink />
+            <GithubLink />
+        </div>
+        {#if !projectContext.sidebar}
+            <div class="island">
+                {@render SidebarButton()}
+            </div>
+        {/if}
+    </nav>
+{/snippet}
+
 <SvelteFlowProvider>
     <main>
-        <SplitPane type="horizontal" pos={targetSidebarPos} priority="min" disabled={smallWidth} --color="var(--color-bg-1)" --thickness="2rem">
+        <SplitPane type="horizontal" pos={targetSidebarPos} priority="min" disabled={mobile} --color="var(--color-bg-1)" --thickness="2rem">
             <section slot="a" class="flow">
-                <nav>
-                    <div class="island">
-                        <a href="/home" role="button" class="icon button" aria-label="Back to home">
-                            <Home />
-                        </a>
-                    </div>
-                    <div class="island collapse">
-                        <input type="text" aria-label="Project name" placeholder="Untitled project..." bind:value={projectName} />
-                    </div>
-                    <div class="island">
-                        <button class="icon" title="Save" onclick={save} disabled={saving} use:shortcut={['ctrl+s', 'command+s']}>
-                            <Save />
-                            {#if !saving && saveChecksum !== currentChecksum}
-                                <span class="save-indicator"></span>
-                            {/if}
-                        </button>
-                        <button class="icon" title="Copy" onclick={exportToClipboard} use:shortcut={['ctrl+c', 'command+c']} style:display="none">Copy</button>
-                        <button class="icon" title="Paste" onclick={importFromClipboard} use:shortcut={['ctrl+v', 'command+v']} style:display="none">Paste</button>
-                        <button class="icon" title="Prettify" onclick={prettify} use:shortcut={'shift+2'}>
-                            <Prettify />
-                        </button>
-                        <button class="icon" title="Fit to view" onclick={fitToView} use:shortcut={'shift+1'}>
-                            <FitToView />
-                        </button>
-                        <button class="icon" title="Remove selection" onclick={removeSelection} disabled={!hasSelection}>
-                            <Trash />
-                        </button>
-                        <button class="icon" title="Duplicate selection" onclick={duplicateSelection} disabled={!hasSelection} use:shortcut={['ctrl+d', 'command+d']}>
-                            <Duplicate />
-                        </button>
-                    </div>
-                    <div style:flex-grow="1"></div>
-                    <div class="island collapse">
-                        <ProfileLink />
-                        <GithubLink />
-                    </div>
-                    {#if !projectContext.sidebar}
-                        <div class="island">
-                            <button class="icon" title="Show sidebar" onclick={projectContext.showSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
-                                <Sidebar />
-                            </button>
-                        </div>
-                    {/if}
-                </nav>
-
                 <Flow onNodeClick={showNodes} bind:this={flow} />
+                {@render (mobile ? NavbarMobile : NavbarDesktop)()}
             </section>
             <section slot="b" class="sidebar">
                 <div class="tabs">
@@ -245,10 +305,8 @@
 
         nav {
             position: absolute;
-            top: 0;
             left: 0;
             right: 0;
-            z-index: 1;
 
             gap: 0.5rem;
             display: flex;
@@ -256,15 +314,25 @@
             overflow: auto;
             user-select: none;
 
+            &.top {
+                top: 0;
+            }
+
+            &.bottom {
+                bottom: 0;
+            }
+
             & .island {
                 display: flex;
 
                 gap: 1rem;
                 border: 0.15rem solid var(--color-bg-1);
+                margin: auto;
                 box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.25);
                 border-radius: 10rem;
                 padding-block: 0.5rem;
                 padding-inline: 1.25rem;
+                justify-content: center;
                 background-color: var(--color-bg);
 
                 input {
@@ -275,12 +343,6 @@
                         color: var(--color-fg-1);
                         user-select: none;
                     }
-                }
-            }
-
-            & .collapse {
-                @media (width <= 932px) {
-                    display: none;
                 }
             }
         }
@@ -318,11 +380,12 @@
     }
 
     .save-indicator {
+        position: absolute;
         top: 0;
         right: 0;
+
         width: 8px;
         height: 8px;
-        position: absolute;
         border-radius: 10rem;
 
         background-color: var(--color-primary);

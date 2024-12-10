@@ -26,8 +26,9 @@
 
 <style>
     div {
-        display: flex;
         position: absolute;
+
+        display: flex;
         pointer-events: all;
     }
 

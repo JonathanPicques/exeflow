@@ -41,10 +41,11 @@
 
 <style>
     .plugin {
+        position: relative;
+
         gap: 0.5rem;
         display: flex;
         padding: 1rem;
-        position: relative;
         user-select: none;
         flex-direction: column;
 

@@ -47,12 +47,13 @@
 
 <style>
     .node::before {
-        content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
+
+        content: '';
         opacity: 0.1;
         border-radius: calc(var(--flow-border-radius-node) - 0.15rem);
         pointer-events: none;
@@ -60,6 +61,7 @@
     }
     .node {
         position: relative;
+
         gap: 1rem;
         width: fit-content;
         display: flex;
