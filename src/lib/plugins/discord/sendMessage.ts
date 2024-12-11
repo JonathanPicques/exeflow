@@ -33,9 +33,12 @@ export default action<typeof configSchema>({
     form({config}) {
         return fill(configSchema, config);
     },
-    data({form, config}) {
+    data({form, config, constant}) {
+        const message = form?.message ?? config?.message ?? zero(configSchema.properties.message);
+
         return {
             valid: true,
+            title: constant(message) ? message : undefined,
             config: {
                 value: {
                     token: form?.token ?? config?.token ?? zero(configSchema.properties.token),
