@@ -86,7 +86,7 @@
         <span
             role="tooltip"
             class="node"
-            title="use the result of {interpolationText} provided by the node {humanPluginName(extractPluginName(node.data.id))}"
+            title="use {interpolationText} provided by the node {humanPluginName(extractPluginName(node.data.id))}"
             onclick={nodeClick}
             onmouseenter={show}
             onmouseleave={hide}
