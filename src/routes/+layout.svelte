@@ -1,6 +1,6 @@
 <script lang="ts">
     import {fade} from 'svelte/transition';
-    import {navigating} from '$app/stores';
+    import {navigating} from '$app/state';
     import {onNavigate} from '$app/navigation';
 
     import '../app.css';
@@ -9,12 +9,11 @@
     let {children} = $props();
 
     $effect(() => {
-        if ($navigating) {
+        if (navigating.to !== null) {
             const timeout = setTimeout(() => {
                 loader = true;
             }, 500);
             return () => {
-                loader = false;
                 clearTimeout(timeout);
             };
         } else {

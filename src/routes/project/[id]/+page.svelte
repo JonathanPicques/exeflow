@@ -252,42 +252,46 @@
 
 <SvelteFlowProvider>
     <main>
-        <SplitPane type="horizontal" pos={targetSidebarPos} priority="min" disabled={mobile} --color="var(--color-bg-1)" --thickness="2rem">
-            <section slot="a" class="flow">
-                <Flow onNodeClick={showNodes} bind:this={flow} />
-                {@render (mobile ? NavbarMobile : NavbarDesktop)()}
-            </section>
-            <section slot="b" class="sidebar">
-                <div class="tabs">
-                    {#if projectContext.sidebar}
-                        <button class="icon" title="Close sidebar" onclick={projectContext.hideSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
-                            <Close />
+        <SplitPane pos={targetSidebarPos} type="horizontal" disabled={mobile} --color="var(--color-bg-1)" --thickness="2rem">
+            {#snippet a()}
+                <section class="flow">
+                    <Flow onNodeClick={showNodes} bind:this={flow} />
+                    {@render (mobile ? NavbarMobile : NavbarDesktop)()}
+                </section>
+            {/snippet}
+            {#snippet b()}
+                <section class="sidebar">
+                    <div class="tabs">
+                        {#if projectContext.sidebar}
+                            <button class="icon" title="Close sidebar" onclick={projectContext.hideSidebar} use:shortcut={['ctrl+shift+i', 'command+shift+i']}>
+                                <Close />
+                            </button>
+                        {/if}
+                        <button class:active={projectContext.tab.type === 'nodes'} onclick={showNodes}>
+                            <Add />
+                            <span>Nodes</span>
                         </button>
-                    {/if}
-                    <button class:active={projectContext.tab.type === 'nodes'} onclick={showNodes}>
-                        <Add />
-                        <span>Nodes</span>
-                    </button>
-                    <button class:active={projectContext.tab.type === 'logs'} onclick={showLogs}>
-                        <Console />
-                        <span>Logs</span>
-                    </button>
-                    <button class:active={projectContext.tab.type === 'secrets'} onclick={showSecrets}>
-                        <Key />
-                        <span>Secrets</span>
-                    </button>
-                </div>
+                        <button class:active={projectContext.tab.type === 'logs'} onclick={showLogs}>
+                            <Console />
+                            <span>Logs</span>
+                        </button>
+                        <button class:active={projectContext.tab.type === 'secrets'} onclick={showSecrets}>
+                            <Key />
+                            <span>Secrets</span>
+                        </button>
+                    </div>
 
-                {#if projectContext.tab.type === 'logs'}
-                    <InspectorLogs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
-                {/if}
-                {#if projectContext.tab.type === 'nodes'}
-                    <InspectorNodes />
-                {/if}
-                {#if projectContext.tab.type === 'secrets'}
-                    <InspectorSecrets />
-                {/if}
-            </section>
+                    {#if projectContext.tab.type === 'logs'}
+                        <InspectorLogs actions={data.actions} triggers={data.triggers} projectId={data.project.id} />
+                    {/if}
+                    {#if projectContext.tab.type === 'nodes'}
+                        <InspectorNodes />
+                    {/if}
+                    {#if projectContext.tab.type === 'secrets'}
+                        <InspectorSecrets />
+                    {/if}
+                </section>
+            {/snippet}
         </SplitPane>
     </main>
 </SvelteFlowProvider>
@@ -310,7 +314,7 @@
 
             gap: 0.5rem;
             display: flex;
-            padding: 0.7rem; /** magic number to align with tabs */
+            padding: 0.7rem; /* magic number to align with tabs */
             overflow: auto;
             user-select: none;
 
@@ -338,6 +342,7 @@
                 input {
                     all: unset;
                     color: var(--color-fg);
+                    height: 2rem; /* magic number to align with icon buttons */
 
                     &::placeholder {
                         color: var(--color-fg-1);
@@ -359,7 +364,7 @@
         .tabs {
             gap: 1rem;
             display: flex;
-            padding: 1rem; /** magic number to align with navbar */
+            padding: 1rem; /* magic number to align with navbar */
             overflow-x: auto;
             overflow-y: hidden;
             flex-shrink: 0;

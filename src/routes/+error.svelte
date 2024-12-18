@@ -1,5 +1,5 @@
 <script>
-    import {page} from '$app/stores';
+    import {page} from '$app/state';
 
     import Bg from '$lib/core/widgets/Bg.svelte';
     import Logo from '$lib/core/widgets/Logo.svelte';
@@ -18,8 +18,8 @@
 </Navbar>
 
 <main>
-    <h1>{$page.status}</h1>
-    <div>{$page.error?.message ?? 'an error occured'}</div>
+    <h1>{page.status}</h1>
+    <div>{page.error?.message ?? 'an error occured'}</div>
 </main>
 
 <style>

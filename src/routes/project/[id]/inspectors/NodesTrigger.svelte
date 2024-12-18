@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {page} from '$app/stores';
+    import {page} from '$app/state';
     import {getGraphContext} from '$lib/core/core';
     import type {TriggerNode} from '$lib/core/core';
 
@@ -9,13 +9,13 @@
     const copy = () => {
         const {port, hostname, protocol} = new URL(location.href);
 
-        window.navigator.clipboard.writeText(`${protocol}//${hostname}:${port}/api/project/${$page.params.id}/triggers/run/${node.id}`);
+        window.navigator.clipboard.writeText(`${protocol}//${hostname}:${port}/api/project/${page.params.id}/triggers/run/${node.id}`);
     };
     const open = () => {
-        window.open(`/api/project/${$page.params.id}/triggers/webhook${node.data.data.config.value.path}`);
+        window.open(`/api/project/${page.params.id}/triggers/webhook${node.data.data.config.value.path}`);
     };
     const test = async () => {
-        const response = await fetch(`/api/project/${$page.params.id}/triggers/test/${node.id}`, {method: 'POST', body: JSON.stringify({nodes: $nodes, edges: $edges})});
+        const response = await fetch(`/api/project/${page.params.id}/triggers/test/${node.id}`, {method: 'POST', body: JSON.stringify({nodes: $nodes, edges: $edges})});
 
         if (!response.ok) throw new Error();
         if (!response.body) throw new Error();
