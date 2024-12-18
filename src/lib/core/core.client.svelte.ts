@@ -1,6 +1,5 @@
 import {getContext, setContext} from 'svelte';
 
-import {putSecret, deleteSecret} from '../../routes/api/secrets/secrets';
 import type {Secret} from '../../routes/api/secrets/secrets';
 import type {PluginNode} from '$lib/core/core';
 
@@ -40,19 +39,17 @@ export class ProjectContext {
         this.sidebar = false;
     };
 
-    public putSecret = async (secret: Secret) => {
-        const newSecret = await putSecret(secret);
-        const foundIndex = this.secrets.findIndex(s => s.key === newSecret.key);
+    public putSecret = (secret: Secret) => {
+        const foundIndex = this.secrets.findIndex(s => s.key === secret.key);
 
         if (foundIndex === -1) {
-            this.secrets.push(newSecret);
+            this.secrets.push(secret);
         } else {
-            this.secrets.splice(foundIndex, 1, newSecret);
+            this.secrets.splice(foundIndex, 1, secret);
         }
     };
 
-    public deleteSecret = async (key: string) => {
-        await deleteSecret({key});
+    public deleteSecret = (key: string) => {
         this.secrets.splice(
             this.secrets.findIndex(s => s.key === key),
             1,
