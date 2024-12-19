@@ -255,7 +255,7 @@
         <SplitPane pos={targetSidebarPos} type="horizontal" disabled={mobile} --color="var(--color-bg-1)" --thickness="2rem">
             {#snippet a()}
                 <section class="flow">
-                    <Flow onNodeClick={showNodes} bind:this={flow} />
+                    <Flow onnodeclick={showNodes} bind:this={flow} />
                     {@render (mobile ? NavbarMobile : NavbarDesktop)()}
                 </section>
             {/snippet}

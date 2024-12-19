@@ -1,5 +1,6 @@
 <script lang="ts">
     import '@xyflow/svelte/dist/style.css';
+    import './flow.css';
 
     import {toPng} from 'html-to-image';
     import {Background, SvelteFlow, getViewportForBounds, useSvelteFlow} from '@xyflow/svelte';
@@ -15,10 +16,10 @@
     import {getGraphContext} from '$lib/core/core';
 
     interface Props {
-        onNodeClick: () => void;
+        onnodeclick: () => void;
     }
 
-    let {onNodeClick}: Props = $props();
+    let {onnodeclick}: Props = $props();
 
     const {nodes, edges, createNode} = getGraphContext();
     const {fitView, getViewport, setViewport, getNodesBounds, screenToFlowPosition} = useSvelteFlow();
@@ -36,7 +37,7 @@
         if (!animate) return;
         const timeout = setTimeout(() => {
             animate = false;
-        }, /* keep timing in sync with css transition */ 300);
+        }, /* keep timing in sync with css transition in flow.css */ 300);
         return () => {
             animate = false;
             clearTimeout(timeout);
@@ -143,47 +144,9 @@
     {isValidConnection}
     on:drop={ondrop}
     on:dragover={ondragover}
-    on:nodedrag={onNodeClick}
-    on:nodeclick={onNodeClick}
+    on:nodedrag={onnodeclick}
+    on:nodeclick={onnodeclick}
 >
     <Connect slot="connectionLine" />
     <Background />
 </SvelteFlow>
-
-<style>
-    :global(.svelte-flow) {
-        font-family: var(--font-mono);
-        background-color: var(--color-bg) !important;
-        --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
-
-        &.animate :global(.svelte-flow__node) {
-            @media screen and (prefers-reduced-motion: no-preference) {
-                transition: all 0.3s ease; /* keep timing in sync with setTimeout */
-            }
-        }
-    }
-
-    :global(.svelte-flow__handle) {
-        width: 0.5rem;
-        height: 0.5rem;
-        position: static;
-        transform: none;
-        border-width: 0.15rem;
-        border-color: var(--x-color-plugin);
-        background-color: var(--x-color-handle);
-    }
-
-    :global(.svelte-flow__edge-path) {
-        stroke: var(--flow-color-edge);
-        stroke-width: 0.1rem;
-    }
-
-    :global(.svelte-flow__handle.connectingto),
-    :global(.svelte-flow__handle.connectingfrom) {
-        --x-color-handle: var(--x-color-plugin);
-    }
-
-    :global(.svelte-flow__attribution) {
-        visibility: hidden;
-    }
-</style>

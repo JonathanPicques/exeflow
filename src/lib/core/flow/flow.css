@@ -1,0 +1,35 @@
+.svelte-flow {
+    font-family: var(--font-mono);
+    background-color: var(--color-bg) !important;
+    --xy-background-pattern-dots-color-default: var(--flow-color-grid-dots);
+
+    &.animate .svelte-flow__node {
+        @media screen and (prefers-reduced-motion: no-preference) {
+            transition: all 0.3s ease; /* keep timing in sync with setTimeout in Flow.svelte */
+        }
+    }
+}
+
+.svelte-flow__handle {
+    width: 0.5rem;
+    height: 0.5rem;
+    position: static;
+    transform: none;
+    border-width: 0.15rem;
+    border-color: var(--x-color-plugin);
+    background-color: var(--x-color-handle);
+}
+
+.svelte-flow__edge-path {
+    stroke: var(--flow-color-edge);
+    stroke-width: 0.1rem;
+}
+
+.svelte-flow__handle.connectingto,
+.svelte-flow__handle.connectingfrom {
+    --x-color-handle: var(--x-color-plugin);
+}
+
+.svelte-flow__attribution {
+    visibility: hidden;
+}
