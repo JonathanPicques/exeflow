@@ -20,6 +20,10 @@
             "**/*.gitignore": true,
             "vite.config.ts": true,
             "svelte.config.js": true,
+            // Zen mode (tests)
+            "e2e": true,
+            "**/*.test.ts": true,
+            "playwright.config.ts": true,
             // Zen mode (supabase)
             "supabase/*.sql": true,
             "supabase/.temp": true,
