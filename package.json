@@ -50,9 +50,9 @@
         "tippy.js": "^6.3.7"
     },
     "devDependencies": {
-        "@playwright/test": "^1.45.3",
+        "@playwright/test": "^1.49.1",
         "@sveltejs/adapter-auto": "^3.3.1",
-        "@sveltejs/kit": "^2.13.0",
+        "@sveltejs/kit": "^2.15.0",
         "@sveltejs/vite-plugin-svelte": "^5.0.3",
         "@types/eslint": "^9.6.1",
         "@types/pg": "^8.11.10",
@@ -61,7 +61,7 @@
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-svelte": "^2.46.1",
         "globals": "^15.14.0",
-        "kanel": "^3.10.3",
+        "kanel": "^3.11.0",
         "kanel-kysely": "^0.6.0",
         "kysely": "^0.27.5",
         "prettier": "^3.4.2",

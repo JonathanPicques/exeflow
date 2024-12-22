@@ -23,6 +23,7 @@
             // Zen mode (tests)
             "e2e": true,
             "**/*.test.ts": true,
+            "test-results": true,
             "playwright.config.ts": true,
             // Zen mode (supabase)
             "supabase/*.sql": true,
