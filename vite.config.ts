@@ -10,5 +10,5 @@ export default defineConfig({
             ignoreSourceErrors: true,
         },
     },
-    plugins: [sveltekit() as any], // TODO: Remove me when fixed
+    plugins: [sveltekit() as any], // TODO: Remove as any when fixed
 });
