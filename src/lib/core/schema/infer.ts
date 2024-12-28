@@ -2,7 +2,7 @@
 
 import type {JsonSchema, JsonSchemaAny, JsonSchemaNull, JsonSchemaAnyOf, JsonSchemaArray, JsonSchemaNumber, JsonSchemaObject, JsonSchemaString, JsonSchemaBoolean} from './schema';
 
-type Const<T extends JsonSchema, Fallback> = T['const'] extends infer C extends {} ? C : Fallback;
+type Const<T extends JsonSchema, Fallback> = T extends {const: infer C} ? C : Fallback;
 type MapEnum<T extends JsonSchemaString> = T['enum'] extends (infer E)[] ? E : string;
 type MapObject<T extends JsonSchemaObject> =
     T['properties'] extends Record<string, JsonSchema>

@@ -19,11 +19,13 @@
             "tsconfig.json": true,
             "**/*.gitignore": true,
             "vite.config.ts": true,
+            "vite.plugins.ts": true,
             "svelte.config.js": true,
             // Zen mode (tests)
             "e2e": true,
-            "**/*.test.ts": true,
             "test-results": true,
+            "**/*.test.ts": true,
+            "**/*.test-d.ts": true,
             "playwright.config.ts": true,
             // Zen mode (supabase)
             "supabase/*.sql": true,

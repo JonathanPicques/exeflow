@@ -1,422 +1,317 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "title": "Exeflow API",
-        "version": "1.0.0",
-        "description": "API documentation for the Exeflow project"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Exeflow API",
+    "version": "0.1.0",
+    "description": "API documentation for the Exeflow project"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5173"
     },
-    "servers": [{"url": "http://localhost:5173"}, {"url": "https://exeflow.vercel.app/"}],
-    "paths": {
-        "/api/auth/me": {
-            "get": {
-                "summary": "Get current user",
-                "security": [{"cookieAuth": []}],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "id": {"type": "string"},
-                                        "email": {"type": "string"}
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    }
-                }
-            }
-        },
-        "/api/project": {
-            "post": {
-                "summary": "Create a new project",
-                "security": [{"cookieAuth": []}],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "required": ["name"],
-                                "properties": {
-                                    "name": {"type": "string"}
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Project created",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "id": {"type": "string"},
-                                        "name": {"type": "string"},
-                                        "image": {"type": "string"},
-                                        "content": {"type": "object"}
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                }
-            }
-        },
-        "/api/project/{id}": {
-            "patch": {
-                "summary": "Update a project",
-                "security": [{"cookieAuth": []}],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {"type": "string"}
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "required": ["name", "image", "content"],
-                                "properties": {
-                                    "name": {"type": "string"},
-                                    "image": {"type": "string"},
-                                    "content": {"type": "object"}
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Project updated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "id": {"type": "string"}
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "404": {
-                        "description": "Project not found"
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete a project",
-                "security": [{"cookieAuth": []}],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {"type": "string"}
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Project deleted"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Project not found"
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                }
-            }
-        },
-        "/api/project/{id}/logs": {
-            "get": {
-                "summary": "Get project logs",
-                "security": [{"cookieAuth": []}],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "schema": {"type": "string"},
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Logs retrieved",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "execId": {"type": "string"},
-                                            "plugins": {"type": "array", "items": {"type": "string"}},
-                                            "startedAt": {"type": "string", "format": "date-time"},
-                                            "finishedAt": {"type": "string", "format": "date-time"}
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Project not found"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete project logs",
-                "security": [{"cookieAuth": []}],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {"type": "string"}
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Logs deleted"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Project not found"
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                }
-            }
-        },
-        "/api/project/{id}/logs/{exec_id}": {
-            "get": {
-                "summary": "Get specific log entry",
-                "security": [{"cookieAuth": []}],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {"type": "string"}
-                    },
-                    {
-                        "name": "exec_id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {"type": "string"}
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Log entry retrieved",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "pluginId": {"type": "string"},
-                                            "config": {"type": "object"},
-                                            "results": {"type": "object"},
-                                            "createdAt": {"type": "string", "format": "date-time"}
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Log entry not found"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete specific log entry",
-                "security": [{"cookieAuth": []}],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "schema": {"type": "string"},
-                        "required": true
-                    },
-                    {
-                        "in": "path",
-                        "name": "exec_id",
-                        "schema": {"type": "string"},
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Log entry deleted"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Log entry not found"
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                }
-            }
-        },
-        "/api/secrets": {
-            "get": {
-                "summary": "Get all secrets",
-                "security": [{"cookieAuth": []}],
-                "responses": {
-                    "200": {
-                        "description": "Secrets retrieved",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "key": {"type": "string"},
-                                            "value": {"type": "string"}
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    }
-                }
-            },
-            "put": {
-                "summary": "Create or update a secret",
-                "security": [{"cookieAuth": []}],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "required": ["key", "value"],
-                                "properties": {
-                                    "key": {"type": "string"},
-                                    "value": {"type": "string"}
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Secret created or updated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "key": {"type": "string"},
-                                        "value": {"type": "string"}
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                }
-            }
-        },
-        "/api/secrets/{key}": {
-            "delete": {
-                "summary": "Delete a secret",
-                "parameters": [
-                    {
-                        "name": "key",
-                        "in": "path",
-                        "required": true,
-                        "schema": {"type": "string"}
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Secret deleted"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Secret not found"
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                },
-                "security": [
-                    {
-                        "cookieAuth": []
-                    }
-                ]
-            }
-        }
-    },
-    "components": {
-        "securitySchemes": {
-            "cookieAuth": {
-                "in": "cookie",
-                "type": "apiKey",
-                "name": "exeflow_session"
-            }
-        }
+    {
+      "url": "https://exeflow.vercel.app/"
     }
+  ],
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "in": "cookie",
+        "type": "apiKey",
+        "name": "exeflow_session"
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/me/": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/api/project/": {
+      "post": {
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/api/project/{id}/": {
+      "patch": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {}
+                  }
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      },
+      "delete": {
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/project/{id}/logs/": {
+      "get": {
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      },
+      "delete": {
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/project/{id}/logs/{exec_id}/": {
+      "get": {
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "exec_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      },
+      "delete": {
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "exec_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/project/{id}/triggers/test/{nodeId}/": {
+      "post": {
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "nodeId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/secrets/": {
+      "get": {
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "parameters": []
+      },
+      "put": {
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/api/secrets/{key}/": {
+      "delete": {
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ]
+      }
+    }
+  }
 }
