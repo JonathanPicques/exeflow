@@ -7,6 +7,7 @@ export const createSupabase = ({url, key, cookies}: {url: string; key: string; c
     const supabase = createClient(url, key, {
         auth: {
             flowType: 'pkce',
+            storageKey: 'exeflow_session',
             persistSession: true,
             autoRefreshToken: false,
             detectSessionInUrl: false,
