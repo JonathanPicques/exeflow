@@ -45,26 +45,60 @@
             "description": "OK"
           },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           }
-        },
-        "parameters": []
+        }
       }
     },
     "/api/project/": {
       "post": {
         "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "400": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Bad Request"
           },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Internal Server Error"
           }
-        },
-        "parameters": []
+        }
       }
     },
     "/api/project/{id}/": {
@@ -84,15 +118,43 @@
             "description": "OK"
           },
           "400": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Bad Request"
           },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Not Found"
           },
           "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Internal Server Error"
           }
         },
@@ -109,13 +171,42 @@
       },
       "delete": {
         "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Not Found"
           },
           "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Internal Server Error"
           }
         },
@@ -134,10 +225,32 @@
     "/api/project/{id}/logs/": {
       "get": {
         "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Not Found"
           }
         },
@@ -154,13 +267,42 @@
       },
       "delete": {
         "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Not Found"
           },
           "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Internal Server Error"
           }
         },
@@ -179,10 +321,32 @@
     "/api/project/{id}/logs/{exec_id}/": {
       "get": {
         "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Not Found"
           }
         },
@@ -207,13 +371,42 @@
       },
       "delete": {
         "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Not Found"
           },
           "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Internal Server Error"
           }
         },
@@ -240,10 +433,67 @@
     "/api/project/{id}/triggers/test/{nodeId}/": {
       "post": {
         "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "locked": {
+                      "type": "boolean"
+                    },
+                    "cancel": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "getReader": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "pipeThrough": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "pipeTo": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "tee": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "values": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "__@asyncIterator@16546": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              }
+            },
+            "description": "OK"
+          },
           "400": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Bad Request"
           },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           }
         },
@@ -270,34 +520,98 @@
     "/api/secrets/": {
       "get": {
         "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           }
-        },
-        "parameters": []
+        }
       },
       "put": {
         "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "400": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Bad Request"
           },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Internal Server Error"
           }
-        },
-        "parameters": []
+        }
       }
     },
     "/api/secrets/{key}/": {
       "delete": {
         "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            },
+            "description": "OK"
+          },
           "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Unauthorized"
           },
           "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "description": "Internal Server Error"
           }
         },

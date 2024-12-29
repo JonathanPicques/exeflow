@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import fs from 'fs/promises';
 import path from 'path';
-import {Node, Type, Project, SyntaxKind, FileSystemRefreshResult} from 'ts-morph';
+import {Node, Type, Project, SyntaxKind, ThrowStatement, ReturnStatement, FileSystemRefreshResult} from 'ts-morph';
 import type {Plugin} from 'vite';
 import type {OpenAPIV3} from 'openapi-types';
 
@@ -9,7 +9,7 @@ interface Endpoint {
     path: string;
     method: string;
     responses: OpenAPIV3.ResponsesObject;
-    parameters: OpenAPIV3.ParameterObject[];
+    parameters?: OpenAPIV3.ParameterObject[];
     requestBody?: OpenAPIV3.RequestBodyObject;
 }
 
@@ -94,7 +94,80 @@ const typeToJsonSchema = (type: Type, location: Node): OpenAPIV3.SchemaObject =>
     return {};
 };
 
-const parseEndpointFile = (project: Project, filePath: string) => {
+const parseResponseInit = (responseInitNode: Node) => {
+    const properties = responseInitNode.getDescendantsOfKind(SyntaxKind.PropertyAssignment);
+    const statusNode = properties.find(property => property.getName() === 'status')?.getInitializerIfKind(SyntaxKind.NumericLiteral);
+    const headersNode = properties.find(property => property.getName().toLowerCase() === 'headers')?.getDescendantsOfKind(SyntaxKind.PropertyAssignment);
+    const contentTypeNode = headersNode?.find(property => property.getName() === "'content-type'")?.getInitializerIfKind(SyntaxKind.StringLiteral);
+
+    return {
+        status: statusNode?.getLiteralValue(),
+        contentType: contentTypeNode?.getLiteralValue(),
+    };
+};
+
+const parseThrowStatement = (throwStatement: ThrowStatement) => {
+    const callExpression = throwStatement.getExpressionIfKind(SyntaxKind.CallExpression);
+    if (callExpression) {
+        if (callExpression.getExpression().getText() === 'error') {
+            const [statusNode, bodyNode] = callExpression.getArguments();
+
+            if (Node.isNumericLiteral(statusNode)) {
+                return {
+                    body: bodyNode ? typeToJsonSchema(bodyNode.getType(), bodyNode) : ({type: 'string'} satisfies OpenAPIV3.SchemaObject),
+                    status: statusNode.getLiteralValue(),
+                    contentType: 'text/plain',
+                };
+            }
+        }
+    }
+};
+
+const parseReturnStatement = (returnStatement: ReturnStatement) => {
+    const newExpression = returnStatement.getExpressionIfKind(SyntaxKind.NewExpression);
+    if (newExpression) {
+        if (newExpression.getExpression().getText() === 'Response') {
+            const [bodyNode, responseInitNode] = newExpression.getArguments();
+            const {status, contentType} = responseInitNode ? parseResponseInit(responseInitNode) : {};
+
+            return {
+                body: typeToJsonSchema(bodyNode.getType(), bodyNode),
+                status: status ?? 200, // new Response() defaults to 200
+                contentType: contentType ?? 'text/plain', // new Response() defaults to text/plain in SvelteKit
+            };
+        }
+    }
+
+    const callExpression = returnStatement.getExpressionIfKind(SyntaxKind.CallExpression);
+    if (callExpression) {
+        const text = callExpression.getExpression().getText();
+
+        switch (text) {
+            case 'json': {
+                const [bodyNode, responseInitNode] = callExpression.getArguments();
+                const {status, contentType} = responseInitNode ? parseResponseInit(responseInitNode) : {};
+
+                return {
+                    body: typeToJsonSchema(bodyNode.getType(), bodyNode),
+                    status: status ?? 200, // calling json({}) defaults to 200
+                    contentType: contentType ?? 'application/json', // calling json({...}) defaults to application/json
+                };
+            }
+            case 'text': {
+                const [, responseInitNode] = callExpression.getArguments();
+                const {status, contentType} = responseInitNode ? parseResponseInit(responseInitNode) : {};
+
+                return {
+                    body: {type: 'string'} satisfies OpenAPIV3.SchemaObject,
+                    status: status ?? 200, // calling text('...') defaults to 200
+                    contentType: contentType ?? 'text/plain', // calling text('...') defaults to text/plain
+                };
+            }
+        }
+    }
+};
+
+const parseEndpointHandler = (project: Project, filePath: string) => {
     const path = filePath
         .replace(/^src\/routes/, '')
         .replace(/\+server\.ts$/, '')
@@ -110,88 +183,62 @@ const parseEndpointFile = (project: Project, filePath: string) => {
             sourceFile.getVariableDeclaration(methodName)?.getInitializerIfKind(SyntaxKind.FunctionExpression);
 
         if (functionExpression) {
-            const endpoint: Endpoint = {
+            const throwStatements = functionExpression
+                .getDescendantsOfKind(SyntaxKind.ThrowStatement)
+                .map(throwStatement => parseThrowStatement(throwStatement))
+                .filter(result => result !== undefined);
+            const returnStatements = functionExpression
+                .getDescendantsOfKind(SyntaxKind.ReturnStatement)
+                .map(returnStatement => parseReturnStatement(returnStatement))
+                .filter(result => result !== undefined);
+            const bodyByStatusAndContentType = [...throwStatements, ...returnStatements].reduce(
+                (acc, {body, status, contentType}) => {
+                    return {
+                        ...acc,
+                        [status]: {
+                            ...acc[status],
+                            [contentType]: [...(acc[status]?.[contentType] ?? []), body],
+                        },
+                    };
+                },
+                {} as Record<string, Record<string, OpenAPIV3.SchemaObject[]>>,
+            );
+
+            endpoints.push({
                 path,
                 method: methodName.toLowerCase(),
-                responses: {},
-                parameters: parameters.map(name => ({
-                    in: 'path',
-                    name,
-                    schema: {type: 'string'},
-                    required: true,
-                })),
-            };
-
-            const textArguments = functionExpression
-                .getDescendantsOfKind(SyntaxKind.CallExpression)
-                .filter(callExpression => callExpression.getExpression().getText() === 'text' && callExpression.getArguments().length > 0)
-                .map(callExpression => callExpression.getArguments());
-            const jsonArguments = functionExpression
-                .getDescendantsOfKind(SyntaxKind.CallExpression)
-                .filter(callExpression => callExpression.getExpression().getText() === 'json' && callExpression.getArguments().length > 0)
-                .map(callExpression => callExpression.getArguments());
-            const errorArguments = functionExpression
-                .getDescendantsOfKind(SyntaxKind.CallExpression)
-                .filter(callExpression => callExpression.getExpression().getText() === 'error' && callExpression.getArguments().length > 0)
-                .map(callExpression => callExpression.getArguments());
-
-            for (const textArgument of textArguments) {
-                const [, responseInitNode] = textArgument;
-
-                const statusNode = responseInitNode
-                    ?.getDescendantsOfKind(SyntaxKind.PropertyAssignment)
-                    .find(property => property.getName() === 'status')
-                    ?.getInitializerIfKind(SyntaxKind.NumericLiteral);
-                const status = Node.isNumericLiteral(statusNode) ? statusNode.getLiteralValue() : 200;
-
-                if (!endpoint.responses[status]) {
-                    endpoint.responses[status] = {
-                        content: {},
-                        description: 'OK',
-                    };
-                }
-                (endpoint.responses[status] as OpenAPIV3.ResponseObject).content!['text/text'] = {
-                    schema: {type: 'string'},
-                };
-            }
-            for (const jsonArgument of jsonArguments) {
-                const [dataNode, responseInitNode] = jsonArgument;
-
-                const statusNode = responseInitNode
-                    ?.getDescendantsOfKind(SyntaxKind.PropertyAssignment)
-                    .find(property => property.getName() === 'status')
-                    ?.getInitializerIfKind(SyntaxKind.NumericLiteral);
-                const status = Node.isNumericLiteral(statusNode) ? statusNode.getLiteralValue() : 200;
-
-                if (Node.isObjectLiteralExpression(dataNode)) {
-                    // TODO: handle unions
-
-                    if (!endpoint.responses[status]) {
-                        endpoint.responses[status] = {
-                            content: {},
-                            description: 'OK',
+                responses: Object.entries(bodyByStatusAndContentType).reduce(
+                    (acc, [status, contentTypes]) => {
+                        return {
+                            ...acc,
+                            [status]: {
+                                content: Object.entries(contentTypes).reduce(
+                                    (acc, [contentType, bodies]) => {
+                                        return {
+                                            ...acc,
+                                            [contentType]: {
+                                                schema: bodies.length === 1 ? bodies[0] : {oneOf: bodies},
+                                            },
+                                        };
+                                    },
+                                    {} as Record<string, OpenAPIV3.MediaTypeObject>,
+                                ),
+                                description: statusCodes[parseInt(status)] ?? 'No description',
+                            },
                         };
-                    }
-                    (endpoint.responses[status] as OpenAPIV3.ResponseObject).content!['application/json'] = {
-                        schema: typeToJsonSchema(dataNode.getType(), dataNode),
-                    };
-                }
-            }
-            for (const errorArgument of errorArguments) {
-                const [statusNode, messageNode] = errorArgument;
-
-                if (Node.isNumericLiteral(statusNode)) {
-                    const status = Node.isNumericLiteral(statusNode) ? statusNode.getLiteralValue() : undefined;
-
-                    if (status) {
-                        const message = Node.isStringLiteral(messageNode) ? messageNode.getLiteralValue() : statusCodes[status];
-
-                        endpoint.responses[status] = {description: message ?? ''};
-                    }
-                }
-            }
-
-            endpoints.push(endpoint);
+                    },
+                    {} as Record<string, OpenAPIV3.ResponseObject>,
+                ),
+                parameters:
+                    parameters.length === 0
+                        ? undefined
+                        : parameters.map(name => ({
+                              in: 'path',
+                              name,
+                              schema: {type: 'string'},
+                              required: true,
+                          })),
+            });
         }
     }
 
@@ -213,7 +260,7 @@ export const sveltekitOpenapi = (pluginOptions: PluginOptions): Plugin => {
                 const file = sourceFile.getFilePath();
 
                 if (file.includes('src/routes/api/') && file.endsWith('+server.ts')) {
-                    endpoints.push(...parseEndpointFile(project, path.relative(process.cwd(), file)));
+                    endpoints.push(...parseEndpointHandler(project, path.relative(process.cwd(), file)));
                 }
             }
 
@@ -222,7 +269,7 @@ export const sveltekitOpenapi = (pluginOptions: PluginOptions): Plugin => {
         async handleHotUpdate({file}) {
             if ((await project.getSourceFile(file)?.refreshFromFileSystem()) !== FileSystemRefreshResult.Deleted) {
                 if (file.includes('src/routes/api/') && file.endsWith('+server.ts')) {
-                    const updatedEndpoints = parseEndpointFile(project, path.relative(process.cwd(), file));
+                    const updatedEndpoints = parseEndpointHandler(project, path.relative(process.cwd(), file));
 
                     for (const endpoint of updatedEndpoints) {
                         const existingEndpointIndex = endpoints.findIndex(e => e.path === endpoint.path && e.method === endpoint.method);
