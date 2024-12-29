@@ -71,7 +71,9 @@ const createProject = (options: MergedOptions) => {
 };
 
 const typeToJsonSchema = (type: Type, location: Node): OpenAPIV3.SchemaObject => {
-    if (type.isString() || type.isStringLiteral()) {
+    if (type.getText().includes('ReadableStream')) {
+        return {type: 'string', format: 'binary'};
+    } else if (type.isString() || type.isStringLiteral()) {
         return {type: 'string'};
     } else if (type.isNumber() || type.isNumberLiteral()) {
         return {type: 'number'};
@@ -98,7 +100,7 @@ const parseResponseInit = (responseInitNode: Node) => {
     const properties = responseInitNode.getDescendantsOfKind(SyntaxKind.PropertyAssignment);
     const statusNode = properties.find(property => property.getName() === 'status')?.getInitializerIfKind(SyntaxKind.NumericLiteral);
     const headersNode = properties.find(property => property.getName().toLowerCase() === 'headers')?.getDescendantsOfKind(SyntaxKind.PropertyAssignment);
-    const contentTypeNode = headersNode?.find(property => property.getName() === "'content-type'")?.getInitializerIfKind(SyntaxKind.StringLiteral);
+    const contentTypeNode = headersNode?.find(property => property.getName().toLowerCase() === "'content-type'")?.getInitializerIfKind(SyntaxKind.StringLiteral);
 
     return {
         status: statusNode?.getLiteralValue(),

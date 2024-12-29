@@ -435,42 +435,10 @@
         "responses": {
           "200": {
             "content": {
-              "text/plain": {
+              "text/event-stream": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "locked": {
-                      "type": "boolean"
-                    },
-                    "cancel": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "getReader": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "pipeThrough": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "pipeTo": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "tee": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "values": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "__@asyncIterator@16546": {
-                      "type": "object",
-                      "properties": {}
-                    }
-                  }
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             },
