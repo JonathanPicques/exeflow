@@ -35,6 +35,11 @@
         },
         // CSS
         "css.lint.unknownAtRules": "ignore",
+        // Eslint
+        "eslint.validate": [
+            "svelte",
+            "typescript",
+        ],
         // Editor
         "editor.tabSize": 4,
         "editor.formatOnSave": true,
