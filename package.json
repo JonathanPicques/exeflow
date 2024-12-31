@@ -47,7 +47,8 @@
         "mousetrap": "^1.6.5",
         "nodemailer": "^6.9.16",
         "pg": "^8.13.1",
-        "tippy.js": "^6.3.7"
+        "tippy.js": "^6.3.7",
+        "zod": "^3.24.1"
     },
     "devDependencies": {
         "@playwright/test": "^1.49.1",

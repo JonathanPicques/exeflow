@@ -1,22 +1,18 @@
+import {z} from 'zod';
 import {sql} from 'kysely';
 import {json, error} from '@sveltejs/kit';
 
-import {valid} from '$lib/core/schema/validate';
+import {parseBody} from '$lib/core/helper/body';
 import {graphSchema} from '$lib/core/core';
 import {triggerRootUrl} from '$lib/core/env/env.server';
 import type {Db} from '$lib/supabase/db.server';
-import type {JsonSchema} from '$lib/core/schema/schema';
 import type {TriggerNode} from '$lib/core/core';
 
-const patchSchema = {
-    type: 'object',
-    required: ['name', 'image', 'content'] as const,
-    properties: {
-        name: {type: 'string'},
-        image: {type: 'string'},
-        content: graphSchema,
-    },
-} satisfies JsonSchema;
+const patchSchema = z.object({
+    name: z.string(),
+    image: z.string(),
+    content: graphSchema,
+});
 
 const jobname = ({node_id, plugin_id, project_id}: {node_id: string; plugin_id: string; project_id: string}) => {
     return `${project_id}:${plugin_id}:${node_id}`;
@@ -45,14 +41,14 @@ export const PATCH = async ({locals, params, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
+    const body = await parseBody(request, patchSchema);
+    if (body.error) throw error(400, body.error.message);
+
     const project = await locals.db.selectFrom('public.projects').select('id').where('id', '=', params.id).where('owner_id', '=', user.id).limit(1).executeTakeFirst();
     if (!project) throw error(404);
 
-    const body = await request.json();
-    if (!valid(body, patchSchema)) throw error(400);
-
     await locals.db.transaction().execute(async trx => {
-        const triggerNodes = body.content.nodes.filter(n => n.type === 'trigger') as TriggerNode[];
+        const triggerNodes = body.data.content.nodes.filter(n => n.type === 'trigger') as TriggerNode[];
         const triggerNodeIds = triggerNodes.map(n => n.id);
 
         const deleteTriggers = trx.deleteFrom('public.triggers').returning(['node_id', 'plugin_id', 'project_id']).where('project_id', '=', params.id);
@@ -90,7 +86,7 @@ export const PATCH = async ({locals, params, request}) => {
                 if (newTrigger?.plugin_id === 'cron:cron') {
                     const cron = triggerNode.data.data.config.value.interval;
 
-                    if (valid(cron, {type: 'string'})) {
+                    if (z.string().safeParse(cron).success) {
                         const {node_id, plugin_id, project_id} = newTrigger;
 
                         await schedule({trx, cron, node_id, plugin_id, project_id});
@@ -104,9 +100,9 @@ export const PATCH = async ({locals, params, request}) => {
             .where('id', '=', params.id)
             .where('owner_id', '=', user.id)
             .set({
-                name: body.name,
-                image: body.image,
-                content: JSON.stringify(body.content),
+                name: body.data.name,
+                image: body.data.image,
+                content: JSON.stringify(body.data.content),
                 updated_at: new Date(),
             })
             .executeTakeFirst();

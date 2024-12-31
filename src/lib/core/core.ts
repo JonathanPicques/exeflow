@@ -1,3 +1,4 @@
+import {z} from 'zod';
 import {init} from '@paralleldrive/cuid2';
 import {get, writable} from 'svelte/store';
 import {getContext, setContext} from 'svelte';
@@ -263,55 +264,61 @@ export const graphContextKey = Symbol('graph');
 export const getGraphContext = () => getContext<GraphContext>(graphContextKey);
 export const setGraphContext = (...params: ConstructorParameters<typeof GraphContext>) => setContext(graphContextKey, new GraphContext(...params));
 
-export const edgeSchema = {
-    type: 'object',
-    required: ['id', 'source', 'target', 'sourceHandle', 'targetHandle'] as const,
-    properties: {
-        id: {type: 'string'},
-        source: {type: 'string'},
-        target: {type: 'string'},
-        sourceHandle: {type: 'string'},
-        targetHandle: {type: 'string'},
-        selected: {type: 'boolean'},
-    },
-} satisfies JsonSchema;
-export const nodeSchema = {
-    type: 'object',
-    required: ['id', 'type', 'data', 'position'] as const,
-    properties: {
-        id: {
-            type: 'string',
-        },
-        type: {
-            type: 'string',
-            enum: ['action', 'trigger'] as const,
-        },
-        data: {
-            type: 'object',
-            required: ['id', 'data'] as const,
-            properties: {
-                id: {type: 'string'},
-                data: {},
-            },
-        },
-        position: {
-            type: 'object',
-            required: ['x', 'y'] as const,
-            properties: {
-                x: {type: 'number'},
-                y: {type: 'number'},
-            },
-        },
-        selected: {
-            type: 'boolean',
-        },
-    },
-} satisfies JsonSchema;
-export const graphSchema = {
-    type: 'object',
-    required: ['nodes', 'edges'] as const,
-    properties: {
-        nodes: {type: 'array', items: nodeSchema},
-        edges: {type: 'array', items: edgeSchema},
-    },
-} satisfies JsonSchema;
+export const actionNodeSchema = z.object({
+    id: z.string(),
+    type: z.literal('action'),
+    data: z.object({
+        id: z.string(),
+        data: z.object({
+            valid: z.boolean(),
+            title: z.string().optional(),
+            config: z.object({
+                value: z.unknown().readonly(),
+                schema: z.unknown().readonly(),
+            }),
+            inputs: z.array(z.string()),
+            outputs: z.array(z.string()),
+            results: z.record(z.string(), z.unknown().readonly()),
+        }),
+    }),
+    position: z.object({
+        x: z.number(),
+        y: z.number(),
+    }),
+    selected: z.boolean().optional(),
+});
+export const triggerNodeSchema = z.object({
+    id: z.string(),
+    type: z.literal('trigger'),
+    data: z.object({
+        id: z.string(),
+        data: z.object({
+            valid: z.boolean(),
+            title: z.string().optional(),
+            config: z.object({
+                value: z.unknown().readonly(),
+                schema: z.unknown().readonly(),
+            }),
+            outputs: z.array(z.string()),
+            results: z.record(z.string(), z.unknown().readonly()),
+        }),
+    }),
+    position: z.object({
+        x: z.number(),
+        y: z.number(),
+    }),
+    selected: z.boolean().optional(),
+});
+export const edgeSchema = z.object({
+    id: z.string(),
+    source: z.string(),
+    target: z.string(),
+    sourceHandle: z.string(),
+    targetHandle: z.string(),
+    selected: z.boolean().optional(),
+});
+export const nodeSchema = z.discriminatedUnion('type', [actionNodeSchema, triggerNodeSchema]);
+export const graphSchema = z.object({
+    nodes: z.array(nodeSchema),
+    edges: z.array(edgeSchema),
+});

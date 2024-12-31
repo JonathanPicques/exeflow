@@ -1,7 +1,7 @@
+import {z} from 'zod';
 import {json, error} from '@sveltejs/kit';
 
-import {valid} from '$lib/core/schema/validate';
-import type {JsonSchema} from '$lib/core/schema/schema';
+import {parseBody} from '$lib/core/helper/body';
 
 export const GET = async ({locals}) => {
     const user = await locals.user();
@@ -16,33 +16,29 @@ export const GET = async ({locals}) => {
     return json(secrets);
 };
 
-const putSchema = {
-    type: 'object',
-    required: ['key', 'value'] as const,
-    properties: {
-        key: {type: 'string', minLength: 1},
-        value: {type: 'string'},
-    },
-} satisfies JsonSchema;
+const putSchema = z.object({
+    key: z.string().trim().min(1),
+    value: z.string().trim(),
+});
 
 export const PUT = async ({locals, request}) => {
     const user = await locals.user();
     if (!user) throw error(401);
 
-    const body = await request.json();
-    if (!valid(body, putSchema)) throw error(400);
+    const body = await parseBody(request, putSchema);
+    if (body.error) throw error(400, body.error.message);
 
     const secret = await locals.db
         .insertInto('public.secrets')
         .values({
-            key: body.key,
-            value: body.value,
+            key: body.data.key,
+            value: body.data.value,
             owner_id: user.id,
         })
         .returning(['key', 'value'])
         .onConflict(oc =>
             oc.constraint('public_secrets_pkey').doUpdateSet({
-                value: body.value,
+                value: body.data.value,
                 updated_at: new Date(),
             }),
         )
