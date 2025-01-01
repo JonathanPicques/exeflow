@@ -4,7 +4,12 @@ import type action from './http';
 
 export default serverAction<typeof action>({
     exec: async function* ({next, config: {url, body, method, search, headers}}) {
-        const response = await fetch(makeUrl(url, search as Record<string, string>), {body, method, headers: headers as Record<string, string>});
+        const hasBody = method !== 'GET' && method !== 'HEAD';
+        const response = await fetch(makeUrl(url, search as Record<string, string>), {
+            body: hasBody ? body : undefined,
+            method,
+            headers: headers as Record<string, string>,
+        });
 
         yield* next({
             output: 'out',
