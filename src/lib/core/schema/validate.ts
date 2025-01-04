@@ -1,7 +1,6 @@
 // imports must be relative for vite typechecking to work
 
 import Ajv from 'ajv';
-import type {z} from 'zod';
 
 import type {JsonSchema} from './schema';
 import type {InferJsonSchema} from './infer';
@@ -21,18 +20,6 @@ export const valid = <T extends JsonSchema>(data: unknown, schema: T): data is I
 };
 
 /**
- * @returns true if the given data validates against the given zod schema
- * @example
- * ```ts
- * valid('hello', z.string()) => true
- * valid({name: 'killer7'}, z.string()) => false
- * ```
- */
-export const valid2 = <T extends z.Schema>(data: unknown, schema: T): data is z.infer<T> => {
-    return schema.safeParse(data).success;
-};
-
-/**
  * @returns the given data if it validates against the given schema
  * @throws otherwise
  * @example
@@ -42,6 +29,6 @@ export const valid2 = <T extends z.Schema>(data: unknown, schema: T): data is z.
  * ```
  */
 export const ensure = <T extends JsonSchema>(data: unknown, schema: T, errorMessage = 'cannot validate value against schema'): InferJsonSchema<T> => {
-    if (validator.validate(schema, data)) return data as InferJsonSchema<T>;
+    if (valid(data, schema)) return data;
     throw new Error(errorMessage);
 };
