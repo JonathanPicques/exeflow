@@ -120,6 +120,7 @@
         color: var(--color-mention-fg);
         cursor: pointer;
         border-radius: 0.5rem;
+        text-wrap-mode: nowrap;
         background-color: var(--color-mention-bg);
 
         img {
