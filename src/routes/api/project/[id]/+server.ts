@@ -11,7 +11,13 @@ import type {TriggerNode} from '$lib/core/core';
 const patchSchema = z.object({
     name: z.string(),
     image: z.string(),
-    content: graphSchema,
+    content: graphSchema.extend({
+        viewport: z.object({
+            x: z.number(),
+            y: z.number(),
+            zoom: z.number(),
+        }),
+    }),
 });
 
 const jobname = ({node_id, plugin_id, project_id}: {node_id: string; plugin_id: string; project_id: string}) => {
