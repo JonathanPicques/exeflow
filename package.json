@@ -7,6 +7,8 @@
         "dev": "vite dev --host --port 5173",
         "build": "vite build",
         "preview": "vite preview --host --port 5173",
+        "perf": "pnpm run perf:ts",
+        "perf:ts": "tsc --generateTrace ./perf",
         "test": "pnpm run test:unit && pnpm run test:e2e",
         "test:e2e": "playwright test",
         "test:unit": "vitest",
