@@ -9,7 +9,7 @@
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parser/parser';
     import type {TriggerNode} from '$lib/core/core';
 
-    let {id, data, selected = undefined}: NodeProps<TriggerNode> = $props();
+    let {id, data, selected}: NodeProps<TriggerNode> = $props();
     const edges = useEdges();
     const {triggers} = getGraphContext();
     const projectContext = getProjectContext();

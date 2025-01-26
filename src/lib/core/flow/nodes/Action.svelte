@@ -10,7 +10,7 @@
     import {humanPluginName, extractPluginName, extractPluginNamespace} from '$lib/core/parser/parser';
     import type {ActionNode} from '$lib/core/core';
 
-    let {id, data, selected = undefined}: NodeProps<ActionNode> = $props();
+    let {id, data, selected}: NodeProps<ActionNode> = $props();
     const edges = useEdges();
     const {actions} = getGraphContext();
     const projectContext = getProjectContext();
